@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="color-scheme" content="dark">
+<title>LV STEAM — Las Vegas Steam Room Ledger</title>
+<style>
+  :root{
+    --black:#000000;
+    --panel:#0c0c0c;
+    --panel-2:#111111;
+    --gold:#d4af37;
+    --gold-bright:#ffd700;
+    --btn-gold:#c8961e;
+    --btn-gold-bright:#e8ad2e;
+    --btn-gold-dark:#8f6a15;
+    --steam:#9fb8bb;
+    --paper:#ffffff;
+    --dim:#b3b3b3;
+    --line: rgba(255,215,0,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  html{
+    scroll-behavior:smooth;
+    background:var(--black);
+  }
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--black);
+    color:var(--paper);
+    font-family:'Arial Narrow', Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- LOGO ---------- */
+  .brandbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:2.6rem 6vw 1.2rem;
+    background:#000000;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:1.1rem;
+  }
+  .logo-mark{
+    width:64px; height:64px;
+    border-radius:50%;
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:visible;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(255,215,0,0.18), transparent 65%),
+      var(--panel);
+    box-shadow: 0 0 0 1px rgba(255,215,0,0.08), 0 0 22px rgba(255,215,0,0.15);
+  }
+  .logo-mark::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border-radius:50%;
+    border:1px solid rgba(255,215,0,0.35);
+  }
+  .logo-mark span{
+    font-family:'Arial Narrow', Arial, sans-serif;
+    font-weight:700;
+    font-size:2rem;
+    letter-spacing:0.02em;
+    color:var(--gold-bright);
+  }
+  .steam-wisp{
+    position:absolute;
+    bottom:54%;
+    width:12px;
+    height:26px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);
+    filter: blur(3px);
+    opacity:0;
+    pointer-events:none;
+    animation: steamRise 3.2s ease-in infinite;
+  }
+  .steam-wisp:nth-child(1){ left:2px;  width:9px;  animation-delay:0s; }
+  .steam-wisp:nth-child(2){ left:14px; width:12px; animation-delay:0.6s; }
+  .steam-wisp:nth-child(3){ left:27px; width:8px;  animation-delay:1.2s; }
+  .steam-wisp:nth-child(4){ left:39px; width:11px; animation-delay:1.8s; }
+  .steam-wisp:nth-child(5){ left:51px; width:9px;  animation-delay:2.4s; }
+  .steam-wisp:nth-child(6){ left:44px; width:7px;  animation-delay:3.0s; }
+  @keyframes steamRise{
+    0%{ transform:translateY(0) translateX(0) scale(0.6); opacity:0; }
+    12%{ opacity:0.75; }
+    55%{ opacity:0.4; transform:translateY(-30px) translateX(-4px) scale(1.2); }
+    100%{ transform:translateY(-58px) translateX(5px) scale(1.6); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .steam-wisp{ animation:none; display:none; }
+  }
+  .logo-text{ line-height:1; }
+  .logo-text .lv{
+    display:inline-block;
+    font-size:3.6rem;
+    font-weight:900;
+    letter-spacing:0.14em;
+    margin-right:-0.14em;
+    color:var(--paper);
+    white-space:nowrap;
+    text-shadow:
+      0 0 12px rgba(255,215,0,0.55),
+      0 0 28px rgba(255,215,0,0.4),
+      0 0 52px rgba(255,215,0,0.22);
+  }
+  .steam-row{
+    display:flex;
+    justify-content:space-between;
+    width:100%;
+    margin-top:0.5rem;
+    font-size:0.92rem;
+    font-weight:900;
+    letter-spacing:0.02em;
+    color:var(--gold);
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .steam-row span:last-child{
+    margin-right:-0.02em;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:1.5rem 6vw 3.5rem;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    background:#000000;
+  }
+  .hero h1{
+    font-size:clamp(1.6rem, 3.4vw, 2.3rem);
+    font-weight:700;
+    letter-spacing:0.04em;
+    margin:0 0 0.9rem;
+    text-transform:uppercase;
+    color:var(--paper);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--gold-bright);
+  }
+  .hero p.lede{
+    max-width:620px;
+    margin:0 auto;
+    font-size:1.05rem;
+    line-height:1.55;
+    color:var(--dim);
+  }
+  .gauge-key{
+    margin-top:2rem;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:1.8rem;
+    font-size:0.85rem;
+    letter-spacing:0.04em;
+    color:var(--dim);
+  }
+  .gauge-key strong{color:var(--gold-bright);}
+
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky; top:0; z-index:10;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:0.6rem;
+    padding:1rem 6vw;
+    background:#000000;
+    border-bottom:1px solid var(--line);
+    font-size:0.82rem;
+  }
+  .chip{
+    padding:0.5rem 1.1rem;
+    border:1px solid rgba(200,150,30,0.55);
+    border-radius:2px;
+    cursor:pointer;
+    color:var(--dim);
+    background:transparent;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    font-family:inherit;
+    transition: all 0.15s ease;
+  }
+  .chip:hover{border-color:var(--btn-gold-bright); color:var(--btn-gold-bright);}
+  .chip.active{
+    background:var(--btn-gold);
+    border-color:var(--btn-gold);
+    color:#fff;
+    font-weight:700;
+  }
+  .controls-secondary{
+    position:static;
+    padding-top:0.4rem;
+  }
+
+  /* ---------- CIRCULAR AREA FILTERS ---------- */
+  .chip-circle{
+    position:relative;
+    width:86px;
+    height:86px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0.4rem;
+    font-size:0.68rem;
+    line-height:1.2;
+    letter-spacing:0.03em;
+    border:2px solid rgba(255,215,0,0.55);
+    color:var(--gold-bright);
+    background:var(--black);
+    z-index:1;
+  }
+  .chip-circle.active{
+    background:var(--gold-bright);
+    border-color:var(--gold-bright);
+    color:#000;
+  }
+  .chip-circle:hover{
+    border-color:var(--gold-bright);
+    color:var(--gold-bright);
+  }
+  .chip-circle.active:hover{
+    color:#000;
+  }
+  .chip-circle::before{
+    content:"";
+    position:absolute;
+    inset:-5px;
+    border-radius:50%;
+    background: conic-gradient(from 0deg, #ff4d4d, #ffb84d, #ffe14d, #6dff4d, #4dd2ff, #6f6fff, #d24dff, #ff4d4d);
+    opacity:0;
+    z-index:-1;
+    transition: opacity 0.2s ease;
+    animation: chipRainbowSpin 2.5s linear infinite;
+  }
+  .chip-circle:hover::before,
+  .chip-circle:focus-visible::before{
+    opacity:1;
+  }
+  @keyframes chipRainbowSpin{
+    to{ transform:rotate(360deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .chip-circle::before{ animation:none; }
+  }
+
+  /* ---------- GRID ---------- */
+  .ledger{
+    padding:3rem 6vw 6rem;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap:1.2rem;
+  }
+
+  .card{
+    background: var(--panel);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:1.6rem 1.6rem 1.4rem;
+    position:relative;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover{ transform: translateY(-3px); border-color: rgba(255,215,0,0.5); }
+
+  .card-top{
+    display:flex; justify-content:space-between; align-items:flex-start; gap:0.8rem;
+  }
+  .card h2{
+    font-weight:700;
+    font-size:1.28rem;
+    margin:0 0 0.3rem;
+    color:var(--paper);
+    line-height:1.15;
+    letter-spacing:0.01em;
+  }
+  .venue-tag{
+    display:inline-block;
+    font-size:0.68rem;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    padding:0.22rem 0.55rem;
+    border-radius:2px;
+    font-weight:700;
+  }
+  .venue-tag.casino{ background:rgba(212,175,55,0.14); color:var(--gold-bright); border:1px solid rgba(212,175,55,0.4);}
+  .venue-tag.noncasino{ background:rgba(159,184,187,0.12); color:var(--steam); border:1px solid rgba(159,184,187,0.35);}
+
+  .badge-row{ margin-top:0.3rem; }
+  .verified-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:15px; height:15px; border-radius:50%;
+    background:#1d9bf0; color:#fff;
+    font-size:9px; font-weight:900; line-height:1;
+    vertical-align:middle;
+    margin-left:0.35rem;
+  }
+  .unverified{
+    font-size:0.68rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase;
+    color:#ff4040;
+  }
+
+  .contact-row{
+    margin-top:0.9rem;
+    display:flex; gap:0.6rem; flex-wrap:wrap;
+  }
+  .contact-row a{
+    display:inline-flex; align-items:center; gap:0.35rem;
+    font-size:0.78rem; font-weight:700; letter-spacing:0.03em;
+    color:#fff; background:var(--btn-gold);
+    padding:0.4rem 0.8rem; border-radius:2px;
+    text-decoration:none;
+    transition: background 0.15s ease;
+  }
+  .contact-row a:hover{ background:var(--btn-gold-dark); }
+  .contact-row a.secondary{
+    background:transparent; color:var(--btn-gold-bright); border:1px solid rgba(200,150,30,0.55);
+  }
+  .contact-row a.secondary:hover{ background:rgba(138,90,43,0.15); }
+
+  .gauge{
+    font-size:1.45rem;
+    letter-spacing:0.1em;
+    white-space:nowrap;
+    text-align:right;
+    font-weight:900;
+  }
+  .gauge .on{ color:var(--gold-bright); text-shadow:0 0 6px rgba(255,215,0,0.75), 0 0 16px rgba(255,215,0,0.4);}
+  .gauge .off{ color:rgba(255,215,0,0.14);}
+  .gauge small{
+    display:block;
+    font-size:0.62rem;
+    color:var(--dim);
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-top:0.2rem;
+    text-align:right;
+    font-weight:400;
+  }
+
+  .meta{
+    margin-top:1rem;
+    padding-top:1rem;
+    border-top:1px dashed var(--line);
+    font-size:0.92rem;
+    line-height:1.6;
+    color:#c9c9c9;
+  }
+  .meta .row{ display:flex; gap:0.55rem; }
+  .meta .k{
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--gold-bright);
+    min-width:64px;
+    padding-top:0.15rem;
+    font-weight:700;
+  }
+
+  .note{
+    margin-top:0.9rem;
+    font-size:0.85rem;
+    color:var(--dim);
+  }
+
+  .stars{
+    margin-top:0.7rem;
+    font-size:0.85rem;
+    color:var(--gold-bright);
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+  }
+  .stars .starIcons{ letter-spacing:0.05em; }
+  .stars .starIcons .off{ color:rgba(255,215,0,0.18); }
+  .stars .src{
+    color:var(--dim);
+    font-size:0.75rem;
+  }
+
+  footer{
+    padding:2.5rem 6vw 3.5rem;
+    border-top:1px solid var(--line);
+    font-size:0.75rem;
+    color:#5a5a5a;
+    line-height:1.7;
+    text-align:center;
+  }
+
+  .newsletter{
+    padding:4rem 6vw;
+    text-align:center;
+    border-top:1px solid var(--line);
+    background:#000000;
+  }
+  .newsletter h2{
+    font-size:clamp(1.5rem, 3vw, 2rem);
+    font-weight:900;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--paper);
+    margin:0 0 0.7rem;
+  }
+  .newsletter h2 span{ color:var(--gold-bright); }
+  .newsletter p{
+    max-width:480px;
+    margin:0 auto 1.8rem;
+    color:var(--dim);
+    font-size:0.95rem;
+    line-height:1.5;
+  }
+  .newsletter-form{
+    display:flex;
+    justify-content:center;
+    gap:0.6rem;
+    flex-wrap:wrap;
+  }
+  .newsletter-form input{
+    min-width:260px;
+    padding:0.75rem 1rem;
+    border-radius:2px;
+    border:1px solid rgba(200,150,30,0.55);
+    background:var(--panel);
+    color:var(--paper);
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+  .newsletter-form input::placeholder{ color:#777; }
+  .newsletter-form input:focus{
+    outline:2px solid var(--gold-bright);
+    outline-offset:1px;
+    border-color:var(--btn-gold-bright);
+  }
+  .newsletter-form button{
+    padding:0.75rem 1.6rem;
+    border:none;
+    border-radius:2px;
+    background:var(--btn-gold);
+    color:#fff;
+    font-family:inherit;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition: background 0.15s ease;
+  }
+  .newsletter-form button:hover{ background:var(--btn-gold-dark); }
+  .newsletter-note{
+    margin-top:1rem;
+    font-size:0.72rem;
+    color:#5a5a5a;
+  }
+  .newsletter-success{
+    margin-top:1.2rem;
+    font-size:0.9rem;
+    color:var(--gold-bright);
+    display:none;
+  }
+
+  /* ---------- DAY PASSES BUTTON + OVERLAY ---------- */
+  .daypass-btn-wrap{
+    position:fixed;
+    right:1.4rem;
+    bottom:1.4rem;
+    z-index:60;
+  }
+  .daypass-btn{
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    background:var(--gold-bright);
+    color:#1a1400;
+    border:none;
+    font-family:inherit;
+    font-weight:900;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    font-size:1.15rem;
+    line-height:1.25;
+    cursor:pointer;
+    text-shadow:
+      0 0 6px rgba(255,255,255,0.85),
+      0 0 14px rgba(255,255,255,0.6),
+      0 0 26px rgba(255,215,0,0.7);
+    box-shadow:0 0 18px rgba(255,215,0,0.45), 0 4px 14px rgba(0,0,0,0.5);
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .daypass-btn:hover{
+    background:var(--gold);
+    box-shadow:0 0 26px rgba(255,215,0,0.6), 0 4px 14px rgba(0,0,0,0.5);
+    transform:scale(1.05);
+  }
+
+  .daypass-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#000000;
+    z-index:100;
+    overflow-y:auto;
+    padding:2.5rem 6vw 4rem;
+  }
+  .daypass-overlay.open{ display:block; }
+  .daypass-close{
+    display:inline-block;
+    margin-bottom:1.6rem;
+    padding:0.7rem 1.4rem;
+    background:var(--btn-gold);
+    border:1px solid var(--btn-gold);
+    color:#fff;
+    border-radius:2px;
+    font-family:inherit;
+    font-weight:900;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    font-size:0.85rem;
+    cursor:pointer;
+    box-shadow:0 2px 10px rgba(0,0,0,0.4);
+  }
+  .daypass-close:hover{
+    background:var(--btn-gold-bright);
+    border-color:var(--btn-gold-bright);
+    color:#000;
+  }
+  .daypass-back-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.7rem;
+    margin-bottom:1.6rem;
+  }
+  .daypass-back-row .daypass-close{
+    margin-bottom:0;
+  }
+  .wtf-corner{
+    position:absolute;
+    top:1.4rem;
+    right:1.4rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.35rem;
+    text-decoration:none;
+    z-index:2;
+  }
+  .wtf-corner-label{
+    font-family:inherit;
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--dim);
+  }
+  .wtf-corner:hover .wtf-corner-label{ color:var(--paper); }
+  .wtf-corner-badge{
+    position:relative;
+    width:82px;
+    height:82px;
+    display:block;
+    transition:transform 0.15s ease;
+  }
+  .wtf-corner:hover .wtf-corner-badge{ transform:scale(1.07); }
+  .wtf-corner-badge svg{ width:100%; height:100%; display:block; }
+  .wtf-corner-smoke{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:0;
+    height:0;
+    pointer-events:none;
+  }
+  .wtf-puff{
+    position:absolute;
+    bottom:0;
+    width:7px;
+    height:14px;
+    border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(255,255,255,0.85), rgba(255,255,255,0) 70%);
+    filter:blur(2px);
+    opacity:0;
+    animation:steamRise 3s ease-in infinite;
+  }
+  .wp1{ left:-14px; animation-delay:0s; }
+  .wp2{ left:0px; width:6px; animation-delay:1s; }
+  .wp3{ left:12px; animation-delay:2s; }
+  @media (prefers-reduced-motion: reduce){
+    .wtf-puff{ animation:none; display:none; }
+  }
+  .daypass-overlay h1{
+    text-align:center;
+    font-size:clamp(1.5rem, 3.2vw, 2.1rem);
+    font-weight:900;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--paper);
+    margin:0 0 0.4rem;
+  }
+  .daypass-overlay h1 span{ color:var(--gold-bright); }
+  .daypass-list{
+    max-width:760px;
+    margin:2.2rem auto 0;
+  }
+  .daypass-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:1rem;
+    padding:0.9rem 0;
+    border-bottom:1px solid var(--line);
+  }
+  .daypass-row .dp-name{
+    font-size:1rem;
+    font-weight:700;
+    color:var(--paper);
+  }
+  .daypass-row .dp-detail{
+    font-size:0.78rem;
+    color:var(--dim);
+    display:block;
+    margin-top:0.15rem;
+    font-weight:400;
+  }
+  .daypass-row .dp-price{
+    font-size:1.3rem;
+    font-weight:900;
+    color:var(--gold-bright);
+    text-shadow:0 0 8px rgba(255,215,0,0.5);
+    white-space:nowrap;
+  }
+  .daypass-unranked{
+    max-width:760px;
+    margin:2.6rem auto 0;
+  }
+  .daypass-unranked h2{
+    font-size:0.9rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--dim);
+    border-top:1px solid var(--line);
+    padding-top:1.6rem;
+    margin:0 0 1rem;
+  }
+  .daypass-unranked .daypass-row .dp-price{
+    color:#7a7a7a;
+    text-shadow:none;
+    font-size:0.8rem;
+    font-weight:700;
+  }
+
+  /* ---------- ROBE GUY EASTER EGG ---------- */
+  .robe-guy{
+    position:fixed;
+    bottom:110px;
+    left:-70px;
+    font-size:2.6rem;
+    z-index:55;
+    pointer-events:none;
+    animation: robeWalk 26s linear infinite;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.6));
+  }
+  @keyframes robeWalk{
+    0%{ left:-70px; transform:scaleX(1) rotate(0deg); }
+    48%{ transform:scaleX(1) rotate(-4deg); }
+    50%{ left:calc(100% + 70px); transform:scaleX(1) rotate(0deg); }
+    50.01%{ transform:scaleX(-1) rotate(0deg); }
+    98%{ transform:scaleX(-1) rotate(4deg); }
+    100%{ left:-70px; transform:scaleX(-1) rotate(0deg); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .robe-guy{ animation:none; display:none; }
+  }
+  @media (max-width:640px){
+    .robe-guy{ bottom:90px; font-size:2rem; }
+  }
+
+  @media (max-width:640px){
+    .hero{ padding:1rem 5vw 2.5rem; }
+    .ledger{ padding:2rem 5vw 4rem; grid-template-columns:1fr; }
+    .controls{ padding:0.9rem 5vw; }
+    .logo-text .lv{ font-size:2.5rem; }
+  }
+
+  :focus-visible{ outline:2px solid var(--gold-bright); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="logo">
+    <div class="logo-mark">
+      <span>℣</span>
+      <div class="steam-wisp"></div>
+      <div class="steam-wisp"></div>
+      <div class="steam-wisp"></div>
+      <div class="steam-wisp"></div>
+      <div class="steam-wisp"></div>
+      <div class="steam-wisp"></div>
+    </div>
+    <div class="logo-text">
+      <div class="lv">LV STEAM</div>
+      <div class="steam-row">
+        <span>STEAM</span><span>SAUNA</span><span>SPA</span><span>LAS VEGAS</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="gauge-key">
+    <span><strong>$</strong> under $60</span>
+    <span><strong>$$</strong> $60–89</span>
+    <span><strong>$$$</strong> $90–129</span>
+    <span><strong>$$$$</strong> $130+</span>
+  </div>
+</section>
+
+<div class="controls" role="tablist" aria-label="Filter venues by area">
+  <button class="chip chip-circle active" data-region="all">All<br>Areas</button>
+  <button class="chip chip-circle" data-region="strip">The<br>Strip</button>
+  <button class="chip chip-circle" data-region="henderson">Henderson</button>
+  <button class="chip chip-circle" data-region="summerlin">Summerlin</button>
+</div>
+<div class="controls controls-secondary" role="tablist" aria-label="Filter venues by type">
+  <button class="chip active" data-type="all">All Venues</button>
+  <button class="chip" data-type="casino">Inside a Casino</button>
+  <button class="chip" data-type="noncasino">Non-Casino</button>
+</div>
+
+<div class="robe-guy" title="Just doing his daily lap around the spa">🧖‍♂️</div>
+
+<div class="daypass-btn-wrap">
+  <button class="daypass-btn" id="dayPassBtn">DAY<br>PASSES</button>
+</div>
+
+<section class="ledger" id="ledger"></section>
+
+<section class="newsletter">
+  <h2>Get The <span>Steam</span> Report</h2>
+  <p>New spas, price drops, and steam room intel for Las Vegas — straight to your inbox. No spam, just steam.</p>
+  <form class="newsletter-form" id="newsletterForm">
+    <input type="email" id="newsletterEmail" placeholder="you@email.com" required>
+    <button type="submit">Subscribe</button>
+  </form>
+  <p class="newsletter-success" id="newsletterSuccess">You're in. Watch for the first steam report soon.</p>
+  <p class="newsletter-note">Unsubscribe anytime. We never sell your info.</p>
+</section>
+
+<footer>
+  Prices, hours, and access policies at Las Vegas resort spas change often and shift by season, day of week, and hotel-guest status — figures here are day-pass estimates gathered mid-2026 and should be confirmed directly with the venue before you go. Ratings reflect non-hotel-guest walk-in pricing where two tiers exist.
+</footer>
+
+<div class="daypass-overlay" id="dayPassOverlay">
+  <a class="wtf-corner" href="wtfdd.html">
+    <span class="wtf-corner-label">Click for</span>
+    <span class="wtf-corner-badge">
+      <span class="wtf-corner-smoke" aria-hidden="true">
+        <span class="wtf-puff wp1"></span>
+        <span class="wtf-puff wp2"></span>
+        <span class="wtf-puff wp3"></span>
+      </span>
+      <svg viewBox="0 0 160 150" aria-hidden="true">
+        <defs>
+          <linearGradient id="wtfCornerLeafGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#7CC96F"/>
+            <stop offset="100%" stop-color="#2F6B3A"/>
+          </linearGradient>
+          <filter id="wtfCornerGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
+            <feFlood flood-color="#ffffff" flood-opacity="0.95" result="color"/>
+            <feComposite in="color" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <g transform="translate(80,120) scale(2.6)">
+          <g fill="url(#wtfCornerLeafGrad)" stroke="#1C4423" stroke-width="0.5" stroke-linejoin="round">
+            <path transform="rotate(0)" d="M0,0 Q-7,-15 -3,-28 Q0,-38 0,-42 Q0,-38 3,-28 Q7,-15 0,0 Z"/>
+            <path transform="rotate(25) scale(0.82)" d="M0,0 Q-7,-15 -3,-28 Q0,-38 0,-42 Q0,-38 3,-28 Q7,-15 0,0 Z"/>
+            <path transform="rotate(-25) scale(0.82)" d="M0,0 Q-7,-15 -3,-28 Q0,-38 0,-42 Q0,-38 3,-28 Q7,-15 0,0 Z"/>
+            <path transform="rotate(52) scale(0.6)" d="M0,0 Q-7,-15 -3,-28 Q0,-38 0,-42 Q0,-38 3,-28 Q7,-15 0,0 Z"/>
+            <path transform="rotate(-52) scale(0.6)" d="M0,0 Q-7,-15 -3,-28 Q0,-38 0,-42 Q0,-38 3,-28 Q7,-15 0,0 Z"/>
+          </g>
+        </g>
+        <text x="80" y="102" filter="url(#wtfCornerGlow)" font-family="Arial Black, Arial, sans-serif" font-size="42" text-anchor="middle" stroke="#000" stroke-width="1.5" paint-order="stroke"><tspan fill="#1B4D28">W</tspan><tspan fill="#4A2E1A">T</tspan><tspan fill="#C0C0C0">F</tspan></text>
+      </svg>
+    </span>
+  </a>
+  <div class="daypass-back-row">
+    <button class="daypass-close" id="dayPassClose">← Back to LV Steam</button>
+  </div>
+  <h1><span>Day Passes</span></h1>
+  <div class="daypass-list" id="dayPassRanked"></div>
+  <div class="daypass-unranked">
+    <h2>No Flat Day-Pass Rate Advertised</h2>
+    <div id="dayPassUnranked"></div>
+  </div>
+</div>
+
+<script>
+const venues = [
+  {
+    name:"Spa at The LINQ",
+    region:"strip", casino:true, verified:false,
+    price:2,
+    priceNote:"$60 day pass (4 hrs) · $50 for Harrah's/LINQ hotel guests",
+    dayPass:{amount:60, display:"$60 non-guest · $50 hotel guest"},
+    address:"3535 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily, 8:00 am – 7:00 pm",
+    phone:"(702) 794-3242",
+    website:"thelinq.com",
+    note:"Co-ed jacuzzis, Himalayan salt room, eucalyptus steam — one of the better-value passes on the Strip.",
+    rating:null, reviews:"223 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Voie Spa & Salon — Paris Las Vegas",
+    region:"strip", casino:true, verified:false,
+    price:2,
+    priceNote:"$60 non-guest · $50 hotel guest",
+    dayPass:{amount:60, display:"$60 non-guest · $50 hotel guest"},
+    address:"3655 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily, 8:30 am – 6:00 pm",
+    phone:"(702) 946-4366",
+    website:"caesars.com/paris-las-vegas/things-to-do/voie-spa-salon",
+    note:"French-inspired lounge, jacuzzi, and a calm steam room tucked away from the casino floor.",
+    rating:null, reviews:"76 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Oleksandra Spa & Salon — Treasure Island",
+    region:"strip", casino:true, verified:false,
+    price:2,
+    priceNote:"$60 non-guest · $50 hotel guest (waived with a booked treatment)",
+    dayPass:{amount:60, display:"$60 non-guest · $50 hotel guest"},
+    address:"3300 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Mon–Thu 8:30 am–5:00 pm · Fri–Sat 8:30 am–7:00 pm (Sun varies)",
+    phone:"(702) 894-7474",
+    website:"treasureisland.com/amenities/spa-salon",
+    note:"Sauna, steam room, and whirlpool; Nevada ID holders get 20% off.",
+    rating:null, reviews:"94 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"The Spa at Flamingo",
+    region:"strip", casino:true, verified:false,
+    price:1,
+    priceNote:"$40–$60 non-guest · $20–$25 hotel guest",
+    dayPass:{amount:60, display:"$40–$60 non-guest · $20–$25 hotel guest"},
+    address:"3555 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily — call to confirm current hours",
+    phone:"(702) 733-3535",
+    website:"caesars.com",
+    note:"Three whirlpools at different temperatures plus a eucalyptus steam room. One of the cheaper Strip passes.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"BATHHOUSE Spa — W Las Vegas (Delano tower)",
+    region:"strip", casino:false, verified:false,
+    price:2,
+    priceNote:"$50 Mon–Thu · $100 Fri–Sun (non-guest) · half-price for hotel guests",
+    dayPass:{amount:100, display:"$50 Mon–Thu / $100 Fri–Sun non-guest"},
+    address:"3950 S Las Vegas Blvd, Las Vegas, NV 89119",
+    hours:"Sun, Mon, Thu–Sat: 8:30 am – 5:00 pm · Closed Tue & Wed",
+    phone:"(877) 632-9636",
+    website:"mgmresorts.com",
+    note:"Sits in the non-gaming W tower on the Mandalay Bay campus — no slot machines between you and the eucalyptus steam.",
+    rating:null, reviews:"186 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Spa Mandalay — Mandalay Bay",
+    region:"strip", casino:true, verified:false,
+    price:2,
+    priceNote:"$75 non-guest day pass",
+    dayPass:{amount:75, display:"$75 non-guest"},
+    address:"3950 Las Vegas Blvd S, Las Vegas, NV 89136",
+    hours:"Daily, 7:00 am – 6:00 pm",
+    phone:"(702) 632-7220",
+    website:"mandalaybay.com",
+    note:"Large facility with steam rooms, saunas, and a cold plunge. Mandatory 22% gratuity on treatments.",
+    rating:null, reviews:"254 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"The Spa at Park MGM",
+    region:"strip", casino:true, verified:false,
+    price:2,
+    priceNote:"Day passes start at $75",
+    dayPass:{amount:75, display:"Starting at $75"},
+    address:"3770 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily, 8:30 am – 6:00 pm",
+    phone:"(702) 730-7593",
+    website:"mgmresorts.com",
+    note:"Quieter than most Strip spas; solid sauna-and-steam pass even if treatments are hit or miss.",
+    rating:null, reviews:"67 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Bellagio Spa & Salon",
+    region:"strip", casino:true, verified:true,
+    price:3,
+    priceNote:"Facility-use pricing varies by season — expect $90+; call to confirm current day-pass rate",
+    dayPass:{amount:90, display:"Est. $90+ (facility currently closed for renovation — call to confirm)"},
+    address:"3600 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Currently limited — spa is under renovation, call to confirm",
+    phone:"(702) 693-7472",
+    website:"mgmresorts.com",
+    note:"⚠ Currently being reimagined/renovated — jacuzzi, sauna, and steam room are NOT available right now; only select services on the 4th floor of the Spa Tower plus in-room treatments. Call ahead.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Qua Baths & Spa — Caesars Palace",
+    region:"strip", casino:true, verified:true,
+    price:4,
+    priceNote:"$65 for 3-hr guest pass · $110 non-guest day pass",
+    dayPass:{amount:110, display:"$110 non-guest · $65 hotel-guest 3-hr pass"},
+    address:"3570 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily, 9:00 am – 6:00 pm (some facilities may be limited during ongoing renovations — call ahead)",
+    phone:"(866) 782-0655",
+    website:"caesars.com/caesars-palace/things-to-do/qua",
+    note:"Roman Baths, Arctic Ice Room, Laconium Room, and an herbal steam room across 50,000 sq ft.",
+    rating:4.0, reviews:"816 Yelp reviews", source:"Time Out critic review"
+  },
+  {
+    name:"The Spa at Vdara",
+    region:"strip", casino:false, verified:false,
+    price:3,
+    priceNote:"Facility pass typically $70–$100 — confirm current rate",
+    dayPass:{amount:100, display:"Est. $70–$100 (unconfirmed — call to verify)"},
+    address:"2600 W Harmon Ave, Las Vegas, NV 89158",
+    hours:"Daily — confirm current hours with spa",
+    phone:"Call hotel main line",
+    website:"mgmresorts.com",
+    note:"Vdara is a non-gaming CityCenter tower; an intimate, quieter steam-and-jacuzzi experience away from the Strip crowds.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"The Spa at Four Seasons Las Vegas",
+    region:"strip", casino:false, verified:true,
+    price:4,
+    priceNote:"Facility access generally bundled with a booked treatment — call for current rates",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — facility access is bundled with a booked treatment"},
+    address:"3960 Las Vegas Blvd S, Las Vegas, NV 89119",
+    hours:"Daily, 8:00 am – 6:00 pm",
+    phone:"(702) 632-5000",
+    website:"fourseasons.com/lasvegas/spa",
+    note:"Forbes Five-Star, fully non-gaming and non-smoking, on the Mandalay Bay campus. Large eucalyptus steam room and co-ed Zen lounge.",
+    rating:null, reviews:"58 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Red Rock Spa by Well & Being",
+    region:"summerlin", casino:true, verified:false,
+    price:3,
+    priceNote:"Day access included with any booked treatment — call for facility-only pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for facility-only pricing"},
+    address:"11011 W Charleston Blvd, Las Vegas, NV 89135",
+    hours:"Daily — confirm current hours with spa",
+    phone:"See website to book",
+    website:"rr-spa.com",
+    note:"Steam room, hot whirlpool, Swedish dry sauna, and cold plunge inside Red Rock Casino Resort. Men's steam/sauna occasionally closed for maintenance — call ahead.",
+    rating:null, reviews:"211 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Spa Aquae — The Resort at Summerlin (formerly JW Marriott/Rampart)",
+    region:"summerlin", casino:true, verified:false,
+    price:2,
+    priceNote:"Facility access with any booked treatment — call for day-pass pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for pricing"},
+    address:"221 N Rampart Blvd, Las Vegas, NV 89145",
+    hours:"Call to confirm current hours",
+    phone:"(702) 869-7777",
+    website:"theresortatsummerlin.com",
+    note:"Steam room, jacuzzis, and hot tub at the Mediterranean-style resort attached to Rampart Casino. Property is mid-rebrand from JW Marriott to The Resort at Summerlin as of Jan 2026.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Green Valley Ranch Spa by Well & Being",
+    region:"henderson", casino:true, verified:false,
+    price:3,
+    priceNote:"Facility access included with any booked treatment — locals get 20% off Mon–Fri",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — bundled with a booked treatment"},
+    address:"2300 Paseo Verde Pkwy, Henderson, NV 89052",
+    hours:"Daily, 8:00 am – 8:00 pm",
+    phone:"(702) 617-7570",
+    website:"gvrspa.com",
+    note:"Wet steam room, Swedish dry sauna, hot therapeutic whirlpool, and a private adults-only lap pool.",
+    rating:null, reviews:"313 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Spa Mio — M Resort",
+    region:"henderson", casino:true, verified:false,
+    price:2,
+    priceNote:"Facility access with any booked treatment — call for day-pass pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for pricing"},
+    address:"12300 S Las Vegas Blvd, Henderson, NV 89044",
+    hours:"Daily, 9:00 am – 5:00 pm",
+    phone:"(702) 797-1800",
+    website:"themresort.com/amenities/spa",
+    note:"Forbes Four-Star spa with steam room, sauna, and hot tub in separate men's/women's wet areas.",
+    rating:null, reviews:"200 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Ageless Humans Longevity Spa & Salon — Westin Lake Las Vegas",
+    region:"henderson", casino:false, verified:false,
+    price:3,
+    priceNote:"Call for current facility/day-pass pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for pricing"},
+    address:"101 MonteLago Blvd, Henderson, NV 89011",
+    hours:"Call to confirm current hours",
+    phone:"(702) 567-6000",
+    website:"lakelasvegas.com/the-westin-resort-spa",
+    note:"Lakefront non-gaming resort spa (recently rebranded from G Aveda Spa Lago) roughly 20 minutes from the Strip.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"The Spa at Wynn",
+    region:"strip", casino:true, verified:true,
+    price:4,
+    priceNote:"No flat facility-only pass — non-resort guests can book Mon–Thu; resort guests daily",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — spa access bundled with a booked treatment"},
+    address:"3131 Las Vegas Blvd S, Las Vegas, NV 89109",
+    hours:"Daily, 7:00 am – 7:00 pm (non-resort-guest treatments Mon–Thu only)",
+    phone:"(702) 770-3900",
+    website:"wynnlasvegas.com/experiences/spas/wynn-spa",
+    note:"Forbes Five-Star spa with steam room, sauna, and whirlpool. Note: The Spa at Encore is temporarily closed for a renovation — only the Wynn side is currently open.",
+    rating:null, reviews:"211 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Sahra Spa, Salon & Hammam — The Cosmopolitan",
+    region:"strip", casino:true, verified:false,
+    price:4,
+    priceNote:"Complimentary with a booked service of $100+; facility/fitness day passes available separately",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for facility-only pricing"},
+    address:"3708 Las Vegas Blvd S, Level 14, Las Vegas, NV 89109",
+    hours:"Daily, 8:00 am – 6:00 pm (Fri–Sat until 7:00 pm)",
+    phone:"(702) 698-7171",
+    website:"cosmopolitanlasvegas.com/resort/spa/sahra-hammam",
+    note:"One of only three authentic Turkish hammams in the U.S., plus a vitality pool, steam room, sauna, and cool mist room.",
+    rating:null, reviews:"332 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Spa at Virgin Hotels Las Vegas",
+    region:"strip", casino:true, verified:false,
+    price:3,
+    priceNote:"$75 non-guest day pass · $50 hotel guest",
+    dayPass:{amount:75, display:"$75 non-guest · $50 hotel guest"},
+    address:"4455 Paradise Rd, Las Vegas, NV 89169",
+    hours:"Daily, 10:00 am – 6:00 pm",
+    phone:"(702) 522-8000",
+    website:"virginhotelslv.com/spa",
+    note:"Hammam, salt therapy room, and meditation spaces with a trendy, bohemian vibe rather than a classic marble-and-gold look.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Lapis Spa & Wellness — Fontainebleau Las Vegas",
+    region:"strip", casino:true, verified:false,
+    price:4,
+    priceNote:"Day pass access capped at 4 hours — call for current rate",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — reported 4-hour access limit on day passes"},
+    address:"2777 S Las Vegas Blvd, Las Vegas, NV 89109",
+    hours:"Call to confirm current hours",
+    phone:"Call resort directly",
+    website:"fontainebleaulasvegas.com",
+    note:"Steam room, infrared room, herbal room, salt room, cold plunge, and ice shower, plus a signature 'Art of Aufguss' sauna ritual event.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Spa Ravella — Hilton Lake Las Vegas Resort & Spa",
+    region:"henderson", casino:false, verified:false,
+    price:2,
+    priceNote:"Call for current facility/day-pass pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for pricing"},
+    address:"1610 Lake Las Vegas Pkwy, Henderson, NV 89011",
+    hours:"Call to confirm current hours",
+    phone:"(702) 567-4600",
+    website:"hilton.com/en/hotels/laslkhf-hilton-lake-las-vegas-resort-and-spa/spa",
+    note:"24 treatment rooms, whirlpools, steam rooms, saunas, and Vichy showers at a non-gaming lakefront resort roughly 17 miles from the Strip.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Elevated Sauna & Cryotherapy Studio",
+    region:"henderson", casino:false, verified:false,
+    price:1,
+    priceNote:"Session-based pricing, not a flat day pass — call for rates",
+    dayPass:{amount:null, display:"No flat day-pass rate — priced per session (infrared sauna, cryotherapy, salt cabin)"},
+    address:"4500 E Sunset Rd, Ste 4, Henderson, NV 89014",
+    hours:"Mon–Fri 9:00 am – 9:00 pm · Sat–Sun hours vary",
+    phone:"(702) 451-0444",
+    website:"Search Yelp: Elevated Sauna & Cryotherapy Studio",
+    note:"Standalone infrared sauna and cryotherapy studio — no wet steam room, but a solid heat-therapy option off the resort-spa circuit.",
+    rating:null, reviews:"103 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Lapis & Oak Spa and Salt Lounge",
+    region:"henderson", casino:false, verified:false,
+    price:3,
+    priceNote:"Treatment-based pricing — call for current rates",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — standalone treatment spa"},
+    address:"615 S Green Valley Pkwy, Ste 120, Henderson, NV 89052",
+    hours:"Mon–Fri 10:00 am – 7:00 pm · Sat–Sun 9:00 am – 6:00 pm",
+    phone:"(702) 848-2424",
+    website:"lapisandoak.com",
+    note:"Standalone Henderson day spa built around massage, skincare, and a salt lounge — no traditional steam room, but a strong sauna-adjacent option for locals.",
+    rating:null, reviews:"162 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Suncoast Hotel & Casino Spa",
+    region:"summerlin", casino:true, verified:false,
+    price:1,
+    priceNote:"Call for current facility/day-pass pricing",
+    dayPass:{amount:null, display:"No flat day-pass rate advertised — call for pricing"},
+    address:"9090 Alta Dr, Las Vegas, NV 89145",
+    hours:"Call to confirm current hours",
+    phone:"(702) 636-7111",
+    website:"suncoast.boydgaming.com",
+    note:"Budget-friendly locals casino with a sauna, hot tub, and fitness center — no confirmed wet steam room.",
+    rating:null, reviews:null, source:null
+  },
+  {
+    name:"Sweat It Infrared Sauna Studio",
+    region:"summerlin", casino:false, verified:false,
+    price:1,
+    priceNote:"Session-based pricing, not a flat day pass — call for rates",
+    dayPass:{amount:null, display:"No flat day-pass rate — priced per private sauna suite session"},
+    address:"1958 Village Center Cir, Ste 5, Las Vegas, NV 89134",
+    hours:"Daily, 9:00 am – 8:00 pm",
+    phone:"(702) 233-9051",
+    website:"sweatitstudio.com",
+    note:"Private full-spectrum infrared sauna suites plus red light therapy in Summerlin's Trails Village Center — no wet steam room.",
+    rating:null, reviews:"29 Yelp reviews", source:"Yelp"
+  },
+  {
+    name:"Perspire Sauna Studio — Summerlin",
+    region:"summerlin", casino:false, verified:false,
+    price:1,
+    priceNote:"Session-based pricing, not a flat day pass — call for rates",
+    dayPass:{amount:null, display:"No flat day-pass rate — priced per private sauna suite session"},
+    address:"410 S Rampart Blvd, Las Vegas, NV 89145",
+    hours:"Mon–Fri 7:00 am – 8:00 pm · Sat–Sun 8:00 am – 6:00 pm",
+    phone:"(702) 766-7073",
+    website:"perspiresaunastudio.com/locations/summerlin",
+    note:"Private infrared sauna suites with towel service and red/color light therapy — no wet steam room.",
+    rating:null, reviews:"19 Yelp reviews", source:"Yelp"
+  },
+];
+
+const ledger = document.getElementById('ledger');
+
+function gaugeHTML(level){
+  let dots = '';
+  for(let i=1;i<=4;i++){
+    dots += `<span class="${i<=level ? 'on':'off'}">$</span>`;
+  }
+  const labels = {1:'BUDGET',2:'MODERATE',3:'UPSCALE',4:'PREMIUM'};
+  return `<div class="gauge">${dots}<small>${labels[level]}</small></div>`;
+}
+
+function starsHTML(v){
+  if(v.rating){
+    const full = Math.round(v.rating);
+    let icons = '';
+    for(let i=1;i<=5;i++){ icons += `<span class="${i<=full?'on':'off'}">★</span>`; }
+    return `<div class="stars"><span class="starIcons">${icons}</span><span>${v.rating.toFixed(1)}</span><span class="src">(${v.source})</span></div>`;
+  } else if (v.reviews) {
+    return `<div class="stars"><span class="src">${v.reviews} — no verified average rating found (${v.source})</span></div>`;
+  }
+  return `<div class="stars"><span class="src">Check current rating on Google or Yelp</span></div>`;
+}
+
+function badgeHTML(v){
+  if(v.verified) return '';
+  return `<div class="badge-row"><span class="unverified">Unverified Vendor</span></div>`;
+}
+
+function contactHTML(v){
+  const telDigits = (v.phone.match(/\d/g) || []).join('');
+  const phoneLink = telDigits.length >= 7
+    ? `<a href="tel:${telDigits}">📞 ${v.phone}</a>`
+    : `<a class="secondary" href="#" onclick="return false;">📞 ${v.phone}</a>`;
+  const looksLikeUrl = /\.[a-z]{2,}/i.test(v.website) && !/\s/.test(v.website);
+  const siteLink = looksLikeUrl
+    ? `<a class="secondary" href="${v.website.startsWith('http') ? v.website : 'https://' + v.website}" target="_blank" rel="noopener">🌐 Visit Website</a>`
+    : `<a class="secondary" href="#" onclick="return false;">🌐 ${v.website}</a>`;
+  return `<div class="contact-row">${phoneLink}${siteLink}</div>`;
+}
+
+let currentRegion = 'all';
+let currentType = 'all';
+
+function render(){
+  ledger.innerHTML = '';
+  venues
+    .filter(v => currentRegion === 'all' || v.region === currentRegion)
+    .filter(v => currentType === 'all' || (currentType === 'casino' && v.casino) || (currentType === 'noncasino' && !v.casino))
+    .forEach(v => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-top">
+          <div>
+            <h2>${v.name}${v.verified ? '<span class="verified-badge" title="Verified Listing">✓</span>' : ''}</h2>
+            <span class="venue-tag ${v.casino ? 'casino':'noncasino'}">${v.casino ? 'Inside a Casino' : 'Non-Casino'}</span>
+            ${badgeHTML(v)}
+          </div>
+          ${gaugeHTML(v.price)}
+        </div>
+        ${starsHTML(v)}
+        <div class="meta">
+          <div class="row"><span class="k">Address</span><span>${v.address}</span></div>
+          <div class="row"><span class="k">Price</span><span>${v.priceNote}</span></div>
+          <div class="row"><span class="k">Hours</span><span>${v.hours}</span></div>
+        </div>
+        <p class="note">${v.note}</p>
+        ${contactHTML(v)}
+      `;
+      ledger.appendChild(card);
+    });
+}
+
+document.querySelectorAll('[data-region]').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-region]').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentRegion = chip.dataset.region;
+    render();
+  });
+});
+
+document.querySelectorAll('[data-type]').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-type]').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentType = chip.dataset.type;
+    render();
+  });
+});
+
+render();
+
+const newsletterForm = document.getElementById('newsletterForm');
+if(newsletterForm){
+  newsletterForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    document.getElementById('newsletterSuccess').style.display = 'block';
+    newsletterForm.reset();
+  });
+}
+
+function buildDayPassView(){
+  const ranked = venues.filter(v => v.dayPass.amount !== null).sort((a,b) => b.dayPass.amount - a.dayPass.amount);
+  const unranked = venues.filter(v => v.dayPass.amount === null);
+
+  document.getElementById('dayPassRanked').innerHTML = ranked.map(v => `
+    <div class="daypass-row">
+      <div>
+        <span class="dp-name">${v.name}</span>
+        <span class="dp-detail">${v.dayPass.display}</span>
+      </div>
+      <div class="dp-price">$${v.dayPass.amount}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('dayPassUnranked').innerHTML = unranked.map(v => `
+    <div class="daypass-row">
+      <div>
+        <span class="dp-name">${v.name}</span>
+        <span class="dp-detail">${v.dayPass.display}</span>
+      </div>
+      <div class="dp-price">Call for rate</div>
+    </div>
+  `).join('');
+}
+
+const dayPassBtn = document.getElementById('dayPassBtn');
+const dayPassOverlay = document.getElementById('dayPassOverlay');
+const dayPassClose = document.getElementById('dayPassClose');
+
+if(dayPassBtn){
+  dayPassBtn.addEventListener('click', ()=>{
+    buildDayPassView();
+    dayPassOverlay.classList.add('open');
+    window.scrollTo(0,0);
+  });
+}
+if(dayPassClose){
+  dayPassClose.addEventListener('click', ()=>{
+    dayPassOverlay.classList.remove('open');
+  });
+}
+
+// Auto-open Day Passes if arriving via a direct link (e.g. from the WTF site's bonus bubble)
+if(new URLSearchParams(window.location.search).get('daypasses') === '1'){
+  buildDayPassView();
+  dayPassOverlay.classList.add('open');
+}
+</script>
+
+</body>
+</html>
