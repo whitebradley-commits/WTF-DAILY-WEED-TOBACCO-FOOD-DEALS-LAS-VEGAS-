@@ -331,6 +331,123 @@
   }
   .contact-row a.secondary:hover{ background:rgba(138,90,43,0.15); }
 
+  .claim-link{
+    display:block;
+    margin-top:0.8rem;
+    background:none;
+    border:1.5px dashed #6a6a6a;
+    color:#b8b8b8;
+    font-family:inherit;
+    font-size:0.76rem;
+    font-weight:700;
+    padding:0.5rem 0.8rem;
+    border-radius:20px;
+    cursor:pointer;
+    width:100%;
+    text-align:center;
+  }
+  .claim-link:hover{
+    border-color:var(--btn-gold-bright);
+    color:var(--btn-gold-bright);
+    background:rgba(255,215,0,0.06);
+  }
+  .claim-link-sm{
+    margin-top:0.6rem;
+    font-size:0.7rem;
+    padding:0.4rem 0.7rem;
+  }
+
+  .claim-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.88);
+    z-index:150;
+    align-items:center;
+    justify-content:center;
+    padding:1.5rem;
+  }
+  .claim-overlay.open{ display:flex; }
+  .claim-panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    max-width:400px;
+    width:100%;
+    padding:2rem 1.6rem 1.8rem;
+    position:relative;
+    text-align:center;
+  }
+  .claim-close{
+    position:absolute;
+    top:0.8rem;
+    right:0.8rem;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--btn-gold);
+    border:none;
+    color:#fff;
+    font-size:0.9rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .claim-panel h3{
+    font-size:1.2rem;
+    font-weight:900;
+    color:var(--gold-bright);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    margin:0 0 0.3rem;
+  }
+  .claim-venue-name{
+    font-size:0.9rem;
+    color:var(--paper);
+    font-weight:700;
+    margin:0 0 1rem;
+  }
+  .claim-panel p{
+    font-size:0.82rem;
+    color:var(--dim);
+    line-height:1.5;
+    margin:0 0 1.2rem;
+  }
+  .claim-form{
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .claim-form input{
+    flex:1;
+    min-width:180px;
+    padding:0.65rem 0.9rem;
+    border-radius:20px;
+    border:1px solid rgba(138,90,43,0.55);
+    background:#000;
+    color:#fff;
+    font-family:inherit;
+    font-size:0.85rem;
+  }
+  .claim-form input:focus{ outline:2px solid var(--gold-bright); }
+  .claim-form button{
+    padding:0.65rem 1.2rem;
+    border-radius:20px;
+    border:none;
+    background:var(--btn-gold);
+    color:#fff;
+    font-family:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .claim-form button:hover{ background:var(--btn-gold-bright); color:#000; }
+  .claim-note{
+    margin-top:0.8rem;
+    font-size:0.78rem;
+    color:var(--gold-bright);
+    display:none;
+  }
+
   .gauge{
     font-size:1.45rem;
     letter-spacing:0.1em;
@@ -511,24 +628,37 @@
     background:#000000;
     z-index:100;
     overflow-y:auto;
-    padding:2.5rem 6vw 4rem;
+    padding:4.2rem 6vw 4rem;
   }
   .daypass-overlay.open{ display:block; }
   .daypass-close{
-    display:inline-block;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:96px;
+    height:96px;
     margin-bottom:1.6rem;
-    padding:0.7rem 1.4rem;
+    padding:0;
     background:var(--btn-gold);
     border:1px solid var(--btn-gold);
     color:#fff;
-    border-radius:2px;
+    border-radius:50%;
     font-family:inherit;
     font-weight:900;
-    letter-spacing:0.06em;
+    letter-spacing:0.04em;
     text-transform:uppercase;
-    font-size:0.85rem;
     cursor:pointer;
     box-shadow:0 2px 10px rgba(0,0,0,0.4);
+  }
+  .daypass-close .arrow{
+    font-size:1.75rem;
+    line-height:1;
+  }
+  .daypass-close .back-label{
+    font-size:0.78rem;
+    line-height:1.2;
+    margin-top:0.2rem;
   }
   .daypass-close:hover{
     background:var(--btn-gold-bright);
@@ -539,6 +669,7 @@
     display:flex;
     flex-wrap:wrap;
     gap:0.7rem;
+    margin-top:-1.6rem;
     margin-bottom:1.6rem;
   }
   .daypass-back-row .daypass-close{
@@ -546,7 +677,7 @@
   }
   .wtf-corner{
     position:absolute;
-    top:1.4rem;
+    top:2.2rem;
     right:1.4rem;
     display:flex;
     flex-direction:column;
@@ -566,8 +697,8 @@
   .wtf-corner:hover .wtf-corner-label{ color:var(--paper); }
   .wtf-corner-badge{
     position:relative;
-    width:82px;
-    height:82px;
+    width:104px;
+    height:104px;
     display:block;
     transition:transform 0.15s ease;
   }
@@ -575,26 +706,27 @@
   .wtf-corner-badge svg{ width:100%; height:100%; display:block; }
   .wtf-corner-smoke{
     position:absolute;
-    top:0;
+    top:-6px;
     left:50%;
     width:0;
     height:0;
     pointer-events:none;
+    z-index:2;
   }
   .wtf-puff{
     position:absolute;
     bottom:0;
-    width:7px;
-    height:14px;
+    width:12px;
+    height:20px;
     border-radius:50%;
-    background:radial-gradient(ellipse at center, rgba(255,255,255,0.85), rgba(255,255,255,0) 70%);
-    filter:blur(2px);
+    background:radial-gradient(ellipse at center, rgba(255,255,255,0.95), rgba(255,255,255,0) 72%);
+    filter:blur(2.5px);
     opacity:0;
-    animation:steamRise 3s ease-in infinite;
+    animation:steamRise 2.8s ease-in infinite;
   }
-  .wp1{ left:-14px; animation-delay:0s; }
-  .wp2{ left:0px; width:6px; animation-delay:1s; }
-  .wp3{ left:12px; animation-delay:2s; }
+  .wp1{ left:-20px; animation-delay:0s; }
+  .wp2{ left:-2px; width:10px; animation-delay:0.9s; }
+  .wp3{ left:16px; animation-delay:1.8s; }
   @media (prefers-reduced-motion: reduce){
     .wtf-puff{ animation:none; display:none; }
   }
@@ -612,14 +744,58 @@
     max-width:760px;
     margin:2.2rem auto 0;
   }
+  .daypass-row-wrap{
+    border-bottom:1px solid var(--line);
+  }
   .daypass-row{
     display:flex;
     justify-content:space-between;
     align-items:baseline;
     gap:1rem;
     padding:0.9rem 0;
-    border-bottom:1px solid var(--line);
+    width:100%;
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-align:left;
+    font-family:inherit;
+    color:inherit;
+    position:relative;
   }
+  .daypass-row::after{
+    content:'▾';
+    position:absolute;
+    right:-1.1rem;
+    top:1.1rem;
+    font-size:0.7rem;
+    color:var(--dim);
+    transition:transform 0.2s ease;
+  }
+  .daypass-row.open::after{
+    transform:rotate(180deg);
+    color:var(--btn-gold-bright);
+  }
+  .dp-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.25s ease;
+  }
+  .dp-panel.open{
+    max-height:210px;
+    padding-bottom:1rem;
+  }
+  .dp-panel-line{
+    font-size:0.85rem;
+    color:#c9c9c9;
+    line-height:1.7;
+  }
+  .dp-panel-line a{
+    color:var(--steam);
+    text-decoration:none;
+    border-bottom:1px dotted rgba(159,184,187,0.4);
+  }
+  .dp-panel-line a:hover{ color:var(--btn-gold-bright); border-color:var(--btn-gold-bright); }
+  .dp-static{ color:#c9c9c9; }
   .daypass-row .dp-name{
     font-size:1rem;
     font-weight:700;
@@ -761,8 +937,22 @@
   Prices, hours, and access policies at Las Vegas resort spas change often and shift by season, day of week, and hotel-guest status — figures here are day-pass estimates gathered mid-2026 and should be confirmed directly with the venue before you go. Ratings reflect non-hotel-guest walk-in pricing where two tiers exist.
 </footer>
 
+<div class="claim-overlay" id="claimOverlay">
+  <div class="claim-panel">
+    <button class="claim-close" id="claimClose" aria-label="Close">✕</button>
+    <h3>Claim Your Listing</h3>
+    <p class="claim-venue-name" id="claimVenueName"></p>
+    <p>Are you the owner or manager of this business? Submit your email and we'll reach out to verify your listing and get you set up with an upgraded profile.</p>
+    <form class="claim-form" id="claimForm">
+      <input type="email" id="claimEmail" placeholder="you@business.com" required>
+      <button type="submit">Submit</button>
+    </form>
+    <p class="claim-note" id="claimNote">Thanks — we'll be in touch to verify your listing.</p>
+  </div>
+</div>
+
 <div class="daypass-overlay" id="dayPassOverlay">
-  <a class="wtf-corner" href="wtfdd.html">
+  <a class="wtf-corner" href="https://wtfdd.com/">
     <span class="wtf-corner-label">Click for</span>
     <span class="wtf-corner-badge">
       <span class="wtf-corner-smoke" aria-hidden="true">
@@ -801,7 +991,7 @@
     </span>
   </a>
   <div class="daypass-back-row">
-    <button class="daypass-close" id="dayPassClose">← Back to LV Steam</button>
+    <button class="daypass-close" id="dayPassClose"><span class="arrow">←</span><span class="back-label">LV Steam</span></button>
   </div>
   <h1><span>Day Passes</span></h1>
   <div class="daypass-list" id="dayPassRanked"></div>
@@ -1176,8 +1366,17 @@ function starsHTML(v){
   return `<div class="stars"><span class="src">Check current rating on Google or Yelp</span></div>`;
 }
 
+function isVerified(v){
+  // Premium ($$$$) venues are always verified.
+  if(v.price === 4) return true;
+  // Strip venues at upscale ($$$) or above are verified; budget/moderate stay unverified.
+  if(v.region === 'strip' && v.price === 3) return true;
+  // Henderson/Summerlin venues below $$$$ stay unverified.
+  return false;
+}
+
 function badgeHTML(v){
-  if(v.verified) return '';
+  if(isVerified(v)) return '';
   return `<div class="badge-row"><span class="unverified">Unverified Vendor</span></div>`;
 }
 
@@ -1207,7 +1406,7 @@ function render(){
       card.innerHTML = `
         <div class="card-top">
           <div>
-            <h2>${v.name}${v.verified ? '<span class="verified-badge" title="Verified Listing">✓</span>' : ''}</h2>
+            <h2>${v.name}${isVerified(v) ? '<span class="verified-badge" title="Verified Listing">✓</span>' : ''}</h2>
             <span class="venue-tag ${v.casino ? 'casino':'noncasino'}">${v.casino ? 'Inside a Casino' : 'Non-Casino'}</span>
             ${badgeHTML(v)}
           </div>
@@ -1221,6 +1420,7 @@ function render(){
         </div>
         <p class="note">${v.note}</p>
         ${contactHTML(v)}
+        <button class="claim-link" type="button" data-venue="${v.name.replace(/"/g,'&quot;')}">Is this your business? Claim This Listing →</button>
       `;
       ledger.appendChild(card);
     });
@@ -1255,29 +1455,87 @@ if(newsletterForm){
   });
 }
 
+const claimOverlay = document.getElementById('claimOverlay');
+const claimClose = document.getElementById('claimClose');
+const claimForm = document.getElementById('claimForm');
+const claimVenueName = document.getElementById('claimVenueName');
+const claimNote = document.getElementById('claimNote');
+
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.claim-link');
+  if(!btn) return;
+  claimVenueName.textContent = btn.dataset.venue || '';
+  claimNote.style.display = 'none';
+  claimForm.style.display = 'flex';
+  claimOverlay.classList.add('open');
+});
+if(claimClose){
+  claimClose.addEventListener('click', ()=>{
+    claimOverlay.classList.remove('open');
+  });
+}
+if(claimForm){
+  claimForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    claimForm.style.display = 'none';
+    claimNote.style.display = 'block';
+    claimForm.reset();
+  });
+}
+
+function dayPassRowHTML(v, idx, priceLabel){
+  const telDigits = (v.phone.match(/\d/g) || []).join('');
+  const phoneLink = telDigits.length >= 7
+    ? `<a href="tel:${telDigits}">📞 ${v.phone}</a>`
+    : `<span class="dp-static">📞 ${v.phone}</span>`;
+  const looksLikeUrl = /\.[a-z]{2,}/i.test(v.website) && !/\s/.test(v.website);
+  const siteLink = looksLikeUrl
+    ? `<a href="${v.website.startsWith('http') ? v.website : 'https://' + v.website}" target="_blank" rel="noopener">🌐 ${v.website}</a>`
+    : `<span class="dp-static">🌐 ${v.website}</span>`;
+  return `
+    <div class="daypass-row-wrap">
+      <button class="daypass-row" type="button" data-target="dp-panel-${idx}">
+        <div>
+          <span class="dp-name">${v.name}</span>
+          <span class="dp-detail">${v.dayPass.display}</span>
+        </div>
+        <div class="dp-price">${priceLabel}</div>
+      </button>
+      <div class="dp-panel" id="dp-panel-${idx}">
+        <div class="dp-panel-line">📍 ${v.address}</div>
+        <div class="dp-panel-line">${phoneLink}</div>
+        <div class="dp-panel-line">${siteLink}</div>
+        <button class="claim-link claim-link-sm" type="button" data-venue="${v.name.replace(/"/g,'&quot;')}">Is this your business? Claim This Listing →</button>
+      </div>
+    </div>
+  `;
+}
+
 function buildDayPassView(){
   const ranked = venues.filter(v => v.dayPass.amount !== null).sort((a,b) => b.dayPass.amount - a.dayPass.amount);
   const unranked = venues.filter(v => v.dayPass.amount === null);
 
-  document.getElementById('dayPassRanked').innerHTML = ranked.map(v => `
-    <div class="daypass-row">
-      <div>
-        <span class="dp-name">${v.name}</span>
-        <span class="dp-detail">${v.dayPass.display}</span>
-      </div>
-      <div class="dp-price">$${v.dayPass.amount}</div>
-    </div>
-  `).join('');
+  document.getElementById('dayPassRanked').innerHTML = ranked.map((v,i) =>
+    dayPassRowHTML(v, 'r'+i, '$' + v.dayPass.amount)
+  ).join('');
 
-  document.getElementById('dayPassUnranked').innerHTML = unranked.map(v => `
-    <div class="daypass-row">
-      <div>
-        <span class="dp-name">${v.name}</span>
-        <span class="dp-detail">${v.dayPass.display}</span>
-      </div>
-      <div class="dp-price">Call for rate</div>
-    </div>
-  `).join('');
+  document.getElementById('dayPassUnranked').innerHTML = unranked.map((v,i) =>
+    dayPassRowHTML(v, 'u'+i, 'Call for rate')
+  ).join('');
+
+  document.querySelectorAll('.daypass-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const panel = document.getElementById(row.dataset.target);
+      if(!panel) return;
+      const isOpen = panel.classList.contains('open');
+      document.querySelectorAll('.dp-panel.open').forEach(p => p.classList.remove('open'));
+      document.querySelectorAll('.daypass-row.open').forEach(r => r.classList.remove('open'));
+      if(!isOpen){
+        panel.classList.add('open');
+        row.classList.add('open');
+      }
+    });
+  });
 }
 
 const dayPassBtn = document.getElementById('dayPassBtn');
