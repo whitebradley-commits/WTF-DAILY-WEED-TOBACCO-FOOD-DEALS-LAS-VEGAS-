@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Poker Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#0a0a0a;min-height:100vh;overflow-x:hidden;}
+/* ============ TPA (The Poker Agency) — fully scoped ============ */
+  .tpa-overlay{
+    position:fixed;inset:0;background:#0a0a0a;z-index:250;
+    display:none;overflow-y:auto;overflow-x:hidden;
+  }
+  .tpa-overlay.open{display:block;}
+  .tpa-scope{
+    position:relative;font-family:'Archivo Narrow',sans-serif;color:#ece7db;
+    padding:70px 22px 60px;max-width:640px;margin:0 auto;
+  }
+  .tpa-felt-glow{
+    position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(245,166,35,0.14), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 30%, rgba(226,35,26,0.10), transparent 60%);
+  }
+  .tpa-mark-intro{display:flex;flex-direction:column;align-items:center;padding:10px 0 30px;}
+  .tpa-emblem{width:min(72vw,260px);filter:drop-shadow(0 0 26px rgba(245,166,35,0.28));margin-bottom:20px;}
+  .tpa-emblem svg{width:100%;height:100%;}
+  .tpa-ring-text-top{font-family:'Archivo Narrow',sans-serif;font-size:12px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;}
+  .tpa-ring-text-bottom{font-family:'Archivo Narrow',sans-serif;font-size:14px;letter-spacing:1px;font-weight:700;text-transform:uppercase;}
+  .tpa-initials{font-family:Georgia,serif;font-weight:700;font-size:74px;fill:#0a0a0a;}
+  .tpa-initials-glow{font-family:Georgia,serif;font-weight:700;font-size:74px;fill:#e2231a;opacity:0.55;}
+  .tpa-platform-row{display:flex;gap:26px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
+  .tpa-platform-word{font-weight:800;font-size:1.4rem;text-transform:uppercase;letter-spacing:-0.01em;}
+  .tpa-fade-clubgg{background-image:linear-gradient(90deg,#fdf6e8 0%,#fdf6e8 50%,#f5a623 67%,#e2231a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+  .tpa-fade-pokerbros{background-image:linear-gradient(90deg,#f5a623 0%,#e2231a 50%,#fdf6e8 67%,#fdf6e8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+  .tpa-brand-center{font-weight:700;background-image:linear-gradient(90deg,#f5a623 0%,#e2231a 45%,#fdf6e8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;}
+  .tpa-about{padding:20px 0 36px;border-top:1px solid rgba(236,231,219,0.12);}
+  .tpa-eyebrow{
+    font-size:1.15rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;font-weight:700;
+    background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  }
+  .tpa-about h2{font-family:Georgia,serif;font-weight:600;font-size:1.6rem;color:#ded6c4;margin-bottom:14px;}
+  .tpa-about p{color:#a9a396;font-size:0.92rem;line-height:1.6;}
+  .tpa-affiliates{display:flex;flex-direction:column;gap:22px;}
+  .tpa-affiliate{
+    background:radial-gradient(ellipse at 50% 25%, rgba(255,255,255,0.05), transparent 55%), radial-gradient(ellipse at 50% 40%, #c85f16 0%, #2a0f04 78%);
+    border-radius:24px;padding:26px 22px;border:6px solid #1b1310;
+    box-shadow:inset 0 0 60px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(245,166,35,0.18);
+  }
+  .tpa-avatar-flag{font-size:2.6rem;line-height:1;margin-bottom:8px;filter:drop-shadow(0 0 10px rgba(245,166,35,0.4));}
+  .tpa-tag{font-size:0.7rem;color:#ff9a3c;letter-spacing:0.12em;text-transform:uppercase;display:block;margin-bottom:6px;}
+  .tpa-affiliate h3{font-family:Georgia,serif;font-size:1.3rem;color:#ece7db;margin-bottom:8px;}
+  .tpa-affiliate p{color:rgba(236,231,219,0.72);font-size:0.88rem;line-height:1.55;margin-bottom:10px;}
+  .tpa-highlight{font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid rgba(245,166,35,0.35);background:linear-gradient(90deg, rgba(245,166,35,0.12), rgba(226,35,26,0.08));color:#f5a623;display:inline-block;margin:0 6px 6px 0;}
+  .tpa-contact-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+  .tpa-btn-call,.tpa-btn-email,.tpa-btn-money,.tpa-btn-hm,.tpa-btn-social{
+    width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .tpa-btn-call svg,.tpa-btn-email svg,.tpa-btn-social svg{width:16px;height:16px;}
+  .tpa-btn-social{border:1px solid rgba(236,231,219,0.25);background:rgba(236,231,219,0.05);}
+  .tpa-btn-social svg{fill:#ece7db;}
+  .tpa-btn-pending{border-color:#555 !important;background:none !important;}
+  .tpa-btn-pending svg{fill:#555 !important;}
+  .tpa-btn-whatsapp{border:1px solid rgba(37,211,102,0.55);background:rgba(37,211,102,0.08);}
+  .tpa-btn-whatsapp svg{fill:#25D366;}
+  .tpa-btn-telegram{border:1px solid rgba(38,165,228,0.55);background:rgba(38,165,228,0.08);}
+  .tpa-btn-telegram svg{fill:#26A5E4;}
+  .tpa-btn-call{border:1px solid rgba(226,35,26,0.55);background:rgba(226,35,26,0.06);}
+  .tpa-btn-call svg{fill:#e2231a;}
+  .tpa-btn-email{border:1px solid rgba(245,166,35,0.5);background:rgba(245,166,35,0.06);}
+  .tpa-btn-email svg{fill:none;stroke:#ff9a3c;stroke-width:1.8;}
+  .tpa-btn-money{border:1px solid rgba(45,201,110,0.55);background:rgba(45,201,110,0.06);}
+  .tpa-btn-money span{font-family:Georgia,serif;font-weight:700;font-size:1.1rem;color:#2dc96e;}
+  .tpa-btn-hm{border:1px solid rgba(232,207,143,0.5);background:rgba(232,207,143,0.06);}
+  .tpa-btn-hm span{font-weight:800;font-size:0.68rem;color:#ff9a3c;}
+  .tpa-footer{margin-top:40px;padding-top:24px;border-top:1px solid rgba(236,231,219,0.12);}
+
+  .tpa-platforms{padding:24px 0;border-top:1px solid rgba(236,231,219,0.12);border-bottom:1px solid rgba(236,231,219,0.12);margin-bottom:36px;}
+  .tpa-platforms-label{font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:#a9a396;display:block;margin-bottom:14px;}
+  .tpa-platform-badges{display:flex;gap:12px;flex-wrap:wrap;}
+  .tpa-badge{border:1px solid rgba(236,231,219,0.12);padding:10px 16px;border-radius:2px;font-family:Georgia,serif;font-size:0.9rem;color:#ece7db;display:flex;align-items:center;gap:8px;}
+  .tpa-badge-dot{width:6px;height:6px;border-radius:50%;background:#f5a623;display:inline-block;}
+
+  .tpa-page-headline{
+    font-family:Georgia,serif;font-weight:700;font-size:2.2rem;line-height:1.1;
+    margin-bottom:32px;
+    background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  }
+
+  .tpa-video-btn{
+    display:inline-flex;align-items:center;gap:5px;
+    background:rgba(10,10,10,0.7);
+    font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.62rem;letter-spacing:0.03em;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1.5px solid #f5a623;
+    text-decoration:none;
+    animation:tpaVideoBtnGlow 2s ease-in-out infinite;
+  }
+  .tpa-video-label, .tpa-video-arrow{
+    background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .tpa-video-arrow{
+    font-size:0.75rem;
+    animation:tpaVideoArrowFlash 1.2s ease-in-out infinite;
+  }
+  @keyframes tpaVideoBtnGlow{
+    0%,100%{ box-shadow:0 0 4px rgba(245,166,35,0.4); border-color:#f5a623; }
+    50%{ box-shadow:0 0 14px rgba(245,166,35,0.9), 0 0 22px rgba(226,35,26,0.4); border-color:#ffc266; }
+  }
+  @keyframes tpaVideoArrowFlash{
+    0%,100%{ opacity:0.4; transform:translateX(0); }
+    50%{ opacity:1; transform:translateX(3px); }
+  }
+
+  .tpa-values{margin-top:48px;margin-bottom:44px;}
+  .tpa-values h2{
+    font-family:Georgia,serif;font-weight:700;font-size:2rem;margin-bottom:20px;
+    background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .tpa-value-grid{display:flex;flex-direction:column;gap:18px;}
+  .tpa-value-card{
+    position:relative;
+    background:radial-gradient(ellipse at 50% 25%, rgba(255,255,255,0.05), transparent 55%), radial-gradient(ellipse at 50% 40%, #c85f16 0%, #2a0f04 78%);
+    border-radius:24px;padding:26px 22px;border:6px solid #1b1310;
+    box-shadow:inset 0 0 60px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(245,166,35,0.18);
+  }
+  .tpa-value-card--featured{
+    border-color:#2a1a10;
+    box-shadow:inset 0 0 60px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(245,166,35,0.35), 0 16px 40px -12px rgba(226,35,26,0.25);
+  }
+  .tpa-value-num{
+    font-family:Georgia,serif;font-size:0.9rem;font-weight:700;color:#000;
+    background:linear-gradient(135deg, #f5a623, #b3480f);
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+    box-shadow:0 0 0 3px rgba(10,10,10,0.5);
+  }
+  .tpa-value-card--featured .tpa-value-num{background:linear-gradient(135deg, #f5a623, #e2231a);}
+  .tpa-value-card h3{font-family:Georgia,serif;font-size:1.15rem;color:#ece7db;margin-bottom:10px;}
+  .tpa-value-card p{color:rgba(236,231,219,0.72);font-size:0.88rem;line-height:1.55;}
+  .tpa-featured-link{
+    cursor:pointer;display:inline-block;margin-top:14px;font-size:0.82rem;font-weight:600;
+    color:#f5a623;border-bottom:1px solid rgba(245,166,35,0.4);padding-bottom:2px;
+  }
+
+  .tpa-join{text-align:center;padding:20px 0 10px;}
+  .tpa-join h2{font-family:Georgia,serif;font-weight:600;font-size:1.6rem;color:#ded6c4;margin-bottom:12px;}
+  .tpa-join p{color:#a9a396;font-size:0.9rem;max-width:420px;margin:0 auto 30px;}
+  .tpa-member-card{
+    position:relative;width:100%;max-width:340px;aspect-ratio:1.586/1;margin:0 auto 30px;
+    border-radius:16px;
+    background:radial-gradient(ellipse at 20% 0%, rgba(245,166,35,0.10), transparent 55%), linear-gradient(155deg, #141414, #050505 60%);
+    border:1px solid rgba(245,166,35,0.25);
+    box-shadow:0 20px 50px -18px rgba(0,0,0,0.7);
+    padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;text-align:left;
+  }
+  .tpa-member-card-sheen{position:absolute;top:0;left:-40%;width:60%;height:100%;background:linear-gradient(100deg, transparent, rgba(255,255,255,0.06) 45%, transparent 60%);transform:skewX(-18deg);}
+  .tpa-member-card-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+  .tpa-card-chip{width:36px;height:26px;border-radius:6px;background:linear-gradient(135deg, #f5a623, #e2231a);}
+  .tpa-member-card-mid{font-weight:700;font-size:0.75rem;letter-spacing:0.3em;color:rgba(236,231,219,0.55);position:relative;z-index:1;}
+  .tpa-member-card-bottom{font-size:0.82rem;position:relative;z-index:1;line-height:1.6;}
+  .tpa-card-agency-name{
+    font-family:Georgia,serif;font-weight:700;font-size:0.85rem;
+    background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  }
+  .tpa-card-tagline{
+    font-family:'Archivo Narrow',sans-serif;font-weight:400;font-size:0.68rem;letter-spacing:0.08em;
+    color:#fff;
+  }
+  .tpa-card-dot{display:none;}
+  .tpa-member-card-since{
+    font-family:Georgia,serif;font-style:italic;font-weight:300;
+    font-size:0.68rem;letter-spacing:0.1em;color:rgba(245,166,35,0.75);
+    position:relative;z-index:1;margin-top:6px;
+  }
+  .tpa-join-btn{
+    position:relative;
+    background:rgba(10,10,10,0.6);
+    color:#ffe4b3;
+    font-family:Georgia,serif;font-weight:700;font-size:0.8rem;letter-spacing:0.04em;
+    padding:11px 26px;
+    border-radius:999px;
+    border:1.5px solid #f5a623;
+    display:inline-flex;align-items:center;gap:9px;
+    text-decoration:none;
+    text-transform:uppercase;
+    animation:tpaBtnGlow 2s ease-in-out infinite;
+    transition:transform .2s ease;
+  }
+  .tpa-join-btn:hover{transform:translateY(-2px);}
+  .tpa-join-btn::after{
+    content:'←';
+    font-size:0.95rem;
+    animation:tpaArrowFlash 1.4s ease-in-out infinite;
+  }
+  @keyframes tpaBtnGlow{
+    0%,100%{ box-shadow:0 0 8px rgba(245,166,35,0.4), inset 0 0 12px rgba(245,166,35,0.08); border-color:#f5a623; }
+    50%{ box-shadow:0 0 22px rgba(245,166,35,0.9), 0 0 40px rgba(226,35,26,0.4), inset 0 0 16px rgba(245,166,35,0.15); border-color:#ffc266; }
+  }
+  @keyframes tpaArrowFlash{
+    0%,100%{ opacity:0.4; transform:translateX(0); }
+    50%{ opacity:1; transform:translateX(4px); }
+  }
+
+  
+</style>
+</head>
+<body>
+
+<div class="tpa-overlay open" id="tpaOverlay">
+    <button class="ty-close" id="tpaClose" aria-label="Close" style="position:fixed;top:16px;left:16px;z-index:50;">✕</button>
+    <a href="https://tpabombpot-4mtcmlwa.manus.space/" target="_blank" rel="noopener" class="tpa-video-btn" style="position:fixed;top:14px;right:16px;z-index:50;">
+      <span class="tpa-video-arrow">→</span><span class="tpa-video-label">VIDEO CATALOG</span>
+    </a>
+    <div class="tpa-scope">
+      <div class="tpa-felt-glow"></div>
+
+      <section class="tpa-mark-intro">
+        <div class="tpa-emblem">
+          <svg viewBox="-30 -30 320 320">
+            <defs>
+              <linearGradient id="tpaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5a623"/>
+                <stop offset="100%" stop-color="#e2231a"/>
+              </linearGradient>
+              <filter id="tpaGlow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="130" cy="130" r="105" fill="none" stroke="url(#tpaGrad)" stroke-width="2.4"/>
+            <text x="130" y="150" text-anchor="middle" class="tpa-initials-glow" filter="url(#tpaGlow)">TPA</text>
+            <text x="130" y="150" text-anchor="middle" class="tpa-initials">TPA</text>
+            <text x="130" y="192" text-anchor="middle" class="tpa-ring-text-bottom" fill="url(#tpaGrad)">THE POKER AGENCY</text>
+          </svg>
+        </div>
+        <div class="tpa-platform-row">
+          <div class="tpa-platform-word"><span class="tpa-fade-clubgg">ClubGG</span></div>
+          <div class="tpa-platform-word tpa-pokerbros"><span class="tpa-fade-pokerbros">PokerBROS</span></div>
+        </div>
+      </section>
+
+      <section class="tpa-about">
+        <div class="tpa-eyebrow" style="background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-size:1.75rem;font-family:Georgia,serif;font-weight:700;">What we're about</div>
+        <h2 style="background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">Professionals You Can Trust</h2>
+        <p><span class="tpa-brand-center">The Poker Agency</span> has direct access to the unions running <span class="tpa-fade-clubgg">ClubGG</span>, <span class="tpa-fade-pokerbros">PokerBROS</span>, and a growing list of other major apps — real players, real consistency, and trust that's earned.</p>
+        <p style="margin-top:14px;">We're live and online pros. We play the same games we coach, on the same apps we send you to.</p>
+        <p style="margin-top:14px;">Long-standing reputations in the community — that's why you can trust us.</p>
+      </section>
+
+      <section class="tpa-affiliates">
+        <div class="tpa-affiliate">
+          <h3>Micheal O'Neill</h3>
+
+
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Micheal"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Micheal"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=791583" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <h3>Samuel Welbourne</h3>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Samuel"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Samuel"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=172222" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <h3>Jordan Bamford</h3>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Jordan"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Jordan"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=200766" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="tpa-footer">
+        <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin-bottom:14px;">
+          <span style="color:#a9a396; font-size:0.8rem;">Partners</span>
+          <button type="button" id="tpaAffiliateBtn" style="color:#f5a623; font-size:0.8rem;background:none;border:none;padding:0;font-family:inherit;cursor:pointer;text-decoration:underline;">Become an Affiliate</button>
+          <button type="button" id="tpaCoachingBtn" style="color:#f5a623; font-size:0.8rem;background:none;border:none;padding:0;font-family:inherit;cursor:pointer;text-decoration:underline;">Coaching</button>
+          <button type="button" id="tpaStakingBtn" style="color:#f5a623; font-size:0.8rem;background:none;border:none;padding:0;font-family:inherit;cursor:pointer;text-decoration:underline;">Staking</button>
+        </div>
+        <div style="font-size:0.75rem; color:#a9a396;">© 2026 The Poker Agency — a community, not a company.</div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="tpa-overlay" id="tpaCoachingOverlay">
+    <button class="ty-close" id="tpaCoachingClose" aria-label="Close" style="position:fixed;top:16px;right:16px;z-index:50;">✕</button>
+    <div class="tpa-scope">
+      <div class="tpa-felt-glow"></div>
+
+      <button type="button" id="tpaCoachingBack" style="background:none;border:none;color:#f5a623;font-size:0.85rem;font-weight:700;padding:0;margin-bottom:24px;cursor:pointer;">← Back to The Poker Agency</button>
+      <div class="tpa-emblem" style="margin:0 auto 20px;">
+        <svg viewBox="-30 -30 320 320">
+          <defs>
+            <linearGradient id="tpaGradCoaching" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f5a623"/>
+              <stop offset="100%" stop-color="#e2231a"/>
+            </linearGradient>
+            <path id="tpaTopArcCoaching" d="M 30,130 A 100,100 0 1,1 230,130"/>
+            <filter id="tpaGlowCoaching" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/></feMerge>
+            </filter>
+          </defs>
+          <circle cx="130" cy="130" r="122" fill="none" stroke="url(#tpaGradCoaching)" stroke-width="2.4"/>
+          <text x="130" y="150" text-anchor="middle" class="tpa-initials-glow" filter="url(#tpaGlowCoaching)">TPA</text>
+          <text x="130" y="150" text-anchor="middle" class="tpa-initials">TPA</text>
+          <text class="tpa-ring-text-top">
+            <textPath href="#tpaTopArcCoaching" startOffset="50%" text-anchor="middle"><tspan fill="url(#tpaGradCoaching)">PLAY </tspan><tspan fill="url(#tpaGradCoaching)" font-size="8">♦</tspan><tspan fill="url(#tpaGradCoaching)"> LEARN </tspan><tspan fill="url(#tpaGradCoaching)" font-size="8">♦</tspan><tspan fill="url(#tpaGradCoaching)"> SWEAT</tspan></textPath>
+          </text>
+          <text x="130" y="205" text-anchor="middle" class="tpa-ring-text-bottom" fill="url(#tpaGradCoaching)">THE POKER AGENCY</text>
+        </svg>
+      </div>
+      
+
+      <h1 class="tpa-page-headline">Coaching</h1>
+
+      <section class="tpa-about" style="border-top:none;padding-top:0;">
+        <div class="tpa-eyebrow">What we're about</div>
+        <h2>Professionals You Can Trust.</h2>
+        <p><span class="tpa-brand-center">The Poker Agency</span> has direct access to the unions running <span class="tpa-fade-clubgg">ClubGG</span>, <span class="tpa-fade-pokerbros">PokerBROS</span>, and a growing list of other major apps — real players, real consistency, and trust that's earned.</p>
+        <p style="margin-top:14px;">We're live and online pros. We play the same games we coach, on the same apps we send you to.</p>
+        <p style="margin-top:14px;">Long-standing reputations in the community — that's why you can trust us.</p>
+      </section>
+
+      <section class="tpa-platforms">
+        <span class="tpa-platforms-label">Where we play</span>
+        <div class="tpa-platform-badges">
+          <div class="tpa-badge"><span class="tpa-badge-dot"></span> ClubGG</div>
+          <div class="tpa-badge"><span class="tpa-badge-dot"></span> PokerBROS</div>
+        </div>
+      </section>
+
+      <section class="tpa-affiliates">
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇮🇪</div>
+          <h3>Micheal O'Neill</h3>
+          <p>A veteran poker teacher with a long run of live tournament titles and cashes on record with Hendon Mob. Specializes in tournament strategy and helping newer players build a sound preflop foundation.</p>
+          <div class="tpa-highlight">★ $25K Cash, WSOP Main Event, 2026</div>
+          <div class="tpa-highlight">★ 2025 WPT Cambodia Main Event Runner-Up</div>
+          <div class="tpa-highlight">★ 2x WSOP Ring Winner</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Micheal"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Micheal"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=791583" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇬🇧</div>
+          <h3>Samuel Welbourne</h3>
+          <p>Built his name coaching cash game players, with a Hendon Mob record backing up years at the table. Known for breaking down hand ranges in plain language.</p>
+          <div class="tpa-highlight">★ 5 protégés, 20+ cashes — 2026 WSOP</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Samuel"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Samuel"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=172222" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇬🇧</div>
+          <h3>Jordan Bamford</h3>
+          <p>Brings a data-driven approach to the game, with a Hendon Mob history of titles and deep runs. Works closely with newer members on mindset and bankroll discipline.</p>
+          <div class="tpa-highlight">★ 5 cashes, 2026 WSOP Las Vegas Series</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Jordan"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Jordan"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=200766" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="tpa-values">
+        <h2>What you get</h2>
+        <div class="tpa-value-grid">
+          <div class="tpa-value-card">
+            <div class="tpa-value-num">1</div>
+            <h3>Direct Union Access</h3>
+            <p>No middlemen. Load straight onto the trusted tables running ClubGG and PokerBROS through our direct relationships with the people who actually run them.</p>
+          </div>
+          <div class="tpa-value-card">
+            <div class="tpa-value-num">2</div>
+            <h3>Real Track Records</h3>
+            <p>Every coach here has a verifiable Hendon Mob history — live titles, cashes, and results you can look up yourself before you ever commit to anything.</p>
+          </div>
+          <div class="tpa-value-card tpa-value-card--featured">
+            <div class="tpa-value-num">3</div>
+            <h3>Transparent Staking</h3>
+            <p>Clear terms, laid out before you load a single table. No surprises, no fine print you didn't see coming.</p>
+            <span class="tpa-featured-link" id="tpaStakingLink">Ask about staking →</span>
+          </div>
+        </div>
+      </section>
+
+      
+      <p style="color:#a9a396;font-size:0.85rem;line-height:1.6;text-align:center;max-width:340px;margin:36px auto 12px;"><span class="tpa-brand-center">The Poker Agency</span> Newsletter comes out on the first of every month — tournament updates, exclusive bonuses, and community highlights, straight to your inbox.</p>
+
+      <div class="tpa-member-card" style="margin:0 auto 20px;">
+        <div class="tpa-member-card-sheen"></div>
+        <div class="tpa-member-card-top">
+          <div class="tpa-card-chip"></div>
+          <svg viewBox="-30 -30 320 320" width="34" height="34">
+            <defs>
+              <linearGradient id="tpaCardGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5a623"/>
+                <stop offset="100%" stop-color="#e2231a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="130" cy="130" r="122" fill="#0a0a0a" stroke="url(#tpaCardGrad1)" stroke-width="10"/>
+            <text x="130" y="158" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="90" fill="url(#tpaCardGrad1)">TPA</text>
+          </svg>
+        </div>
+        <div class="tpa-member-card-mid">MEMBER</div>
+        <div class="tpa-member-card-bottom"><span class="tpa-card-agency-name">THE POKER AGENCY</span><br><span class="tpa-card-tagline">PLAY  LEARN  SWEAT</span></div>
+        <div class="tpa-member-card-since">MEMBER SINCE 2026</div>
+      </div>
+      <form id="tpaCoachingJoinForm" style="display:flex;justify-content:center;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;border-radius:999px;border:1.5px solid #f5a623;background:rgba(10,10,10,0.6);overflow:hidden;">
+          <input type="email" id="tpaCoachingJoinEmail" placeholder="you@email.com" required style="padding:13px 6px 13px 18px;border:none;background:none;color:#ffe4b3;font-family:'Archivo Narrow',sans-serif;font-size:0.9rem;outline:none;width:170px;">
+          <button type="submit" style="padding:13px 18px;border:none;background:none;color:#f5a623;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">Submit</button>
+        </div>
+      </form>
+      <p id="tpaCoachingJoinMsg" style="color:#f5a623;font-size:0.8rem;text-align:center;margin-bottom:6px;"></p>
+      
+      <footer class="tpa-footer">
+        <div style="font-size:0.75rem; color:#a9a396;">© 2026 The Poker Agency — a community, not a company.</div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="tpa-overlay" id="tpaStakingOverlay">
+    <button class="ty-close" id="tpaStakingClose" aria-label="Close" style="position:fixed;top:16px;right:16px;z-index:50;">✕</button>
+    <div class="tpa-scope">
+      <div class="tpa-felt-glow"></div>
+
+      <button type="button" id="tpaStakingBack" style="background:none;border:none;color:#f5a623;font-size:0.85rem;font-weight:700;padding:0;margin-bottom:24px;cursor:pointer;">← Back to The Poker Agency</button>
+      <div class="tpa-emblem" style="margin:0 auto 20px;">
+        <svg viewBox="-30 -30 320 320">
+          <defs>
+            <linearGradient id="tpaGradStaking" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f5a623"/>
+              <stop offset="100%" stop-color="#e2231a"/>
+            </linearGradient>
+            <path id="tpaTopArcStaking" d="M 30,130 A 100,100 0 1,1 230,130"/>
+            <filter id="tpaGlowStaking" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/></feMerge>
+            </filter>
+          </defs>
+          <circle cx="130" cy="130" r="122" fill="none" stroke="url(#tpaGradStaking)" stroke-width="2.4"/>
+          <text x="130" y="150" text-anchor="middle" class="tpa-initials-glow" filter="url(#tpaGlowStaking)">TPA</text>
+          <text x="130" y="150" text-anchor="middle" class="tpa-initials">TPA</text>
+          <text class="tpa-ring-text-top">
+            <textPath href="#tpaTopArcStaking" startOffset="50%" text-anchor="middle"><tspan fill="url(#tpaGradStaking)">PLAY </tspan><tspan fill="url(#tpaGradStaking)" font-size="8">♦</tspan><tspan fill="url(#tpaGradStaking)"> LEARN </tspan><tspan fill="url(#tpaGradStaking)" font-size="8">♦</tspan><tspan fill="url(#tpaGradStaking)"> SWEAT</tspan></textPath>
+          </text>
+          <text x="130" y="205" text-anchor="middle" class="tpa-ring-text-bottom" fill="url(#tpaGradStaking)">THE POKER AGENCY</text>
+        </svg>
+      </div>
+      
+
+            <h1 class="tpa-page-headline">Staking</h1>
+
+      <section class="tpa-about" style="border-top:none;padding-top:0;">
+        <div class="tpa-eyebrow">What we're about</div>
+        <h2>Professionals You Can Trust.</h2>
+        <p><span class="tpa-brand-center">The Poker Agency</span> has direct access to the unions running the platforms that matter — real players, real consistency, and trust that's earned.</p>
+        <p style="margin-top:14px;">We're live and online pros. We play the same games we coach, on the same apps we send you to.</p>
+        <p style="margin-top:14px;">Long-standing reputations in the community — that's why you can trust us.</p>
+      </section>
+
+      <section class="tpa-affiliates">
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇮🇪</div>
+          <h3>Micheal O'Neill</h3>
+          <p>A veteran poker teacher with a long run of live tournament titles and cashes on record with Hendon Mob. Specializes in tournament strategy and helping newer players build a sound preflop foundation.</p>
+          <div class="tpa-highlight">★ $25K Cash, WSOP Main Event, 2026</div>
+          <div class="tpa-highlight">★ 2025 WPT Cambodia Main Event Runner-Up</div>
+          <div class="tpa-highlight">★ 2x WSOP Ring Winner</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Micheal"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Micheal"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=791583" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇬🇧</div>
+          <h3>Samuel Welbourne</h3>
+          <p>Built his name coaching cash game players, with a Hendon Mob record backing up years at the table. Known for breaking down hand ranges in plain language.</p>
+          <div class="tpa-highlight">★ 5 protégés, 20+ cashes — 2026 WSOP</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Samuel"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Samuel"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=172222" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate">
+          <div class="tpa-avatar-flag">🇬🇧</div>
+          <h3>Jordan Bamford</h3>
+          <p>Brings a data-driven approach to the game, with a Hendon Mob history of titles and deep runs. Works closely with newer members on mindset and bankroll discipline.</p>
+          <div class="tpa-highlight">★ 5 cashes, 2026 WSOP Las Vegas Series</div>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-whatsapp" aria-label="WhatsApp Jordan"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-telegram" aria-label="Telegram Jordan"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/player.php?a=r&n=200766" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="tpa-values">
+        <h2>What you get</h2>
+        <div class="tpa-value-grid">
+          <div class="tpa-value-card">
+            <div class="tpa-value-num">1</div>
+            <h3>Direct Union Access</h3>
+            <p>No middlemen. Load straight onto trusted tables through our direct relationships with the people who actually run them.</p>
+          </div>
+          <div class="tpa-value-card">
+            <div class="tpa-value-num">2</div>
+            <h3>Real Track Records</h3>
+            <p>Every coach here has a verifiable Hendon Mob history — live titles, cashes, and results you can look up yourself before you ever commit to anything.</p>
+          </div>
+          <div class="tpa-value-card tpa-value-card--featured">
+            <div class="tpa-value-num">3</div>
+            <h3>Transparent Staking</h3>
+            <p>Clear terms, laid out before you load a single table. No surprises, no fine print you didn't see coming.</p>
+            <span class="tpa-featured-link" id="tpaStakingLink2">Ask about staking →</span>
+          </div>
+        </div>
+      </section>
+
+      <p style="color:#a9a396;font-size:0.85rem;line-height:1.6;text-align:center;max-width:340px;margin:36px auto 12px;"><span class="tpa-brand-center">The Poker Agency</span> Newsletter comes out on the first of every month — tournament updates, exclusive bonuses, and community highlights, straight to your inbox.</p>
+
+      <div class="tpa-member-card" style="margin:0 auto 20px;">
+        <div class="tpa-member-card-sheen"></div>
+        <div class="tpa-member-card-top">
+          <div class="tpa-card-chip"></div>
+          <svg viewBox="-30 -30 320 320" width="34" height="34">
+            <defs>
+              <linearGradient id="tpaCardGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5a623"/>
+                <stop offset="100%" stop-color="#e2231a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="130" cy="130" r="122" fill="#0a0a0a" stroke="url(#tpaCardGrad2)" stroke-width="10"/>
+            <text x="130" y="158" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="90" fill="url(#tpaCardGrad2)">TPA</text>
+          </svg>
+        </div>
+        <div class="tpa-member-card-mid">MEMBER</div>
+        <div class="tpa-member-card-bottom"><span class="tpa-card-agency-name">THE POKER AGENCY</span><br><span class="tpa-card-tagline">PLAY  LEARN  SWEAT</span></div>
+        <div class="tpa-member-card-since">MEMBER SINCE 2026</div>
+      </div>
+      <form id="tpaStakingJoinForm" style="display:flex;justify-content:center;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;border-radius:999px;border:1.5px solid #f5a623;background:rgba(10,10,10,0.6);overflow:hidden;">
+          <input type="email" id="tpaStakingJoinEmail" placeholder="you@email.com" required style="padding:13px 6px 13px 18px;border:none;background:none;color:#ffe4b3;font-family:'Archivo Narrow',sans-serif;font-size:0.9rem;outline:none;width:170px;">
+          <button type="submit" style="padding:13px 18px;border:none;background:none;color:#f5a623;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">Submit</button>
+        </div>
+      </form>
+      <p id="tpaStakingJoinMsg" style="color:#f5a623;font-size:0.8rem;text-align:center;margin-bottom:6px;"></p>
+      
+      <footer class="tpa-footer">
+        <div style="font-size:0.75rem; color:#a9a396;">© 2026 The Poker Agency — a community, not a company.</div>
+      </footer>
+    </div>
+  </div>
+
+  
+
+  <div class="tpa-overlay" id="tpaAffiliateOverlay">
+    <button class="ty-close" id="tpaAffiliateClose" aria-label="Close" style="position:fixed;top:16px;right:16px;z-index:50;">✕</button>
+    <div class="tpa-scope" style="min-height:100vh;display:flex;flex-direction:column;">
+      <div class="tpa-felt-glow"></div>
+
+      <button type="button" id="tpaAffiliateBack" style="background:none;border:none;color:#f5a623;font-size:0.85rem;font-weight:700;padding:0;margin-bottom:24px;cursor:pointer;">← Back to The Poker Agency</button>
+
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+        <h1 class="tpa-page-headline" style="margin-top:20px;margin-bottom:24px;">Becoming an Affiliate</h1>
+        <p style="background-image:linear-gradient(90deg, #ffc266, #f5a623 55%, #e2231a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;font-size:1rem;letter-spacing:0.03em;text-transform:uppercase;font-family:Georgia,serif;font-weight:700;max-width:340px;line-height:1.5;">Unlimited Earning Potential, Bonuses, Yearly Retreat, Free Workshops, Direct Coach Access, A Real Community</p>
+      </div>
+
+
+
+      <div style="display:flex;flex-direction:column;gap:14px;margin:44px 0 10px;">
+        <div class="tpa-affiliate" style="padding:16px 14px;border-radius:16px;">
+          <div class="tpa-avatar-flag" style="font-size:1.8rem;margin-bottom:4px;">🇮🇳</div>
+          <h3 style="font-size:1rem;margin-bottom:5px;">This Could Be You</h3>
+          <p style="font-size:0.78rem;">A dedicated poker professional with a strong track record and a growing community following. Bring your reputation, your players, and your results — we'll bring the platform.</p>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="WhatsApp coming soon"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="Telegram coming soon"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate" style="padding:16px 14px;border-radius:16px;">
+          <div class="tpa-avatar-flag" style="font-size:1.8rem;margin-bottom:4px;">🇺🇸</div>
+          <h3 style="font-size:1rem;margin-bottom:5px;">This Could Be You</h3>
+          <p style="font-size:0.78rem;">A respected name in the community, known for coaching real players toward real results. We're looking for affiliates who play the game the right way and want to grow with us.</p>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="WhatsApp coming soon"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="Telegram coming soon"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+
+        <div class="tpa-affiliate" style="padding:16px 14px;border-radius:16px;">
+          <div class="tpa-avatar-flag" style="font-size:1.8rem;margin-bottom:4px;">🇨🇦</div>
+          <h3 style="font-size:1rem;margin-bottom:5px;">This Could Be You</h3>
+          <p style="font-size:0.78rem;">Someone who takes the game seriously and takes their players even more seriously. If that's you, we want to talk — wherever in the world you're playing from.</p>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="WhatsApp coming soon"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="Telegram coming soon"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+      
+        <div class="tpa-affiliate" style="padding:16px 14px;border-radius:16px;">
+          <div class="tpa-avatar-flag" style="font-size:1.8rem;margin-bottom:4px;">🇳🇱</div>
+          <h3 style="font-size:1rem;margin-bottom:5px;">This Could Be You</h3>
+          <p style="font-size:0.78rem;">A steady, well-liked presence at the tables who's ready to bring their community along. If you've got the following and the reputation, let's talk.</p>
+          <div class="tpa-contact-row">
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="WhatsApp coming soon"><svg viewBox="0 0 24 24"><path d="M17.6 6.3A8.8 8.8 0 0 0 3.6 16.7L2.4 21l4.4-1.2a8.8 8.8 0 0 0 4.2 1.1 8.8 8.8 0 0 0 6.6-14.6zM12 20.1a7.3 7.3 0 0 1-3.7-1l-.3-.2-2.6.7.7-2.5-.2-.3a7.4 7.4 0 1 1 6.1 3.3zm4-5.5c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1s-.6.7-.8.9-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.8 6.8 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.5l.4-.4a1.8 1.8 0 0 0 .2-.4.4.4 0 0 0 0-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.6 4.6 0 0 0 1 2.5 10.5 10.5 0 0 0 4 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 0 0 1.5.1 2.5 2.5 0 0 0 1.6-1.1 2 2 0 0 0 .1-1.1c-.1-.1-.2-.2-.4-.3z"/></svg></span>
+            <span class="tpa-btn-social tpa-btn-pending" aria-label="Telegram coming soon"><svg viewBox="0 0 24 24"><path d="M21.5 4.5 3.2 11.4c-1 .4-1 1.9.1 2.2l4.6 1.4 1.8 5.5c.2.7 1.1.9 1.6.4l2.6-2.5 4.7 3.5c.8.6 1.9.1 2.1-.8l3-14.2c.2-1.1-.9-2-2.2-1.4zM8.8 14.5l8.6-6.9c.3-.2.6.1.3.4l-7 6.9-.3 3.2z"/></svg></span>
+            <a href="mailto:hello@theplayercenter.com?subject=Payment%20Options" class="tpa-btn-money" aria-label="Payment options"><span>$</span></a>
+            <a href="https://pokerdb.thehendonmob.com/" target="_blank" rel="noopener" class="tpa-btn-hm" aria-label="Hendon Mob profile"><span>HM</span></a>
+          </div>
+        </div>
+      </div>
+
+      <p style="color:#a9a396;font-size:0.85rem;line-height:1.6;text-align:center;max-width:340px;margin:36px auto 12px;"><span class="tpa-brand-center">The Poker Agency</span> Newsletter comes out on the first of every month — tournament updates, exclusive bonuses, and community highlights, straight to your inbox.</p>
+
+      <div style="padding:30px 0 40px;margin-top:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+        <div class="tpa-member-card" style="margin:0;">
+          <div class="tpa-member-card-sheen"></div>
+          <div class="tpa-member-card-top">
+            <div class="tpa-card-chip"></div>
+            <svg viewBox="-30 -30 320 320" width="34" height="34">
+            <defs>
+              <linearGradient id="tpaCardGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5a623"/>
+                <stop offset="100%" stop-color="#e2231a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="130" cy="130" r="122" fill="#0a0a0a" stroke="url(#tpaCardGrad3)" stroke-width="10"/>
+            <text x="130" y="158" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="90" fill="url(#tpaCardGrad3)">TPA</text>
+          </svg>
+          </div>
+          <div class="tpa-member-card-mid">MEMBER</div>
+          <div class="tpa-member-card-bottom"><span class="tpa-card-agency-name">THE POKER AGENCY</span><br><span class="tpa-card-tagline">PLAY  LEARN  SWEAT</span></div>
+          <div class="tpa-member-card-since">MEMBER SINCE 2026</div>
+        </div>
+        <form id="tpaAffiliateJoinForm" style="display:flex;align-items:center;justify-content:center;margin-top:12px;">
+          <div style="display:flex;align-items:center;border-radius:999px;border:1.5px solid #f5a623;background:rgba(10,10,10,0.6);box-shadow:0 0 0 1.5px rgba(74,144,217,0.5);overflow:hidden;">
+            <input type="email" id="tpaAffiliateJoinEmail" placeholder="you@email.com" required style="padding:13px 6px 13px 18px;border:none;background:none;color:#ffe4b3;font-family:'Archivo Narrow',sans-serif;font-size:0.9rem;outline:none;width:170px;">
+            <button type="submit" style="padding:13px 18px;border:none;background:none;color:#f5a623;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">Submit</button>
+          </div>
+        </form>
+        <p id="tpaAffiliateJoinMsg" style="color:#f5a623;font-size:0.8rem;margin-top:14px;width:100%;text-align:center;"></p>
+      </div>
+
+      <footer class="tpa-footer">
+        <div style="font-size:0.75rem; color:#a9a396;text-align:center;">© 2026 The Poker Agency — a community, not a company.</div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="tpa-overlay" id="tpaJoinOverlay">
+    <button class="ty-close" id="tpaJoinClose" aria-label="Close" style="position:fixed;top:16px;right:16px;z-index:50;">✕</button>
+    <div class="tpa-scope" style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;">
+      <div class="tpa-felt-glow"></div>
+
+      <button type="button" id="tpaJoinBack" style="background:none;border:none;color:#f5a623;font-size:0.85rem;font-weight:700;padding:0;margin-bottom:24px;cursor:pointer;position:absolute;top:70px;left:22px;">← Back</button>
+
+      <div style="text-align:center;">
+        <h1 class="tpa-page-headline" style="margin-bottom:14px;">Join The Poker Agency</h1>
+        <p style="color:#a9a396;font-size:0.9rem;max-width:340px;margin:0 auto 30px;">Newsletters, tournament updates, and special events — straight from the community. Membership is free to start.</p>
+
+        <div class="tpa-member-card" style="margin:0 auto 30px;">
+          <div class="tpa-member-card-sheen"></div>
+          <div class="tpa-member-card-top">
+            <div class="tpa-card-chip"></div>
+            <svg viewBox="-30 -30 320 320" width="34" height="34">
+            <defs>
+              <linearGradient id="tpaCardGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f5a623"/>
+                <stop offset="100%" stop-color="#e2231a"/>
+              </linearGradient>
+            </defs>
+            <circle cx="130" cy="130" r="122" fill="#0a0a0a" stroke="url(#tpaCardGrad4)" stroke-width="10"/>
+            <text x="130" y="158" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="90" fill="url(#tpaCardGrad4)">TPA</text>
+          </svg>
+          </div>
+          <div class="tpa-member-card-mid">MEMBER</div>
+          <div class="tpa-member-card-bottom"><span class="tpa-card-agency-name">THE POKER AGENCY</span><br><span class="tpa-card-tagline">PLAY  LEARN  SWEAT</span></div>
+          <div class="tpa-member-card-since">MEMBER SINCE 2026</div>
+        </div>
+
+        <form id="tpaJoinForm" style="display:flex;justify-content:center;margin:0 auto;">
+          <div style="display:flex;align-items:center;border-radius:999px;border:1.5px solid #f5a623;background:rgba(10,10,10,0.6);overflow:hidden;">
+            <input type="email" id="tpaJoinEmail" placeholder="you@email.com" required style="padding:13px 6px 13px 18px;border:none;background:none;color:#ffe4b3;font-family:'Archivo Narrow',sans-serif;font-size:0.9rem;outline:none;width:170px;">
+            <button type="submit" style="padding:13px 18px;border:none;background:none;color:#f5a623;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;">Submit</button>
+          </div>
+        </form>
+        <p id="tpaJoinMsg" style="color:#f5a623;font-size:0.8rem;margin-top:14px;"></p>
+      </div>
+    </div>
+  </div>
+
+  
+
+<script>
+function setupTPA(){
+  const overlay = document.getElementById('tpaOverlay');
+  const closeBtn = document.getElementById('tpaClose');
+  const openBtn = document.getElementById('tpaCornerBtn');
+  const coachingOverlay = document.getElementById('tpaCoachingOverlay');
+  const coachingBtn = document.getElementById('tpaCoachingBtn');
+  const coachingClose = document.getElementById('tpaCoachingClose');
+  const coachingBack = document.getElementById('tpaCoachingBack');
+  const stakingOverlay = document.getElementById('tpaStakingOverlay');
+  const stakingBtn = document.getElementById('tpaStakingBtn');
+  const stakingClose = document.getElementById('tpaStakingClose');
+  const stakingBack = document.getElementById('tpaStakingBack');
+  if(!overlay) return;
+  if(openBtn){
+    openBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      overlay.classList.add('open');
+      overlay.scrollTop = 0;
+      window.scrollTo(0,0);
+    });
+  }
+  if(closeBtn){
+    closeBtn.addEventListener('click', function(){
+      overlay.classList.remove('open');
+    });
+  }
+  if(coachingBtn && coachingOverlay){
+    coachingBtn.addEventListener('click', function(){
+      coachingOverlay.classList.add('open');
+      coachingOverlay.scrollTop = 0;
+      window.scrollTo(0,0);
+    });
+  }
+  if(coachingClose && coachingOverlay){
+    coachingClose.addEventListener('click', function(){
+      coachingOverlay.classList.remove('open');
+    });
+  }
+  if(coachingBack && coachingOverlay){
+    coachingBack.addEventListener('click', function(){
+      coachingOverlay.classList.remove('open');
+      overlay.scrollTop = 0;
+    });
+  }
+  if(stakingBtn && stakingOverlay){
+    stakingBtn.addEventListener('click', function(){
+      stakingOverlay.classList.add('open');
+      stakingOverlay.scrollTop = 0;
+      window.scrollTo(0,0);
+    });
+  }
+  if(stakingClose && stakingOverlay){
+    stakingClose.addEventListener('click', function(){
+      stakingOverlay.classList.remove('open');
+    });
+  }
+  if(stakingBack && stakingOverlay){
+    stakingBack.addEventListener('click', function(){
+      stakingOverlay.classList.remove('open');
+      overlay.scrollTop = 0;
+    });
+  }
+  const stakingLink = document.getElementById('tpaStakingLink');
+  const joinBtn = document.querySelector('.tpa-join-btn');
+  if(stakingLink && joinBtn){
+    stakingLink.addEventListener('click', function(){
+      joinBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+  const stakingLink2 = document.getElementById('tpaStakingLink2');
+  if(stakingLink2 && stakingOverlay){
+    stakingLink2.addEventListener('click', function(){
+      const joinBtn2 = stakingOverlay.querySelector('.tpa-join-btn');
+      if(joinBtn2) joinBtn2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+  const affiliateOverlay = document.getElementById('tpaAffiliateOverlay');
+  const affiliateBtn = document.getElementById('tpaAffiliateBtn');
+  const affiliateClose = document.getElementById('tpaAffiliateClose');
+  const affiliateBack = document.getElementById('tpaAffiliateBack');
+  if(affiliateBtn && affiliateOverlay){
+    affiliateBtn.addEventListener('click', function(){
+      affiliateOverlay.classList.add('open');
+      affiliateOverlay.scrollTop = 0;
+      window.scrollTo(0,0);
+    });
+  }
+  if(affiliateClose && affiliateOverlay){
+    affiliateClose.addEventListener('click', function(){
+      affiliateOverlay.classList.remove('open');
+    });
+  }
+  if(affiliateBack && affiliateOverlay){
+    affiliateBack.addEventListener('click', function(){
+      affiliateOverlay.classList.remove('open');
+      overlay.scrollTop = 0;
+    });
+  }
+  const joinOverlay = document.getElementById('tpaJoinOverlay');
+  const joinClose = document.getElementById('tpaJoinClose');
+  const joinBack = document.getElementById('tpaJoinBack');
+  const joinTriggers = document.querySelectorAll('.tpa-join-trigger');
+  if(joinOverlay){
+    joinTriggers.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        joinOverlay.classList.add('open');
+        joinOverlay.scrollTop = 0;
+        window.scrollTo(0,0);
+      });
+    });
+    if(joinClose){
+      joinClose.addEventListener('click', function(){
+        joinOverlay.classList.remove('open');
+      });
+    }
+    if(joinBack){
+      joinBack.addEventListener('click', function(){
+        joinOverlay.classList.remove('open');
+      });
+    }
+    const joinForm = document.getElementById('tpaJoinForm');
+    const joinMsg = document.getElementById('tpaJoinMsg');
+    if(joinForm){
+      joinForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        if(joinMsg) joinMsg.textContent = `Thank you for signing up for the monthly newsletter.`;
+        joinForm.reset();
+      });
+    }
+    const affiliateJoinForm = document.getElementById('tpaAffiliateJoinForm');
+    const affiliateJoinMsg = document.getElementById('tpaAffiliateJoinMsg');
+    if(affiliateJoinForm){
+      affiliateJoinForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        affiliateJoinForm.style.display = 'none';
+        if(affiliateJoinMsg) affiliateJoinMsg.textContent = `Thank you for signing up for the monthly newsletter.`;
+        affiliateJoinForm.reset();
+      });
+    }
+    const coachingJoinForm = document.getElementById('tpaCoachingJoinForm');
+    const coachingJoinMsg = document.getElementById('tpaCoachingJoinMsg');
+    if(coachingJoinForm){
+      coachingJoinForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        coachingJoinForm.style.display = 'none';
+        if(coachingJoinMsg) coachingJoinMsg.textContent = `Thank you for signing up for the monthly newsletter.`;
+        coachingJoinForm.reset();
+      });
+    }
+    const stakingJoinForm = document.getElementById('tpaStakingJoinForm');
+    const stakingJoinMsg = document.getElementById('tpaStakingJoinMsg');
+    if(stakingJoinForm){
+      stakingJoinForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        stakingJoinForm.style.display = 'none';
+        if(stakingJoinMsg) stakingJoinMsg.textContent = `Thank you for signing up for the monthly newsletter.`;
+        stakingJoinForm.reset();
+      });
+    }
+  }
+}
+
+setupTPA();
+</script>
+</body>
+</html>
