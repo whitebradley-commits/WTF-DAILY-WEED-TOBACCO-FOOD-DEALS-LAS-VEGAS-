@@ -1515,6 +1515,13 @@
     display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:60px 16px 40px;
   }
   .directory-overlay.open{display:flex;}
+  /* The web popup must sit above EVERY other overlay (Best Of / LV Steam use
+     z-index:160, thank-you 200, pics gallery 220, TPA 250). Before this, the
+     popup opened at z-index:50 — underneath whatever page you were viewing —
+     so it looked like the buttons did nothing at all. */
+  #webPopupOverlay{ z-index:400; }
+  #phonePopupOverlay{ z-index:420; }
+  #directionsPopupOverlay{ z-index:420; }
   .directory-panel{
     background:var(--surface);border:1px solid var(--border);border-radius:16px;
     max-width:480px;width:100%;padding:24px;position:relative;
@@ -1784,6 +1791,12 @@
     text-decoration:none;transition:all 0.25s ease;flex-shrink:0;
   }
   .icon-btn svg{width:16px;height:16px;}
+  /* Some of these are <button> elements now (phone, directions) rather than
+     links, so strip the browser's default button chrome to keep them looking
+     identical to the anchor versions. */
+  button.icon-btn, button.directions-btn, button.site-btn, button.menu-text-btn{
+    background:none;padding:0;font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none;
+  }
   .icon-btn:hover{background:var(--red);border-color:var(--red);color:#fff;transform:translateY(-2px);}
   .icon-btn.fb-btn{border-color:#1877f2;color:#7fb0fb;}
   .icon-btn.fb-btn:hover{background:#1877f2;border-color:#1877f2;color:#fff;}
@@ -1795,6 +1808,14 @@
   .site-btn-pending:hover{transform:none;background:none;}
   .icon-btn-pending, .directions-btn-pending{
     border-color:#555 !important;color:#555 !important;background:none !important;cursor:default;
+  }
+  /* Facebook / Instagram buttons keep their full brand colors — they look
+     great and signal the business has a presence. They just don't navigate:
+     those sites refuse to be shown inside our popup, and sending visitors
+     out to them was pulling people off the site for good. Clicks are
+     swallowed by a capture-phase handler in JS. */
+  .fb-btn, .ig-btn, .bo-fb-btn, .bo-ig-btn{
+    cursor:default !important;
   }
   .icon-btn-pending:hover, .directions-btn-pending:hover{background:none !important;transform:none !important;color:#555 !important;}
   .icon-btn.email-btn{border-color:#B7410E;color:#CC6633;}
@@ -4981,10 +5002,43 @@
     </div>
   </div>
 
+  <div class="directory-overlay" id="directionsPopupOverlay" style="padding:20px;align-items:center;">
+    <div class="directory-panel" role="dialog" aria-modal="true" style="max-width:380px;width:100%;text-align:center;padding:28px 20px 20px;">
+      <button type="button" id="directionsPopupCloseBtn" class="directory-close" aria-label="Close">&#10005;</button>
+      <div style="font-family:'Archivo Narrow',sans-serif;font-size:0.72rem;letter-spacing:0.14em;color:#888;margin-top:6px;">DIRECTIONS</div>
+      <div id="directionsPopupName" style="font-family:'Archivo Black',sans-serif;font-size:1rem;color:#F2F2F2;margin:6px 0 8px;"></div>
+      <div id="directionsPopupAddress" style="font-family:'Archivo Narrow',sans-serif;font-size:0.86rem;color:#FFD700;line-height:1.5;margin:0 0 14px;"></div>
+      <iframe id="directionsPopupMap" src="" title="Map" loading="lazy"
+        style="width:100%;height:230px;border:1px solid #333;border-radius:12px;background:#111;display:block;"></iframe>
+      <a id="directionsPopupOpen" href="#" style="display:block;margin-top:16px;padding:13px 18px;border-radius:999px;background:#3D8B4C;color:#fff;text-decoration:none;font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.9rem;">OPEN IN MAPS</a>
+      <button type="button" id="directionsPopupCopy" style="margin-top:12px;background:none;border:1px solid #444;border-radius:999px;padding:9px 16px;color:#bbb;font-family:'Archivo Narrow',sans-serif;font-size:0.78rem;cursor:pointer;width:100%;">COPY ADDRESS</button>
+    </div>
+  </div>
+
+  <div class="directory-overlay" id="phonePopupOverlay" style="padding:20px;align-items:center;">
+    <div class="directory-panel" role="dialog" aria-modal="true" style="max-width:340px;width:100%;text-align:center;padding:28px 22px 22px;">
+      <button type="button" id="phonePopupCloseBtn" class="directory-close" aria-label="Close">&#10005;</button>
+      <div style="font-family:'Archivo Narrow',sans-serif;font-size:0.72rem;letter-spacing:0.14em;color:#888;margin-top:6px;">CALL</div>
+      <div id="phonePopupName" style="font-family:'Archivo Black',sans-serif;font-size:1rem;color:#F2F2F2;margin:6px 0 2px;"></div>
+      <a id="phonePopupNumber" href="#" style="display:block;font-family:'Archivo Black',sans-serif;font-size:1.5rem;color:#FFD700;text-decoration:none;margin:10px 0 18px;letter-spacing:0.01em;"></a>
+      <a id="phonePopupCall" href="#" style="display:block;padding:13px 18px;border-radius:999px;background:#3D8B4C;color:#fff;text-decoration:none;font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.9rem;">CALL NOW</a>
+      <button type="button" id="phonePopupCopy" style="margin-top:12px;background:none;border:1px solid #444;border-radius:999px;padding:9px 16px;color:#bbb;font-family:'Archivo Narrow',sans-serif;font-size:0.78rem;cursor:pointer;width:100%;">COPY NUMBER</button>
+    </div>
+  </div>
+
   <div class="directory-overlay" id="webPopupOverlay" style="padding:20px;">
     <div class="directory-panel" role="dialog" aria-modal="true" style="max-width:600px;width:100%;height:85vh;padding:0;display:flex;flex-direction:column;">
       <button type="button" id="webPopupCloseBtn" class="directory-close" aria-label="Close" style="position:absolute;top:10px;right:10px;z-index:5;">✕</button>
       <iframe id="webPopupFrame" src="" style="flex:1;width:100%;border:none;border-radius:16px;background:#fff;" title="Restaurant website"></iframe>
+      <div id="webPopupBar" style="flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#111;border-top:1px solid #333;border-radius:0 0 16px 16px;">
+        <span style="font-family:'Archivo Narrow',sans-serif;font-size:0.72rem;color:#888;line-height:1.3;">
+          Blank or won't load?<br>Some sites block previews.
+        </span>
+        <a id="webPopupOpenTab" href="#" target="_blank" rel="noopener noreferrer"
+           style="flex-shrink:0;padding:8px 14px;border:2px solid #FFD700;border-radius:999px;color:#FFD700;text-decoration:none;font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.04em;white-space:nowrap;">
+          OPEN IN NEW TAB
+        </a>
+      </div>
     </div>
   </div>
 
@@ -6542,10 +6596,13 @@ function renderStars(rating){
   return '<span class="rating-stars">' + stars + '</span> <span class="rating-text">' + rating.score.toFixed(1) + countText + '</span>';
 }
 
-function directionsButtonHTML(address){
+function directionsButtonHTML(address, name){
   if(!address) return '<span class="directions-btn directions-btn-pending" title="Directions coming soon">\ud83d\udccd</span>';
-  const q = encodeURIComponent(address);
-  return '<a href="https://www.google.com/maps/search/?api=1&query=' + q + '" target="_blank" rel="noopener" class="directions-btn" title="Directions">\ud83d\udccd</a>';
+  // Opens our own styled popup with an embedded map. Google's "output=embed"
+  // map view is one of the few external pages that permits being framed, so
+  // the map genuinely renders inside our own box.
+  const esc = function(v){ return String(v || '').replace(/"/g, '&quot;'); };
+  return '<button type="button" class="directions-btn" data-directions-popup="' + esc(address) + '" data-directions-name="' + esc(name) + '" title="Directions">\ud83d\udccd</button>';
 }
 
 function emailButtonHTML(email){
@@ -6558,7 +6615,11 @@ function callButtonHTML(phone){
   const svg = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8z"/></svg>';
   const telDigits = phone ? (String(phone).match(/\d/g) || []).join('') : '';
   if(!telDigits || telDigits.length < 7) return '<span class="icon-btn call-btn icon-btn-pending" title="Phone coming soon">' + svg + '</span>';
-  return '<a class="icon-btn call-btn" href="tel:' + telDigits + '" title="Call">' + svg + '</a>';
+  // Opens our own popup rather than relying on a raw tel: link. In-app
+  // browsers (and desktop) often swallow tel: links entirely, which made the
+  // button look dead. Our popup always shows the number, with a CALL NOW
+  // link and a copy button as a backstop.
+  return '<button type="button" class="icon-btn call-btn" data-phone-popup="' + telDigits + '" data-phone-display="' + String(phone).replace(/"/g,'&quot;') + '" title="Call">' + svg + '</button>';
 }
 
 function menuButtonHTML(name, url, rank){
@@ -6595,7 +6656,7 @@ function setupWebPopup(){
         e.preventDefault();
         e.stopPropagation();
         const url = btn.getAttribute('data-web-popup');
-        openExternal(url);
+        openInPopup(url);
       });
     });
   }, 300);
@@ -6605,70 +6666,197 @@ function setupRestaurantMenuPopup(){
   // Menu buttons are currently disabled (static/inert) per request - nothing to wire up.
 }
 
-// ---- Keeping our site alive when a visitor opens an outside link ----
-// Important constraint: Facebook, Instagram, and most restaurant sites send
-// an X-Frame-Options / frame-ancestors header that forbids being displayed
-// inside another site's iframe. So a true in-page popup of those sites is
-// impossible — that was the original bug where the popup showed up blank.
-//
-// Best available behavior on a phone: hand Instagram and Facebook off to
-// their NATIVE APPS via a deep link. The app opens on top of the browser,
-// our page stays loaded underneath, and when they close the app they land
-// right back on us. If the app isn't installed, we fall back to opening a
-// separate browser tab so our page still isn't replaced.
-function openExternal(href){
-  if(!href) return;
+// ---- Everything stays inside our page ----
+// Outside links open in an in-page popup instead of navigating away, so the
+// visitor never loses our site. Some sites (Facebook, Instagram, Yelp, and
+// others) send a header that forbids being shown inside another page's frame
+// — for those the popup shows a short explanation with an explicit
+// "open in new tab" choice, so leaving is always the visitor's decision
+// rather than something that happens to them.
+function openInPopup(url){
+  if(!url) return;
+  var overlay = document.getElementById('webPopupOverlay');
+  var frame = document.getElementById('webPopupFrame');
+  var openTab = document.getElementById('webPopupOpenTab');
+  if(!overlay || !frame){ return; }
 
-  var deepLink = null;
-  try{
-    var u = new URL(href, window.location.href);
-    var host = u.hostname.replace(/^www\./, '').toLowerCase();
-    var handle = u.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
+  // We deliberately do NOT try to auto-detect whether the site allowed
+  // itself to be framed: a blocked frame still reports "loaded" and we
+  // can't read inside a cross-origin frame, so detection is unreliable.
+  // Instead the popup always carries an "open in new tab" escape bar, so a
+  // blank frame is never a dead end.
+  if(openTab) openTab.setAttribute('href', url);
+  frame.src = url;
+  overlay.classList.add('open');
+}
 
-    if(host.indexOf('instagram.com') !== -1 && handle){
-      deepLink = 'instagram://user?username=' + encodeURIComponent(handle);
-    } else if(host.indexOf('facebook.com') !== -1){
-      // fb://facewebmodal opens the target page inside the Facebook app
-      deepLink = 'fb://facewebmodal/f?href=' + encodeURIComponent(u.href);
-    }
-  }catch(err){ deepLink = null; }
+// ---- Directions popup ----
+// Our own styled box with an embedded Google map, plus OPEN IN MAPS and a
+// copy-address fallback, so the visitor never leaves the site to see where
+// a place is.
+function openDirectionsPopup(address, name){
+  var overlay = document.getElementById('directionsPopupOverlay');
+  if(!overlay || !address) return;
+  var nameEl = document.getElementById('directionsPopupName');
+  var addrEl = document.getElementById('directionsPopupAddress');
+  var mapEl = document.getElementById('directionsPopupMap');
+  var openEl = document.getElementById('directionsPopupOpen');
+  var q = encodeURIComponent(address);
 
-  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(nameEl){
+    nameEl.textContent = name || '';
+    nameEl.style.display = name ? '' : 'none';
+  }
+  if(addrEl) addrEl.textContent = address;
+  if(mapEl) mapEl.src = 'https://www.google.com/maps?q=' + q + '&output=embed';
+  if(openEl) openEl.setAttribute('href', 'https://www.google.com/maps/search/?api=1&query=' + q);
 
-  if(deepLink && isMobile){
-    var handedOff = false;
-    // If the app takes over, the page gets hidden — that's our signal it worked.
-    var onHide = function(){ handedOff = true; };
-    document.addEventListener('visibilitychange', onHide);
-    window.addEventListener('pagehide', onHide);
+  overlay.dataset.address = address;
+  overlay.classList.add('open');
+}
 
-    var frame = document.createElement('iframe');
-    frame.style.display = 'none';
-    frame.src = deepLink;
-    document.body.appendChild(frame);
+function setupDirectionsPopup(){
+  var overlay = document.getElementById('directionsPopupOverlay');
+  if(!overlay) return;
+  var closeBtn = document.getElementById('directionsPopupCloseBtn');
+  var copyBtn = document.getElementById('directionsPopupCopy');
+  var mapEl = document.getElementById('directionsPopupMap');
 
-    setTimeout(function(){
-      document.removeEventListener('visibilitychange', onHide);
-      window.removeEventListener('pagehide', onHide);
-      if(frame.parentNode) frame.parentNode.removeChild(frame);
-      if(!handedOff && !document.hidden){
-        // App not installed — open a separate tab instead of replacing us.
-        window.open(href, '_blank', 'noopener,noreferrer');
-      }
-    }, 900);
-    return;
+  function closeDirectionsPopup(){
+    overlay.classList.remove('open');
+    if(mapEl) mapEl.src = '';   // stop the map loading in the background
   }
 
-  window.open(href, '_blank', 'noopener,noreferrer');
+  if(closeBtn) closeBtn.addEventListener('click', closeDirectionsPopup);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeDirectionsPopup();
+  });
+  if(copyBtn){
+    copyBtn.addEventListener('click', function(){
+      var addr = overlay.dataset.address || '';
+      var done = function(){
+        copyBtn.textContent = 'COPIED';
+        setTimeout(function(){ copyBtn.textContent = 'COPY ADDRESS'; }, 1600);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(addr).then(done).catch(function(){});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = addr;
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); done(); }catch(err){}
+        document.body.removeChild(ta);
+      }
+    });
+  }
+
+  setInterval(function(){
+    document.querySelectorAll('[data-directions-popup]').forEach(function(btn){
+      if(btn.dataset.dirWired) return;
+      btn.dataset.dirWired = '1';
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openDirectionsPopup(btn.getAttribute('data-directions-popup'), btn.getAttribute('data-directions-name'));
+      });
+    });
+  }, 300);
 }
+
+// ---- Phone popup ----
+// Shows the number in-page with a CALL NOW link plus a copy fallback, so the
+// button still does something useful in webviews that block tel: links.
+function openPhonePopup(digits, display){
+  var overlay = document.getElementById('phonePopupOverlay');
+  if(!overlay || !digits) return;
+  var numEl = document.getElementById('phonePopupNumber');
+  var callEl = document.getElementById('phonePopupCall');
+  if(numEl){
+    numEl.textContent = display || digits;
+    numEl.setAttribute('href', 'tel:' + digits);
+  }
+  if(callEl) callEl.setAttribute('href', 'tel:' + digits);
+  overlay.dataset.digits = digits;
+  overlay.classList.add('open');
+}
+
+function setupPhonePopup(){
+  var overlay = document.getElementById('phonePopupOverlay');
+  if(!overlay) return;
+  var closeBtn = document.getElementById('phonePopupCloseBtn');
+  var copyBtn = document.getElementById('phonePopupCopy');
+
+  function closePhonePopup(){ overlay.classList.remove('open'); }
+
+  if(closeBtn) closeBtn.addEventListener('click', closePhonePopup);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closePhonePopup();
+  });
+  if(copyBtn){
+    copyBtn.addEventListener('click', function(){
+      var digits = overlay.dataset.digits || '';
+      var done = function(){
+        copyBtn.textContent = 'COPIED';
+        setTimeout(function(){ copyBtn.textContent = 'COPY NUMBER'; }, 1600);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(digits).then(done).catch(function(){});
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = digits;
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); done(); }catch(err){}
+        document.body.removeChild(ta);
+      }
+    });
+  }
+
+  // Cards render continuously, so wire new phone buttons as they appear.
+  setInterval(function(){
+    document.querySelectorAll('[data-phone-popup]').forEach(function(btn){
+      if(btn.dataset.phoneWired) return;
+      btn.dataset.phoneWired = '1';
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openPhonePopup(btn.getAttribute('data-phone-popup'), btn.getAttribute('data-phone-display'));
+      });
+    });
+  }, 300);
+}
+
+// Hard stop for Facebook / Instagram: never navigate, never popup.
+// Two layers so a click can't slip through: (1) swallow the click in the
+// capture phase before anything else sees it, and (2) continuously strip the
+// href off those buttons as cards render, so even a JS hiccup can't navigate.
+document.addEventListener('click', function(e){
+  if(e.target.closest('.fb-btn, .ig-btn, .bo-fb-btn, .bo-ig-btn')){
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+}, true);
+
+setInterval(function(){
+  document.querySelectorAll('.fb-btn[href], .ig-btn[href], .bo-fb-btn[href], .bo-ig-btn[href]').forEach(function(el){
+    el.removeAttribute('href');
+    el.removeAttribute('target');
+  });
+}, 400);
 
 document.addEventListener('click', function(e){
   var link = e.target.closest('a[target="_blank"]');
   if(!link) return;
+  if(e.target.closest('.fb-btn, .ig-btn, .bo-fb-btn, .bo-ig-btn')) return;
+  // The popup's own "open in new tab" escape link must be left alone,
+  // otherwise it would loop straight back into the popup it's escaping.
+  if(link.id === 'webPopupOpenTab') return;
   var href = link.getAttribute('href');
   if(!href) return;
   e.preventDefault();
-  openExternal(href);
+  openInPopup(href);
 });
 
 function siteButtonHTML(url){
@@ -6802,7 +6990,7 @@ function renderEntryList(entries, catLabel, area){
         addressLine +
         specialtyLine +
         ratingLine +
-        '<div class="entry-site-row">' + callButtonHTML(d.phone) + directionsButtonHTML(d.address) + siteBtn + fbBtn + igBtn + emailButtonHTML(d.email) + picsButtonHTML(d.name) + '</div>' +
+        '<div class="entry-site-row">' + callButtonHTML(d.phone) + directionsButtonHTML(d.address, d.name) + siteBtn + fbBtn + igBtn + emailButtonHTML(d.email) + picsButtonHTML(d.name) + '</div>' +
       '</div>' +
     '</li>';
   }).join('');
@@ -13574,7 +13762,7 @@ function boRenderCategory(cat){
                 <div class="bo-other-location-actions">
                   ${menuButtonHTML(s.name, s.url, s.rank)}
                   ${callButtonHTML(loc.phone)}
-                  ${directionsButtonHTML(loc.address)}
+                  ${directionsButtonHTML(loc.address, loc.name || s.name)}
                 </div>
               </div>
             `).join('')}
@@ -13584,7 +13772,7 @@ function boRenderCategory(cat){
       <div class="bo-icon-row">
         ${menuButtonHTML(s.name, s.url, s.rank)}
         ${callButtonHTML(s.phone)}
-        ${directionsButtonHTML(s.address)}
+        ${directionsButtonHTML(s.address, s.name)}
         ${siteButtonHTML(s.url)}
         ${s.facebook ? `
         <a class="bo-icon-btn bo-fb-btn" href="https://facebook.com/${s.facebook}" target="_blank" rel="noopener" title="Facebook">
@@ -14631,6 +14819,8 @@ async function init(){
   setupWtfCitiesToggle();
   setupRestaurantMenuPopup();
   setupWebPopup();
+  setupPhonePopup();
+  setupDirectionsPopup();
   setupCompanyHub();
   setupBopMiniBadge();
   setupBopLandingBadge();
