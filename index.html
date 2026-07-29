@@ -3232,13 +3232,14 @@
 
   .bo-hours-line{
     color:#FFD700;
-    font-size:0.8rem;
+    font-size:0.68rem;
     font-weight:600;
     margin-top:0.5rem;
     opacity:0.9;
   }
   .bo-hours-icon{
     margin-right:0.3rem;
+    font-size:0.62rem;
   }
 
   .bo-other-locations{
@@ -6594,7 +6595,7 @@ function setupWebPopup(){
         e.preventDefault();
         e.stopPropagation();
         const url = btn.getAttribute('data-web-popup');
-        window.open(url, '_blank', 'noopener,noreferrer');
+        openExternal(url);
       });
     });
   }, 300);
@@ -6604,19 +6605,70 @@ function setupRestaurantMenuPopup(){
   // Menu buttons are currently disabled (static/inert) per request - nothing to wire up.
 }
 
-// Links with target="_blank" (website, Instagram, Facebook, etc.) get routed
-// through window.open() below instead of left as plain navigation. On a
-// phone that has this site installed as a home-screen app, there's no
-// browser "tabs" — a plain link click just takes over that one app window.
-// window.open() forces it to pop out into the phone's actual browser app
-// instead, so this page stays open and running underneath it.
+// ---- Keeping our site alive when a visitor opens an outside link ----
+// Important constraint: Facebook, Instagram, and most restaurant sites send
+// an X-Frame-Options / frame-ancestors header that forbids being displayed
+// inside another site's iframe. So a true in-page popup of those sites is
+// impossible — that was the original bug where the popup showed up blank.
+//
+// Best available behavior on a phone: hand Instagram and Facebook off to
+// their NATIVE APPS via a deep link. The app opens on top of the browser,
+// our page stays loaded underneath, and when they close the app they land
+// right back on us. If the app isn't installed, we fall back to opening a
+// separate browser tab so our page still isn't replaced.
+function openExternal(href){
+  if(!href) return;
+
+  var deepLink = null;
+  try{
+    var u = new URL(href, window.location.href);
+    var host = u.hostname.replace(/^www\./, '').toLowerCase();
+    var handle = u.pathname.replace(/^\/+|\/+$/g, '').split('/')[0];
+
+    if(host.indexOf('instagram.com') !== -1 && handle){
+      deepLink = 'instagram://user?username=' + encodeURIComponent(handle);
+    } else if(host.indexOf('facebook.com') !== -1){
+      // fb://facewebmodal opens the target page inside the Facebook app
+      deepLink = 'fb://facewebmodal/f?href=' + encodeURIComponent(u.href);
+    }
+  }catch(err){ deepLink = null; }
+
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  if(deepLink && isMobile){
+    var handedOff = false;
+    // If the app takes over, the page gets hidden — that's our signal it worked.
+    var onHide = function(){ handedOff = true; };
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onHide);
+
+    var frame = document.createElement('iframe');
+    frame.style.display = 'none';
+    frame.src = deepLink;
+    document.body.appendChild(frame);
+
+    setTimeout(function(){
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onHide);
+      if(frame.parentNode) frame.parentNode.removeChild(frame);
+      if(!handedOff && !document.hidden){
+        // App not installed — open a separate tab instead of replacing us.
+        window.open(href, '_blank', 'noopener,noreferrer');
+      }
+    }, 900);
+    return;
+  }
+
+  window.open(href, '_blank', 'noopener,noreferrer');
+}
+
 document.addEventListener('click', function(e){
-  const link = e.target.closest('a[target="_blank"]');
+  var link = e.target.closest('a[target="_blank"]');
   if(!link) return;
-  const href = link.getAttribute('href');
+  var href = link.getAttribute('href');
   if(!href) return;
   e.preventDefault();
-  window.open(href, '_blank', 'noopener,noreferrer');
+  openExternal(href);
 });
 
 function siteButtonHTML(url){
