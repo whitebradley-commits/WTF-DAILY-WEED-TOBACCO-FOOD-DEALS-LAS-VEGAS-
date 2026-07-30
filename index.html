@@ -3627,17 +3627,47 @@
     line-height:1.55;
     max-width:56ch;
   }
+  /* The grey write-up is collapsed by default so the cards read cleanly —
+     tapping MORE reveals it. */
+  .bo-note-collapsed{ display:none; }
+  .bo-more-btn{
+    background:none;
+    border:none;
+    padding:2px 0;
+    margin:2px 0 0;
+    cursor:pointer;
+    font-family:'Bebas Neue',sans-serif;
+    font-weight:400;
+    font-size:0.92rem;
+    letter-spacing:0.18em;
+    color:#8f8f8f;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .bo-more-btn:hover{ color:#ddd; }
+  .bo-more-caret{
+    font-size:0.6rem;
+    line-height:1;
+    transition:transform 0.2s ease;
+  }
+  .bo-more-btn[aria-expanded="true"] .bo-more-caret{ transform:rotate(180deg); }
+  @media (prefers-reduced-motion: reduce){
+    .bo-more-caret{ transition:none; }
+  }
 
   .bo-hours-line{
     color:#FFD700;
-    font-size:0.68rem;
+    font-size:0.79rem;
     font-weight:600;
     margin-top:0.5rem;
     opacity:0.9;
   }
   .bo-hours-icon{
     margin-right:0.3rem;
-    font-size:0.62rem;
+    font-size:0.73rem;
   }
 
   .bo-other-locations{
@@ -7139,6 +7169,34 @@ function openInPopup(url, fullScreen){
   overlay.classList.toggle('web-popup-full', !!fullScreen);
   overlay.classList.add('open');
 }
+
+// MORE toggle on the Best Of cards: reveals the grey write-up on demand.
+// Delegated from the document so it works for cards rendered at any point.
+// Behaves like an accordion: only one write-up is open at a time, so opening
+// a different card closes the previous one and its button returns to MORE.
+// The label itself never changes.
+document.addEventListener('click', function(e){
+  var btn = e.target.closest('.bo-more-btn');
+  if(!btn) return;
+  e.preventDefault();
+  var note = btn.nextElementSibling;
+  if(!note || !note.classList.contains('bo-note')) return;
+
+  var willOpen = note.classList.contains('bo-note-collapsed');
+
+  // close every other open write-up first
+  document.querySelectorAll('.bo-note:not(.bo-note-collapsed)').forEach(function(open){
+    if(open === note) return;
+    open.classList.add('bo-note-collapsed');
+    var otherBtn = open.previousElementSibling;
+    if(otherBtn && otherBtn.classList.contains('bo-more-btn')){
+      otherBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  note.classList.toggle('bo-note-collapsed', !willOpen);
+  btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+});
 
 // ---- Split-flap board ----
 // The cells are built once and never move. To change message, each cell
@@ -14696,7 +14754,8 @@ function boRenderCategory(cat){
           <div class="bo-price-tag">${'$'.repeat(s.price)}<span style="opacity:0.25">${'$'.repeat(4 - s.price)}</span></div>
         </div>
         <div class="bo-why">${s.why}</div>
-        <div class="bo-note">${s.note}</div>
+        <button type="button" class="bo-more-btn" aria-expanded="false">MORE <span class="bo-more-caret">&#9660;</span></button>
+        <div class="bo-note bo-note-collapsed">${s.note}</div>
         ${hoursTextHTML(s.hours, s.open24)}
         ${s.otherLocations && s.otherLocations.length ? `
         <div class="bo-other-locations">
