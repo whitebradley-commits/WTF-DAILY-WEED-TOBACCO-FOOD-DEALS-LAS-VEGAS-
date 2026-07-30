@@ -1599,13 +1599,16 @@
   .sf-board{
     display:flex;
     justify-content:center;
-    gap:3px;
+    gap:1px;
     margin:2px auto 10px;
     perspective:340px;
   }
   .sf-cell{
-    width:23px;
-    height:31px;
+    /* 16 cells still have to fit inside the page's 5vw side padding, but the
+       letters were shrunk too far at 19px — these are back near the original
+       12-cell size, with a tighter gap buying the extra room. */
+    width:21px;
+    height:30px;
     flex-shrink:0;
     background:
       radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0.6px, transparent 0.7px) 0 0 / 3px 3px,
@@ -1621,8 +1624,11 @@
     font-family:'Archivo Black',sans-serif;
     font-size:0.95rem;
     line-height:1;
-    color:#f2c94c;
-    text-shadow:0 0 5px rgba(242,201,76,0.55), 0 0 11px rgba(201,162,75,0.30);
+    color:#ffe9a8;
+    text-shadow:
+      0 0 4px rgba(255,255,255,0.85),
+      0 0 9px rgba(255,236,170,0.75),
+      0 0 20px rgba(201,162,75,0.45);
     transform-origin:center center;
     transition:transform 90ms linear, opacity 90ms linear;
     will-change:transform;
@@ -1633,8 +1639,12 @@
     opacity:0.25;
   }
   @media (max-width:400px){
-    .sf-cell{ width:20px; height:27px; }
-    .sf-char{ font-size:0.82rem; }
+    .sf-cell{ width:19px; height:27px; }
+    .sf-char{ font-size:0.85rem; }
+  }
+  @media (max-width:340px){
+    .sf-cell{ width:17px; height:24px; }
+    .sf-char{ font-size:0.75rem; }
   }
   @media (prefers-reduced-motion: reduce){
     .sf-char{ transition:none; }
@@ -2417,6 +2427,50 @@
     max-width:340px;
     margin-top:1.4rem;
   }
+  /* The search bar now sits inside the hero, under the "Real direction"
+     line, so it no longer needs to clear the globe control — the hero's own
+     top padding does that. Just a little breathing room above it. */
+  .bo-hero .bo-search-wrap{
+    margin-top:2.4rem;
+  }
+  /* The hero is first on the page now, so IT has to clear the globe in the
+     top-right corner. */
+  /* Everything in the hero shifts down together — the gaps between the title,
+     sub-line, tagline and search bar are untouched. The extra bottom padding
+     is what keeps the "The Top N, Right Now" section head below the fold on
+     first load instead of peeking in at the bottom of the screen. */
+  /* Only the main Best Of page gets the tall first-screen treatment. Picker
+     pages (Other Bests and the genre grids) already carry
+     .bo-hero-picker-mode and stay compact, so their buttons sit right under
+     the search bar instead of being pushed down a full screen. */
+  #boHeroSection:not(.bo-hero-picker-mode){
+    padding-top:9rem !important;
+    padding-bottom:2vh !important;
+    /* Fill the first screen so the "The Top N, Right Now" section head starts
+       below the fold on any phone, rather than tuning padding to one device.
+       dvh tracks the real visible height with browser chrome accounted for;
+       vh is the fallback. */
+    min-height:calc(100vh - 9rem);
+    min-height:calc(100dvh - 9rem);
+    box-sizing:border-box;
+  }
+  @media (max-width:380px){
+    #boHeroSection:not(.bo-hero-picker-mode){ padding-top:9.6rem !important; }
+  }
+  /* Picker pages: title, tagline, search bar, then straight into the buttons. */
+  #boHeroSection.bo-hero-picker-mode{
+    padding-top:2.4rem !important;
+    padding-bottom:0.5rem !important;
+    min-height:0 !important;
+  }
+  #boHeroSection.bo-hero-picker-mode .bo-search-wrap{
+    margin-top:1.4rem;
+  }
+  /* Pull the BEST OF / Vegas Period title up on its own. Negative margin on
+     the h1 only, so the sub-line, tagline and search bar below it don't move. */
+  #boHeroSection:not(.bo-hero-picker-mode) #boHeroTitle{
+    margin-top:-2.2rem;
+  }
   .bo-search-input-big{
     padding:0.75rem 5.6rem 0.75rem 1.2rem;
     font-size:0.95rem;
@@ -2654,6 +2708,11 @@
 
   .bo-picker-grid{
     display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:10px;max-width:460px;margin:0 auto;padding:0 0 40px;
+  }
+  /* A little air between the search bar and the first row of buttons. */
+  #boList > .bo-picker-grid:first-child,
+  #boList > .bo-picker-grid{
+    padding-top:0.9rem;
   }
   .bo-picker-btn{
     flex:0 1 auto;
@@ -3043,6 +3102,77 @@
   .bo-hero h1 .bo-period{
     color:var(--gold);
   }
+  /* The full stop after "Period" is rendered as a copyright mark. It inherits
+     the gold from whichever Period element wraps it, and sits down on the
+     baseline — small enough that it reads as the actual period rather than a
+     superscript notice. */
+  /* ===== CONTINUE gate on the main Best Of page =====
+     Sits under card 3. Red, softly pulsing, with an arrow that points back
+     in toward the final E of the word. */
+  .bo-continue-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;      /* CONTINUE hugs the left edge under card 3 */
+    gap:2px;
+    padding:0.5rem 0 0.2rem;
+  }
+  .bo-continue-btn{
+    background:none;
+    border:none;
+    padding:2px 0;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Archivo Narrow',sans-serif;
+    font-weight:500;             /* lighter than the old Bebas weight */
+    font-size:0.95rem;
+    letter-spacing:0.16em;
+    color:#e23b3b;
+    animation:bo-continue-pulse 2.1s ease-in-out infinite;
+  }
+  .bo-continue-word{ display:inline-block; }
+  /* the arrow points left, back at the E it sits beside */
+  .bo-continue-arrow{
+    display:inline-block;
+    transform:scaleX(-1);
+    font-size:0.68rem;
+    line-height:1;
+    animation:bo-continue-nudge 2.1s ease-in-out infinite;
+  }
+  @keyframes bo-continue-pulse{
+    0%,100%{ text-shadow:0 0 5px rgba(226,59,59,0.35); opacity:0.85; }
+    50%    { text-shadow:0 0 13px rgba(226,59,59,0.85), 0 0 26px rgba(226,59,59,0.35); opacity:1; }
+  }
+  @keyframes bo-continue-nudge{
+    0%,100%{ transform:scaleX(-1) translateX(0); }
+    50%    { transform:scaleX(-1) translateX(4px); }
+  }
+  /* once opened it stops shouting */
+  .bo-continue-btn.bo-continue-done{
+    animation:none;
+    opacity:0.6;
+    text-shadow:none;
+  }
+  .bo-continue-btn.bo-continue-done .bo-continue-arrow{
+    animation:none;
+    transform:scaleX(-1) rotate(-90deg);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bo-continue-btn, .bo-continue-arrow{ animation:none; }
+  }
+
+  .bo-rest-collapsed{ display:none; }
+
+  .period-mark{
+    font-size:0.34em;
+    vertical-align:baseline;
+    line-height:1;
+    letter-spacing:0;
+    margin-left:0.04em;
+  }
 
   .bo-hero-sub{
     margin-top:2rem;
@@ -3111,12 +3241,41 @@
     z-index:2;
   }
 
+  /* On the main Best Of page the section head follows Hot List immediately, so
+     the two read as one block across the fold. Genre sub-pages have no Hot
+     List above them, so they keep the original roomier padding. */
+  #boSectionHead.bo-section-head-tight{
+    padding-top:0.6rem !important;
+    margin-top:0 !important;
+  }
   .bo-section-head .bo-kicker{
     font-family:'Bebas Neue', sans-serif;
     letter-spacing:0.4em;
     color:var(--ember);
     font-size:0.85rem;
     margin-bottom:1rem;
+  }
+  /* Hot List now closes out the first screen, sitting below SCROLL so it's the
+     last thing visible before the fold — the cue to keep going. */
+  /* Hint above the Top 100 rows — the names are tappable and jump to that
+     restaurant's card in its own category. */
+  .bo-extended-tap-hint{
+    text-align:left;
+    color:#9a9a9a;
+    font-family:'Archivo Narrow',sans-serif;
+    font-size:0.76rem;
+    letter-spacing:0.02em;
+    margin:6px 0 10px;
+  }
+  .bo-kicker-hero{
+    display:none;             /* main Best Of page only — toggled in JS */
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:0.4em;
+    color:var(--ember);
+    font-size:1rem;
+    margin-top:auto;          /* pushed down to the bottom of the first screen */
+    padding-top:2.6rem;
+    text-align:center;
   }
 
   .bo-back-btn{
@@ -3171,7 +3330,10 @@
     margin-right:auto;
     font-size:0.95rem;
     font-weight:600;
-    text-wrap:pretty;
+    /* balance evens out the line lengths instead of just avoiding orphans,
+       which keeps the city names from stacking awkwardly now that they're
+       separated by spaces rather than commas. */
+    text-wrap:balance;
   }
 
   .bo-list{
@@ -4344,7 +4506,7 @@
             <div class="ring-inner"></div>
             <span class="hub-best-mini-label">Best Of</span>
             <span class="hub-best-mini-city is-active" id="hubBestMiniCity">Vegas</span>
-            <span class="hub-best-mini-period">Period.</span>
+            <span class="hub-best-mini-period">Period<span class="period-mark">&copy;</span></span>
           </span>
         </button>
           <button class="hub-logo-item" id="hubLvBtn" type="button">
@@ -6171,7 +6333,7 @@
           <div class="bop-splash-line1">Best Of</div>
           <div class="bop-splash-line2" id="bopSplashLine2Row">
             <span class="bop-splash-city-col"><span class="bop-splash-city is-active" id="bopSplashCityText">Vegas</span></span>
-            <span class="bop-splash-period">Period.</span>
+            <span class="bop-splash-period">Period<span class="period-mark">&copy;</span></span>
           </div>
           <div class="bop-splash-tagline">Real direction. No filler. Just the best.</div>
         </div>
@@ -6241,34 +6403,28 @@
     </div>
     <div id="bestOfContent" style="padding-top:36px;">
 
-<div id="boExpandBtnTopWrap" style="display:flex;justify-content:center;padding:1.6rem 0 0.4rem;">
-  <button type="button" id="boExpandBtnTop" class="bo-expand-btn" aria-expanded="false">
-    <span class="bo-expand-arrow bo-expand-arrow-left">→</span><span class="bo-expand-label" style="font-size:0.7rem;">OTHER<br>BESTS</span><span class="bo-expand-arrow bo-expand-arrow-right">←</span>
-  </button>
-</div>
-
-<div class="bo-search-wrap bo-search-wrap-big">
-  <input type="text" id="boSearchInput" class="bo-search-input bo-search-input-big" placeholder="Search all restaurants..." autocomplete="off">
-  <div class="bo-search-powered-by">
-    ⚡ Powered by
-    <svg viewBox="0 0 40 40" width="15" height="15"><circle cx="20" cy="20" r="18" fill="#0a0a0a" stroke="#FFD700" stroke-width="2"/><text x="20" y="24" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="12" fill="#FFD700">BJS</text></svg>
-  </div>
-  <div id="boSearchResults" class="bo-search-results"></div>
-</div>
 
 <section class="bo-hero" id="boHeroSection">
   <div class="bo-hero-grillmark"></div>
   <h1 id="boHeroTitle">
     BEST STEAK.<br>
-    <span class="bo-line2">Vegas</span> <span class="bo-period">Period.</span>
+    <span class="bo-line2">Vegas</span> <span class="bo-period">Period<span class="period-mark">&copy;</span></span>
   </h1>
   <p class="bo-hero-sub" id="boHeroSub">Ten steakhouses. Real ratings. No filler. Just the cuts worth flying in for.</p>
   <p style="text-align:center;color:#fff;font-weight:700;text-transform:uppercase;font-size:0.9rem;margin:6px 0 0;">Real direction. No filler. Just the best.</p>
+  <div class="bo-search-wrap bo-search-wrap-big">
+    <input type="text" id="boSearchInput" class="bo-search-input bo-search-input-big" placeholder="Search all restaurants..." autocomplete="off">
+  <div class="bo-search-powered-by">
+    ⚡ Powered by
+    <svg viewBox="0 0 40 40" width="15" height="15"><circle cx="20" cy="20" r="18" fill="#0a0a0a" stroke="#FFD700" stroke-width="2"/><text x="20" y="24" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="12" fill="#FFD700">BJS</text></svg>
+  </div>
+    <div id="boSearchResults" class="bo-search-results"></div>
+  </div>
   <div class="bo-scroll-cue" id="boScrollCue">SCROLL ↓</div>
+  <div class="bo-kicker bo-kicker-hero" id="boKickerHero">Hot List</div>
 </section>
 
 <div class="bo-section-head" id="boSectionHead">
-  <div class="bo-kicker">The List</div>
   <h2 id="boSectionHeadTitle">The Top, Right Now</h2>
   <p id="boSectionHeadPara" style="font-size:0.98rem;font-weight:400;font-family:'IBM Plex Sans Condensed',sans-serif;">⭐ Ranked by aggregate review data across <strong style="font-weight:700;">Google</strong> <strong style="font-weight:700;">Yelp</strong> <strong style="font-weight:700;">Tripadvisor</strong> <strong style="font-weight:700;">OpenTable</strong> <strong style="font-weight:700;">Uber Eats</strong> and <strong style="font-weight:700;">BJS</strong><svg viewBox="0 0 40 40" width="14" height="14" style="vertical-align:-2px;margin:0 2px;"><circle cx="20" cy="20" r="18" fill="#0a0a0a" stroke="#FFD700" stroke-width="2"/><text x="20" y="24" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="12" fill="#FFD700">BJS</text></svg> Hover any card for a closer look.</p>
 </div>
@@ -7172,38 +7328,25 @@ function openInPopup(url, fullScreen){
 
 // MORE toggle on the Best Of cards: reveals the grey write-up on demand.
 // Delegated from the document so it works for cards rendered at any point.
-// Behaves like an accordion: only one write-up is open at a time, so opening
-// a different card closes the previous one and its button returns to MORE.
-// The label itself never changes.
+// Simple toggle: MORE opens the write-up, LESS closes it again.
 document.addEventListener('click', function(e){
   var btn = e.target.closest('.bo-more-btn');
   if(!btn) return;
   e.preventDefault();
   var note = btn.nextElementSibling;
   if(!note || !note.classList.contains('bo-note')) return;
-
   var willOpen = note.classList.contains('bo-note-collapsed');
-
-  // close every other open write-up first
-  document.querySelectorAll('.bo-note:not(.bo-note-collapsed)').forEach(function(open){
-    if(open === note) return;
-    open.classList.add('bo-note-collapsed');
-    var otherBtn = open.previousElementSibling;
-    if(otherBtn && otherBtn.classList.contains('bo-more-btn')){
-      otherBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
-
   note.classList.toggle('bo-note-collapsed', !willOpen);
   btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  btn.firstChild.textContent = willOpen ? 'LESS ' : 'MORE ';
 });
 
 // ---- Split-flap board ----
 // The cells are built once and never move. To change message, each cell
 // shuffles through a few random characters (staggered left to right, like a
 // real board cascading) and then settles on its target letter.
-var SF_MESSAGES = ['VEGAS LIVE!', 'COMING TO', 'A CITY', 'NEAR YOU!'];
-var SF_CELLS = 12;
+var SF_MESSAGES = ['VEGAS IS LIVE!', 'COMING TO A', 'CITY NEAR YOU!'];
+var SF_CELLS = 16;
 var SF_GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!';
 
 function sfPad(text){
@@ -14626,18 +14769,18 @@ function boRenderCategory(cat){
         <div class="bop-splash-line1">Best Of</div>
         <div class="bop-splash-line2">
           <span class="bop-splash-city-col"><span class="bop-splash-city is-active" id="bopResultsCityText">${randomStartCity}</span></span>
-          <span class="bop-splash-period">Period.</span>
+          <span class="bop-splash-period">Period<span class="period-mark">&copy;</span></span>
         </div>
       </div>`;
       startBopVegasSlotCycler('bopResultsCityText', BOP_SPLASH_CITIES, 2, 5000, 1, 1, 0, true);
     } else {
       const vegasClass = cat === 'dessert' ? 'bo-hero-dessert-word' : 'bo-line2';
-      boHeroTitleEl.innerHTML = `${boHeroCopy[cat].title}<br><span class="${vegasClass}">Vegas</span> <span class="bo-period">Period.</span>`;
+      boHeroTitleEl.innerHTML = `${boHeroCopy[cat].title}<br><span class="${vegasClass}">Vegas</span> <span class="bo-period">Period<span class="period-mark">&copy;</span></span>`;
     }
     boHeroSubEl.textContent = boHeroCopy[cat].sub;
     if(boSectionHeadParaEl){
       boSectionHeadParaEl.innerHTML = cat === 'bestof'
-        ? "⭐ This is the <strong style='font-weight:700;'>BEST OF</strong> every restaurant, of every cuisine, across <strong style='font-weight:700;'>Las Vegas</strong>, <strong style='font-weight:700;'>Downtown</strong>, <strong style='font-weight:700;'>Summerlin</strong>, and <strong style='font-weight:700;'>Henderson</strong> — not just one genre. Ranked by aggregate review data across <strong style='font-weight:700;'>Google</strong> <strong style='font-weight:700;'>Yelp</strong> <strong style='font-weight:700;'>Tripadvisor</strong> <strong style='font-weight:700;'>OpenTable</strong> <strong style='font-weight:700;'>Uber Eats</strong> and <strong style='font-weight:700;'>BJS</strong><svg viewBox='0 0 40 40' width='14' height='14' style='vertical-align:-2px;margin:0 2px;'><circle cx='20' cy='20' r='18' fill='#0a0a0a' stroke='#FFD700' stroke-width='2'/><text x='20' y='24' text-anchor='middle' font-family='Archivo Black, sans-serif' font-size='12' fill='#FFD700'>BJS</text></svg>"
+        ? "⭐ <strong style='font-weight:700;'>BEST OF</strong> every restaurant across <strong style='font-weight:700;'>Las Vegas</strong>&hellip; <strong style='font-weight:700;'>Downtown</strong>&nbsp; <strong style='font-weight:700;'>Summerlin</strong>&nbsp; <strong style='font-weight:700;'>Henderson</strong>. Ranked by aggregate review data across <strong style='font-weight:700;'>Google</strong> <strong style='font-weight:700;'>Yelp</strong> <strong style='font-weight:700;'>Tripadvisor</strong> <strong style='font-weight:700;'>OpenTable</strong> <strong style='font-weight:700;'>Uber Eats</strong> and <strong style='font-weight:700;'>BJS</strong><svg viewBox='0 0 40 40' width='14' height='14' style='vertical-align:-2px;margin:0 2px;'><circle cx='20' cy='20' r='18' fill='#0a0a0a' stroke='#FFD700' stroke-width='2'/><text x='20' y='24' text-anchor='middle' font-family='Archivo Black, sans-serif' font-size='12' fill='#FFD700'>BJS</text></svg>"
         : "⭐ Ranked by aggregate review data across <strong style='font-weight:700;'>Google</strong> <strong style='font-weight:700;'>Yelp</strong> <strong style='font-weight:700;'>Tripadvisor</strong> <strong style='font-weight:700;'>OpenTable</strong> <strong style='font-weight:700;'>Uber Eats</strong> and <strong style='font-weight:700;'>BJS</strong><svg viewBox='0 0 40 40' width='14' height='14' style='vertical-align:-2px;margin:0 2px;'><circle cx='20' cy='20' r='18' fill='#0a0a0a' stroke='#FFD700' stroke-width='2'/><text x='20' y='24' text-anchor='middle' font-family='Archivo Black, sans-serif' font-size='12' fill='#FFD700'>BJS</text></svg> — hover any card for a closer look";
     }
     boHeroTitleEl.style.opacity = 1;
@@ -14657,6 +14800,11 @@ function boRenderCategory(cat){
   if(cat === 'breakfast') spawnFlyingEmoji('breakfast', '🍳');
 
   boBackBtnEl.classList.toggle('bo-visible', cat !== 'bestof');
+  // Hot List belongs to the main Best Of page only, not the genre sub-pages.
+  const boKickerHeroEl = document.getElementById('boKickerHero');
+  if(boKickerHeroEl) boKickerHeroEl.style.display = (cat === 'bestof') ? 'block' : 'none';
+  const boSectionHeadEl2 = document.getElementById('boSectionHead');
+  if(boSectionHeadEl2) boSectionHeadEl2.classList.toggle('bo-section-head-tight', cat === 'bestof');
   if(boExpandBtnTopEl) boExpandBtnTopEl.style.display = (cat === 'bestof') ? 'flex' : 'none';
   if(botrToLandingBtnEl) botrToLandingBtnEl.style.display = (cat === 'bestof') ? 'flex' : 'none';
 
@@ -14738,7 +14886,7 @@ function boRenderCategory(cat){
   sortedEntries.forEach((s, i) => {
     s.rank = i + 1;
   });
-  sortedEntries.forEach(s => {
+  sortedEntries.forEach((s, i) => {
     const card = document.createElement('div');
     card.className = 'bo-card';
     card.id = 'bo-card-' + s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -14812,7 +14960,67 @@ function boRenderCategory(cat){
         ${picsButtonHTML(s.name)}
       </div>
     `;
-    boListEl.appendChild(card);
+    // Cards 4 and beyond land inside the hidden wrapper, so they only appear
+    // once CONTINUE is tapped.
+    const restWrap = document.getElementById('boRestWrap');
+    if(cat === 'bestof' && i > 2 && restWrap){
+      restWrap.appendChild(card);
+    } else {
+      boListEl.appendChild(card);
+    }
+
+    // On the main Best Of page only the first three cards show up front. Cards
+    // 4+ are hidden behind a CONTINUE control so the page opens short, and the
+    // Other Bests button sits right underneath it as the alternative path.
+    if(cat === 'bestof' && i === 2){
+      const gate = document.createElement('div');
+      gate.className = 'bo-continue-wrap';
+      gate.id = 'boContinueWrap';
+      gate.innerHTML = `
+        <button type="button" class="bo-continue-btn" id="boContinueBtn" aria-expanded="false">
+          <span class="bo-continue-word">CONTINU<span class="bo-continue-e">E</span></span>
+          <span class="bo-continue-arrow">&#10148;</span>
+        </button>
+      `;
+      boListEl.appendChild(gate);
+
+      // The Other Bests button used to sit at the top of the page; it now
+      // lives directly under CONTINUE as the alternative route, so scrolling
+      // past CONTINUE leads straight to Other Bests instead of more cards.
+      // Built fresh here rather than moving the original element — the list
+      // gets wiped on every category switch, which would destroy a moved node.
+      const otherBtnWrap = document.createElement('div');
+      otherBtnWrap.style.cssText = 'display:flex;justify-content:center;width:100%;padding:0.5rem 0 0.6rem;';
+      otherBtnWrap.innerHTML = `
+        <button type="button" class="bo-expand-btn" id="boExpandBtnBottom" aria-expanded="false">
+          <span class="bo-expand-arrow bo-expand-arrow-left">&#8594;</span><span class="bo-expand-label" style="font-size:0.7rem;">OTHER<br>BESTS</span><span class="bo-expand-arrow bo-expand-arrow-right">&#8592;</span>
+        </button>
+      `;
+      gate.appendChild(otherBtnWrap);
+      const otherBtn = otherBtnWrap.querySelector('#boExpandBtnBottom');
+      if(otherBtn){
+        otherBtn.addEventListener('click', function(){
+          boRenderCategory('otheroptions');
+          window.scrollTo(0, 0);
+        });
+      }
+
+      const hidden = document.createElement('div');
+      hidden.className = 'bo-rest-wrap bo-rest-collapsed';
+      hidden.id = 'boRestWrap';
+      boListEl.appendChild(hidden);
+
+      const contBtn = gate.querySelector('#boContinueBtn');
+      if(contBtn){
+        contBtn.addEventListener('click', function(){
+          const opening = hidden.classList.contains('bo-rest-collapsed');
+          hidden.classList.toggle('bo-rest-collapsed', !opening);
+          contBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+          if(opening) contBtn.classList.add('bo-continue-done');
+          else contBtn.classList.remove('bo-continue-done');
+        });
+      }
+    }
   });
 
   if(cat === 'bestof'){
@@ -14837,7 +15045,7 @@ function boRenderCategory(cat){
         <span class="bo-top100-toggle-label">TOP 100</span>
         <span class="bo-top100-toggle-arrow">\u2190</span>
       `;
-      boListEl.appendChild(toggleBtn);
+      (document.getElementById('boRestWrap') || boListEl).appendChild(toggleBtn);
 
       const wrap = document.createElement('div');
       wrap.className = 'bo-extended-list bo-extended-list-collapsed';
@@ -14845,9 +15053,10 @@ function boRenderCategory(cat){
       wrap.innerHTML = `
         <div class="bo-extended-heading">The Rest of the Top 100, Las Vegas County</div>
         <div class="bo-extended-disclaimer">⭐ Ranked by aggregate review data across <strong style="font-weight:700;">Google</strong> <strong style="font-weight:700;">Yelp</strong> <strong style="font-weight:700;">Tripadvisor</strong> <strong style="font-weight:700;">OpenTable</strong> <strong style="font-weight:700;">Uber Eats</strong> and <strong style="font-weight:700;">BJS</strong><svg viewBox="0 0 40 40" width="14" height="14" style="vertical-align:-2px;margin:0 2px;"><circle cx="20" cy="20" r="18" fill="#0a0a0a" stroke="#FFD700" stroke-width="2"/><text x="20" y="24" text-anchor="middle" font-family="Archivo Black, sans-serif" font-size="12" fill="#FFD700">BJS</text></svg></div>
+        <div class="bo-extended-tap-hint">Tap a restaurant for more information &#9662;</div>
         ${extended.map((r, i) => `<div class="bo-extended-row"><span class="bo-extended-rank">${sortedEntries.length + i + 1}.</span> <span class="bo-extended-name bo-extended-name-link" data-cat="${r.cat}" data-jump-name="${r.name.replace(/"/g, '&quot;')}">${r.shortName || r.name}</span>${r.phone ? `<a class="bo-extended-phone" href="tel:${r.phone.replace(/[^0-9+]/g, '')}"><span class="bo-extended-phone-dot">\u2022</span>${r.phone}</a>` : ''}</div>`).join('')}
       `;
-      boListEl.appendChild(wrap);
+      (document.getElementById('boRestWrap') || boListEl).appendChild(wrap);
 
       toggleBtn.addEventListener('click', () => {
         wrap.classList.toggle('bo-extended-list-collapsed');
