@@ -1765,8 +1765,8 @@
     font-weight:700;
     font-size:9px;
     letter-spacing:0.07em;
-    fill:#3b9dff;
-    filter:drop-shadow(0 0 6px rgba(59,157,255,0.5));
+    fill:#c9a24b;
+    filter:drop-shadow(0 0 6px rgba(201,162,75,0.5));
   }
 
   /* ===== Other Cities world map page ===== */
@@ -1780,7 +1780,7 @@
     justify-content:center;padding:70px 18px 50px;text-align:center;
   }
   .oc-world-title{
-    font-family:'Archivo Black',sans-serif;font-size:1.35rem;color:#F2F2F2;
+    font-family:'Archivo Black',sans-serif;font-size:1.35rem;color:#c9a24b;
     letter-spacing:0.04em;margin:0 0 6px;
   }
   .oc-world-sub{
@@ -3470,6 +3470,14 @@
   }
 
   .bo-back-btn{
+    /* Fixed to the viewport (not the scrolling page), so it stays on screen
+       the whole time you scroll, consistently on every Best Of page — that
+       was inconsistent before because its container scrolled while the
+       button itself had no position set, so it just scrolled away with it. */
+    position:fixed;
+    top:84px;
+    left:9vw;
+    z-index:20;
     display:none;
     align-items:center;
     justify-content:center;
@@ -5794,6 +5802,15 @@
     </div>
   </div>
 
+  <div class="directory-overlay" id="menuPopupOverlay" style="padding:20px;align-items:center;">
+    <div class="directory-panel" role="dialog" aria-modal="true" style="max-width:340px;width:100%;text-align:center;padding:28px 22px 22px;">
+      <button type="button" id="menuPopupCloseBtn" class="directory-close" aria-label="Close">&#10005;</button>
+      <div style="font-family:'Archivo Narrow',sans-serif;font-size:0.72rem;letter-spacing:0.14em;color:#888;margin-top:6px;">MENU</div>
+      <div id="menuPopupName" style="font-family:'Archivo Black',sans-serif;font-size:1.1rem;color:#F2F2F2;margin:6px 0 18px;"></div>
+      <a id="menuPopupOpen" href="#" target="_blank" rel="noopener noreferrer" style="display:block;padding:13px 18px;border-radius:999px;background:#3D8B4C;color:#fff;text-decoration:none;font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.9rem;">VIEW MENU &#8594;</a>
+    </div>
+  </div>
+
   <div class="directory-overlay" id="socialPopupOverlay" style="padding:20px;align-items:center;">
     <div class="directory-panel" role="dialog" aria-modal="true" style="max-width:340px;width:100%;text-align:center;padding:28px 22px 22px;">
       <button type="button" id="socialPopupCloseBtn" class="directory-close" aria-label="Close">&#10005;</button>
@@ -6563,33 +6580,33 @@
   </div>
 
   <div class="lvsteam-overlay" id="bestOfOverlay">
-    <!-- Other Cities globe: top-right corner of the Best Of page, mirroring
-         the back badge on the top-left. Blue arrows flash inward at the globe
-         to signal it's tappable; tapping opens the world map page. -->
-<div class="oc-globe-wrap">
-  <button type="button" class="oc-globe-btn" id="ocGlobeBtn" aria-label="Other cities">
-    <span class="oc-arrow oc-arrow-l">&#9654;</span>
-    <span class="oc-arrow oc-arrow-r">&#9664;</span>
-    <span class="oc-arrow oc-arrow-t">&#9660;</span>
-    <span class="oc-arrow oc-arrow-b">&#9650;</span>
-    <span class="oc-globe">&#127758;</span>
-  </button>
-  <svg class="oc-curve" viewBox="0 0 100 32" aria-hidden="true">
-    <defs>
-      <!-- Tight arc so the words hug the underside of the globe. -->
-      <path id="ocCurvePath" d="M 8,4 A 46,46 0 0 0 92,4" fill="none"/>
-    </defs>
-    <text>
-      <textPath href="#ocCurvePath" startOffset="50%" text-anchor="middle">OTHER CITIES</textPath>
-    </text>
-  </svg>
-</div>
     <div class="sf-board" id="sfBoard" aria-live="polite" aria-label="Announcements"></div>
 
+    <!-- Other Cities globe: back to its original spot, pinned to the
+         top-right corner, untouched. -->
+    <div class="oc-globe-wrap">
+      <button type="button" class="oc-globe-btn" id="ocGlobeBtn" aria-label="Other cities">
+        <span class="oc-arrow oc-arrow-l">&#9654;</span>
+        <span class="oc-arrow oc-arrow-r">&#9664;</span>
+        <span class="oc-arrow oc-arrow-t">&#9660;</span>
+        <span class="oc-arrow oc-arrow-b">&#9650;</span>
+        <span class="oc-globe">&#127758;</span>
+      </button>
+      <svg class="oc-curve" viewBox="0 0 100 32" aria-hidden="true">
+        <defs>
+          <!-- Tight arc so the words hug the underside of the globe. -->
+          <path id="ocCurvePath" d="M 8,4 A 46,46 0 0 0 92,4" fill="none"/>
+        </defs>
+        <text>
+          <textPath href="#ocCurvePath" startOffset="50%" text-anchor="middle">OTHER CITIES</textPath>
+        </text>
+      </svg>
+    </div>
+
+    <div id="bestOfContent" style="padding-top:36px;">
     <div class="lvsteam-topbar">
       <button type="button" id="boBackBtn" class="bo-back-btn">←<br>Back</button>
     </div>
-    <div id="bestOfContent" style="padding-top:36px;">
 
 
 <section class="bo-hero" id="boHeroSection">
@@ -7450,7 +7467,8 @@ function menuButtonHTML(name, url, rank){
   if(rank && rank > 10) return '<span class="menu-text-btn" style="cursor:default;">MENU</span>';
   const q = encodeURIComponent(name + ' Las Vegas');
   const yelpUrl = 'https://www.yelp.com/search?find_desc=' + q;
-  return '<button type="button" class="menu-text-btn" data-web-popup="' + yelpUrl.replace(/"/g,'&quot;') + '" title="Menu">MENU</button>';
+  const esc = function(v){ return String(v || '').replace(/"/g, '&quot;'); };
+  return '<button type="button" class="menu-text-btn" data-menu-popup="' + esc(yelpUrl) + '" data-menu-name="' + esc(name) + '" title="Menu">MENU</button>';
 }
 
 function setupWebPopup(){
@@ -8073,6 +8091,50 @@ function setupPhonePopup(){
         e.preventDefault();
         e.stopPropagation();
         openPhonePopup(btn.getAttribute('data-phone-popup'), btn.getAttribute('data-phone-display'));
+      });
+    });
+  }, 300);
+}
+
+// ---- Menu popup ----
+// Yelp (and most menu links) refuse to be shown inside our frame, so the old
+// in-page popup for MENU always hit a white box. Same fix as Facebook /
+// Instagram: our own small panel with the name, then a button that opens the
+// real page in a new tab, so leaving is a deliberate choice, not a dead end.
+function openMenuPopup(url, name){
+  var overlay = document.getElementById('menuPopupOverlay');
+  if(!overlay || !url) return;
+  var nameEl = document.getElementById('menuPopupName');
+  var openEl = document.getElementById('menuPopupOpen');
+  if(nameEl){
+    nameEl.textContent = name || '';
+    nameEl.style.display = name ? '' : 'none';
+  }
+  if(openEl) openEl.setAttribute('href', url);
+  overlay.classList.add('open');
+}
+
+function setupMenuPopup(){
+  var overlay = document.getElementById('menuPopupOverlay');
+  if(!overlay) return;
+  var closeBtn = document.getElementById('menuPopupCloseBtn');
+
+  function closeMenuPopup(){ overlay.classList.remove('open'); }
+
+  if(closeBtn) closeBtn.addEventListener('click', closeMenuPopup);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeMenuPopup();
+  });
+
+  // Cards render continuously, so wire new menu buttons as they appear.
+  setInterval(function(){
+    document.querySelectorAll('[data-menu-popup]').forEach(function(btn){
+      if(btn.dataset.menuWired) return;
+      btn.dataset.menuWired = '1';
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openMenuPopup(btn.getAttribute('data-menu-popup'), btn.getAttribute('data-menu-name'));
       });
     });
   }, 300);
@@ -14742,7 +14804,13 @@ const boPickerParent = {
   peruvian: 'otheroptions', filipino: 'otheroptions', ethiopian: 'otheroptions', spanish: 'otheroptions',
   ramen: 'otheroptions', hawaiian: 'otheroptions', southern: 'otheroptions', deli: 'otheroptions', crepes: 'otheroptions',
   diner: 'otheroptions', fastfood: 'otheroptions',
-  mexicanhighend: 'mexican', mexicandive: 'mexican'
+  mexicanhighend: 'mexican', mexicandive: 'mexican',
+  // These six had no entry at all, so Back from any of them fell through to
+  // the 'bestof' default below instead of returning to Other Bests — that
+  // was the bug where Back skipped past Other Bests to the main page.
+  steak: 'otheroptions', sushi: 'otheroptions', italian: 'otheroptions',
+  breakfast: 'otheroptions', asian: 'otheroptions', burgersbjspick: 'otheroptions',
+  dessert: 'otheroptions', '24hours': 'otheroptions'
 };
 
 const boHeroCopy = {
@@ -16398,6 +16466,7 @@ async function init(){
   setupPhonePopup();
   setupDirectionsPopup();
   setupSocialPopup();
+  setupMenuPopup();
   setupOtherCities();
   setupSplitFlap();
   setupCompanyHub();
