@@ -1523,6 +1523,34 @@
   #phonePopupOverlay{ z-index:420; }
   #directionsPopupOverlay{ z-index:420; }
   #socialPopupOverlay{ z-index:420; }
+  /* Full-screen variant of the web popup, used when we open one of our own
+     sites (e.g. bestofperiod.com) so it fills the screen while this page
+     stays loaded behind it. */
+  #webPopupOverlay.web-popup-full{ padding:0 !important; }
+  #webPopupOverlay.web-popup-full .directory-panel{
+    max-width:none !important;
+    width:100% !important;
+    height:100% !important;
+    border-radius:0 !important;
+    border:none !important;
+  }
+  #webPopupOverlay.web-popup-full #webPopupFrame{ border-radius:0 !important; }
+  /* In full-screen mode we hide the popup furniture entirely — no bottom
+     escape bar — so it reads as the site itself rather than a dialog. Only a
+     small close control remains so it's never a dead end. */
+  #webPopupOverlay.web-popup-full #webPopupBar{ display:none !important; }
+  #webPopupOverlay.web-popup-full{ background:#000 !important; }
+  #webPopupOverlay.web-popup-full #webPopupCloseBtn{
+    top:auto !important;
+    bottom:18px !important;
+    right:18px !important;
+    width:42px !important;
+    height:42px !important;
+    background:rgba(0,0,0,0.6) !important;
+    border:1px solid rgba(255,255,255,0.35) !important;
+    backdrop-filter:blur(4px);
+    opacity:0.75;
+  }
   .directory-panel{
     background:var(--surface);border:1px solid var(--border);border-radius:16px;
     max-width:480px;width:100%;padding:24px;position:relative;
@@ -6651,6 +6679,7 @@ function setupWebPopup(){
 
   function closeWebPopup(){
     overlay.classList.remove('open');
+    overlay.classList.remove('web-popup-full');
     frame.src = '';
   }
 
@@ -6686,7 +6715,7 @@ function setupRestaurantMenuPopup(){
 // — for those the popup shows a short explanation with an explicit
 // "open in new tab" choice, so leaving is always the visitor's decision
 // rather than something that happens to them.
-function openInPopup(url){
+function openInPopup(url, fullScreen){
   if(!url) return;
   var overlay = document.getElementById('webPopupOverlay');
   var frame = document.getElementById('webPopupFrame');
@@ -6700,6 +6729,7 @@ function openInPopup(url){
   // blank frame is never a dead end.
   if(openTab) openTab.setAttribute('href', url);
   frame.src = url;
+  overlay.classList.toggle('web-popup-full', !!fullScreen);
   overlay.classList.add('open');
 }
 
@@ -14535,16 +14565,10 @@ setInterval(function(){
     btn.addEventListener('click', function(e){
       e.preventDefault();
       e.stopPropagation();
-      const landingOverlay = document.getElementById('tbotrLandingOverlay');
-      if(landingOverlay) landingOverlay.classList.remove('open');
-      const wtfGate = document.getElementById('wtfLandingOverlay');
-      if(wtfGate) wtfGate.classList.remove('open');
-      const bestOverlay = document.getElementById('bestOfOverlay');
-      if(bestOverlay){
-        bestOverlay.classList.add('open');
-        window.scrollTo(0,0);
-        setTimeout(() => { if(typeof spawnFlyingEmoji === 'function') spawnFlyingEmoji('bestof', '\ud83c\udfc6'); }, 50);
-      }
+      // ENTER on the Best Of Period landing page navigates straight to
+      // bestofperiod.com. Both sites are ours, so the phone's back button
+      // reliably returns the visitor to wtfdd.com — no frame, no popup.
+      window.location.href = 'https://bestofperiod.com';
     });
   }
 }, 300);
