@@ -2443,7 +2443,7 @@
      pages (Other Bests and the genre grids) already carry
      .bo-hero-picker-mode and stay compact, so their buttons sit right under
      the search bar instead of being pushed down a full screen. */
-  #boHeroSection:not(.bo-hero-picker-mode){
+  #boHeroSection.bo-hero-main{
     padding-top:9rem !important;
     padding-bottom:2vh !important;
     /* Fill the first screen so the "The Top N, Right Now" section head starts
@@ -2455,7 +2455,7 @@
     box-sizing:border-box;
   }
   @media (max-width:380px){
-    #boHeroSection:not(.bo-hero-picker-mode){ padding-top:9.6rem !important; }
+    #boHeroSection.bo-hero-main{ padding-top:9.6rem !important; }
   }
   /* Picker pages: title, tagline, search bar, then straight into the buttons. */
   #boHeroSection.bo-hero-picker-mode{
@@ -2468,7 +2468,7 @@
   }
   /* Pull the BEST OF / Vegas Period title up on its own. Negative margin on
      the h1 only, so the sub-line, tagline and search bar below it don't move. */
-  #boHeroSection:not(.bo-hero-picker-mode) #boHeroTitle{
+  #boHeroSection.bo-hero-main #boHeroTitle{
     margin-top:-2.2rem;
   }
   .bo-search-input-big{
@@ -3236,7 +3236,9 @@
 
   .bo-section-head{
     text-align:center;
-    padding:6rem 5vw 2rem;
+    /* was 6rem — that top gap is what left "The Top N, Right Now" sitting low
+       on the genre pages. The main page overrides this again below. */
+    padding:1.4rem 5vw 2rem;
     position:relative;
     z-index:2;
   }
@@ -6410,7 +6412,7 @@
     BEST STEAK.<br>
     <span class="bo-line2">Vegas</span> <span class="bo-period">Period<span class="period-mark">&copy;</span></span>
   </h1>
-  <p class="bo-hero-sub" id="boHeroSub">Ten steakhouses. Real ratings. No filler. Just the cuts worth flying in for.</p>
+  <p class="bo-hero-sub" id="boHeroSub">Ten steakhouses. Real ratings. No filler.</p>
   <p style="text-align:center;color:#fff;font-weight:700;text-transform:uppercase;font-size:0.9rem;margin:6px 0 0;">Real direction. No filler. Just the best.</p>
   <div class="bo-search-wrap bo-search-wrap-big">
     <input type="text" id="boSearchInput" class="bo-search-input bo-search-input-big" placeholder="Search all restaurants..." autocomplete="off">
@@ -14446,19 +14448,19 @@ const boPickerParent = {
 const boHeroCopy = {
   steak: {
     title: 'BEST STEAK',
-    sub: "Real ratings. No filler. Just the steakhouses worth flying in for."
+    sub: "Real ratings. No filler."
   },
   sushi: {
     title: 'BEST SUSHI',
-    sub: "Ten sushi rooms. Real ratings. No filler. Just the fish worth flying in for."
+    sub: "Ten sushi rooms. Real ratings. No filler."
   },
   italian: {
     title: 'BEST ITALIAN',
-    sub: "Real ratings. No filler. Just the Italian worth flying in for."
+    sub: "Real ratings. No filler."
   },
   tacos: {
     title: 'BEST TACOS',
-    sub: "Ten taco spots. Real ratings. No filler. Just the tortillas worth flying in for."
+    sub: "Ten taco spots. Real ratings. No filler."
   },
   bestof: {
     title: '<span class="bo-hero-24hr-glow">BEST OF</span>',
@@ -14470,11 +14472,11 @@ const boHeroCopy = {
   },
   breakfast: {
     title: 'BEST BREAKFAST',
-    sub: "Real ratings. No filler. Just the breakfast worth flying in for."
+    sub: "Real ratings. No filler."
   },
   sushihighend: {
     title: 'BEST FINE SUSHI',
-    sub: "Real ratings. No filler. Just the sushi and omakase worth flying in for."
+    sub: "Real ratings. No filler."
   },
   sushicasual: {
     title: 'BEST CASUAL SUSHI',
@@ -14486,11 +14488,11 @@ const boHeroCopy = {
   },
   steakhighend: {
     title: 'BEST FINE STEAK',
-    sub: "Steakhouses worth flying in for. Real ratings. No filler."
+    sub: "Real ratings. No filler."
   },
   steakcasual: {
     title: 'BEST CASUAL STEAK',
-    sub: "Real ratings where they exist. No filler. Just the casual steakhouses worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   steakdive: {
     title: 'BEST DIVE STEAK',
@@ -14518,11 +14520,11 @@ const boHeroCopy = {
   },
   italianhighend: {
     title: 'BEST FINE ITALIAN',
-    sub: "Real ratings where they exist. No filler. Just the fine Italian worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   italiancasual: {
     title: 'BEST CASUAL ITALIAN',
-    sub: "Italian kitchens worth flying in for. Real ratings. No filler."
+    sub: "Real ratings. No filler."
   },
   italiandive: {
     title: 'BEST DIVE ITALIAN',
@@ -14530,27 +14532,27 @@ const boHeroCopy = {
   },
   breakfasthighend: {
     title: 'BEST FINE BREAKFAST',
-    sub: "Real ratings. No filler. Just the elevated mornings worth flying in for."
+    sub: "Real ratings. No filler."
   },
   breakfastcasual: {
     title: 'BEST CASUAL BREAKFAST',
-    sub: "Breakfast spots worth flying in for. Real ratings. No filler."
+    sub: "Real ratings. No filler."
   },
   breakfastdive: {
     title: 'BEST DIVE BREAKFAST',
-    sub: "Dive means low cost, high rating — not low quality. Real ratings, no filler. Just the cheap breakfast worth flying in for."
+    sub: "Dive means low cost, high rating — not low quality. Real ratings, no filler."
   },
   coffee: {
     title: 'BEST COFFEE',
-    sub: "Ten coffee spots. Real ratings. No filler. Just the cups worth flying in for."
+    sub: "Ten coffee spots. Real ratings. No filler."
   },
   '24hours': {
     title: '<span class="bo-hero-24hr-glow">BEST 24 HOURS</span>',
-    sub: "Ten restaurants that never close. Real ratings. No filler. Just the spots worth flying in for, any hour of the day."
+    sub: "Ten restaurants that never close. Real ratings. No filler."
   },
   diner: {
     title: 'BEST DINERS',
-    sub: "Classic American diner spots — real ratings where they exist. No filler. Just the diners worth flying in for."
+    sub: "Classic American diner spots — real ratings where they exist. No filler."
   },
   fastfood: {
     title: 'BEST DRIVE-THRU / FAST FOOD',
@@ -14558,7 +14560,7 @@ const boHeroCopy = {
   },
   asian: {
     title: 'BEST ASIAN',
-    sub: "Real ratings. No filler. Just the Asian food worth flying in for."
+    sub: "Real ratings. No filler."
   },
   otheroptions: {
     title: '<span class="bo-hero-24hr-glow">OTHER BESTS</span>',
@@ -14570,67 +14572,67 @@ const boHeroCopy = {
   },
   smoothies: {
     title: 'BEST SMOOTHIES',
-    sub: "Real ratings where they exist. No filler. Just the smoothies worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   chocolatier: {
     title: 'BEST CHOCOLATIER',
-    sub: "Real ratings where they exist. No filler. Just the chocolate worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   wings: {
     title: 'BEST WINGS',
-    sub: "Real ratings where they exist. No filler. Just the wings worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   ayce: {
     title: 'BEST ALL YOU CAN EAT',
-    sub: "Ranked by real ratings. No filler. Just the buffets and AYCE spreads worth flying in for."
+    sub: "Ranked by real ratings. No filler."
   },
   peruvian: {
     title: 'BEST PERUVIAN',
-    sub: "Real ratings where they exist. No filler. Just the Peruvian worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   filipino: {
     title: 'BEST FILIPINO',
-    sub: "Real ratings where they exist. No filler. Just the Filipino worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   ethiopian: {
     title: 'BEST ETHIOPIAN &amp; AFRICAN',
-    sub: "Real ratings where they exist. No filler. Just the Ethiopian and African food worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   spanish: {
     title: 'BEST SPANISH &amp; TAPAS',
-    sub: "Real ratings where they exist. No filler. Just the Spanish and tapas worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   ramen: {
     title: 'BEST RAMEN',
-    sub: "Real ratings where they exist. No filler. Just the bowls worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   hawaiian: {
     title: 'BEST HAWAIIAN &amp; POKE',
-    sub: "Real ratings where they exist. No filler. Just the Hawaiian and poke worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   southern: {
     title: 'BEST SOUTHERN &amp; SOUL FOOD',
-    sub: "Ranked by real ratings. No filler. Just the Southern and soul food worth flying in for."
+    sub: "Ranked by real ratings. No filler."
   },
   deli: {
     title: 'BEST DELI &amp; SANDWICHES',
-    sub: "Ranked by real ratings. No filler. Just the delis and sandwiches worth flying in for."
+    sub: "Ranked by real ratings. No filler."
   },
   crepes: {
     title: 'BEST CREPES',
-    sub: "Real ratings where they exist. No filler. Just the crepes worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   mexican: {
     title: 'BEST MEXICAN',
-    sub: "Real ratings. No filler. Just the Mexican food worth flying in for."
+    sub: "Real ratings. No filler."
   },
   korean: {
     title: 'BEST KOREAN BBQ',
-    sub: "Real ratings. No filler. Just the tables worth flying in for."
+    sub: "Real ratings. No filler."
   },
   chinese: {
     title: 'BEST CHINESE',
-    sub: "Real ratings. No filler. Just the tables worth flying in for."
+    sub: "Real ratings. No filler."
   },
   combo: {
     title: 'BEST ASIAN, COMBO',
@@ -14638,23 +14640,23 @@ const boHeroCopy = {
   },
   indian: {
     title: 'BEST INDIAN',
-    sub: "Real ratings where they exist. No filler. Just the Indian worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   thai: {
     title: 'BEST THAI',
-    sub: "Real ratings where they exist. No filler. Just the Thai worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   vietnamese: {
     title: 'BEST VIETNAMESE',
-    sub: "Real ratings where they exist. No filler. Just the flavors worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   pho: {
     title: 'BEST PHO',
-    sub: "Real ratings where they exist. No filler. Just the bowls worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   buffet: {
     title: 'BEST BUFFETS',
-    sub: "Real ratings where they exist. No filler. Just the spreads worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   asianbestofrest: {
     title: 'BEST ASIAN',
@@ -14662,47 +14664,47 @@ const boHeroCopy = {
   },
   asianfusion: {
     title: 'BEST FUSION ASIAN',
-    sub: "Real ratings where they exist. No filler. Just the fusion worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   french: {
     title: 'BEST FRENCH',
-    sub: "Real ratings where they exist. No filler. Just the French worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   mediterranean: {
     title: 'BEST MEDITERRANEAN',
-    sub: "Real ratings where they exist. No filler. Just the Mediterranean worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   greek: {
     title: 'BEST GREEK',
-    sub: "Real ratings where they exist. No filler. Just the Greek worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   seafood: {
     title: 'BEST SEAFOOD',
-    sub: "Ranked by real ratings. No filler. Just the seafood worth flying in for."
+    sub: "Ranked by real ratings. No filler."
   },
   bbq: {
     title: 'BEST BBQ',
-    sub: "Ranked by real ratings. No filler. Just the barbecue worth flying in for."
+    sub: "Ranked by real ratings. No filler."
   },
   burgers: {
     title: 'BEST BURGERS',
-    sub: "Real ratings where they exist. No filler. Just the burgers worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   pizza: {
     title: 'BEST PIZZA',
-    sub: "Real ratings where they exist. No filler. Just the pies worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   vegan: {
     title: 'BEST VEGAN & VEGETARIAN',
-    sub: "Real ratings where they exist. No filler. Just the plant-based worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   mexicanhighend: {
     title: 'FINE MEXICAN',
-    sub: "Real ratings where they exist. No filler. Just the fine Mexican worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   mexicancasual: {
     title: 'CASUAL MEXICAN',
-    sub: "Real ratings where they exist. No filler. Just the casual Mexican worth flying in for."
+    sub: "Real ratings where they exist. No filler."
   },
   mexicandive: {
     title: 'DIVE MEXICAN',
@@ -14801,6 +14803,10 @@ function boRenderCategory(cat){
 
   boBackBtnEl.classList.toggle('bo-visible', cat !== 'bestof');
   // Hot List belongs to the main Best Of page only, not the genre sub-pages.
+  // Only the main Best Of page gets the full-screen hero. Genre list pages keep
+  // the normal hero height so their "The Top N, Right Now" head sits up top,
+  // in the same place it does on the main page.
+  if(boHeroSectionEl) boHeroSectionEl.classList.toggle('bo-hero-main', cat === 'bestof');
   const boKickerHeroEl = document.getElementById('boKickerHero');
   if(boKickerHeroEl) boKickerHeroEl.style.display = (cat === 'bestof') ? 'block' : 'none';
   const boSectionHeadEl2 = document.getElementById('boSectionHead');
