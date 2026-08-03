@@ -8141,6 +8141,24 @@ function showMapView(){
   mapView.style.display = 'block';
 }
 
+function resetMainFilters(){
+  currentArea = 'All';
+  currentCategory = 'All';
+
+  document.querySelectorAll('.area-tab').forEach(function(tab){
+    tab.classList.remove('active');
+    tab.setAttribute('aria-pressed','false');
+  });
+
+  document.querySelectorAll('.cat-tab[data-cat]').forEach(function(tab){
+    const isAll = tab.dataset.cat === 'All';
+    tab.classList.toggle('active', isAll);
+    tab.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+  });
+
+  try{ renderBoard(); }catch(e){}
+}
+
 function setupDirectory(){
   const btn = document.getElementById('directoryBtn');
   const overlay = document.getElementById('directoryOverlay');
@@ -8159,6 +8177,8 @@ function setupDirectory(){
   closeBtn.addEventListener('click', () => {
     try{
       overlay.classList.remove('open');
+      showMapView();
+      resetMainFilters();
       const homeBtn = document.getElementById('bjsHomeBtn');
       if(homeBtn) homeBtn.style.display = '';
     }catch(err){ showDebugError('Directory close: ' + err.message); }
@@ -8166,6 +8186,8 @@ function setupDirectory(){
   overlay.addEventListener('click', (e) => {
     if(e.target === overlay){
       overlay.classList.remove('open');
+      showMapView();
+      resetMainFilters();
       const homeBtn = document.getElementById('bjsHomeBtn');
       if(homeBtn) homeBtn.style.display = '';
     }
@@ -16520,6 +16542,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     var o=document.getElementById('directoryOverlay');
     if(o) o.classList.remove('open');
     directoryBack();
+    if(typeof resetMainFilters==='function') resetMainFilters();
+    var homeBtn=document.getElementById('bjsHomeBtn');
+    if(homeBtn) homeBtn.style.display='';
     restore();
   }
   function directoryBack(){
