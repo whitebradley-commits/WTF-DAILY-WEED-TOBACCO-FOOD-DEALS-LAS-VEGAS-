@@ -4714,6 +4714,22 @@
 .wtf-map-pin::after{content:"";position:absolute;width:7px;height:7px;background:#fff;border-radius:50%;left:5.5px;top:5.5px;}
 .wtf-map-view{margin-top:8px;border:1px solid #FFD700;background:#111;color:#FFD700;border-radius:18px;padding:7px 11px;font-weight:800;cursor:pointer;}
 .near-result .wtf-map-view{margin:0;white-space:nowrap;}
+
+/* ===== Main WTF hero cleanup ===== */
+.hero-content{padding-top:18px;}
+.wtf-stamp{
+  width:min(65vw,263px) !important;
+  height:min(44vw,176px) !important;
+  margin:14px auto 18px !important;
+}
+@media(max-width:480px){
+  .hero-content{padding-top:22px;}
+  .wtf-stamp{
+    width:min(65vw,242px) !important;
+    height:min(44vw,162px) !important;
+    margin:16px auto 20px !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -6046,9 +6062,7 @@
 </div>
 <span aria-label="WTF — Weed, Tobacco, Food" class="new-wtf-logo" role="img"></span>
 </div>
-<div class="mini-ticker">
-<div class="mini-ticker-track"><span>DAILY DEALS ON</span><span class="word-weed">WEED</span><span class="mini-ticker-dot">•</span><span class="word-tobacco">TOBACCO</span><span class="mini-ticker-dot">•</span><span class="word-food">FOOD</span></div>
-</div>
+
 </div>
 </header>
 <div class="category-bar">
