@@ -4617,6 +4617,75 @@
   .wtf-landing-logo.new-wtf-logo{width:min(58vw,205px) !important;height:min(39vw,137px) !important;}
   #wtfLandingOverlay .landing-bjs-corner{right:12px;bottom:12px;width:44px;height:44px;}
 }
+
+
+/* ===== Near Me half-mile color key + main logo visibility repair ===== */
+.wtf-stamp{
+  width:min(62vw,250px) !important;
+  height:min(42vw,168px) !important;
+  margin:0 auto 8px !important;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+}
+.wtf-stamp > .new-wtf-logo{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:180px;
+  min-height:120px;
+  background-size:contain !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+}
+.join-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:0;
+}
+.join-box .newsletter-brand-logo{
+  flex:0 0 auto;
+  width:min(44vw,175px) !important;
+  height:min(29vw,116px) !important;
+  margin:0 auto 10px !important;
+}
+.join-box h4.newsletter-title{
+  width:100%;
+  margin:0 auto 16px !important;
+  line-height:1.12 !important;
+}
+.near-toggle[data-near-cat="all"].active{
+  background:#222 !important;border-color:#fff !important;color:#fff !important;
+  box-shadow:0 0 12px rgba(255,255,255,.35) !important;
+}
+.near-toggle[data-near-cat="weed"].active{
+  background:#3D8B4C !important;border-color:#8ff29f !important;color:#fff !important;
+  box-shadow:0 0 14px rgba(61,139,76,.75) !important;
+}
+.near-toggle[data-near-cat="tobacco"].active{
+  background:#6b3f1f !important;border-color:#c58a55 !important;color:#fff !important;
+  box-shadow:0 0 14px rgba(107,63,31,.75) !important;
+}
+.near-toggle[data-near-cat="food"].active{
+  background:#d6a900 !important;border-color:#ffe36d !important;color:#111 !important;
+  box-shadow:0 0 14px rgba(214,169,0,.75) !important;
+}
+.near-map-legend{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  padding:10px 14px;border-top:1px solid #2e2e2e;border-bottom:1px solid #2e2e2e;
+  background:#0d0d0d;font-size:12px;font-weight:700;color:#ddd;
+}
+.near-map-legend span{display:inline-flex;align-items:center;gap:6px;}
+.near-legend-dot{width:12px;height:12px;border-radius:50%;border:2px solid #fff;display:inline-block;}
+.near-legend-weed{background:#3D8B4C;}
+.near-legend-tobacco{background:#6b3f1f;}
+.near-legend-food{background:#d6a900;}
+.near-result[data-category="weed"]{border-left:5px solid #3D8B4C;}
+.near-result[data-category="tobacco"]{border-left:5px solid #6b3f1f;}
+.near-result[data-category="food"]{border-left:5px solid #d6a900;}
+.near-distance{color:#ddd !important;}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -6010,25 +6079,7 @@
 <span class="chip-circle">📍</span>
 <span class="label">Near<br/>Me</span>
 </button>
-<button aria-haspopup="dialog" class="corner-btn" id="directoryBtn">
-<span class="chip-circle mini-map-btn">
-<svg aria-hidden="true" height="34" viewbox="0 0 300 420" width="34">
-<defs>
-<clippath id="miniNvClip">
-<path d="M70,15 L230,15 L230,250 L248,250 L248,330 L268,392 L172,392 L150,352 L112,322 L96,282 L64,232 L58,180 L84,142 L56,96 L70,15 Z"></path>
-</clippath>
-</defs>
-<g clip-path="url(#miniNvClip)">
-<rect fill="#5C7A45" height="203" width="162" x="0" y="0"></rect>
-<rect fill="#3D6B4A" height="203" width="138" x="162" y="0"></rect>
-<rect fill="#4C8055" height="217" width="162" x="0" y="203"></rect>
-<rect fill="#6B8F5D" height="217" width="138" x="162" y="203"></rect>
-</g>
-<path d="M70,15 L230,15 L230,250 L248,250 L248,330 L268,392 L172,392 L150,352 L112,322 L96,282 L64,232 L58,180 L84,142 L56,96 L70,15 Z" fill="none" stroke="#fff" stroke-width="6"></path>
-</svg>
-</span>
-<span class="label">Nevada<br/>Map</span>
-</button>
+
 <button aria-haspopup="dialog" class="corner-btn" id="shuttleBtn">
 <span class="chip-circle">🚌</span>
 <span class="label">Free<br/>Shuttle</span>
@@ -6148,7 +6199,7 @@
       <button aria-label="Close Near Me" class="near-me-close" id="nearMeClose" type="button">×</button>
     </div>
     <div class="near-me-controls">
-      <p class="near-me-help">Choose one or more categories, then allow location access. Pins will appear for nearby businesses. Tap or hover over a pin for details.</p>
+      <p class="near-me-help">Choose one or more categories, then allow location access. Colored pins will show matching businesses within one-half mile. Tap or hover over a pin for details.</p>
       <div class="near-me-toggles" id="nearMeToggles">
         <button class="near-toggle active" data-near-cat="all" type="button">All</button>
         <button class="near-toggle" data-near-cat="weed" type="button">Weed</button>
@@ -6159,6 +6210,11 @@
       <div aria-live="polite" class="near-status" id="nearMeStatus"></div>
     </div>
     <div id="nearMeMap"></div>
+    <div class="near-map-legend" aria-label="Map pin colors">
+      <span><i class="near-legend-dot near-legend-weed"></i> Weed</span>
+      <span><i class="near-legend-dot near-legend-tobacco"></i> Tobacco</span>
+      <span><i class="near-legend-dot near-legend-food"></i> Food</span>
+    </div>
     <div class="near-results" id="nearMeResults"><div class="near-empty">Your nearby results will appear here.</div></div>
   </div>
 </div>
@@ -15999,59 +16055,218 @@ function setupNearMe(){
   const results=document.getElementById('nearMeResults');
   const toggles=[...document.querySelectorAll('.near-toggle')];
   if(!openBtn||!overlay||!searchBtn) return;
-  let map=null, markerLayer=null, userMarker=null;
-  const open=()=>{overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>{if(map)map.invalidateSize();},100);};
-  const close=()=>{overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';};
-  openBtn.addEventListener('click',open); closeBtn?.addEventListener('click',close);
+
+  const HALF_MILE_METERS=805;
+  const COLORS={weed:'#3D8B4C',tobacco:'#6b3f1f',food:'#d6a900'};
+  let map=null, markerLayer=null, userMarker=null, radiusCircle=null;
+
+  const open=()=>{
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    setTimeout(()=>{if(map)map.invalidateSize();},140);
+  };
+  const close=()=>{
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  };
+  openBtn.addEventListener('click',open);
+  closeBtn?.addEventListener('click',close);
   overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+
   toggles.forEach(btn=>btn.addEventListener('click',()=>{
     const cat=btn.dataset.nearCat;
-    if(cat==='all') toggles.forEach(b=>b.classList.toggle('active',b===btn));
-    else{
+    if(cat==='all'){
+      toggles.forEach(b=>b.classList.toggle('active',b===btn));
+    }else{
       toggles.find(b=>b.dataset.nearCat==='all')?.classList.remove('active');
       btn.classList.toggle('active');
       if(!toggles.some(b=>b.classList.contains('active'))) toggles[0].classList.add('active');
     }
   }));
-  function selected(){const a=toggles.filter(b=>b.classList.contains('active')).map(b=>b.dataset.nearCat);return a.includes('all')?['weed','tobacco','food']:a;}
+
+  function selected(){
+    const active=toggles.filter(b=>b.classList.contains('active')).map(b=>b.dataset.nearCat);
+    return active.includes('all')?['weed','tobacco','food']:active;
+  }
+
   function initMap(lat,lon){
-    if(!window.L){status.textContent='The map library could not load. Use the Directions buttons in the results instead.';return;}
-    if(!map){map=L.map('nearMeMap').setView([lat,lon],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);markerLayer=L.layerGroup().addTo(map);}else map.setView([lat,lon],13);
-    markerLayer.clearLayers(); if(userMarker)map.removeLayer(userMarker);
-    userMarker=L.circleMarker([lat,lon],{radius:9,weight:3,color:'#fff',fillColor:'#3D8B4C',fillOpacity:1}).addTo(map).bindPopup('<strong>You are here</strong>');
-    setTimeout(()=>map.invalidateSize(),80);
+    if(!window.L){
+      status.textContent='The map library could not load. Please check your internet connection and try again.';
+      return false;
+    }
+    if(!map){
+      map=L.map('nearMeMap',{zoomControl:true}).setView([lat,lon],16);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        maxZoom:19,
+        attribution:'© OpenStreetMap contributors'
+      }).addTo(map);
+      markerLayer=L.layerGroup().addTo(map);
+    }else{
+      map.setView([lat,lon],16);
+    }
+    markerLayer.clearLayers();
+    if(userMarker)map.removeLayer(userMarker);
+    if(radiusCircle)map.removeLayer(radiusCircle);
+    radiusCircle=L.circle([lat,lon],{
+      radius:HALF_MILE_METERS,
+      color:'#fff',weight:1,dashArray:'6 7',fillColor:'#fff',fillOpacity:.025
+    }).addTo(map);
+    userMarker=L.circleMarker([lat,lon],{
+      radius:9,weight:3,color:'#fff',fillColor:'#2878d4',fillOpacity:1
+    }).addTo(map).bindPopup('<strong>You are here</strong>');
+    map.fitBounds(radiusCircle.getBounds(),{padding:[18,18]});
+    setTimeout(()=>map.invalidateSize(),100);
+    return true;
   }
+
   const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  function classify(tags){if(tags.shop==='cannabis')return'Weed';if(tags.shop==='tobacco'||tags.shop==='electronic_cigarette'||tags.amenity==='hookah_lounge')return'Tobacco';return'Food';}
-  function center(el){if(typeof el.lat==='number')return[el.lat,el.lon];if(el.center)return[el.center.lat,el.center.lon];return null;}
+  function classify(tags){
+    if(tags.shop==='cannabis'||tags.healthcare==='cannabis')return'weed';
+    if(tags.shop==='tobacco'||tags.shop==='electronic_cigarette'||tags.amenity==='hookah_lounge')return'tobacco';
+    return'food';
+  }
+  function center(el){
+    if(typeof el.lat==='number')return[el.lat,el.lon];
+    if(el.center)return[el.center.lat,el.center.lon];
+    return null;
+  }
+  function milesBetween(lat1,lon1,lat2,lon2){
+    const R=3958.7613,toRad=v=>v*Math.PI/180;
+    const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);
+    const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    return 2*R*Math.asin(Math.sqrt(a));
+  }
+
   async function fetchNearby(lat,lon,cats){
-    const q=[]; const r=8000;
-    if(cats.includes('weed'))q.push(`nwr[shop=cannabis](around:${r},${lat},${lon});`);
-    if(cats.includes('tobacco'))q.push(`nwr[shop=tobacco](around:${r},${lat},${lon});nwr[shop=electronic_cigarette](around:${r},${lat},${lon});nwr[amenity=hookah_lounge](around:${r},${lat},${lon});`);
-    if(cats.includes('food'))q.push(`nwr[amenity~"restaurant|cafe|fast_food|food_court"](around:${r},${lat},${lon});`);
-    const query='[out:json][timeout:25];('+q.join('')+');out center tags 80;';
-    const res=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});
-    if(!res.ok)throw new Error('Nearby service is temporarily unavailable.');
-    return (await res.json()).elements||[];
+    const q=[];
+    const r=HALF_MILE_METERS;
+    if(cats.includes('weed')){
+      q.push(`nwr[shop=cannabis](around:${r},${lat},${lon});`);
+      q.push(`nwr[healthcare=cannabis](around:${r},${lat},${lon});`);
+    }
+    if(cats.includes('tobacco')){
+      q.push(`nwr[shop=tobacco](around:${r},${lat},${lon});`);
+      q.push(`nwr[shop=electronic_cigarette](around:${r},${lat},${lon});`);
+      q.push(`nwr[amenity=hookah_lounge](around:${r},${lat},${lon});`);
+    }
+    if(cats.includes('food')){
+      q.push(`nwr[amenity~"restaurant|cafe|fast_food|food_court|ice_cream|bar|pub"](around:${r},${lat},${lon});`);
+    }
+    const query='[out:json][timeout:20];('+q.join('')+');out center tags;';
+    const endpoints=[
+      'https://overpass-api.de/api/interpreter',
+      'https://overpass.kumi.systems/api/interpreter',
+      'https://overpass.nchc.org.tw/api/interpreter'
+    ];
+    let lastError=null;
+    for(const endpoint of endpoints){
+      try{
+        const controller=new AbortController();
+        const timer=setTimeout(()=>controller.abort(),18000);
+        const res=await fetch(endpoint,{
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+          body:'data='+encodeURIComponent(query),
+          signal:controller.signal
+        });
+        clearTimeout(timer);
+        if(!res.ok)throw new Error('Nearby service returned '+res.status);
+        const data=await res.json();
+        return data.elements||[];
+      }catch(err){lastError=err;}
+    }
+    throw lastError||new Error('Nearby service is temporarily unavailable.');
   }
-  function render(items,lat,lon){
-    const seen=new Set(); const clean=[];
-    items.forEach(el=>{const c=center(el),t=el.tags||{},name=t.name||t.brand;if(!c||!name)return;const k=name+'|'+c.join('|');if(seen.has(k))return;seen.add(k);clean.push({name,cat:classify(t),lat:c[0],lon:c[1],address:[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),website:t.website||t['contact:website']||''});});
-    clean.sort((a,b)=>((a.lat-lat)**2+(a.lon-lon)**2)-((b.lat-lat)**2+(b.lon-lon)**2));
-    const list=clean.slice(0,60);
-    if(!list.length){results.innerHTML='<div class="near-empty">No matching places were found within about five miles. Try another category.</div>';status.textContent='No nearby matches found.';return;}
-    results.innerHTML=list.map(x=>`<div class="near-result"><div><strong>${esc(x.name)}</strong><small>${esc(x.cat)}${x.address?' · '+esc(x.address):''}</small></div><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Directions</a></div>`).join('');
-    if(map&&markerLayer){list.forEach(x=>{const html=`<strong>${esc(x.name)}</strong><br>${esc(x.cat)}${x.address?'<br>'+esc(x.address):''}<br><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Get directions</a>`;const m=L.marker([x.lat,x.lon]).bindPopup(html);m.on('mouseover',()=>m.openPopup());markerLayer.addLayer(m);});}
-    status.textContent=`Showing ${list.length} nearby place${list.length===1?'':'s'}.`;
+
+  function render(items,lat,lon,cats){
+    const seen=new Set(),clean=[];
+    items.forEach(el=>{
+      const c=center(el),t=el.tags||{},name=t.name||t.brand||t.operator;
+      if(!c||!name)return;
+      const cat=classify(t);
+      if(!cats.includes(cat))return;
+      const distance=milesBetween(lat,lon,c[0],c[1]);
+      if(distance>.51)return;
+      const key=name+'|'+c[0].toFixed(5)+'|'+c[1].toFixed(5);
+      if(seen.has(key))return;
+      seen.add(key);
+      clean.push({
+        name,cat,lat:c[0],lon:c[1],distance,
+        address:[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),
+        phone:t.phone||t['contact:phone']||'',
+        website:t.website||t['contact:website']||'',
+        openingHours:t.opening_hours||''
+      });
+    });
+    clean.sort((a,b)=>a.distance-b.distance);
+    const list=clean.slice(0,80);
+    markerLayer?.clearLayers();
+
+    if(!list.length){
+      results.innerHTML='<div class="near-empty">No matching mapped businesses were found within one-half mile. Try another category or move the map search from a different location.</div>';
+      status.textContent='No mapped matches found within 0.5 mile.';
+      return;
+    }
+
+    results.innerHTML=list.map((x,i)=>{
+      const label=x.cat==='weed'?'Weed':x.cat==='tobacco'?'Tobacco':'Food';
+      return `<div class="near-result" data-category="${x.cat}" data-near-index="${i}" tabindex="0"><div><strong>${esc(x.name)}</strong><small>${label}${x.address?' · '+esc(x.address):''}</small><small class="near-distance">${x.distance.toFixed(2)} mile${x.distance<.995?'':'s'} away</small></div><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Directions</a></div>`;
+    }).join('');
+
+    const markers=[];
+    if(map&&markerLayer){
+      list.forEach((x,i)=>{
+        const label=x.cat==='weed'?'Weed':x.cat==='tobacco'?'Tobacco':'Food';
+        const color=COLORS[x.cat];
+        const popup=`<strong>${esc(x.name)}</strong><br>${label}<br>${x.distance.toFixed(2)} miles away${x.address?'<br>'+esc(x.address):''}${x.openingHours?'<br><small>Hours: '+esc(x.openingHours)+'</small>':''}<br><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Get directions</a>`;
+        const marker=L.circleMarker([x.lat,x.lon],{
+          radius:10,weight:3,color:'#fff',fillColor:color,fillOpacity:1
+        }).bindPopup(popup,{maxWidth:260});
+        marker.on('mouseover',()=>marker.openPopup());
+        marker.on('click',()=>marker.openPopup());
+        markerLayer.addLayer(marker);
+        markers.push(marker);
+      });
+    }
+
+    results.querySelectorAll('.near-result').forEach(row=>{
+      const i=Number(row.dataset.nearIndex);
+      const show=()=>{
+        const marker=markers[i];
+        if(marker&&map){map.panTo(marker.getLatLng());marker.openPopup();}
+      };
+      row.addEventListener('click',e=>{if(!e.target.closest('a'))show();});
+      row.addEventListener('mouseenter',show);
+      row.addEventListener('focus',show);
+    });
+    status.textContent=`Showing ${list.length} place${list.length===1?'':'s'} within one-half mile.`;
   }
+
   searchBtn.addEventListener('click',()=>{
     if(!navigator.geolocation){status.textContent='Location is not supported by this browser.';return;}
-    status.textContent='Requesting your location…';searchBtn.disabled=true;
+    status.textContent='Requesting your location…';
+    searchBtn.disabled=true;
     navigator.geolocation.getCurrentPosition(async pos=>{
-      const lat=pos.coords.latitude,lon=pos.coords.longitude;initMap(lat,lon);status.textContent='Finding nearby places…';
-      try{render(await fetchNearby(lat,lon,selected()),lat,lon);}catch(err){status.textContent=err.message+' You can still open Google Maps.';const words=selected().map(c=>c==='weed'?'dispensaries':c==='tobacco'?'tobacco and vape shops':'restaurants').join(' ');results.innerHTML=`<div class="near-empty"><a style="color:#79e48c" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(words+' near me')}/@${lat},${lon},13z">Open this search in Google Maps</a></div>`;}finally{searchBtn.disabled=false;}
-    },err=>{status.textContent=err.code===1?'Location permission was denied. Enable location access and try again.':'Your location could not be determined. Please try again.';searchBtn.disabled=false;},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+      const lat=pos.coords.latitude,lon=pos.coords.longitude,cats=selected();
+      initMap(lat,lon);
+      status.textContent='Finding mapped businesses within one-half mile…';
+      try{
+        const places=await fetchNearby(lat,lon,cats);
+        render(places,lat,lon,cats);
+      }catch(err){
+        status.textContent='The live nearby directory could not load. Try again in a moment.';
+        const words=cats.map(c=>c==='weed'?'dispensaries':c==='tobacco'?'tobacco vape shops':'restaurants').join(' OR ');
+        results.innerHTML=`<div class="near-empty">The map search service did not respond. <a style="color:#79e48c" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(words+' near me')}/@${lat},${lon},16z">Open the same search in Google Maps</a></div>`;
+      }finally{
+        searchBtn.disabled=false;
+      }
+    },err=>{
+      status.textContent=err.code===1?'Location permission was denied. Enable location access for WTFDD and try again.':'Your location could not be determined. Please try again.';
+      searchBtn.disabled=false;
+    },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
   });
 }
 
