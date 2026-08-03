@@ -4,7 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>WTFdd.com</title>
+<title>WTFdd.com — Newsletter Issue 012</title>
+<meta name="wtf-newsletter-build" content="012-LOCKED-INTERNAL">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Archivo+Narrow:wght@400;500;600;700&amp;family=Baloo+2:wght@600;700;800&amp;family=Bebas+Neue&amp;family=Alfa+Slab+One&amp;family=Roboto+Condensed:wght@300;400&amp;family=IBM+Plex+Sans+Condensed:wght@400;700&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Oswald:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -4955,6 +4956,7 @@
 </style>
 </head>
 <body>
+<!-- WTF NEWSLETTER BUILD: ISSUE 012 LOCKED INTERNAL -->
 <div aria-hidden="true" id="siteFrame"></div>
 <div id="app">
 <div class="thank-you-overlay open" id="wtfLandingOverlay">
@@ -5156,7 +5158,7 @@
 </div>
 </div>
 <div class="tpa-overlay" id="tpaOverlay">
-<a class="tpa-video-btn" href="https://tpabombpot-4mtcmlwa.manus.space/" rel="noopener" style="position:fixed;top:14px;right:16px;z-index:50;" target="_blank">
+<a class="tpa-video-btn" href="#wtf-newsletter-012" rel="noopener" style="position:fixed;top:14px;right:16px;z-index:50;" target="_blank">
 <span class="tpa-video-arrow">→</span><span class="tpa-video-label">VIDEO CATALOG</span>
 </a>
 <div class="tpa-scope">
@@ -6779,6 +6781,7 @@
         <button class="wtf-news-submit" type="submit">OPEN ISSUE 012 →</button>
       </form>
       <div class="wtf-news-note" id="wtfNewsletterAccessNote"></div>
+      <div style="margin-top:10px;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.42);">WTF NEWSLETTER • ISSUE 012</div>
       <p class="wtf-news-privacy">A new issue comes out every Friday. No spam. Unsubscribe anytime.</p>
     </div>
   </section>
@@ -17041,6 +17044,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   const FORM_ENDPOINT='https://formspree.io/f/xpqgbnje';
   let accessType='Existing Member';
   function openNews(){
+    if(window.openLockedWtfNewsletter){window.openLockedWtfNewsletter();return;}
     const o=document.getElementById('wtfNewsletterOverlay');
     if(!o)return;
     o.classList.add('open');o.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
@@ -17084,6 +17088,37 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       document.getElementById('wtfNewsletterOverlay').scrollTop=0;
     });
   });
+})();
+</script>
+
+
+<script>
+(function(){
+  function openLockedWtfNewsletter(){
+    var overlay=document.getElementById('wtfNewsletterOverlay');
+    var gate=document.getElementById('wtfNewsletterGate');
+    var issue=document.getElementById('wtfNewsletterIssue');
+    var email=document.getElementById('wtfNewsletterAccessEmail');
+    var note=document.getElementById('wtfNewsletterAccessNote');
+    if(!overlay || !gate || !issue) return false;
+    issue.classList.remove('show');
+    gate.style.display='flex';
+    if(email) email.value='';
+    if(note) note.textContent='';
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    overlay.scrollTop=0;
+    return true;
+  }
+  window.openLockedWtfNewsletter=openLockedWtfNewsletter;
+  document.addEventListener('click',function(e){
+    var target=e.target.closest('.wtf-newsletter-open,.goto-newsletter-link,[data-wtf-newsletter],a[href*="manus"],a[href="#wtf-newsletter-012"]');
+    if(!target) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openLockedWtfNewsletter();
+  },true);
 })();
 </script>
 
