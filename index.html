@@ -16083,7 +16083,10 @@ function setupWtfLanding(){
   document.body.style.overflow = 'hidden';
 
   enterBtn.addEventListener('click', function(){
+    // Go directly from the age gate into the main WTFDD site.
     overlay.classList.remove('open');
+    const obsoleteCompanyHub = document.getElementById('companyHubOverlay');
+    if(obsoleteCompanyHub) obsoleteCompanyHub.remove();
     document.body.style.overflow = '';
     window.scrollTo(0, 0);
   });
@@ -16487,6 +16490,11 @@ async function init(){
   setupHighHungry();
   setupVendorVerify();
   setupWtfCitiesToggle();
+  // Permanently remove the former BJS company hub from this build.
+  // The only entry flow is: WTF 21+ gate -> main WTFDD site.
+  const obsoleteCompanyHub = document.getElementById('companyHubOverlay');
+  if(obsoleteCompanyHub) obsoleteCompanyHub.remove();
+
   setupRestaurantMenuPopup();
   setupWebPopup();
   setupPhonePopup();
@@ -16495,7 +16503,6 @@ async function init(){
   setupMenuPopup();
   setupOtherCities();
   setupSplitFlap();
-  setupCompanyHub();
   setupBopMiniBadge();
   setupBopLandingBadge();
   setupAboutUs();
