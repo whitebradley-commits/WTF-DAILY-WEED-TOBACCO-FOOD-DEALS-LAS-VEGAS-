@@ -4548,6 +4548,41 @@
   }
 
 
+
+/* ===== Newsletter repair + working Near Me finder ===== */
+.join-box-wrap{padding:28px 16px !important;min-height:0 !important;}
+.join-box{max-width:560px !important;padding:24px 18px 28px !important;min-height:0 !important;}
+.join-box .newsletter-icon{margin-bottom:4px !important;}
+.join-box .newsletter-brand-logo{display:block;width:min(42vw,170px);height:min(28vw,112px);margin:0 auto 8px;background-size:contain;}
+.join-box h4.newsletter-title{font-size:clamp(27px,7vw,39px);line-height:1.08;margin:0 0 18px;color:#3D8B4C;text-align:center;}
+.join-box p{max-width:520px;margin-left:auto;margin-right:auto;}
+@media(max-width:480px){.join-box{padding:20px 14px 24px !important}.join-box p{font-size:14px}.join-box p.no-spam-line{white-space:normal}}
+
+.near-me-btn .chip-circle{border-color:#4fd267 !important;box-shadow:0 0 12px rgba(79,210,103,.75),0 0 28px rgba(79,210,103,.35) !important;}
+.near-me-btn .label{color:#69df7d !important;}
+.near-me-overlay{position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.92);display:none;overflow:auto;padding:18px;}
+.near-me-overlay.open{display:block;}
+.near-me-panel{width:min(920px,100%);margin:18px auto;background:#090909;border:1px solid #3f3f3f;border-radius:18px;box-shadow:0 0 38px rgba(79,210,103,.22);overflow:hidden;}
+.near-me-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid #2e2e2e;}
+.near-me-head h2{margin:0;font-family:'Archivo Black',sans-serif;font-size:clamp(23px,5vw,34px);color:#fff;}
+.near-me-close{width:42px;height:42px;border-radius:50%;border:1px solid #555;background:#111;color:#fff;font-size:24px;cursor:pointer;}
+.near-me-controls{padding:16px 18px;}
+.near-me-help{margin:0 0 12px;color:#bdbdbd;font-size:14px;line-height:1.45;}
+.near-me-toggles{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:13px;}
+.near-toggle{border:1px solid #555;background:#111;color:#ddd;border-radius:999px;padding:10px 16px;font:700 14px 'Archivo Narrow',sans-serif;cursor:pointer;}
+.near-toggle.active{background:#3D8B4C;border-color:#fff;color:#fff;box-shadow:0 0 12px rgba(79,210,103,.5);}
+.near-search-btn{width:100%;border:0;border-radius:12px;padding:14px 18px;background:#3D8B4C;color:#fff;font:800 17px 'Archivo Narrow',sans-serif;cursor:pointer;box-shadow:0 4px 0 #245c31;}
+.near-status{min-height:22px;margin:12px 0 0;color:#ddd;font-size:13px;text-align:center;}
+#nearMeMap{height:min(52vh,480px);min-height:320px;background:#151515;}
+.near-results{padding:14px 18px 22px;display:grid;gap:9px;max-height:330px;overflow:auto;}
+.near-result{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #333;border-radius:12px;padding:12px;background:#0d0d0d;}
+.near-result strong{display:block;color:#fff;font-size:15px;}
+.near-result small{display:block;color:#9b9b9b;margin-top:3px;}
+.near-result a{flex:0 0 auto;text-decoration:none;border:1px solid #4fd267;color:#7fe890;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:700;}
+.near-empty{color:#aaa;text-align:center;padding:14px;}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#111;color:#fff;}
+.leaflet-popup-content a{color:#79e48c;}
+
 /* ===== Approved WTF logo replacement ===== */
 .new-wtf-logo{
   display:inline-block;
@@ -4583,6 +4618,8 @@
   #wtfLandingOverlay .landing-bjs-corner{right:12px;bottom:12px;width:44px;height:44px;}
 }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 <div aria-hidden="true" id="siteFrame"></div>
@@ -5969,6 +6006,10 @@
 </div>
 </div>
 <div class="top-bar-row wtf-always-visible-row">
+<button aria-haspopup="dialog" class="corner-btn near-me-btn" id="nearMeBtn" type="button">
+<span class="chip-circle">📍</span>
+<span class="label">Near<br/>Me</span>
+</button>
 <button aria-haspopup="dialog" class="corner-btn" id="directoryBtn">
 <span class="chip-circle mini-map-btn">
 <svg aria-hidden="true" height="34" viewbox="0 0 300 420" width="34">
@@ -6092,12 +6133,36 @@
 </div>
 <div class="join-box">
 <div aria-hidden="true" class="newsletter-icon">📰</div>
-<h4>Sign Up for the <span aria-label="WTF logo, tap for vendor verification" class="new-wtf-logo wtf-inline-logo wtf-logo-link" role="button" tabindex="0"></span> Newsletter</h4>
+<span aria-label="WTF — Weed, Tobacco, Food" class="new-wtf-logo newsletter-brand-logo" role="img"></span>
+<h4 class="newsletter-title">Sign Up for the Newsletter</h4>
 <p>Get the best deals — percentages off, new drops, and specials — from dispensaries, smoke shops, and restaurants across Las Vegas, dropped in your inbox once a month.</p>
 <p class="no-spam-line">No spam, unsubscribe anytime.</p>
 <a class="btn btn-primary" href="https://wtfddnews-imc8abbb.manus.space" rel="noopener" style="display:inline-block;text-align:center;text-decoration:none;" target="_blank">Sign Up</a>
 </div>
 </div>
+
+<div aria-hidden="true" aria-labelledby="nearMeTitle" class="near-me-overlay" id="nearMeOverlay" role="dialog">
+  <div class="near-me-panel">
+    <div class="near-me-head">
+      <h2 id="nearMeTitle">Find WTF Near Me</h2>
+      <button aria-label="Close Near Me" class="near-me-close" id="nearMeClose" type="button">×</button>
+    </div>
+    <div class="near-me-controls">
+      <p class="near-me-help">Choose one or more categories, then allow location access. Pins will appear for nearby businesses. Tap or hover over a pin for details.</p>
+      <div class="near-me-toggles" id="nearMeToggles">
+        <button class="near-toggle active" data-near-cat="all" type="button">All</button>
+        <button class="near-toggle" data-near-cat="weed" type="button">Weed</button>
+        <button class="near-toggle" data-near-cat="tobacco" type="button">Tobacco</button>
+        <button class="near-toggle" data-near-cat="food" type="button">Food</button>
+      </div>
+      <button class="near-search-btn" id="nearMeSearch" type="button">Use My Location &amp; Show Nearby</button>
+      <div aria-live="polite" class="near-status" id="nearMeStatus"></div>
+    </div>
+    <div id="nearMeMap"></div>
+    <div class="near-results" id="nearMeResults"><div class="near-empty">Your nearby results will appear here.</div></div>
+  </div>
+</div>
+
 <main class="board" id="board">
 <!-- populated by JS -->
 </main>
@@ -15924,8 +15989,75 @@ function setupPicsGallery(){
   }
 }
 
+
+function setupNearMe(){
+  const openBtn=document.getElementById('nearMeBtn');
+  const overlay=document.getElementById('nearMeOverlay');
+  const closeBtn=document.getElementById('nearMeClose');
+  const searchBtn=document.getElementById('nearMeSearch');
+  const status=document.getElementById('nearMeStatus');
+  const results=document.getElementById('nearMeResults');
+  const toggles=[...document.querySelectorAll('.near-toggle')];
+  if(!openBtn||!overlay||!searchBtn) return;
+  let map=null, markerLayer=null, userMarker=null;
+  const open=()=>{overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>{if(map)map.invalidateSize();},100);};
+  const close=()=>{overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';};
+  openBtn.addEventListener('click',open); closeBtn?.addEventListener('click',close);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+  toggles.forEach(btn=>btn.addEventListener('click',()=>{
+    const cat=btn.dataset.nearCat;
+    if(cat==='all') toggles.forEach(b=>b.classList.toggle('active',b===btn));
+    else{
+      toggles.find(b=>b.dataset.nearCat==='all')?.classList.remove('active');
+      btn.classList.toggle('active');
+      if(!toggles.some(b=>b.classList.contains('active'))) toggles[0].classList.add('active');
+    }
+  }));
+  function selected(){const a=toggles.filter(b=>b.classList.contains('active')).map(b=>b.dataset.nearCat);return a.includes('all')?['weed','tobacco','food']:a;}
+  function initMap(lat,lon){
+    if(!window.L){status.textContent='The map library could not load. Use the Directions buttons in the results instead.';return;}
+    if(!map){map=L.map('nearMeMap').setView([lat,lon],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);markerLayer=L.layerGroup().addTo(map);}else map.setView([lat,lon],13);
+    markerLayer.clearLayers(); if(userMarker)map.removeLayer(userMarker);
+    userMarker=L.circleMarker([lat,lon],{radius:9,weight:3,color:'#fff',fillColor:'#3D8B4C',fillOpacity:1}).addTo(map).bindPopup('<strong>You are here</strong>');
+    setTimeout(()=>map.invalidateSize(),80);
+  }
+  const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  function classify(tags){if(tags.shop==='cannabis')return'Weed';if(tags.shop==='tobacco'||tags.shop==='electronic_cigarette'||tags.amenity==='hookah_lounge')return'Tobacco';return'Food';}
+  function center(el){if(typeof el.lat==='number')return[el.lat,el.lon];if(el.center)return[el.center.lat,el.center.lon];return null;}
+  async function fetchNearby(lat,lon,cats){
+    const q=[]; const r=8000;
+    if(cats.includes('weed'))q.push(`nwr[shop=cannabis](around:${r},${lat},${lon});`);
+    if(cats.includes('tobacco'))q.push(`nwr[shop=tobacco](around:${r},${lat},${lon});nwr[shop=electronic_cigarette](around:${r},${lat},${lon});nwr[amenity=hookah_lounge](around:${r},${lat},${lon});`);
+    if(cats.includes('food'))q.push(`nwr[amenity~"restaurant|cafe|fast_food|food_court"](around:${r},${lat},${lon});`);
+    const query='[out:json][timeout:25];('+q.join('')+');out center tags 80;';
+    const res=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});
+    if(!res.ok)throw new Error('Nearby service is temporarily unavailable.');
+    return (await res.json()).elements||[];
+  }
+  function render(items,lat,lon){
+    const seen=new Set(); const clean=[];
+    items.forEach(el=>{const c=center(el),t=el.tags||{},name=t.name||t.brand;if(!c||!name)return;const k=name+'|'+c.join('|');if(seen.has(k))return;seen.add(k);clean.push({name,cat:classify(t),lat:c[0],lon:c[1],address:[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),website:t.website||t['contact:website']||''});});
+    clean.sort((a,b)=>((a.lat-lat)**2+(a.lon-lon)**2)-((b.lat-lat)**2+(b.lon-lon)**2));
+    const list=clean.slice(0,60);
+    if(!list.length){results.innerHTML='<div class="near-empty">No matching places were found within about five miles. Try another category.</div>';status.textContent='No nearby matches found.';return;}
+    results.innerHTML=list.map(x=>`<div class="near-result"><div><strong>${esc(x.name)}</strong><small>${esc(x.cat)}${x.address?' · '+esc(x.address):''}</small></div><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Directions</a></div>`).join('');
+    if(map&&markerLayer){list.forEach(x=>{const html=`<strong>${esc(x.name)}</strong><br>${esc(x.cat)}${x.address?'<br>'+esc(x.address):''}<br><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}">Get directions</a>`;const m=L.marker([x.lat,x.lon]).bindPopup(html);m.on('mouseover',()=>m.openPopup());markerLayer.addLayer(m);});}
+    status.textContent=`Showing ${list.length} nearby place${list.length===1?'':'s'}.`;
+  }
+  searchBtn.addEventListener('click',()=>{
+    if(!navigator.geolocation){status.textContent='Location is not supported by this browser.';return;}
+    status.textContent='Requesting your location…';searchBtn.disabled=true;
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      const lat=pos.coords.latitude,lon=pos.coords.longitude;initMap(lat,lon);status.textContent='Finding nearby places…';
+      try{render(await fetchNearby(lat,lon,selected()),lat,lon);}catch(err){status.textContent=err.message+' You can still open Google Maps.';const words=selected().map(c=>c==='weed'?'dispensaries':c==='tobacco'?'tobacco and vape shops':'restaurants').join(' ');results.innerHTML=`<div class="near-empty"><a style="color:#79e48c" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(words+' near me')}/@${lat},${lon},13z">Open this search in Google Maps</a></div>`;}finally{searchBtn.disabled=false;}
+    },err=>{status.textContent=err.code===1?'Location permission was denied. Enable location access and try again.':'Your location could not be determined. Please try again.';searchBtn.disabled=false;},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+  });
+}
+
 async function init(){
   setupDirectory();
+  setupNearMe();
   setupAccordionToggle();
   setupShuttle();
   setupThc24();
