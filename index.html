@@ -546,7 +546,7 @@
     color:var(--text);margin:6px 0 0;line-height:1.05;letter-spacing:0;
   }
   .brand-title span{color:var(--red);}
-  /* ---- Reliable daily-deals header (no marquee) ---- */
+  /* ---- Slim sticky daily-deals ticker ---- */
   .mini-ticker{
     width:min(92%,520px);margin:2px auto 18px;
     overflow:visible;
@@ -563,54 +563,56 @@
   .mini-ticker .word-food{color:#ffd54a;text-shadow:0 0 8px rgba(255,213,74,.55);}
   .mini-ticker-dot{color:#777;font-size:.8em;}
 
-  .ticker-section{padding:8px 12px 12px;background:#000;}
-  .ticker-wrap{
-    position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-    align-items:center;gap:12px;width:min(980px,100%);min-height:70px;margin:0 auto;
-    border:1px solid rgba(79,210,103,.48);border-radius:16px;
-    background:linear-gradient(135deg,rgba(18,58,28,.98),rgba(5,20,10,.98));
-    box-shadow:0 0 18px rgba(79,210,103,.22),inset 0 0 24px rgba(79,210,103,.06);
-    overflow:hidden;padding:10px 12px;
+  .ticker-section{
+    position:sticky;top:0;z-index:45;
+    padding:5px 8px;background:rgba(0,0,0,.62);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(79,210,103,.28);
+    box-shadow:0 4px 16px rgba(0,0,0,.28);
   }
-  .ticker-wrap::after{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.05) 50%,transparent 58%);
+  .ticker-wrap{
+    display:flex;align-items:center;gap:10px;width:min(1100px,100%);height:38px;margin:0 auto;
+    border:1px solid rgba(79,210,103,.42);border-radius:999px;
+    background:linear-gradient(90deg,rgba(13,43,21,.76),rgba(3,12,6,.68),rgba(13,43,21,.76));
+    box-shadow:0 0 13px rgba(79,210,103,.17),inset 0 0 15px rgba(79,210,103,.04);
+    overflow:hidden;padding:0 10px 0 6px;
   }
   .ticker-label{
-    position:relative;z-index:1;display:flex;align-items:center;gap:8px;flex-shrink:0;
-    font-family:'Archivo Black',sans-serif;font-size:clamp(11px,2.8vw,15px);letter-spacing:.06em;
-    color:#fff;white-space:nowrap;padding:9px 12px;border-radius:999px;
-    background:#050505;border:1px solid rgba(255,255,255,.18);
-    box-shadow:0 0 12px rgba(0,0,0,.5);
+    position:relative;z-index:2;display:flex;align-items:center;gap:6px;flex:0 0 auto;
+    height:28px;padding:0 10px;border-radius:999px;
+    font-family:'Archivo Black',sans-serif;font-size:10px;letter-spacing:.07em;color:#fff;white-space:nowrap;
+    background:rgba(0,0,0,.86);border:1px solid rgba(255,255,255,.16);
+    box-shadow:5px 0 10px rgba(0,0,0,.5);
   }
-  .ticker-live-dot{width:8px;height:8px;border-radius:50%;background:#69df7d;box-shadow:0 0 10px #69df7d;flex:0 0 auto;}
-  .ticker-track{position:relative;z-index:1;min-width:0;overflow:hidden;display:flex;align-items:center;min-height:48px;}
-  .ticker-inner{
-    width:100%;font-family:'Archivo Narrow',sans-serif;font-weight:800;
-    font-size:clamp(17px,4.4vw,24px);line-height:1.15;color:#fff;text-align:center;
-    letter-spacing:.2px;padding:3px 6px;
-    opacity:1;transform:translateY(0);transition:opacity .24s ease,transform .24s ease;
-    text-shadow:0 0 7px rgba(255,255,255,.22);
-    white-space:normal;
+  .ticker-live-dot{width:7px;height:7px;border-radius:50%;background:#69df7d;box-shadow:0 0 9px #69df7d;flex:0 0 auto;}
+  .ticker-track{
+    position:relative;min-width:0;flex:1;overflow:hidden;height:34px;
+    display:flex;align-items:center;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
   }
-  .ticker-inner.is-changing{opacity:0;transform:translateY(7px);}
-  .ticker-controls{position:relative;z-index:1;display:flex;gap:6px;}
-  .ticker-arrow{
-    width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.22);
-    background:#050505;color:#fff;font-size:18px;line-height:1;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
+  .ticker-marquee{
+    display:flex;width:max-content;min-width:max-content;white-space:nowrap;
+    animation:wtfDealScroll 42s linear infinite;will-change:transform;
   }
-  .ticker-arrow:hover{border-color:#69df7d;box-shadow:0 0 10px rgba(79,210,103,.45);}
-  .ticker-arrow:focus-visible{outline:2px solid #69df7d;outline-offset:2px;}
+  .ticker-copy{
+    display:inline-flex;align-items:center;white-space:nowrap;
+    font-family:'Archivo Narrow',sans-serif;font-weight:800;font-size:15px;line-height:1;color:#fff;
+    letter-spacing:.25px;text-shadow:0 0 6px rgba(255,255,255,.18);
+    padding-right:42px;
+  }
+  .ticker-sep{color:#69df7d;margin:0 16px;text-shadow:0 0 7px rgba(79,210,103,.6);}
+  .ticker-wrap:hover .ticker-marquee,.ticker-wrap:focus-within .ticker-marquee{animation-play-state:paused;}
+  @keyframes wtfDealScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @media(max-width:560px){
-    .ticker-wrap{grid-template-columns:1fr auto;gap:8px;padding:10px;}
-    .ticker-label{grid-column:1 / -1;justify-self:center;padding:7px 11px;}
-    .ticker-track{min-height:44px;}
-    .ticker-inner{text-align:left;padding-left:4px;}
-    .ticker-controls{align-self:center;}
+    .ticker-section{padding:4px 5px;}
+    .ticker-wrap{height:36px;gap:6px;padding-right:6px;}
+    .ticker-label{height:26px;padding:0 8px;font-size:9px;}
+    .ticker-copy{font-size:13px;padding-right:30px;}
+    .ticker-sep{margin:0 11px;}
   }
   @media(prefers-reduced-motion:reduce){
-    .ticker-inner{transition:none;}
+    .ticker-marquee{animation-duration:80s;}
   }
 
   /* ---- Category tabs: circular chip buttons ---- */
@@ -5921,14 +5923,13 @@
 </div>
 </div>
 <div class="ticker-section">
-<div class="ticker-wrap" aria-label="Daily deals spotlight">
+<div class="ticker-wrap" aria-label="Daily deals">
 <div class="ticker-label"><span class="ticker-live-dot" aria-hidden="true"></span> DAILY DEALS</div>
 <div class="ticker-track">
-<div class="ticker-inner" id="ticker-content" aria-live="polite">Loading today’s specials…</div>
+<div class="ticker-marquee" id="tickerMarquee" aria-live="off">
+<span class="ticker-copy" id="ticker-content">Loading today’s specials…</span>
+<span class="ticker-copy" id="ticker-content-copy" aria-hidden="true">Loading today’s specials…</span>
 </div>
-<div class="ticker-controls" aria-label="Deal controls">
-<button class="ticker-arrow" id="tickerPrev" type="button" aria-label="Previous deal">‹</button>
-<button class="ticker-arrow" id="tickerNext" type="button" aria-label="Next deal">›</button>
 </div>
 </div>
 </div>
@@ -6678,8 +6679,6 @@ const SAMPLE_DEALS = [
 ];
 
 let tickerDeals = [];
-let tickerIndex = 0;
-let tickerTimer = null;
 
 function buildTickerDeals(){
   const todays = specials.filter(function(s){ return isFromToday(s.submittedAt); });
@@ -6690,42 +6689,25 @@ function buildTickerDeals(){
   return liveDeals.concat(SAMPLE_DEALS.filter(function(deal){ return deal !== 'HOT DEALS'; }));
 }
 
-function showTickerDeal(index, immediate){
-  const el = document.getElementById('ticker-content');
-  if(!el || tickerDeals.length === 0) return;
-  tickerIndex = (index + tickerDeals.length) % tickerDeals.length;
-  const update = function(){
-    el.textContent = tickerDeals[tickerIndex];
-    el.classList.remove('is-changing');
-  };
-  if(immediate){ update(); return; }
-  el.classList.add('is-changing');
-  window.setTimeout(update, 220);
-}
-
-function restartTickerTimer(){
-  if(tickerTimer) window.clearInterval(tickerTimer);
-  tickerTimer = window.setInterval(function(){ showTickerDeal(tickerIndex + 1, false); }, 4300);
-}
-
 function renderTicker(){
-  const el = document.getElementById('ticker-content');
-  if(!el) return;
+  const first = document.getElementById('ticker-content');
+  const second = document.getElementById('ticker-content-copy');
+  const marquee = document.getElementById('tickerMarquee');
+  if(!first || !second || !marquee) return;
   tickerDeals = buildTickerDeals();
   if(tickerDeals.length === 0) tickerDeals = ['Check back soon for new daily deals.'];
-  showTickerDeal(0, true);
-
-  const prev = document.getElementById('tickerPrev');
-  const next = document.getElementById('tickerNext');
-  if(prev && !prev.dataset.bound){
-    prev.dataset.bound = '1';
-    prev.addEventListener('click', function(){ showTickerDeal(tickerIndex - 1, false); restartTickerTimer(); });
-  }
-  if(next && !next.dataset.bound){
-    next.dataset.bound = '1';
-    next.addEventListener('click', function(){ showTickerDeal(tickerIndex + 1, false); restartTickerTimer(); });
-  }
-  restartTickerTimer();
+  const separator = '<span class="ticker-sep" aria-hidden="true">◆</span>';
+  const line = tickerDeals.map(function(deal){
+    const span = document.createElement('span');
+    span.textContent = deal;
+    return span.outerHTML;
+  }).join(separator);
+  first.innerHTML = line + separator;
+  second.innerHTML = line + separator;
+  // Restart from the beginning whenever live deals are refreshed.
+  marquee.style.animation = 'none';
+  void marquee.offsetWidth;
+  marquee.style.animation = '';
 }
 
 function renderBoard(){
