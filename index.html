@@ -5460,7 +5460,7 @@
 </div>
 <div class="directory-overlay" id="directoryOverlay">
 <div aria-labelledby="directoryTitle" aria-modal="true" class="directory-panel" role="dialog">
-<button aria-label="Close directory" class="directory-close" id="directoryClose">✕</button>
+<button aria-label="Close directory" class="directory-close" id="directoryClose" onclick="window.WTFUI&&window.WTFUI.closeDirectory();return false;">✕</button>
 <h2 id="directoryTitle">Dispensary Directory</h2>
 <p class="directory-sub">Tap a zone to see licensed dispensaries and their official websites in that area. Not exhaustive, not sponsored — always confirm hours, ID requirements, and current offerings directly with the dispensary.</p>
 <div id="directoryMapView">
@@ -5517,7 +5517,7 @@
 <p class="map-hint">Tap a quadrant or a legend button to see dispensaries there</p>
 </div>
 <div id="directoryListView" style="display:none;">
-<button class="map-back" id="directoryBack">← Back to map</button>
+<button class="map-back" id="directoryBack" onclick="window.WTFUI&&window.WTFUI.directoryBack();return false;">← Back to map</button>
 <div class="directory-area" id="listAreaTitle"></div>
 <ul class="directory-list" id="listAreaItems"></ul>
 </div>
@@ -6115,7 +6115,7 @@
 </div>
 </div>
 <div class="top-bar-row wtf-always-visible-row">
-<button aria-haspopup="dialog" class="corner-btn near-me-btn" id="nearMeBtn" type="button">
+<button aria-haspopup="dialog" class="corner-btn near-me-btn" id="nearMeBtn" type="button" onclick="window.WTFUI&&window.WTFUI.openNearMe();return false;">
 <span class="chip-circle">📍</span>
 <span class="label">Near<br/>Me</span>
 </button>
@@ -6236,7 +6236,7 @@
   <div class="near-me-panel">
     <div class="near-me-head">
       <h2 id="nearMeTitle">Find WTF Near Me</h2>
-      <button aria-label="Close Near Me" class="near-me-close" id="nearMeClose" type="button">×</button>
+      <button aria-label="Close Near Me" class="near-me-close" id="nearMeClose" type="button" onclick="window.WTFUI&&window.WTFUI.closeNearMe();return false;">×</button>
     </div>
     <div class="near-me-controls">
       <p class="near-me-help">Choose one or more categories, then allow location access. Colored pins will show matching businesses within one-half mile. Tap or hover over a pin for details.</p>
@@ -6246,7 +6246,7 @@
         <button class="near-toggle" data-near-cat="tobacco" type="button">Tobacco</button>
         <button class="near-toggle" data-near-cat="food" type="button">Food</button>
       </div>
-      <button class="near-search-btn" id="nearMeSearch" type="button">Use My Location &amp; Show Nearby</button>
+      <button class="near-search-btn" id="nearMeSearch" type="button" onclick="if(window.wtfBuildNearMeMap){window.wtfBuildNearMeMap();}return false;">Use My Location &amp; Show Nearby</button>
       <div aria-live="polite" class="near-status" id="nearMeStatus"></div>
     </div>
     <div id="nearMeMap"></div>
@@ -16082,7 +16082,7 @@ function setupPicsGallery(){
 }
 
 
-function setupNearMe(){
+function setupNearMeLegacyUnused(){
   const openBtn=document.getElementById('nearMeBtn');
   const overlay=document.getElementById('nearMeOverlay');
   const closeBtn=document.getElementById('nearMeClose');
@@ -16438,6 +16438,7 @@ function setupNearMeSiteDirectory(){
     status.textContent=`Showing ${plotted.length} active WTFDD listing${plotted.length===1?'':'s'} across the Las Vegas map.`;
     searchBtn.disabled=false;
   }
+  window.wtfBuildNearMeMap=buildMap;
   searchBtn.textContent='Show WTFDD Map';
   searchBtn.addEventListener('click',buildMap);
 }
@@ -16494,7 +16495,54 @@ async function init(){
   // Do not automatically open the BJS company hub over it.
 }
 
-init();
+init().catch(function(err){ console.error('WTFDD startup error:',err); });
 </script>
+
+
+
+<script>
+(function(){
+  function restore(){ document.body.style.overflow=''; }
+  function openNearMe(){
+    var o=document.getElementById('nearMeOverlay');
+    if(!o) return;
+    o.classList.add('open');
+    o.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')); },120);
+  }
+  function closeNearMe(){
+    var o=document.getElementById('nearMeOverlay');
+    if(o){ o.classList.remove('open'); o.setAttribute('aria-hidden','true'); }
+    restore();
+  }
+  function closeDirectory(){
+    var o=document.getElementById('directoryOverlay');
+    if(o) o.classList.remove('open');
+    directoryBack();
+    restore();
+  }
+  function directoryBack(){
+    var map=document.getElementById('directoryMapView');
+    var list=document.getElementById('directoryListView');
+    if(map) map.style.display='block';
+    if(list) list.style.display='none';
+  }
+  window.WTFUI={openNearMe:openNearMe,closeNearMe:closeNearMe,closeDirectory:closeDirectory,directoryBack:directoryBack};
+
+  document.addEventListener('click',function(e){
+    var near=document.getElementById('nearMeOverlay');
+    var dir=document.getElementById('directoryOverlay');
+    if(near && e.target===near) closeNearMe();
+    if(dir && e.target===dir) closeDirectory();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape') return;
+    closeNearMe();
+    closeDirectory();
+  });
+})();
+</script>
+
 </body>
 </html>
