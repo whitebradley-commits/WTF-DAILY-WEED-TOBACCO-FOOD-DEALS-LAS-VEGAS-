@@ -546,59 +546,72 @@
     color:var(--text);margin:6px 0 0;line-height:1.05;letter-spacing:0;
   }
   .brand-title span{color:var(--red);}
+  /* ---- Reliable daily-deals header (no marquee) ---- */
   .mini-ticker{
-    width:100%;max-width:340px;margin:0 auto 16px;overflow:hidden;
+    width:min(92%,520px);margin:2px auto 18px;
+    overflow:visible;
   }
   .mini-ticker-track{
-    display:inline-block;width:max-content;min-width:max-content;white-space:nowrap;
-    font-family:'Archivo Narrow',sans-serif;font-size:26px;font-weight:700;letter-spacing:1px;
-    text-transform:uppercase;color:#fff;
-    text-shadow:0 0 3px #fff, 0 0 6px rgba(255,255,255,0.6), 0 1px 2px rgba(255,255,255,0.8);
-    animation:scroll-left 12s linear infinite;
-    will-change:transform;
-    transform:translate3d(0,0,0);
+    display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+    width:100%;white-space:normal;
+    font-family:'Archivo Narrow',sans-serif;font-size:clamp(14px,3.8vw,19px);font-weight:800;
+    letter-spacing:0.7px;text-transform:uppercase;color:#fff;text-align:center;
+    text-shadow:0 0 5px rgba(255,255,255,0.42);
   }
-  .mini-ticker .word-weed{color:#1B4D28;}
-  .mini-ticker .word-tobacco{color:#4A2E1A;}
-  .mini-ticker .word-food{color:#5C5C5C;}
-  .pipe-sep{vertical-align:middle;margin:0 4px;position:relative;top:-2px;}
-  @media (prefers-reduced-motion: reduce){
-    .mini-ticker-track{animation-duration:24s;}
-  }
+  .mini-ticker .word-weed{color:#69df7d;text-shadow:0 0 8px rgba(79,210,103,.55);}
+  .mini-ticker .word-tobacco{color:#b98252;text-shadow:0 0 8px rgba(139,88,45,.55);}
+  .mini-ticker .word-food{color:#ffd54a;text-shadow:0 0 8px rgba(255,213,74,.55);}
+  .mini-ticker-dot{color:#777;font-size:.8em;}
 
-  .ticker-section{padding:0;}
+  .ticker-section{padding:8px 12px 12px;background:#000;}
   .ticker-wrap{
-    display:flex;align-items:stretch;width:100%;
-    border-top:2px solid #000;border-bottom:2px solid #000;background:#3F8542;
+    position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;gap:12px;width:min(980px,100%);min-height:70px;margin:0 auto;
+    border:1px solid rgba(79,210,103,.48);border-radius:16px;
+    background:linear-gradient(135deg,rgba(18,58,28,.98),rgba(5,20,10,.98));
+    box-shadow:0 0 18px rgba(79,210,103,.22),inset 0 0 24px rgba(79,210,103,.06);
+    overflow:hidden;padding:10px 12px;
+  }
+  .ticker-wrap::after{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.05) 50%,transparent 58%);
   }
   .ticker-label{
-    font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.5px;font-size:15px;
-    background:#000;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:6px;
-    flex-shrink:0;white-space:nowrap;
-    text-shadow:0 0 3px #fff, 0 0 6px rgba(255,255,255,0.6), 0 1px 2px rgba(255,255,255,0.8);
+    position:relative;z-index:1;display:flex;align-items:center;gap:8px;flex-shrink:0;
+    font-family:'Archivo Black',sans-serif;font-size:clamp(11px,2.8vw,15px);letter-spacing:.06em;
+    color:#fff;white-space:nowrap;padding:9px 12px;border-radius:999px;
+    background:#050505;border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 0 12px rgba(0,0,0,.5);
   }
-  .ticker-track{white-space:nowrap;overflow:hidden;position:relative;height:44px;flex:1;background:#3F8542;display:flex;align-items:center;}
+  .ticker-live-dot{width:8px;height:8px;border-radius:50%;background:#69df7d;box-shadow:0 0 10px #69df7d;flex:0 0 auto;}
+  .ticker-track{position:relative;z-index:1;min-width:0;overflow:hidden;display:flex;align-items:center;min-height:48px;}
   .ticker-inner{
-    display:inline-block;
-    flex:0 0 auto;
-    width:max-content;
-    min-width:max-content;
-    white-space:nowrap;
-    font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:22px;color:#fff;
-    letter-spacing:0.3px;
-    text-shadow:0 0 3px #1C4423, 0 0 6px rgba(28,68,35,0.8), 0 1px 2px rgba(28,68,35,0.9);
-    animation:scroll-left 17.6s linear infinite;
-    will-change:transform;
-    transform:translate3d(0,0,0);
+    width:100%;font-family:'Archivo Narrow',sans-serif;font-weight:800;
+    font-size:clamp(17px,4.4vw,24px);line-height:1.15;color:#fff;text-align:center;
+    letter-spacing:.2px;padding:3px 6px;
+    opacity:1;transform:translateY(0);transition:opacity .24s ease,transform .24s ease;
+    text-shadow:0 0 7px rgba(255,255,255,.22);
+    white-space:normal;
   }
-  @media (prefers-reduced-motion: reduce){
-    .ticker-inner{animation-duration:35.2s;}
+  .ticker-inner.is-changing{opacity:0;transform:translateY(7px);}
+  .ticker-controls{position:relative;z-index:1;display:flex;gap:6px;}
+  .ticker-arrow{
+    width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.22);
+    background:#050505;color:#fff;font-size:18px;line-height:1;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
   }
-  @keyframes scroll-left{
-    0%{transform:translate3d(0,0,0);}
-    100%{transform:translate3d(-50%,0,0);}
+  .ticker-arrow:hover{border-color:#69df7d;box-shadow:0 0 10px rgba(79,210,103,.45);}
+  .ticker-arrow:focus-visible{outline:2px solid #69df7d;outline-offset:2px;}
+  @media(max-width:560px){
+    .ticker-wrap{grid-template-columns:1fr auto;gap:8px;padding:10px;}
+    .ticker-label{grid-column:1 / -1;justify-self:center;padding:7px 11px;}
+    .ticker-track{min-height:44px;}
+    .ticker-inner{text-align:left;padding-left:4px;}
+    .ticker-controls{align-self:center;}
   }
-  .ticker-inner .sep{color:#1C1C1C;margin:0 16px;font-weight:700;}
+  @media(prefers-reduced-motion:reduce){
+    .ticker-inner{transition:none;}
+  }
 
   /* ---- Category tabs: circular chip buttons ---- */
   .category-bar{
@@ -4560,6 +4573,10 @@
 
 .near-me-btn .chip-circle{border-color:#4fd267 !important;box-shadow:0 0 12px rgba(79,210,103,.75),0 0 28px rgba(79,210,103,.35) !important;}
 .near-me-btn .label{color:#69df7d !important;}
+.shuttle-btn .chip-circle{border-color:#ffd54a !important;box-shadow:0 0 12px rgba(255,213,74,.78),0 0 28px rgba(255,184,0,.38) !important;animation:shuttleGlow 1.9s ease-in-out infinite;}
+.shuttle-btn .label{color:#ffd54a !important;text-shadow:0 0 7px rgba(255,213,74,.42) !important;}
+@keyframes shuttleGlow{0%,100%{box-shadow:0 0 9px rgba(255,213,74,.6),0 0 20px rgba(255,184,0,.24)}50%{box-shadow:0 0 18px rgba(255,213,74,1),0 0 34px rgba(255,184,0,.55)}}
+@media(prefers-reduced-motion:reduce){.shuttle-btn .chip-circle{animation:none;}}
 .near-me-overlay{position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.92);display:none;overflow:auto;padding:18px;}
 .near-me-overlay.open{display:block;}
 .near-me-panel{width:min(920px,100%);margin:18px auto;background:#090909;border:1px solid #3f3f3f;border-radius:18px;box-shadow:0 0 38px rgba(79,210,103,.22);overflow:hidden;}
@@ -5897,13 +5914,14 @@
 </div>
 </div>
 <div class="ticker-section">
-<div class="ticker-wrap">
-<div class="ticker-label">
-<span aria-label="Vendor verification" class="new-wtf-logo mini-leaf wtf-logo-link" role="button" tabindex="0"></span>
-        DAILY DEALS
-      </div>
+<div class="ticker-wrap" aria-label="Daily deals spotlight">
+<div class="ticker-label"><span class="ticker-live-dot" aria-hidden="true"></span> DAILY DEALS</div>
 <div class="ticker-track">
-<div class="ticker-inner" id="ticker-content">Loading live specials…</div>
+<div class="ticker-inner" id="ticker-content" aria-live="polite">Loading today’s specials…</div>
+</div>
+<div class="ticker-controls" aria-label="Deal controls">
+<button class="ticker-arrow" id="tickerPrev" type="button" aria-label="Previous deal">‹</button>
+<button class="ticker-arrow" id="tickerNext" type="button" aria-label="Next deal">›</button>
 </div>
 </div>
 </div>
@@ -6021,7 +6039,7 @@
 <span aria-label="WTF — Weed, Tobacco, Food" class="new-wtf-logo" role="img"></span>
 </div>
 <div class="mini-ticker">
-<div class="mini-ticker-track">DAILY DEALS ON <span class="word-weed">WEED</span> <span class="word-tobacco">TOBACCO</span> <span class="word-food">FOOD</span> <svg aria-hidden="true" class="pipe-sep" height="26" viewbox="0 -5 40 45" width="26"><rect fill="#5C4433" height="6" rx="3" width="14" x="24" y="23"></rect><circle cx="12" cy="26" fill="#E8433D" r="9"></circle><circle cx="20" cy="26" fill="#E8433D" r="9"></circle><ellipse cx="15" cy="17" fill="#2A1710" rx="4" ry="2"></ellipse><line stroke="#5C4433" stroke-linecap="round" stroke-width="1.5" x1="15" x2="16" y1="17" y2="12"></line><ellipse cx="19" cy="13" fill="#4C8055" rx="3" ry="1.5" transform="rotate(-20 19 13)"></ellipse><path d="M15,12 Q19,8 15,4 Q11,0 15,-3" fill="none" opacity="0.85" stroke="#eee" stroke-linecap="round" stroke-width="1.4"></path></svg> DAILY DEALS ON <span class="word-weed">WEED</span> <span class="word-tobacco">TOBACCO</span> <span class="word-food">FOOD</span></div>
+<div class="mini-ticker-track"><span>DAILY DEALS ON</span><span class="word-weed">WEED</span><span class="mini-ticker-dot">•</span><span class="word-tobacco">TOBACCO</span><span class="mini-ticker-dot">•</span><span class="word-food">FOOD</span></div>
 </div>
 </div>
 </header>
@@ -6080,7 +6098,7 @@
 <span class="label">Near<br/>Me</span>
 </button>
 
-<button aria-haspopup="dialog" class="corner-btn" id="shuttleBtn">
+<button aria-haspopup="dialog" class="corner-btn shuttle-btn" id="shuttleBtn">
 <span class="chip-circle">🚌</span>
 <span class="label">Free<br/>Shuttle</span>
 </button>
@@ -6652,40 +6670,55 @@ const SAMPLE_DEALS = [
   '$6.99 Steak & Eggs \u2014 Midnight to 6AM'
 ];
 
+let tickerDeals = [];
+let tickerIndex = 0;
+let tickerTimer = null;
+
+function buildTickerDeals(){
+  const todays = specials.filter(function(s){ return isFromToday(s.submittedAt); });
+  const liveDeals = todays.map(function(s){
+    return (CAT_ICON[s.mainCategory] || '') + ' ' + s.name + ' — ' + s.special;
+  });
+  // Keep the same established deal wording, with any real same-day submissions first.
+  return liveDeals.concat(SAMPLE_DEALS.filter(function(deal){ return deal !== 'HOT DEALS'; }));
+}
+
+function showTickerDeal(index, immediate){
+  const el = document.getElementById('ticker-content');
+  if(!el || tickerDeals.length === 0) return;
+  tickerIndex = (index + tickerDeals.length) % tickerDeals.length;
+  const update = function(){
+    el.textContent = tickerDeals[tickerIndex];
+    el.classList.remove('is-changing');
+  };
+  if(immediate){ update(); return; }
+  el.classList.add('is-changing');
+  window.setTimeout(update, 220);
+}
+
+function restartTickerTimer(){
+  if(tickerTimer) window.clearInterval(tickerTimer);
+  tickerTimer = window.setInterval(function(){ showTickerDeal(tickerIndex + 1, false); }, 4300);
+}
+
 function renderTicker(){
   const el = document.getElementById('ticker-content');
   if(!el) return;
-  const todays = specials.filter(function(s){ return isFromToday(s.submittedAt); });
+  tickerDeals = buildTickerDeals();
+  if(tickerDeals.length === 0) tickerDeals = ['Check back soon for new daily deals.'];
+  showTickerDeal(0, true);
 
-  const sampleContent = SAMPLE_DEALS.reduce(function(acc, deal, i, arr){
-    const isHot = deal === 'HOT DEALS';
-    const prevWasHot = i > 0 && arr[i-1] === 'HOT DEALS';
-    if(i === 0){
-      return isHot ? '<span class="sep">\ud83d\udd25</span> ' + deal + ' <span class="sep">\ud83d\udd25</span>' : deal;
-    }
-    if(isHot){
-      return acc + ' <span class="sep">\ud83d\udd25</span> ' + deal + ' <span class="sep">\ud83d\udd25</span>';
-    }
-    if(prevWasHot){
-      return acc + ' ' + deal;
-    }
-    return acc + ' <span class="sep">\u2605</span> ' + deal;
-  }, '');
-
-  let content;
-  if(todays.length === 0){
-    content = sampleContent;
-  }else{
-    const realContent = todays.map(function(s){
-      return (CAT_ICON[s.mainCategory] || '') + ' ' + s.name + ' \u2014 ' + s.special;
-    }).join(' <span class="sep">*</span> ');
-    // Always pad with sample deals too, so a short real-specials list never leaves visible gaps in the scroll
-    content = realContent + ' <span class="sep">*</span> ' + sampleContent;
+  const prev = document.getElementById('tickerPrev');
+  const next = document.getElementById('tickerNext');
+  if(prev && !prev.dataset.bound){
+    prev.dataset.bound = '1';
+    prev.addEventListener('click', function(){ showTickerDeal(tickerIndex - 1, false); restartTickerTimer(); });
   }
-
-  const sepClass = todays.length === 0 ? '\u2605' : '*';
-  const seam = todays.length === 0 ? ' ' : ' <span class="sep">' + sepClass + '</span> ';
-  el.innerHTML = content + seam + content;
+  if(next && !next.dataset.bound){
+    next.dataset.bound = '1';
+    next.addEventListener('click', function(){ showTickerDeal(tickerIndex + 1, false); restartTickerTimer(); });
+  }
+  restartTickerTimer();
 }
 
 function renderBoard(){
