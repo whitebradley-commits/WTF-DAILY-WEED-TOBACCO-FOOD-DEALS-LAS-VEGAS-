@@ -16270,9 +16270,151 @@ function setupNearMe(){
   });
 }
 
+<style>
+.wtf-map-pin-wrap{background:transparent!important;border:0!important;}
+.wtf-map-pin{display:block;width:24px;height:24px;background:var(--pin);border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 10px rgba(0,0,0,.75),0 0 12px var(--pin);}
+.wtf-map-pin::after{content:"";position:absolute;width:7px;height:7px;background:#fff;border-radius:50%;left:5.5px;top:5.5px;}
+.wtf-map-view{margin-top:8px;border:1px solid #FFD700;background:#111;color:#FFD700;border-radius:18px;padding:7px 11px;font-weight:800;cursor:pointer;}
+.near-result .wtf-map-view{margin:0;white-space:nowrap;}
+</style>
+
+
+/* ===== Near Me: pins built from WTFDD's own active listings ===== */
+function setupNearMeSiteDirectory(){
+  const openBtn=document.getElementById('nearMeBtn');
+  const overlay=document.getElementById('nearMeOverlay');
+  const closeBtn=document.getElementById('nearMeClose');
+  const searchBtn=document.getElementById('nearMeSearchBtn');
+  const status=document.getElementById('nearMeStatus');
+  const results=document.getElementById('nearMeResults');
+  const toggles=Array.from(document.querySelectorAll('.near-toggle'));
+  if(!openBtn||!overlay||!closeBtn||!searchBtn||!status||!results)return;
+
+  const COLORS={weed:'#3D8B4C',tobacco:'#6b3f1f',food:'#d6a900'};
+  let map=null,markerLayer=null,userMarker=null;
+  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  function open(){overlay.classList.add('open');document.body.style.overflow='hidden';setTimeout(()=>map&&map.invalidateSize(),120);}
+  function close(){overlay.classList.remove('open');document.body.style.overflow='';}
+  openBtn.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
+
+  toggles.forEach(btn=>btn.addEventListener('click',()=>{
+    const cat=btn.dataset.nearCat;
+    if(cat==='all') toggles.forEach(b=>b.classList.toggle('active',b===btn));
+    else{
+      toggles.find(b=>b.dataset.nearCat==='all')?.classList.remove('active');
+      btn.classList.toggle('active');
+      if(!toggles.some(b=>b.classList.contains('active')))toggles[0].classList.add('active');
+    }
+  }));
+  function selected(){const a=toggles.filter(b=>b.classList.contains('active')).map(b=>b.dataset.nearCat);return a.includes('all')?['weed','tobacco','food']:a;}
+
+  function siteListings(cats){
+    const out=[];
+    if(cats.includes('weed')) Object.entries((BUSINESS_DIRECTORY&&BUSINESS_DIRECTORY.Weed)||{}).forEach(([area,list])=>list.forEach(x=>{if(x.address)out.push({...x,cat:'weed',area,source:'directory'});}));
+    if(cats.includes('tobacco')) Object.entries((BUSINESS_DIRECTORY&&BUSINESS_DIRECTORY.Tobacco)||{}).forEach(([area,list])=>list.forEach(x=>{if(x.address)out.push({...x,cat:'tobacco',area,source:'directory'});}));
+    if(cats.includes('food')){
+      (window.DIVE_SPOTS_LIST||DIVE_SPOTS_LIST||[]).forEach(x=>{if(x.address)out.push({...x,cat:'food',area:x.area||'The Strip',source:'food'});});
+      (window.HIGH_HUNGRY_LIST||HIGH_HUNGRY_LIST||[]).forEach(x=>{if(x.address)out.push({...x,cat:'food',area:x.area||'Las Vegas',source:'food'});});
+    }
+    const seen=new Set();
+    return out.filter(x=>{const k=(x.name+'|'+x.address).toLowerCase();if(seen.has(k))return false;seen.add(k);return true;});
+  }
+
+  async function geocode(item){
+    const key='wtfgeo:'+item.address.toLowerCase();
+    try{const hit=JSON.parse(localStorage.getItem(key)||'null');if(hit&&hit.lat&&hit.lon)return hit;}catch(e){}
+    const url='https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=us&q='+encodeURIComponent(item.address);
+    const res=await fetch(url,{headers:{'Accept':'application/json'}});
+    if(!res.ok)throw new Error('Geocoder '+res.status);
+    const data=await res.json();
+    if(!data[0])return null;
+    const hit={lat:+data[0].lat,lon:+data[0].lon};
+    try{localStorage.setItem(key,JSON.stringify(hit));}catch(e){}
+    return hit;
+  }
+
+  function initMap(){
+    if(!window.L){status.textContent='The map library could not load. Check your connection and try again.';return false;}
+    if(!map){
+      map=L.map('nearMeMap',{zoomControl:true}).setView([36.1699,-115.1398],11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+      markerLayer=L.layerGroup().addTo(map);
+    }
+    markerLayer.clearLayers();
+    if(userMarker){map.removeLayer(userMarker);userMarker=null;}
+    setTimeout(()=>map.invalidateSize(),100);
+    return true;
+  }
+
+  function pinIcon(cat){
+    const color=COLORS[cat];
+    return L.divIcon({className:'wtf-map-pin-wrap',html:`<span class="wtf-map-pin" style="--pin:${color}"></span>`,iconSize:[28,38],iconAnchor:[14,36],popupAnchor:[0,-34]});
+  }
+
+  function openInternal(item){
+    close();
+    if(item.source==='directory'){
+      showBusinessList(item.cat==='weed'?'Weed':'Tobacco',item.area);
+      setTimeout(()=>focusListing(document.getElementById('directoryOverlay'),item.name),180);
+    }else{
+      const hh=document.getElementById('hhOverlay');
+      if(hh){renderHighHungry();hh.classList.add('open');setTimeout(()=>focusListing(hh,item.name),180);}
+    }
+  }
+  function focusListing(root,name){
+    if(!root)return;
+    const nodes=Array.from(root.querySelectorAll('li,.directory-entry,.directory-card'));
+    const target=nodes.find(n=>n.textContent.toLowerCase().includes(String(name).toLowerCase()));
+    if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.style.outline='3px solid #FFD700';target.style.outlineOffset='4px';setTimeout(()=>{target.style.outline='';target.style.outlineOffset='';},3500);target.click?.();}
+  }
+
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-wtf-map-index]');if(!b)return;
+    const idx=Number(b.dataset.wtfMapIndex);const item=window.__wtfMapItems&&window.__wtfMapItems[idx];if(item)openInternal(item);
+  });
+
+  async function buildMap(){
+    const cats=selected(),items=siteListings(cats);
+    if(!initMap())return;
+    searchBtn.disabled=true;results.innerHTML='';status.textContent=`Loading ${items.length} WTFDD listings onto the map…`;
+    const plotted=[];
+    for(let i=0;i<items.length;i++){
+      const item=items[i];
+      status.textContent=`Placing pin ${i+1} of ${items.length}: ${item.name}`;
+      try{
+        const g=await geocode(item);
+        if(g){item.lat=g.lat;item.lon=g.lon;plotted.push(item);}
+      }catch(e){}
+      await new Promise(r=>setTimeout(r,220));
+    }
+    window.__wtfMapItems=plotted;
+    const bounds=[];
+    plotted.forEach((x,i)=>{
+      const label=x.cat==='weed'?'Dispensary':x.cat==='tobacco'?'Tobacco / Smoke Shop':'Restaurant';
+      const marker=L.marker([x.lat,x.lon],{icon:pinIcon(x.cat),title:x.name});
+      marker.bindTooltip(esc(x.name),{direction:'top',offset:[0,-28],opacity:.98});
+      marker.bindPopup(`<strong>${esc(x.name)}</strong><br><span style="color:${COLORS[x.cat]}">${label}</span><br>${esc(x.address)}<br><button type="button" class="wtf-map-view" data-wtf-map-index="${i}">View this listing inside WTFDD</button>`,{maxWidth:285});
+      marker.on('mouseover',()=>marker.openTooltip());
+      markerLayer.addLayer(marker);bounds.push([x.lat,x.lon]);
+    });
+    if(bounds.length)map.fitBounds(bounds,{padding:[28,28],maxZoom:13});
+    navigator.geolocation?.getCurrentPosition(pos=>{
+      userMarker=L.circleMarker([pos.coords.latitude,pos.coords.longitude],{radius:8,weight:3,color:'#fff',fillColor:'#2878d4',fillOpacity:1}).addTo(map).bindPopup('<strong>You are here</strong>');
+    },()=>{}, {enableHighAccuracy:false,timeout:7000,maximumAge:120000});
+    results.innerHTML=plotted.map((x,i)=>`<div class="near-result" data-category="${x.cat}"><div><strong>${esc(x.name)}</strong><small>${esc(x.area)} · ${esc(x.address)}</small></div><button type="button" class="wtf-map-view" data-wtf-map-index="${i}">View listing</button></div>`).join('')||'<div class="near-empty">No listings with usable addresses were found for the selected categories.</div>';
+    status.textContent=`Showing ${plotted.length} active WTFDD listing${plotted.length===1?'':'s'} across the Las Vegas map.`;
+    searchBtn.disabled=false;
+  }
+  searchBtn.textContent='Show WTFDD Map';
+  searchBtn.addEventListener('click',buildMap);
+}
+
 async function init(){
   setupDirectory();
-  setupNearMe();
+  setupNearMeSiteDirectory();
   setupAccordionToggle();
   setupShuttle();
   setupThc24();
