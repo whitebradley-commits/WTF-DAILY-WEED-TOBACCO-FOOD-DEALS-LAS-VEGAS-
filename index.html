@@ -16077,8 +16077,15 @@ function setupWtfLanding(){
   const overlay = document.getElementById('wtfLandingOverlay');
   const enterBtn = document.getElementById('wtfLandingEnterBtn');
   if(!overlay || !enterBtn) return;
+
+  // The WTF 21+ age gate is the first screen on every fresh page load.
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
   enterBtn.addEventListener('click', function(){
     overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    window.scrollTo(0, 0);
   });
 }
 
@@ -16513,9 +16520,8 @@ async function init(){
   renderBoard();
   renderHighHungry();
 
-  // BJS CO. hub is now the front door of the site — open it immediately on load.
-  const hubOverlay = document.getElementById('companyHubOverlay');
-  if(hubOverlay) hubOverlay.classList.add('open');
+  // The WTF 21+ age gate is the front door of the site.
+  // Do not automatically open the BJS company hub over it.
 }
 
 init();
