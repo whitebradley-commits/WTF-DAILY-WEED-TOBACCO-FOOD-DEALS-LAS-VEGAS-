@@ -5050,6 +5050,58 @@
     margin:16px auto 20px !important;
   }
 }
+
+
+/* ===== Requested newsletter logo + category color update ===== */
+/* The approved WTF logo appears on both the newsletter access page and issue masthead. */
+.wtf-news-gate-logo,
+.wtf-news-masthead-logo{
+  display:block !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+}
+.wtf-news-masthead-logo{
+  width:min(180px,46vw) !important;
+  height:min(120px,31vw) !important;
+  margin-bottom:12px !important;
+  background-size:contain !important;
+}
+
+/* Dispensary / cannabis sections: all readable copy is green. */
+.wtf-news-section.weed,
+.wtf-news-section.weed h2,
+.wtf-news-section.weed .wtf-news-item strong,
+.wtf-news-section.weed .wtf-news-item span,
+.wtf-news-section.weed .wtf-news-link,
+.wtf-news-section.weed .wtf-news-alert{
+  color:#69df7d !important;
+}
+.wtf-news-section.weed .wtf-news-item{border-top-color:rgba(105,223,125,.24) !important;}
+
+/* Tobacco, smoke-shop and nicotine-vape sections: all readable copy is brown. */
+.wtf-news-section.tobacco,
+.wtf-news-section.tobacco h2,
+.wtf-news-section.tobacco .wtf-news-item strong,
+.wtf-news-section.tobacco .wtf-news-item span,
+.wtf-news-section.tobacco .wtf-news-link,
+.wtf-news-section.tobacco .wtf-news-alert{
+  color:#b98252 !important;
+}
+.wtf-news-section.tobacco .wtf-news-item{border-top-color:rgba(185,130,82,.26) !important;}
+
+/* Food and restaurant sections: all readable copy is yellow. */
+.wtf-news-section.food,
+.wtf-news-section.food h2,
+.wtf-news-section.food .wtf-news-item strong,
+.wtf-news-section.food .wtf-news-item span,
+.wtf-news-section.food .wtf-news-link,
+.wtf-news-section.food .wtf-news-alert{
+  color:#ffd54a !important;
+}
+.wtf-news-section.food .wtf-news-item{border-top-color:rgba(255,213,74,.26) !important;}
 </style>
 </head>
 <body>
@@ -6867,7 +6919,7 @@
   <section class="wtf-news-gate" id="wtfNewsletterGate">
     <div class="wtf-news-gate-card">
       <span aria-label="WTF — Weed, Tobacco, Food" class="new-wtf-logo wtf-news-gate-logo" role="img"></span>
-<h1>THE <span>WTF</span><br>NEWSLETTER</h1>
+<h1>THE<br>NEWSLETTER</h1>
       <p>Las Vegas deals, new drops, food finds, concerts, and events—without leaving the WTF world.</p>
       <div class="wtf-news-tabs" role="tablist">
         <button class="wtf-news-tab active" data-news-type="Existing Member" type="button">I’m a Member</button>
