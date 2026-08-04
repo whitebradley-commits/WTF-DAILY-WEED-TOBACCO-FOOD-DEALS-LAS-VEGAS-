@@ -16599,7 +16599,17 @@ function setupCompanyHub(){
   if(bjsHomeBtn){
     bjsHomeBtn.addEventListener('click', function(e){
       e.preventDefault();
-      overlay.classList.add('open');
+
+      // Return from the main WTF page to the 21+ landing screen.
+      const wtfLanding = document.getElementById('wtfLandingOverlay');
+      if(wtfLanding){
+        wtfLanding.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Close any hub overlay if it still exists.
+      if(overlay) overlay.classList.remove('open');
+
       window.scrollTo(0,0);
     });
   }
