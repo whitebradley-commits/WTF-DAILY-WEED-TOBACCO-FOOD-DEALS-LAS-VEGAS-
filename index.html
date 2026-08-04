@@ -5568,6 +5568,47 @@ button[class*="enter"] {
 }
 </style>
 
+
+<style id="im21-button-f-match">
+/* Preserve original button style; only recolor accents */
+#im21EnterBtn,
+.im21-enter,
+.age-gate-enter,
+button.enter-btn,
+button[class*="enter"] {
+  border-color:#F2A900 !important;
+  color:#F2A900 !important;
+}
+#im21EnterBtn::before,
+.im21-enter::before,
+.age-gate-enter::before,
+button.enter-btn::before,
+button[class*="enter"]::before {
+  border-color:#F2A900 !important;
+}
+#im21EnterBtn,
+.im21-enter,
+.age-gate-enter,
+button.enter-btn,
+button[class*="enter"] {
+  box-shadow:0 0 18px #F2A900,0 0 34px rgba(242,169,0,.55) !important;
+}
+</style>
+
+
+<style id="im21-button-black-fill-final">
+/* Final IM21 button correction: black interior, F-color border/text/glow only. */
+#im21EnterBtn,
+.im21-enter,
+.age-gate-enter,
+button.enter-btn,
+button[class*="enter"]{
+  background:#000 !important;
+  color:#F2A900 !important;
+  border-color:#F2A900 !important;
+}
+</style>
+
 </head>
 <body>
 <!-- Replace WTF headings with uploaded transparent WTF logo asset -->
