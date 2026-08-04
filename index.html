@@ -5422,6 +5422,82 @@
 }
 </style>
 
+
+<style id="wtf-approved-orange-site-accents">
+:root {
+  --wtf-approved-orange:#FF9800;
+}
+
+/* Keep the approved landing Enter button exactly as styled, using the approved orange. */
+#wtfLandingEnterBtn {
+  background:#0a0a0a !important;
+  border-color:var(--wtf-approved-orange) !important;
+  color:var(--wtf-approved-orange) !important;
+}
+#wtfLandingEnterBtn:hover,
+#wtfLandingEnterBtn:focus,
+#wtfLandingEnterBtn:active {
+  background:#0a0a0a !important;
+  border-color:var(--wtf-approved-orange) !important;
+  color:var(--wtf-approved-orange) !important;
+}
+
+/* All footer hot links: color only; destinations and click behavior remain unchanged. */
+.footer-hotlink,
+footer .footer-hotlink,
+.fine-print .footer-hotlink {
+  color:var(--wtf-approved-orange) !important;
+  -webkit-text-fill-color:var(--wtf-approved-orange) !important;
+}
+.footer-hotlink:hover,
+footer .footer-hotlink:hover,
+.fine-print .footer-hotlink:hover {
+  color:var(--wtf-approved-orange) !important;
+  -webkit-text-fill-color:var(--wtf-approved-orange) !important;
+  opacity:.82;
+}
+
+/* All Back controls across the site. */
+button[id*="Back"],
+button[id*="back"],
+[id*="Back"].btn,
+[id*="back"].btn,
+.map-back,
+.bo-back-btn,
+.wtf-news-back {
+  color:var(--wtf-approved-orange) !important;
+  -webkit-text-fill-color:var(--wtf-approved-orange) !important;
+  border-color:var(--wtf-approved-orange) !important;
+}
+button[id*="Back"] svg,
+button[id*="back"] svg,
+.map-back svg,
+.bo-back-btn svg,
+.wtf-news-back svg {
+  color:var(--wtf-approved-orange) !important;
+  fill:var(--wtf-approved-orange) !important;
+  stroke:var(--wtf-approved-orange) !important;
+}
+#ocWorldClose {
+  color:var(--wtf-approved-orange) !important;
+  border-color:var(--wtf-approved-orange) !important;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255,152,0,.20), transparent 65%),
+    #0c0c0c !important;
+}
+
+/* BJS badge on the main WTF landing page only. */
+.landing-bjs-corner circle {
+  stroke:var(--wtf-approved-orange) !important;
+}
+.landing-bjs-corner text {
+  fill:var(--wtf-approved-orange) !important;
+}
+.landing-bjs-corner {
+  color:var(--wtf-approved-orange) !important;
+}
+</style>
+
 </head>
 <body>
 <!-- Replace WTF headings with uploaded transparent WTF logo asset -->
