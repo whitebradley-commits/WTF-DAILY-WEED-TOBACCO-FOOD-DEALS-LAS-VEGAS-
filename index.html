@@ -5434,7 +5434,7 @@
   opacity:0;
   will-change:transform,opacity;
 }
-.arcade-runner-one{top:15%;animation:arcadeDashOne 40s linear infinite;}
+.arcade-runner-one{top:15%;animation:arcadeDashOne 40s linear infinite 3s;}
 .arcade-runner-two{top:27%;animation:arcadeDashTwo 47s linear infinite 17s;}
 
 .arcade-smoke{
@@ -5497,10 +5497,14 @@
   50%{transform:scaleY(1);}
 }
 @keyframes arcadeDashOne{
-  0%,2%{opacity:0;transform:translateX(0);}
+  0%,2%{opacity:0;transform:translate(0,18px) rotate(-3deg);}
   3%{opacity:1;}
-  10%{opacity:1;transform:translateX(calc(100vw + 190px));}
-  11%,100%{opacity:0;transform:translateX(calc(100vw + 190px));}
+  4.2%{transform:translate(14vw,-8px) rotate(2deg);}
+  5.7%{transform:translate(34vw,14px) rotate(-2deg);}
+  7.2%{transform:translate(56vw,-12px) rotate(2deg);}
+  8.7%{transform:translate(78vw,10px) rotate(-2deg);}
+  10%{opacity:1;transform:translate(calc(100vw + 190px),-5px) rotate(1deg);}
+  11%,100%{opacity:0;transform:translate(calc(100vw + 190px),-5px);}
 }
 @keyframes arcadeDashTwo{
   0%,2%{opacity:0;transform:translateX(0);}
@@ -5526,7 +5530,7 @@
   opacity:0;
   will-change:transform,opacity;
 }
-.main-arcade-one{top:18%;animation:mainArcadeChaseOne 42s linear infinite 7s;}
+.main-arcade-one{top:18%;animation:mainArcadeChaseOne 42s linear infinite 3s;}
 .main-arcade-two{top:42%;animation:mainArcadeChaseTwo 49s linear infinite 28s;}
 .main-arcade-runner .arcade-snack{
   display:inline-block;
