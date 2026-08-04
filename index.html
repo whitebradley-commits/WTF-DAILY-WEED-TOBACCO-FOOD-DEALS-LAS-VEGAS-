@@ -18218,5 +18218,67 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 })();
 </script>
 
+
+<style>
+/* ===== WTF main hero depth pass: selected clouds/food travel in front of logo ===== */
+.hero{
+  isolation:isolate;
+}
+.hero .food-sky{
+  z-index:1;
+}
+.hero .hero-content{
+  position:relative;
+  z-index:3;
+}
+.hero .food-sky-front{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  overflow:hidden;
+  pointer-events:none;
+}
+.hero .food-sky-front .floaty{
+  position:absolute;
+}
+/* Keep the arcade chase as the closest moving layer. */
+.hero .main-arcade-runner{
+  z-index:5;
+}
+/* A faint soft edge helps the photo-based logo sit inside the moving scene. */
+.hero .wtf-stamp > .new-wtf-logo{
+  filter:drop-shadow(0 0 7px rgba(255,255,255,.16));
+}
+</style>
+<script>
+(function(){
+  function buildHeroDepth(){
+    var hero=document.querySelector('header.hero');
+    if(!hero || hero.querySelector('.food-sky-front')) return;
+    var back=hero.querySelector('.food-sky');
+    var content=hero.querySelector('.hero-content');
+    if(!back || !content) return;
+
+    var front=document.createElement('div');
+    front.className='food-sky-front';
+    front.setAttribute('aria-hidden','true');
+
+    /* These selected pieces now cross naturally over the WTF logo,
+       while the remaining animation continues behind it. */
+    ['f3','f6','f10','f11','f12'].forEach(function(cls){
+      var item=back.querySelector('.'+cls);
+      if(item) front.appendChild(item);
+    });
+
+    hero.appendChild(front);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',buildHeroDepth);
+  }else{
+    buildHeroDepth();
+  }
+})();
+</script>
+
 </body>
 </html>
