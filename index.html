@@ -897,8 +897,17 @@
   /* ---- Footer / membership ---- */
   .scene-wrapper{position:relative;}
   .empire-state{
-    position:absolute;bottom:0;left:20px;z-index:3;pointer-events:none;
+    position:absolute;
+    bottom:24px;
+    left:14px;
+    width:112px;
+    height:240px;
+    z-index:6;
+    pointer-events:none;
+    overflow:visible;
+    filter:drop-shadow(0 0 8px rgba(255,255,255,0.18));
   }
+  .empire-state svg{width:100%;height:100%;display:block;overflow:visible;}
   .flag-wave{
     animation:flag-ripple 2.4s ease-in-out infinite;
   }
@@ -7538,7 +7547,37 @@ button[id*="back"] svg,
 </div>
 <div class="scene-wrapper">
 <div aria-hidden="true" class="empire-state">
-<span aria-label="WTF — Weed, Tobacco, Food" class="new-wtf-logo" role="img"></span>
+<svg viewBox="0 0 112 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="empireBody" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#202020"/>
+      <stop offset="0.5" stop-color="#555"/>
+      <stop offset="1" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="empireTop" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#777"/>
+      <stop offset="1" stop-color="#292929"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="105" width="72" height="111" rx="2" fill="url(#empireBody)" stroke="#777" stroke-width="1"/>
+  <rect x="27" y="81" width="58" height="28" fill="url(#empireTop)" stroke="#777" stroke-width="1"/>
+  <rect x="36" y="59" width="40" height="24" fill="url(#empireTop)" stroke="#777" stroke-width="1"/>
+  <rect x="44" y="42" width="24" height="19" fill="url(#empireTop)" stroke="#777" stroke-width="1"/>
+  <path d="M50 42 L56 17 L62 42 Z" fill="#777"/>
+  <rect x="55" y="3" width="2" height="17" fill="#cfcfcf"/>
+  <g fill="#f4d35e" opacity="0.92">
+    <rect x="29" y="118" width="5" height="7"/><rect x="42" y="118" width="5" height="7"/><rect x="55" y="118" width="5" height="7"/><rect x="68" y="118" width="5" height="7"/><rect x="81" y="118" width="5" height="7"/>
+    <rect x="29" y="136" width="5" height="7"/><rect x="42" y="136" width="5" height="7"/><rect x="55" y="136" width="5" height="7"/><rect x="68" y="136" width="5" height="7"/><rect x="81" y="136" width="5" height="7"/>
+    <rect x="29" y="154" width="5" height="7"/><rect x="42" y="154" width="5" height="7"/><rect x="55" y="154" width="5" height="7"/><rect x="68" y="154" width="5" height="7"/><rect x="81" y="154" width="5" height="7"/>
+    <rect x="29" y="172" width="5" height="7"/><rect x="42" y="172" width="5" height="7"/><rect x="55" y="172" width="5" height="7"/><rect x="68" y="172" width="5" height="7"/><rect x="81" y="172" width="5" height="7"/>
+    <rect x="29" y="190" width="5" height="7"/><rect x="42" y="190" width="5" height="7"/><rect x="55" y="190" width="5" height="7"/><rect x="68" y="190" width="5" height="7"/><rect x="81" y="190" width="5" height="7"/>
+  </g>
+  <g class="flag-wave" style="transform-origin:57px 18px;">
+    <path d="M57 8 C70 3,84 10,99 5 L99 28 C84 33,70 26,57 31 Z" fill="#3D8B4C" stroke="#fff" stroke-width="1"/>
+    <text x="78" y="21" text-anchor="middle" font-family="Archivo Black, Arial, sans-serif" font-size="10" fill="#fff">WTF</text>
+  </g>
+  <rect x="12" y="214" width="88" height="5" rx="2" fill="#111"/>
+</svg>
 </div>
 <div aria-hidden="true" class="street-scene">
 <div class="sidewalk-line"></div>
