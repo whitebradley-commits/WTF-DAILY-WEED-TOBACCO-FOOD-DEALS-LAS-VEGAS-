@@ -5103,6 +5103,130 @@
 }
 .wtf-news-section.food .wtf-news-item{border-top-color:rgba(255,213,74,.26) !important;}
 </style>
+
+<style id="newsletter-final-color-fix">
+/* Final newsletter correction: visible WTF logos, correct vape category, and solid-color issue panels. */
+.wtf-news-gate-card,
+.wtf-news-masthead{position:relative !important;}
+
+/* Put the approved WTF logo in the top-right corner of both newsletter boxes. */
+.wtf-news-gate-logo,
+.wtf-news-masthead-logo{
+  display:block !important;
+  position:absolute !important;
+  top:14px !important;
+  right:16px !important;
+  left:auto !important;
+  width:112px !important;
+  height:76px !important;
+  min-width:112px !important;
+  min-height:76px !important;
+  margin:0 !important;
+  z-index:8 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  background-color:transparent !important;
+  background-size:contain !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.95)) drop-shadow(0 0 13px rgba(255,255,255,.45)) !important;
+}
+.wtf-news-gate-card{padding-top:104px !important;}
+.wtf-news-gate-card h1{margin-top:0 !important;}
+.wtf-news-masthead{padding:30px 148px 30px 24px !important;min-height:220px !important;overflow:visible !important;}
+
+/* Keep the sign-in page design, but remove gray copy. */
+.wtf-news-gate p{color:#ffffff !important;}
+.wtf-news-tab{color:#c9f8ff !important;}
+.wtf-news-note{color:#ff9ce8 !important;}
+.wtf-news-privacy{color:#8dffe7 !important;}
+.wtf-news-gate-card > div[style*="letter-spacing"]{color:#f7c4ff !important;}
+
+/* Cleaner newsletter-page background. */
+.wtf-news-issue{
+  background:
+    radial-gradient(circle at 15% 8%,rgba(255,90,190,.22),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(79,199,255,.20),transparent 30%),
+    linear-gradient(180deg,#12081d 0%,#071b29 48%,#100915 100%) !important;
+}
+.wtf-news-masthead{
+  border:0 !important;
+  background:#30164f !important;
+  box-shadow:0 18px 48px rgba(0,0,0,.34) !important;
+}
+.wtf-news-masthead p{color:#bfefff !important;}
+.wtf-news-source{color:#8edcff !important;}
+
+/* Each newsletter box is one solid color; no gray panel backgrounds. */
+.wtf-news-section{
+  border:0 !important;
+  box-shadow:0 16px 42px rgba(0,0,0,.30) !important;
+}
+.wtf-news-section.weed{background:#123d22 !important;color:#8ff0a1 !important;}
+.wtf-news-section.tobacco,
+.wtf-news-section.vape{background:#4a2b18 !important;color:#e5b78e !important;}
+.wtf-news-section.food{background:#5a4700 !important;color:#ffe36b !important;}
+.wtf-news-section.events{background:#5a1d49 !important;color:#ff9dda !important;}
+.wtf-news-section.community{background:#123f5a !important;color:#9fe2ff !important;}
+
+.wtf-news-section.weed *,
+.wtf-news-section.weed h2,
+.wtf-news-section.weed strong,
+.wtf-news-section.weed span,
+.wtf-news-section.weed a,
+.wtf-news-section.weed .wtf-news-alert{color:#8ff0a1 !important;}
+
+.wtf-news-section.tobacco *,
+.wtf-news-section.vape *,
+.wtf-news-section.tobacco h2,
+.wtf-news-section.vape h2,
+.wtf-news-section.tobacco strong,
+.wtf-news-section.vape strong,
+.wtf-news-section.tobacco span,
+.wtf-news-section.vape span,
+.wtf-news-section.tobacco a,
+.wtf-news-section.vape a,
+.wtf-news-section.tobacco .wtf-news-alert,
+.wtf-news-section.vape .wtf-news-alert{color:#e5b78e !important;}
+
+.wtf-news-section.food *,
+.wtf-news-section.food h2,
+.wtf-news-section.food strong,
+.wtf-news-section.food span,
+.wtf-news-section.food a,
+.wtf-news-section.food .wtf-news-alert{color:#ffe36b !important;}
+
+.wtf-news-section.events *,
+.wtf-news-section.events h2,
+.wtf-news-section.events strong,
+.wtf-news-section.events span,
+.wtf-news-section.events a,
+.wtf-news-section.events .wtf-news-alert{color:#ff9dda !important;}
+
+.wtf-news-section.community *,
+.wtf-news-section.community h2,
+.wtf-news-section.community strong,
+.wtf-news-section.community span,
+.wtf-news-section.community a,
+.wtf-news-section.community .wtf-news-alert{color:#9fe2ff !important;}
+
+.wtf-news-item{border-color:rgba(255,255,255,.18) !important;}
+.wtf-news-alert,
+.wtf-news-subhead,
+.wtf-news-mini{background:rgba(0,0,0,.16) !important;border-color:rgba(255,255,255,.20) !important;}
+
+@media(max-width:680px){
+  .wtf-news-gate-card{padding-top:96px !important;}
+  .wtf-news-gate-logo,.wtf-news-masthead-logo{
+    top:12px !important;right:12px !important;width:92px !important;height:63px !important;min-width:92px !important;min-height:63px !important;
+  }
+  .wtf-news-masthead{padding:92px 18px 24px !important;min-height:0 !important;}
+}
+</style>
+
 </head>
 <body>
 <!-- Replace WTF headings with uploaded transparent WTF logo asset -->
@@ -7020,7 +7144,7 @@
           <div class="wtf-news-alert">Cannabis offers change quickly and may exclude taxes, delivery, loyalty stacking, or specific locations. Screenshot the offer and confirm inventory before leaving.</div>
         </section>
 
-        <section class="wtf-news-section weed full">
+        <section class="wtf-news-section tobacco vape full">
           <h2>🔋 VAPE BOARD — CARTS, PODS & DISPOSABLES</h2>
 
           <div class="wtf-news-item">
