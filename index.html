@@ -1081,6 +1081,9 @@
     -webkit-tap-highlight-color:transparent;
   }
   .footer-hotlink:hover{ color:#fff; }
+  /* The BJS CO. words already open the Founders page; suppress the redundant
+     miniature badge immediately after them so every footer stays compact. */
+  .fine-print .footer-hotlink[data-dest="about"] + svg{display:none!important;}
 
   #debug-error{position:fixed;bottom:0;left:0;right:0;background:var(--red);color:#fff;padding:12px 16px;font-family:'Archivo Narrow',sans-serif;font-size:12px;z-index:9999;word-break:break-word;box-shadow:0 -2px 10px rgba(0,0,0,0.4);}
 
