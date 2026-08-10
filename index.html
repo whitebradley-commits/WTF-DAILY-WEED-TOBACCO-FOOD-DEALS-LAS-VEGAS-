@@ -18764,10 +18764,10 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function enterSelectedCity(){
     var select=q('wtfCitySelect'),city=select?select.dataset.value:'';
     if(!city)return;
-    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}
-    if(city==='Las Vegas'){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);overlay.scrollTop=0;return;}
-    var notice=q('wtfCityInlineComing'),title=q('wtfCityInlineComingCity');if(title)title.textContent=city;if(notice)notice.hidden=false;
-    setTimeout(function(){if(notice)notice.hidden=true;setOpen(q('wtfCityLaunch'),false);overlay.scrollTop=0;},1750);
+    if(city==='Las Vegas'){setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);overlay.scrollTop=0;return;}
+    var notice=q('wtfCityInlineComing'),title=q('wtfCityInlineComingCity'),menu=q('wtfCityMenu'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');
+    if(title)title.textContent=city;if(notice)notice.hidden=false;if(close)close.disabled=true;
+    setTimeout(function(){if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(go)go.disabled=true;if(close)close.disabled=true;overlay.scrollTop=0;if(select)select.focus();},1750);
   }
   function openWtf2WithCities(){openWtf2();setTimeout(showCityLaunch,90);}
   function closeWtf2(){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
@@ -18832,7 +18832,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
-    try{var savedCity=sessionStorage.getItem('wtfSelectedCity');setWtfCityBadge(savedCity||'Las Vegas');}catch(e){setWtfCityBadge('Las Vegas');}
+    try{var savedCity=sessionStorage.getItem('wtfSelectedCity');setWtfCityBadge(savedCity==='Las Vegas'?savedCity:'Las Vegas');if(savedCity&&savedCity!=='Las Vegas')sessionStorage.removeItem('wtfSelectedCity');}catch(e){setWtfCityBadge('Las Vegas');}
     document.querySelectorAll('#wtfCityMenu .wtf-city-future').forEach(function(option){option.hidden=true;});
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
