@@ -18530,7 +18530,65 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   @media(max-width:520px){#wtfLandingOverlay>.wtf2-share-page{width:44px;height:44px;font-size:5.5px;}#wtfLandingOverlay>.wtf2-share-page svg{width:12px;height:12px;margin-bottom:1px;}}
   @media(min-width:600px){.wtf2-shell{padding-left:36px;padding-right:36px}.wtf2-top{min-height:330px}.wtf2-logo{width:540px!important;height:245px!important}.wtf2-category{min-height:138px}.wtf2-tools{grid-template-columns:repeat(4,1fr)}.wtf2-tool{min-height:92px}}
   @media(prefers-reduced-motion:reduce){#wtf2Overlay *{animation:none!important;transition:none!important;}}
+  .wtf-city-launch{position:fixed;inset:0;z-index:100020;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.58);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);}
+  .wtf-city-launch.open{display:grid;}
+  .wtf-city-launch-card{width:min(100%,390px);padding:25px 22px 22px;border:1px solid rgba(255,255,255,.82);border-radius:24px;background:rgba(255,255,255,.88);color:#090909;box-shadow:0 22px 75px rgba(0,0,0,.72);text-align:center;}
+  .wtf-city-launch-logo.new-wtf-logo{display:block;width:124px;height:82px;margin:0 auto 12px;background-size:contain;background-position:center;background-repeat:no-repeat;}
+  .wtf-city-launch-card h2{margin:0 0 10px;font:900 clamp(20px,6vw,27px)/1.08 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf-city-launch-card p{margin:0 auto 18px;max-width:330px;color:#303030;font:700 15px/1.38 'Archivo Narrow',sans-serif;}
+  .wtf-city-launch-card label{display:block;margin-bottom:7px;color:#C90201;font:900 12px/1 'Archivo Black',sans-serif;letter-spacing:.08em;text-transform:uppercase;}
+  .wtf-city-select{display:block;width:100%;height:50px;padding:0 14px;border:2px solid #F59E0B;border-radius:12px;background:#fff;color:#111;font:900 16px/1 'Archivo Narrow',sans-serif;}
+  .wtf-city-enter{width:100%;margin-top:12px;padding:14px;border:0;border-radius:999px;background:#050505;color:#F59E0B;font:900 14px/1 'Archivo Black',sans-serif;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 0 0 2px #F59E0B;cursor:pointer;}
+  .wtf-city-launch-note{display:block;margin-top:12px;color:#555;font:700 10px/1.25 'Archivo Narrow',sans-serif;letter-spacing:.04em;text-transform:uppercase;}
+  .wtf-city-shell{position:fixed;inset:0;z-index:100018;display:none;overflow:auto;background:#000;color:#f5f1e8;font-family:'Archivo Narrow',sans-serif;}
+  .wtf-city-shell.open{display:block;}
+  .wtf-city-shell-inner{width:min(100%,620px);min-height:100vh;margin:auto;padding:28px 18px 50px;text-align:center;}
+  .wtf-city-shell-logo.new-wtf-logo{display:block;width:min(76vw,310px);height:150px;margin:20px auto 0;background-size:contain;background-position:center;background-repeat:no-repeat;}
+  .wtf-city-shell h1{margin:8px 0 5px;color:#F59E0B;font:900 clamp(31px,10vw,48px)/1 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf-city-shell-kicker{margin:0 0 32px;color:#999;font:800 12px/1 'Archivo Narrow',sans-serif;letter-spacing:.12em;text-transform:uppercase;}
+  .wtf-city-shell-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .wtf-city-shell-tile{min-height:116px;padding:15px 5px;border:1px solid currentColor;border-radius:18px;background:#070707;font:900 clamp(12px,3.5vw,17px)/1 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf-city-shell-tile span{display:block;margin-bottom:13px;font-size:28px}.wtf-city-shell-tile small{display:block;margin-top:9px;color:#777;font:700 9px/1 'Archivo Narrow',sans-serif;letter-spacing:.08em;}
+  .wtf-city-shell-tile.weed{color:#4FAE68}.wtf-city-shell-tile.tobacco{color:#9A633A}.wtf-city-shell-tile.food{color:#F59E0B}
+  .wtf-city-change{margin:34px auto 0;padding:12px 20px;border:2px solid #F59E0B;border-radius:999px;background:#030303;color:#F59E0B;font:900 12px/1 'Archivo Black',sans-serif;cursor:pointer;text-transform:uppercase;}
 </style>
+
+<div class="wtf-city-launch" id="wtfCityLaunch" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfCityLaunchTitle">
+  <div class="wtf-city-launch-card">
+    <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
+    <h2 id="wtfCityLaunchTitle">WTF Is Expanding</h2>
+    <p>WTF is following its Las Vegas launch with nine of America’s hottest markets.</p>
+    <label for="wtfCitySelect">Choose Your City</label>
+    <select class="wtf-city-select" id="wtfCitySelect">
+      <option value="Las Vegas">Las Vegas — Live Now</option>
+      <option value="Denver">Denver</option>
+      <option value="Silicon Valley">Silicon Valley</option>
+      <option value="San Diego">San Diego</option>
+      <option value="Los Angeles">Los Angeles</option>
+      <option value="New York City">New York City</option>
+      <option value="Detroit">Detroit</option>
+      <option value="Chicago">Chicago</option>
+      <option value="Boston">Boston</option>
+      <option value="Portland">Portland</option>
+    </select>
+    <button class="wtf-city-enter" id="wtfCityEnter" type="button">Enter City</button>
+    <small class="wtf-city-launch-note">Las Vegas is live. New city directories are being built now.</small>
+  </div>
+</div>
+
+<section class="wtf-city-shell" id="wtfCityShell" aria-hidden="true">
+  <div class="wtf-city-shell-inner">
+    <span class="new-wtf-logo wtf-city-shell-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
+    <h1 id="wtfCityShellTitle">Denver</h1>
+    <p class="wtf-city-shell-kicker">WTF is coming to your city</p>
+    <div class="wtf-city-shell-grid">
+      <div class="wtf-city-shell-tile weed"><span>🌿</span>Weed<small>Coming Soon</small></div>
+      <div class="wtf-city-shell-tile tobacco"><span>🍂</span>Tobacco<small>Coming Soon</small></div>
+      <div class="wtf-city-shell-tile food"><span>🍔</span>Food<small>Coming Soon</small></div>
+    </div>
+    <button class="wtf-city-change" id="wtfCityChange" type="button">Choose Another City</button>
+  </div>
+</section>
 
 <section id="wtf2Overlay" aria-hidden="true">
   <button class="wtf2-music-toggle is-muted" id="wtf2MusicToggle" type="button" aria-pressed="false" aria-label="Turn music on"><span class="note">♫</span><span class="music-label">MUSIC ON</span></button>
@@ -18618,7 +18676,16 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function q(id){return document.getElementById(id);}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
-  function closeWtf2(){setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
+  function showCityLaunch(){setOpen(q('wtfCityShell'),false);setOpen(q('wtfCityLaunch'),true);document.body.style.overflow='hidden';}
+  function enterSelectedCity(){
+    var select=q('wtfCitySelect'),city=select?select.value:'Las Vegas';
+    setOpen(q('wtfCityLaunch'),false);
+    if(city==='Las Vegas'){setOpen(q('wtfCityShell'),false);overlay.scrollTop=0;return;}
+    var title=q('wtfCityShellTitle');if(title)title.textContent=city;
+    setOpen(q('wtfCityShell'),true);q('wtfCityShell').scrollTop=0;
+  }
+  function openWtf2WithCities(){openWtf2();setTimeout(showCityLaunch,90);}
+  function closeWtf2(){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
   function returnToAgeGate(){stopMusic();closeWtf2();var gate=q('wtfLandingOverlay');if(gate)gate.classList.add('open');document.body.style.overflow='hidden';}
   function musicTone(freq,when,duration,type,volume){
     if(!musicCtx||!musicMaster)return;var osc=musicCtx.createOscillator(),gain=musicCtx.createGain();osc.type=type||'sine';osc.frequency.setValueAtTime(freq,when);gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.012);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);osc.connect(gain);gain.connect(musicMaster);osc.start(when);osc.stop(when+duration+.03);
@@ -18680,8 +18747,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
-    q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
-    var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2,40);});
+    q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
+    var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
+    q('wtfCityEnter').addEventListener('click',enterSelectedCity);
+    q('wtfCitySelect').addEventListener('change',function(){q('wtfCityEnter').textContent=this.value==='Las Vegas'?'Enter Live Site':'Preview '+this.value;});
+    q('wtfCityChange').addEventListener('click',showCityLaunch);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
     q('wtf2GrooveTrigger').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});
     q('wtf2GrooveClose').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),false);});
