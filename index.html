@@ -18538,7 +18538,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-launch-card p{margin:0 auto 18px;max-width:330px;color:#303030;font:700 15px/1.38 'Archivo Narrow',sans-serif;}
   .wtf-city-launch-card label{display:block;margin-bottom:7px;color:#C90201;font:900 12px/1 'Archivo Black',sans-serif;letter-spacing:.08em;text-transform:uppercase;}
   .wtf-city-select-wrap{position:relative;width:100%;}
-  .wtf-city-select{display:block;width:100%;height:50px;padding:0 46px 0 14px;border:2px solid #F59E0B;border-radius:12px;background:#050505;color:#F59E0B;font:900 16px/1 'Archivo Narrow',sans-serif;text-align:left;cursor:pointer;}
+  .wtf-city-select{display:block;width:100%;height:50px;padding:0 132px 0 14px;border:2px solid #F59E0B;border-radius:999px;background:#050505;color:#F59E0B;font:900 16px/1 'Archivo Narrow',sans-serif;text-align:left;cursor:pointer;animation:wtfCitySearchPulse 2.5s ease-in-out infinite;}
+  .wtf-city-select::placeholder{color:#F59E0B;opacity:.82;text-shadow:0 0 7px rgba(245,158,11,.72);}
+  .wtf-city-powered-by{position:absolute;z-index:2;right:17px;top:25px;transform:translateY(-50%);display:flex;align-items:center;gap:4px;color:#F59E0B;font:700 10px/1 'Archivo Narrow',sans-serif;letter-spacing:.01em;pointer-events:none;white-space:nowrap;}
+  @keyframes wtfCitySearchPulse{0%,100%{transform:scale(1);box-shadow:0 0 7px rgba(245,158,11,.28),inset 0 0 8px rgba(245,158,11,.07)}50%{transform:scale(1.012);box-shadow:0 0 17px rgba(245,158,11,.58),inset 0 0 13px rgba(245,158,11,.12)}}
+  @keyframes wtfCitySearchWord{0%,100%{opacity:.78;text-shadow:0 0 5px rgba(245,158,11,.45)}50%{opacity:1;text-shadow:0 0 12px rgba(245,158,11,.92)}}
   .wtf-city-enter{width:100%;margin-top:12px;padding:14px;border:0;border-radius:999px;background:#050505;color:#F59E0B;font:900 14px/1 'Archivo Black',sans-serif;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 0 0 2px #F59E0B;cursor:pointer;}
   .wtf-city-launch-note{display:block;margin-top:12px;color:#555;font:700 10px/1.25 'Archivo Narrow',sans-serif;letter-spacing:.04em;text-transform:uppercase;}
   .wtf-city-shell{position:fixed;inset:0;z-index:100018;display:none;overflow:auto;background:#000;color:#f5f1e8;font-family:'Archivo Narrow',sans-serif;}
@@ -18561,10 +18565,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-launch-logo.new-wtf-logo{width:108px;height:70px;margin-bottom:8px;}
   .wtf-city-launch-card h2{color:#F59E0B;font-size:clamp(18px,5.5vw,24px);text-shadow:none;}
   .wtf-city-launch-card p{max-width:330px;color:#F59E0B;font-size:16px;line-height:1.34;text-shadow:none;}
-  .wtf-city-inline-logo.new-wtf-logo{display:inline-block;width:43px;height:25px;margin:0 3px -7px;background-size:contain;background-position:center;background-repeat:no-repeat;vertical-align:baseline;}
   .wtf-city-launch-card label{color:#F59E0B;}
-  .wtf-city-select{border-color:#F59E0B;background-color:#050505;color:#F59E0B;box-shadow:inset 0 0 10px rgba(245,158,11,.08);background-image:linear-gradient(45deg,transparent 50%,#F59E0B 50%),linear-gradient(135deg,#F59E0B 50%,transparent 50%);background-position:calc(100% - 21px) 21px,calc(100% - 15px) 21px;background-size:6px 6px,6px 6px;background-repeat:no-repeat;}
-  .wtf-city-select[aria-expanded="true"]{border-radius:12px 12px 0 0;box-shadow:0 0 14px rgba(245,158,11,.28);}
+  .wtf-city-select{border-color:#F59E0B;background-color:#050505;color:#F59E0B;}
+  .wtf-city-select[aria-expanded="true"]{border-radius:22px 22px 0 0;}
   .wtf-city-menu{position:absolute;z-index:20;left:0;right:0;top:calc(100% - 2px);max-height:255px;overflow-y:auto;border:2px solid #F59E0B;border-top:1px solid rgba(245,158,11,.45);border-radius:0 0 14px 14px;background:rgba(3,3,3,.98);box-shadow:0 16px 28px rgba(0,0,0,.82);}
   .wtf-city-menu[hidden]{display:none;}
   .wtf-city-option{display:flex;align-items:center;width:100%;min-height:46px;padding:10px 15px;border:0;border-bottom:1px solid rgba(245,158,11,.28);background:#050505;color:#F59E0B;font:900 15px/1.1 'Archivo Narrow',sans-serif;text-align:left;cursor:pointer;}
@@ -18585,20 +18588,24 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <button class="wtf-city-launch-close" id="wtfCityLaunchClose" type="button" aria-label="Close city selection">×</button>
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
     <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
-          <p>★ This month, <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets—cultivating the cutting edge of weed, tobacco, and food, one city at a time.</p>
+          <p>★ This month, WTF is expanding into nine of the nation’s largest and most exciting markets—cultivating the cutting edge of weed, tobacco, and food, one city at a time.</p>
     <div class="wtf-city-select-wrap">
-      <button class="wtf-city-select" id="wtfCitySelect" type="button" data-value="" aria-label="Choose your city" aria-haspopup="listbox" aria-expanded="false"><span>Choose a city</span></button>
+      <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Search…" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Search cities" aria-haspopup="listbox" aria-expanded="false"/>
+      <div class="wtf-city-powered-by" aria-hidden="true">
+        ⚡ Powered by
+        <svg height="15" viewBox="0 0 40 40" width="15"><circle cx="20" cy="20" fill="#0a0a0a" r="18" stroke="#F59E0B" stroke-width="2"></circle><text fill="#F59E0B" font-family="Archivo Black, sans-serif" font-size="12" text-anchor="middle" x="20" y="24">BJS</text></svg>
+      </div>
       <div class="wtf-city-menu" id="wtfCityMenu" role="listbox" hidden>
-        <button class="wtf-city-option" type="button" data-city="Las Vegas" role="option">★ Las Vegas</button>
+        <button class="wtf-city-option" type="button" data-city="Boston" role="option">Boston</button>
+        <button class="wtf-city-option" type="button" data-city="Chicago" role="option">Chicago</button>
         <button class="wtf-city-option" type="button" data-city="Denver" role="option">Denver</button>
-        <button class="wtf-city-option" type="button" data-city="Silicon Valley" role="option">Silicon Valley</button>
-        <button class="wtf-city-option" type="button" data-city="San Diego" role="option">San Diego</button>
+        <button class="wtf-city-option" type="button" data-city="Detroit" role="option">Detroit</button>
+        <button class="wtf-city-option" type="button" data-city="Las Vegas" role="option">★ Las Vegas</button>
         <button class="wtf-city-option" type="button" data-city="Los Angeles" role="option">Los Angeles</button>
         <button class="wtf-city-option" type="button" data-city="New York City" role="option">New York City</button>
-        <button class="wtf-city-option" type="button" data-city="Detroit" role="option">Detroit</button>
-        <button class="wtf-city-option" type="button" data-city="Chicago" role="option">Chicago</button>
-        <button class="wtf-city-option" type="button" data-city="Boston" role="option">Boston</button>
         <button class="wtf-city-option" type="button" data-city="Portland" role="option">Portland</button>
+        <button class="wtf-city-option" type="button" data-city="San Diego" role="option">San Diego</button>
+        <button class="wtf-city-option" type="button" data-city="Silicon Valley" role="option">Silicon Valley</button>
       </div>
     </div>
     <button class="wtf-city-enter" id="wtfCityEnter" type="button" disabled>Go</button>
@@ -18777,8 +18784,12 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
     q('wtfCityEnter').addEventListener('click',enterSelectedCity);
     q('wtfCityLaunchClose').addEventListener('click',function(){setOpen(q('wtfCityLaunch'),false);overlay.scrollTop=0;});
-    q('wtfCitySelect').addEventListener('click',function(e){e.stopPropagation();var menu=q('wtfCityMenu'),open=menu.hasAttribute('hidden');menu.toggleAttribute('hidden',!open);this.setAttribute('aria-expanded',open?'true':'false');});
-    q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option)return;var select=q('wtfCitySelect'),go=q('wtfCityEnter');select.dataset.value=option.dataset.city;select.querySelector('span').textContent=option.textContent;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;go.textContent='Go';});
+    function openCityMenu(){var menu=q('wtfCityMenu'),select=q('wtfCitySelect');menu.removeAttribute('hidden');select.setAttribute('aria-expanded','true');}
+    q('wtfCitySelect').addEventListener('focus',openCityMenu);
+    q('wtfCitySelect').addEventListener('click',function(e){e.stopPropagation();openCityMenu();});
+    q('wtfCitySelect').addEventListener('input',function(){var query=this.value.trim().toLowerCase(),go=q('wtfCityEnter'),matches=[];this.dataset.value='';go.disabled=true;document.querySelectorAll('#wtfCityMenu .wtf-city-option').forEach(function(option){var match=!query||option.dataset.city.toLowerCase().startsWith(query);option.hidden=!match;if(match)matches.push(option);});if(matches.length===1&&matches[0].dataset.city.toLowerCase()===query){this.dataset.value=matches[0].dataset.city;go.disabled=false;}openCityMenu();});
+    q('wtfCitySelect').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var visible=[].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option')).filter(function(option){return !option.hidden;});if(!this.dataset.value&&visible.length===1){this.value=visible[0].dataset.city;this.dataset.value=visible[0].dataset.city;q('wtfCityEnter').disabled=false;}if(this.dataset.value){e.preventDefault();enterSelectedCity();}});
+    q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option)return;var select=q('wtfCitySelect'),go=q('wtfCityEnter');select.dataset.value=option.dataset.city;select.value=option.dataset.city;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;go.textContent='Go';});
     document.addEventListener('click',function(e){var wrap=e.target.closest('.wtf-city-select-wrap');if(wrap)return;var menu=q('wtfCityMenu'),select=q('wtfCitySelect');if(menu)menu.setAttribute('hidden','');if(select)select.setAttribute('aria-expanded','false');});
     q('wtfCityChange').addEventListener('click',showCityLaunch);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
