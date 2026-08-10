@@ -18292,34 +18292,36 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 
 <!-- ===== WTF2 private working preview: isolated from the live WTF experience ===== -->
 <style id="wtf2-private-preview-styles">
-  :root{--wtf2-red:#D7263D;--wtf2-orange:#F59E0B;--wtf2-weed:#4FAE68;--wtf2-tobacco:#8C603F;--wtf2-food:#F4CF45;}
+  :root{--wtf2-red:#C90201;--wtf2-orange:#F59E0B;--wtf2-weed:#4FAE68;--wtf2-tobacco:#8C603F;--wtf2-food:#F4CF45;}
   /* 21+ entrance: preserve the approved gold/orange rings; red lettering only. */
   #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{color:var(--wtf2-red)!important;}
   #wtfLandingOverlay .landing-bjs-corner text{fill:var(--wtf2-red)!important;}
   #wtfLandingOverlay .wtf-landing-logo.new-wtf-logo{width:min(66vw,235px)!important;height:min(44vw,157px)!important;}
-  #wtfLandingEnterBtn{padding:.75rem 1.55rem!important;font-size:.76rem!important;}
+  #wtfLandingEnterBtn{padding:.75rem 1.55rem!important;font-size:.76rem!important;font-family:'Archivo Black',sans-serif!important;}
   #wtf2Overlay{position:fixed;inset:0;z-index:100000;display:none;overflow:auto;background:#000;color:#f7f3ea;font-family:'Archivo Narrow',sans-serif;overscroll-behavior:contain;}
   #wtf2Overlay.open{display:block;}
-  .wtf2-shell{width:min(100%,760px);min-height:100vh;margin:0 auto;padding:20px 16px 50px;background:radial-gradient(circle at 50% 2%,rgba(215,38,61,.13),transparent 34%),#000;}
+  .wtf2-shell{width:min(100%,760px);min-height:100vh;margin:0 auto;padding:20px 16px 50px;background:#000;}
   .wtf2-top{position:relative;display:flex;justify-content:center;align-items:center;min-height:340px;margin:0 -16px 8px;overflow:hidden;isolation:isolate;}
   .wtf2-exit{position:absolute;z-index:8;left:0;top:3px;width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 24px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09);}
-  .wtf2-logo{position:relative;z-index:6;display:block!important;width:min(94vw,490px)!important;height:205px!important;margin:30px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:drop-shadow(0 0 14px rgba(215,38,61,.24));}
-  .wtf2-redline{width:82%;height:2px;margin:-2px auto 30px;background:linear-gradient(90deg,transparent,var(--wtf2-red),var(--wtf2-orange),transparent);box-shadow:0 0 10px rgba(215,38,61,.55);}
+  .wtf2-logo{position:relative;z-index:6;display:block!important;width:min(94vw,490px)!important;height:205px!important;margin:30px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:none;}
+  .wtf2-redline{width:82%;height:0;margin:0 auto 30px;background:none;box-shadow:none;}
   .wtf2-hero-fx{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;}
   .wtf2-smoke{position:absolute;width:19px;height:19px;border-radius:50%;background:radial-gradient(circle,rgba(238,238,238,.58),rgba(180,180,180,.2) 48%,transparent 72%);filter:blur(1px);opacity:0;animation:wtf2Smoke 5.6s ease-out infinite;}
   .wtf2-sm1{left:37%;top:29%;}.wtf2-sm2{left:47%;top:20%;animation-delay:1.2s}.wtf2-sm3{left:57%;top:27%;animation-delay:2.5s}.wtf2-sm4{left:52%;top:37%;animation-delay:3.7s}
   @keyframes wtf2Smoke{0%{transform:translate(0,24px) scale(.45);opacity:0}18%{opacity:.58}70%{opacity:.2}100%{transform:translate(17px,-82px) scale(2.15);opacity:0}}
-  .wtf2-hero-food{position:absolute;font-size:clamp(22px,7vw,36px);filter:drop-shadow(0 0 6px rgba(255,255,255,.18));will-change:transform;}
+  .wtf2-hero-food{position:absolute;font-size:clamp(22px,7vw,36px);filter:drop-shadow(0 7px 5px rgba(0,0,0,.65)) saturate(.92);will-change:transform,opacity;transform-origin:center;}
   .wtf2-hf1{left:-60px;top:31%;animation:wtf2FoodRight 12s linear infinite;}.wtf2-hf2{right:-60px;top:24%;animation:wtf2FoodLeft 15s linear 3s infinite}.wtf2-hf3{right:-60px;bottom:18%;font-size:27px;animation:wtf2FoodLeft 13s linear 8s infinite}.wtf2-hf4{left:-60px;bottom:12%;font-size:25px;animation:wtf2FoodRight 17s linear 6s infinite}
-  @keyframes wtf2FoodRight{0%{transform:translateX(-20px) translateY(10px) rotate(-12deg);opacity:0}8%{opacity:1}50%{transform:translateX(55vw) translateY(-25px) rotate(180deg)}92%{opacity:1}100%{transform:translateX(calc(100vw + 100px)) translateY(6px) rotate(370deg);opacity:0}}
-  @keyframes wtf2FoodLeft{0%{transform:translateX(20px) translateY(0) rotate(8deg);opacity:0}8%{opacity:1}50%{transform:translateX(-55vw) translateY(-22px) rotate(-170deg)}92%{opacity:1}100%{transform:translateX(calc(-100vw - 100px)) translateY(8px) rotate(-360deg);opacity:0}}
+  @keyframes wtf2FoodRight{0%{transform:translate3d(-20px,28px,0) rotate(-12deg) scale(.72);opacity:0}9%{opacity:.95}28%{transform:translate3d(30vw,-38px,0) rotate(82deg) scale(1)}53%{transform:translate3d(57vw,4px,0) rotate(176deg) scale(.9)}77%{transform:translate3d(82vw,-31px,0) rotate(282deg) scale(1.03);opacity:.95}100%{transform:translate3d(calc(100vw + 100px),18px,0) rotate(370deg) scale(.72);opacity:0}}
+  @keyframes wtf2FoodLeft{0%{transform:translate3d(20px,18px,0) rotate(8deg) scale(.75);opacity:0}9%{opacity:.95}30%{transform:translate3d(-31vw,-34px,0) rotate(-92deg) scale(1.02)}56%{transform:translate3d(-59vw,6px,0) rotate(-192deg) scale(.9)}80%{transform:translate3d(-84vw,-27px,0) rotate(-286deg) scale(1);opacity:.95}100%{transform:translate3d(calc(-100vw - 100px),20px,0) rotate(-360deg) scale(.72);opacity:0}}
   .wtf2-smoker{position:absolute;left:3px;bottom:14px;width:105px;height:128px;animation:wtf2CharacterBob 3s ease-in-out infinite;filter:drop-shadow(0 5px 6px rgba(0,0,0,.5));}
-  .wtf2-smoker svg,.wtf2-chef svg,.wtf2-cloud-picnic svg{width:100%;height:100%;display:block;overflow:visible}.wtf2-smoker-puff{position:absolute;left:82px;top:24px;width:15px;height:15px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.62),transparent 70%);animation:wtf2Smoke 3.7s ease-out infinite;}
-  .wtf2-chef{position:absolute;right:0;bottom:0;width:148px;height:150px;animation:wtf2CharacterBob 3.4s ease-in-out infinite reverse;filter:drop-shadow(0 5px 6px rgba(0,0,0,.55));}
+  .wtf2-smoker svg,.wtf2-chef svg,.wtf2-cloud-picnic svg{width:100%;height:100%;display:block;overflow:visible}.wtf2-smoker:before{content:"";position:absolute;z-index:3;left:72%;top:42%;width:26px;height:5px;border-radius:4px;background:linear-gradient(90deg,#ede3c7 0 74%,#b98a54 75% 87%,#C90201 88% 100%);border:1px solid rgba(63,39,25,.7);box-shadow:2px 0 7px rgba(201,2,1,.9);transform:rotate(-13deg);transform-origin:left center}.wtf2-smoker:after{content:"WTF";position:absolute;z-index:3;left:42%;top:69%;transform:translateX(-50%) rotate(-2deg);color:#F59E0B;font:900 12px/1 'Archivo Black',sans-serif;letter-spacing:-.06em;text-shadow:1px 1px 0 #C90201,-1px -1px 0 #111}.wtf2-smoker-puff{position:absolute;z-index:4;left:96%;top:29%;width:19px;height:19px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.72),rgba(190,190,190,.28) 48%,transparent 72%);animation:wtf2JointSmoke 3.2s ease-out infinite;}
+  @keyframes wtf2JointSmoke{0%{transform:translate(0,7px) scale(.35);opacity:0}18%{opacity:.78}55%{transform:translate(9px,-24px) scale(1.15);opacity:.45}100%{transform:translate(-3px,-55px) scale(2.05);opacity:0}}
+  .wtf2-chef{position:absolute;right:0;bottom:0;width:148px;height:150px;animation:wtf2ChefWork 5.2s ease-in-out infinite;filter:drop-shadow(0 7px 7px rgba(0,0,0,.68));transform-origin:70% 100%;will-change:transform;}
   .wtf2-toss{position:absolute;right:53px;bottom:102px;font-size:23px;animation:wtf2Toss 2.4s ease-in-out infinite}.wtf2-toss.t2{right:92px;animation-delay:.8s}.wtf2-toss.t3{right:15px;animation-delay:1.6s}
   .wtf2-cloud-picnic{position:absolute;left:51px;top:13px;width:112px;height:55px;animation:wtf2CloudDrift 10s ease-in-out infinite;opacity:.82;}
   @keyframes wtf2CloudDrift{0%,100%{transform:translateX(-4px) translateY(0)}50%{transform:translateX(5px) translateY(6px)}}
-  @keyframes wtf2Toss{0%,100%{transform:translate(0,20px) rotate(0);opacity:.25}50%{transform:translate(-15px,-44px) rotate(220deg);opacity:1}}
+  @keyframes wtf2Toss{0%,12%,100%{transform:translate(0,22px) rotate(0) scale(.72);opacity:0}25%{opacity:1}50%{transform:translate(-18px,-52px) rotate(210deg) scale(1.08);opacity:1}76%{transform:translate(-4px,7px) rotate(390deg) scale(.86);opacity:.9}88%{opacity:0}}
+  @keyframes wtf2ChefWork{0%,100%{transform:translate3d(0,0,0) rotate(0)}18%{transform:translate3d(-7px,-2px,0) rotate(-2deg)}38%{transform:translate3d(3px,-7px,0) rotate(2deg)}58%{transform:translate3d(-5px,-3px,0) rotate(-1deg)}78%{transform:translate3d(4px,-8px,0) rotate(2deg)}}
   @keyframes wtf2CharacterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
   .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;}
   .wtf2-category{position:relative;min-height:118px;padding:15px 6px 12px;border-radius:20px;background:#070707;color:#fff;font:900 clamp(14px,4.2vw,20px)/1 'Archivo Black',sans-serif;text-transform:uppercase;cursor:pointer;overflow:hidden;}
@@ -18367,6 +18369,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-footer{margin-top:36px;padding-top:18px;border-top:1px solid #171717;text-align:center;color:#555;font-size:11px;}
   .wtf2-full-footer{margin-top:38px;padding:24px 6px 10px;border-top:1px solid #202020;text-align:center}.wtf2-full-footer .fine-print{color:#777!important;font-size:.7rem!important;line-height:1.55!important}.wtf2-full-footer .footer-hotlink{color:#8a8a8a}.wtf2-full-footer a{color:#aaa!important}
   .wtf2-music-toggle{position:fixed;z-index:100009;right:13px;top:13px;width:58px;height:58px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 14px rgba(245,158,11,.45),inset 0 0 11px rgba(245,158,11,.1);}.wtf2-music-toggle .note{display:block;margin-bottom:3px;font-size:17px;color:var(--wtf2-red)}.wtf2-music-toggle.is-muted{color:#777;border-color:#7b551b;box-shadow:0 0 8px rgba(245,158,11,.2)}
+  .wtf2-music-picker{position:fixed;z-index:100008;right:12px;top:78px;width:132px;padding:9px;border:1px solid #5b4218;border-radius:13px;background:rgba(0,0,0,.94);box-shadow:0 8px 24px rgba(0,0,0,.65);font-family:'Archivo Narrow',sans-serif}.wtf2-music-picker b{display:block;margin:0 0 6px;color:#a8a8a8;font-size:9px;letter-spacing:.12em;text-align:center}.wtf2-track{display:block;width:100%;margin:5px 0;padding:7px 5px;border:1px solid #333;border-radius:8px;background:#090909;color:#ddd;font:900 10px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf2-track.active{border-color:var(--wtf2-orange);color:var(--wtf2-red);box-shadow:0 0 8px rgba(245,158,11,.25)}
   .wtf2-share-page{position:fixed;z-index:100009;left:13px;bottom:13px;width:64px;height:64px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.035em;cursor:pointer;box-shadow:0 0 12px rgba(245,158,11,.42),inset 0 0 11px rgba(245,158,11,.09);animation:wtf2SharePulse 2.2s ease-in-out infinite;}.wtf2-share-page svg{display:block;width:18px;height:18px;margin:0 auto 4px;fill:none;stroke:var(--wtf2-red);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.wtf2-share-page.is-copied{color:#75dd82;animation:none}.wtf2-share-page.is-copied svg{stroke:#75dd82}
   .wtf2-main-share-wrap{display:flex;justify-content:flex-end;align-items:center;margin:-5px 3px 11px;}.wtf2-main-share-wrap:before{content:"SEND THIS PAGE";margin-right:9px;color:#6e6e6e;font:800 9px/1 'Archivo Narrow',sans-serif;letter-spacing:.11em;}
   .wtf2-main-share-wrap .wtf2-share-page{position:relative;z-index:1;left:auto;bottom:auto;width:66px;height:66px;flex:0 0 auto;}
@@ -18377,7 +18380,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-directory-inner{width:min(100%,760px);min-height:100vh;margin:auto;padding:18px 15px 50px;}
   .wtf2-dir-top{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;margin-bottom:16px;}
   .wtf2-dir-back{width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 23px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.4),inset 0 0 10px rgba(245,158,11,.09);}
-  .wtf2-dir-back svg,.wtf2-exit svg{display:block;width:20px;height:20px;margin:auto;stroke:var(--wtf2-red);stroke-width:4;stroke-linecap:round;pointer-events:none;filter:drop-shadow(0 0 3px rgba(215,38,61,.55));}
+  .wtf2-dir-back,.wtf2-exit{color:var(--wtf2-red)!important;-webkit-text-fill-color:var(--wtf2-red)!important;}
+  .wtf2-dir-back svg,.wtf2-exit svg{display:block;width:20px;height:20px;margin:auto;stroke:var(--wtf2-red)!important;color:var(--wtf2-red)!important;stroke-width:4;stroke-linecap:round;pointer-events:none;filter:drop-shadow(0 0 3px rgba(201,2,1,.55));}
+  #wtf2Directory .wtf2-dir-back path{stroke:#C90201!important;}
   .wtf2-dir-title{margin:0;text-align:center;font:900 22px/1 'Archivo Black',sans-serif;text-transform:uppercase;}
   .wtf2-area-row{display:flex;gap:8px;overflow:auto;padding:4px 0 15px;scrollbar-width:none;}.wtf2-area-row::-webkit-scrollbar{display:none;}
   .wtf2-area{flex:0 0 auto;padding:9px 14px;border:1px solid #333;border-radius:999px;background:#070707;color:#aaa;font-weight:800;cursor:pointer;}.wtf2-area.active{color:#fff;border-color:var(--wtf2-red);box-shadow:0 0 10px rgba(215,38,61,.3);}
@@ -18408,6 +18413,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 
 <section id="wtf2Overlay" aria-hidden="true">
   <button class="wtf2-music-toggle is-muted" id="wtf2MusicToggle" type="button" aria-pressed="false" aria-label="Turn music on"><span class="note">♫</span><span class="music-label">MUSIC ON</span></button>
+  <div class="wtf2-music-picker" aria-label="Choose an original 8-bit soundtrack"><b>PICK A GROOVE</b><button class="wtf2-track active" data-track="0" type="button">MIX · 1 + 3</button><button class="wtf2-track" data-track="1" type="button">1 · VEGAS QUEST</button><button class="wtf2-track" data-track="2" type="button">2 · PIXEL PICNIC</button><button class="wtf2-track" data-track="3" type="button">3 · NIGHT SHUTTLE</button></div>
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Return to current WTF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -18423,7 +18429,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <div class="wtf2-redline"></div>
     <div class="wtf2-category-grid" aria-label="Browse categories">
       <button class="wtf2-category" data-cat="Weed" type="button"><span class="wtf2-icon">🌿</span>Weed</button>
-      <button class="wtf2-category" data-cat="Tobacco" type="button"><span class="wtf2-icon">♨</span>Tobacco</button>
+      <button class="wtf2-category" data-cat="Tobacco" type="button"><span class="wtf2-icon" aria-hidden="true"><svg viewBox="0 0 64 64" width="43" height="43"><defs><linearGradient id="wtf2TobaccoLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d7a16a"/><stop offset=".48" stop-color="#9a633a"/><stop offset="1" stop-color="#5e351f"/></linearGradient></defs><path d="M53 6C31 8 14 19 11 39c-1 8 3 15 10 18 17-8 30-24 32-51Z" fill="url(#wtf2TobaccoLeaf)" stroke="#e1b17b" stroke-width="2"/><path d="M17 53C27 38 37 25 49 12M25 42l-9-2M31 34l-8-5M37 27l8 1M42 20l7-1" fill="none" stroke="#4b2918" stroke-width="2.3" stroke-linecap="round"/></svg></span>Tobacco</button>
       <button class="wtf2-category" data-cat="Food" type="button"><span class="wtf2-icon">🍴</span>Food</button>
     </div>
     <div class="wtf2-main-share-wrap"><button class="wtf2-share-page" id="wtf2SharePageMain" type="button" aria-label="Share this page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.7 10.7l6.6-4.2M8.7 13.3l6.6 4.2"></path></svg><span class="share-label">SHARE<br>PAGE</span></button></div>
@@ -18485,7 +18491,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 <script id="wtf2-private-preview-script">
 (function(){
   var overlay,dir,currentCat='Weed',currentArea='All';
-  var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false;
+  var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false,musicTrack=0;
   function q(id){return document.getElementById(id);}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
@@ -18495,15 +18501,25 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     if(!musicCtx||!musicMaster)return;var osc=musicCtx.createOscillator(),gain=musicCtx.createGain();osc.type=type||'sine';osc.frequency.setValueAtTime(freq,when);gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.012);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);osc.connect(gain);gain.connect(musicMaster);osc.start(when);osc.stop(when+duration+.03);
   }
   function musicBeat(){
-    if(!musicOn||!musicCtx)return;var t=musicCtx.currentTime+.025,bass=[110,110,146.83,98,110,164.81,146.83,98],lead=[440,0,523.25,0,659.25,0,523.25,392];var i=musicStep%8;
-    musicTone(bass[i],t,.24,'triangle',.12);if(lead[i])musicTone(lead[i],t+.04,.12,'square',.022);if(i%2===0){musicTone(58,t,.09,'sine',.18);}if(i===3||i===7)musicTone(2200,t,.035,'square',.009);musicStep++;
+    if(!musicOn||!musicCtx)return;
+    var songs={
+      1:{bass:[110,110,146.83,98,110,164.81,146.83,98,110,130.81,146.83,164.81,196,164.81,146.83,130.81],lead:[440,0,523.25,659.25,0,783.99,659.25,523.25,440,493.88,587.33,659.25,783.99,659.25,587.33,493.88],beat:286,wave:'square'},
+      2:{bass:[130.81,164.81,196,164.81,146.83,174.61,220,174.61,130.81,164.81,196,261.63,220,196,174.61,146.83],lead:[659.25,783.99,880,783.99,698.46,880,987.77,880,659.25,783.99,1046.5,987.77,880,783.99,698.46,587.33],beat:238,wave:'square'},
+      3:{bass:[82.41,82.41,110,123.47,73.42,73.42,98,110,82.41,82.41,123.47,146.83,73.42,98,110,123.47],lead:[329.63,0,392,0,440,493.88,0,392,329.63,0,493.88,0,587.33,493.88,440,392],beat:360,wave:'triangle'}
+    },activeTrack=musicTrack===0?(Math.floor(musicStep/96)%2===0?1:3):musicTrack,song=songs[activeTrack],t=musicCtx.currentTime+.025,i=musicStep%song.bass.length;
+    musicTone(song.bass[i],t,song.beat/1000*.78,'triangle',.15);
+    if(song.lead[i])musicTone(song.lead[i],t+.025,song.beat/1000*.55,song.wave,.035);
+    if(i%4===0)musicTone(activeTrack===3?46:58,t,.08,'sine',.2);
+    if(i%4===2)musicTone(1700+(activeTrack*260),t,.035,'square',.012);
+    musicStep++;return song.beat;
   }
   function updateMusicButton(){var b=q('wtf2MusicToggle');if(!b)return;b.classList.toggle('is-muted',!musicOn);b.setAttribute('aria-pressed',musicOn?'true':'false');b.setAttribute('aria-label',musicOn?'Turn music off':'Turn music on');var l=b.querySelector('.music-label');if(l)l.textContent=musicOn?'MUSIC OFF':'MUSIC ON';}
   function startMusic(){
-    try{if(!musicCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;musicCtx=new AC();musicMaster=musicCtx.createGain();musicMaster.gain.value=.17;musicMaster.connect(musicCtx.destination);}if(musicCtx.state==='suspended')musicCtx.resume();if(musicOn)return;musicOn=true;musicStep=0;musicBeat();musicTimer=setInterval(musicBeat,330);updateMusicButton();}catch(_e){}
+    try{if(!musicCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;musicCtx=new AC();musicMaster=musicCtx.createGain();musicMaster.gain.value=.26;musicMaster.connect(musicCtx.destination);}if(musicCtx.state==='suspended')musicCtx.resume();if(musicOn)return;musicOn=true;musicStep=0;function scheduleBeat(){if(!musicOn)return;var delay=musicBeat()||286;musicTimer=setTimeout(scheduleBeat,delay);}scheduleBeat();updateMusicButton();}catch(_e){}
   }
   function stopMusic(){musicOn=false;if(musicTimer){clearInterval(musicTimer);musicTimer=null;}if(musicMaster)musicMaster.gain.setTargetAtTime(.0001,musicCtx.currentTime,.035);updateMusicButton();}
-  function toggleMusic(){if(musicOn){stopMusic();}else{if(musicMaster)musicMaster.gain.setValueAtTime(.17,musicCtx.currentTime);startMusic();}}
+  function toggleMusic(){if(musicOn){stopMusic();}else{if(musicMaster)musicMaster.gain.setValueAtTime(.26,musicCtx.currentTime);startMusic();}}
+  function selectMusic(track){if(musicOn)stopMusic();musicTrack=Number(track);if(!Number.isFinite(musicTrack)||musicTrack<0||musicTrack>3)musicTrack=0;document.querySelectorAll('.wtf2-track').forEach(function(b){b.classList.toggle('active',Number(b.dataset.track)===musicTrack);});startMusic();}
   async function shareWtf2(button){
     var b=button||q('wtf2SharePage'),label=b&&b.querySelector('.share-label'),url=window.location.href,title='WTF! Check this out!',shareText='WTF! Check this out! 🌿🍂🍔';
     try{if(navigator.share){await navigator.share({title:title,text:shareText,url:url});return;}var copied=shareText+' '+url;if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(copied);}else{var t=document.createElement('textarea');t.value=copied;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}if(b&&label){b.classList.add('is-copied');label.innerHTML='LINK<br>COPIED';setTimeout(function(){b.classList.remove('is-copied');label.innerHTML='SHARE<br>PAGE';},1800);}}catch(_e){}
@@ -18544,6 +18560,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2,40);});
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
+    document.querySelectorAll('.wtf2-track').forEach(function(b){b.addEventListener('click',function(){selectMusic(b.dataset.track);});});
     q('wtf2SharePage').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
     q('wtf2SharePageMain').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
     document.querySelectorAll('.wtf2-category').forEach(function(b){b.addEventListener('click',function(){openDirectory(b.dataset.cat);});});
