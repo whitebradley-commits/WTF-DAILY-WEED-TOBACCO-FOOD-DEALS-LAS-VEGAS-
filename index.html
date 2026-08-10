@@ -18326,18 +18326,21 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   @keyframes wtf2TinyDriftRight{0%{transform:translate3d(-20px,5px,0) rotate(-5deg);opacity:0}8%{opacity:.9}45%{transform:translate3d(52vw,-13px,0) rotate(4deg)}92%{opacity:.9}100%{transform:translate3d(calc(100vw + 90px),7px,0) rotate(-4deg);opacity:0}}
   @keyframes wtf2TinyDriftLeft{0%{transform:translate3d(20px,0,0) rotate(5deg);opacity:0}8%{opacity:.92}48%{transform:translate3d(-54vw,16px,0) rotate(-4deg)}92%{opacity:.92}100%{transform:translate3d(calc(-100vw - 90px),-3px,0) rotate(4deg);opacity:0}}
   @keyframes wtf2CharacterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;}
+  .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;transform:translateY(-10px);}
   .wtf2-category{position:relative;min-height:118px;padding:15px 6px 12px;border-radius:20px;background:#070707;color:#fff;font:900 clamp(14px,4.2vw,20px)/1 'Archivo Black',sans-serif;text-transform:uppercase;cursor:pointer;overflow:hidden;}
   .wtf2-category:before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid currentColor;opacity:.9;box-shadow:inset 0 0 18px currentColor;pointer-events:none;}
   .wtf2-category .wtf2-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 10px;border:1px solid currentColor;border-radius:50%;font-size:25px;background:#020202;box-shadow:0 0 17px currentColor;}
   .wtf2-category[data-cat="Weed"]{color:var(--wtf2-weed);}
   .wtf2-category[data-cat="Tobacco"]{color:var(--wtf2-tobacco);}
   .wtf2-category[data-cat="Food"]{color:var(--wtf2-food);}
-  .wtf2-primary-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px;}
-  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:68px;margin:0;border:2px solid var(--wtf2-red);border-radius:18px;background:#070707;color:#fff;font:900 clamp(10px,3vw,14px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 18px rgba(215,38,61,.3),inset 0 0 15px rgba(245,158,11,.08);}
-  .wtf2-near span{color:var(--wtf2-orange);font-size:22px;}
-  .wtf2-thc24{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:68px;border:2px solid var(--wtf2-weed);border-radius:18px;background:radial-gradient(circle at 25% 50%,rgba(79,174,104,.14),transparent 48%),#050805;color:#78df85;font:900 clamp(11px,3.1vw,15px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 18px rgba(79,174,104,.34),inset 0 0 16px rgba(79,174,104,.1);text-transform:uppercase;}
+  .wtf2-primary-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px;transform:translateY(6px);}
+  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:68px;margin:0;border:2px solid var(--wtf2-red);border-radius:18px;background:#070707;color:#fff;font:900 clamp(10px,3vw,14px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;animation:wtf2NearTilePulse 2.5s ease-in-out infinite;}
+  .wtf2-near .wtf2-near-logo.new-wtf-logo{display:block;width:49px;height:33px;flex:0 0 49px;margin:0;background-size:contain;background-position:center;background-repeat:no-repeat;}
+  .wtf2-near .wtf2-near-text{display:block;color:#fff;text-align:left;}
+  .wtf2-thc24{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:68px;border:2px solid var(--wtf2-weed);border-radius:18px;background:radial-gradient(circle at 25% 50%,rgba(79,174,104,.14),transparent 48%),#050805;color:#78df85;font:900 clamp(11px,3.1vw,15px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;text-transform:uppercase;animation:wtf2ThcTilePulse 2.5s ease-in-out infinite;}
   .wtf2-thc24 svg{width:34px;height:42px;overflow:visible;filter:drop-shadow(0 0 5px rgba(79,174,104,.6));flex:0 0 auto}.wtf2-thc24 span{display:block;text-align:left}
+  @keyframes wtf2NearTilePulse{0%,100%{box-shadow:0 0 10px rgba(201,2,1,.24),inset 0 0 12px rgba(245,158,11,.05)}50%{box-shadow:0 0 23px rgba(201,2,1,.62),inset 0 0 18px rgba(201,2,1,.11)}}
+  @keyframes wtf2ThcTilePulse{0%,100%{box-shadow:0 0 10px rgba(79,174,104,.25),inset 0 0 12px rgba(79,174,104,.06)}50%{box-shadow:0 0 24px rgba(79,174,104,.68),inset 0 0 19px rgba(79,174,104,.14)}}
   .wtf2-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:26px;}
   .wtf2-tool{min-height:78px;border:1px solid #282828;border-radius:16px;background:linear-gradient(145deg,#0c0c0c,#030303);color:#f3efe6;font:800 14px/1.12 'Archivo Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
   .wtf2-tool strong{display:block;margin-bottom:7px;color:var(--wtf2-orange);font-size:21px;}
@@ -18392,6 +18395,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-area{flex:0 0 auto;padding:9px 14px;border:1px solid #333;border-radius:999px;background:#070707;color:#aaa;font-weight:800;cursor:pointer;}.wtf2-area.active{color:#fff;border-color:var(--wtf2-red);box-shadow:0 0 10px rgba(215,38,61,.3);}
   #wtf2DirList .directory-area{color:var(--wtf2-orange);}
   #wtf2DirList .listing-card{background:#080808;border-color:#242424;margin-bottom:9px;box-shadow:0 5px 18px rgba(0,0,0,.35);}
+  #wtf2DirList .listing-name{color:#E8D7A7!important;font-weight:800;text-shadow:0 0 7px rgba(232,215,167,.16);}
   .wtf2-result-count{margin:-5px 0 13px;color:#777;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
   body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay,body.wtf2-child-open #thc24Overlay{z-index:100005!important;}
   body.wtf2-child-open #shuttleClose,body.wtf2-child-open #nearMeClose,body.wtf2-child-open #hhClose,body.wtf2-child-open #wtfNewsletterClose,body.wtf2-child-open #thc24Back{width:46px!important;height:46px!important;border:2px solid var(--wtf2-orange)!important;border-radius:50%!important;background:#020202!important;color:var(--wtf2-red)!important;font:900 23px/1 'Archivo Black',sans-serif!important;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09)!important;}
@@ -18438,7 +18442,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-category" data-cat="Food" type="button"><span class="wtf2-icon">🍴</span>Food</button>
     </div>
     <div class="wtf2-primary-row">
-      <button class="wtf2-near" id="wtf2Near" type="button"><span>⌖</span> FIND WTF<br>NEAR ME</button>
+      <button class="wtf2-near" id="wtf2Near" type="button"><span class="new-wtf-logo wtf2-near-logo" role="img" aria-label="WTF"></span><span class="wtf2-near-text">WTF<br>NEAR ME</span></button>
       <button class="wtf2-thc24" id="wtf2Thc24" type="button"><svg viewBox="0 0 50 64" aria-hidden="true"><path d="M8 57C20 39 29 22 42 6" fill="none" stroke="#62cf70" stroke-width="3" stroke-linecap="round"/><path d="M25 32C13 34 7 27 7 19c11-1 19 3 18 13zM31 23c-2-11 5-18 15-19 1 10-4 18-15 19zM19 43C9 45 3 40 2 32c9-2 16 2 17 11zM35 39c-2-10 4-17 13-19 2 9-3 17-13 19zM12 53C5 54 1 50 1 44c7-1 12 2 11 9z" fill="#71df78" stroke="#2f923e" stroke-width="1"/></svg><span>24 Hour<br>THC</span></button>
     </div>
     <div class="wtf2-tools">
@@ -18577,7 +18581,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtf2Shuttle').addEventListener('click',function(){document.body.classList.add('wtf2-shuttle-active');openChild('shuttleOverlay');});
     q('wtf2Near').addEventListener('click',function(){openChild('nearMeOverlay',function(){if(window.WTFUI&&window.WTFUI.openNearMe)window.WTFUI.openNearMe();else setOpen(q('nearMeOverlay'),true);});});
     q('wtf2Thc24').addEventListener('click',function(){document.body.classList.add('wtf2-thc24-active');openChild('thc24Overlay');});
-    q('wtf2HH').addEventListener('click',function(){openDirectory('Food');});
+    q('wtf2HH').addEventListener('click',function(){openChild('hhOverlay',function(){if(typeof renderHighHungry==='function')renderHighHungry();setOpen(q('hhOverlay'),true);});});
     q('wtf2Deals').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),true);});
     q('wtf2DealsClose').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);});
     q('wtf2DealsSignup').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
