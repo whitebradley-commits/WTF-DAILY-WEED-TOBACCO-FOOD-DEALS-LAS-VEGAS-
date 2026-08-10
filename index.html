@@ -18551,16 +18551,33 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-shell-tile span{display:block;margin-bottom:13px;font-size:28px}.wtf-city-shell-tile small{display:block;margin-top:9px;color:#777;font:700 9px/1 'Archivo Narrow',sans-serif;letter-spacing:.08em;}
   .wtf-city-shell-tile.weed{color:#4FAE68}.wtf-city-shell-tile.tobacco{color:#9A633A}.wtf-city-shell-tile.food{color:#F59E0B}
   .wtf-city-change{margin:34px auto 0;padding:12px 20px;border:2px solid #F59E0B;border-radius:999px;background:#030303;color:#F59E0B;font:900 12px/1 'Archivo Black',sans-serif;cursor:pointer;text-transform:uppercase;}
+  /* Revised city experience: black, translucent, oval, and legible over WTF. */
+  .wtf-city-launch{background:rgba(0,0,0,.28);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+  .wtf-city-launch-card{position:relative;width:min(92vw,430px);padding:34px 28px 28px;border:3px solid #F59E0B;border-radius:44% / 24%;background:rgba(0,0,0,.88);color:#F59E0B;box-shadow:0 0 25px rgba(245,158,11,.34),inset 0 0 24px rgba(245,158,11,.07);overflow:hidden;}
+  .wtf-city-launch-card:before{content:"✦  *";position:absolute;left:22px;top:15px;color:#F59E0B;font:900 15px/1 'Archivo Black',sans-serif;letter-spacing:7px;}
+  .wtf-city-launch-logo.new-wtf-logo{width:108px;height:70px;margin-bottom:8px;}
+  .wtf-city-launch-card h2{color:#F59E0B;font-size:clamp(18px,5.5vw,24px);text-shadow:none;}
+  .wtf-city-launch-card p{max-width:330px;color:#F59E0B;font-size:16px;line-height:1.34;text-shadow:none;}
+  .wtf-city-launch-card label{color:#F59E0B;}
+  .wtf-city-select{border-color:#F59E0B;background:#050505;color:#F59E0B;box-shadow:inset 0 0 10px rgba(245,158,11,.08);}
+  .wtf-city-enter{background:#050505;color:#F59E0B;box-shadow:0 0 0 2px #F59E0B,0 0 13px rgba(245,158,11,.26);}
+  .wtf-city-launch-note{color:#A97722;}
+  .wtf-city-shell{z-index:100018;background:rgba(0,0,0,.18);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);overflow:hidden;}
+  .wtf-city-shell-inner{display:grid;place-items:center;width:100%;min-height:100vh;padding:20px;background:transparent;}
+  .wtf-city-coming-ring{display:flex;flex-direction:column;align-items:center;justify-content:center;width:min(68vw,285px);aspect-ratio:1;border:3px solid #F59E0B;border-radius:50%;background:rgba(0,0,0,.84);box-shadow:0 0 26px rgba(245,158,11,.38),inset 0 0 22px rgba(245,158,11,.08);}
+  .wtf-city-shell .wtf-city-coming-ring h1{margin:0 0 9px;color:#C90201;font-size:clamp(25px,8vw,39px);}
+  .wtf-city-coming-ring strong{color:#C90201;font:900 clamp(18px,6vw,27px)/1 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf-city-coming-ring .wtf-city-change{margin:22px 0 0;padding:10px 15px;font-size:10px;}
 </style>
 
 <div class="wtf-city-launch" id="wtfCityLaunch" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfCityLaunchTitle">
   <div class="wtf-city-launch-card">
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
-    <h2 id="wtfCityLaunchTitle">WTF Is Expanding</h2>
-    <p>WTF is following its Las Vegas launch with nine of America’s hottest markets.</p>
+    <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
+    <p>Following up our Vegas launch with the nine hottest cities in the nation.</p>
     <label for="wtfCitySelect">Choose Your City</label>
     <select class="wtf-city-select" id="wtfCitySelect">
-      <option value="Las Vegas">Las Vegas — Live Now</option>
+      <option value="Las Vegas">★ Las Vegas</option>
       <option value="Denver">Denver</option>
       <option value="Silicon Valley">Silicon Valley</option>
       <option value="San Diego">San Diego</option>
@@ -18571,22 +18588,18 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <option value="Boston">Boston</option>
       <option value="Portland">Portland</option>
     </select>
-    <button class="wtf-city-enter" id="wtfCityEnter" type="button">Enter City</button>
-    <small class="wtf-city-launch-note">Las Vegas is live. New city directories are being built now.</small>
+    <button class="wtf-city-enter" id="wtfCityEnter" type="button">Enter Las Vegas</button>
+    <small class="wtf-city-launch-note">Select any available city</small>
   </div>
 </div>
 
 <section class="wtf-city-shell" id="wtfCityShell" aria-hidden="true">
   <div class="wtf-city-shell-inner">
-    <span class="new-wtf-logo wtf-city-shell-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
-    <h1 id="wtfCityShellTitle">Denver</h1>
-    <p class="wtf-city-shell-kicker">WTF is coming to your city</p>
-    <div class="wtf-city-shell-grid">
-      <div class="wtf-city-shell-tile weed"><span>🌿</span>Weed<small>Coming Soon</small></div>
-      <div class="wtf-city-shell-tile tobacco"><span>🍂</span>Tobacco<small>Coming Soon</small></div>
-      <div class="wtf-city-shell-tile food"><span>🍔</span>Food<small>Coming Soon</small></div>
+    <div class="wtf-city-coming-ring">
+      <h1 id="wtfCityShellTitle">Denver</h1>
+      <strong>Coming Soon</strong>
+      <button class="wtf-city-change" id="wtfCityChange" type="button">Choose a City</button>
     </div>
-    <button class="wtf-city-change" id="wtfCityChange" type="button">Choose Another City</button>
   </div>
 </section>
 
@@ -18750,7 +18763,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
     q('wtfCityEnter').addEventListener('click',enterSelectedCity);
-    q('wtfCitySelect').addEventListener('change',function(){q('wtfCityEnter').textContent=this.value==='Las Vegas'?'Enter Live Site':'Preview '+this.value;});
+    q('wtfCitySelect').addEventListener('change',function(){q('wtfCityEnter').textContent='Enter '+this.value;});
     q('wtfCityChange').addEventListener('click',showCityLaunch);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
     q('wtf2GrooveTrigger').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});
