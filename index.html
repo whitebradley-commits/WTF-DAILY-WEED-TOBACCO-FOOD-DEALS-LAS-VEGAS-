@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <title>WTFdd.com — Weed · Tobacco · Food</title>
 <meta property="og:title" content="WTF! Check this out!"/>
 <meta property="og:description" content="Weed · Tobacco · Food 🌿🍂🍔"/>
@@ -14,6 +14,8 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Archivo+Narrow:wght@400;500;600;700&amp;family=Baloo+2:wght@600;700;800&amp;family=Bebas+Neue&amp;family=Alfa+Slab+One&amp;family=Roboto+Condensed:wght@300;400&amp;family=IBM+Plex+Sans+Condensed:wght@400;700&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Oswald:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
+  html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;}
+  button,a,input,select,[role="button"]{touch-action:manipulation;}
   :root{
     --bg:#000000;
     --surface:#000000;
@@ -18567,7 +18569,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-launch-logo.new-wtf-logo{width:145px;height:95px;margin:-31px auto 11px;}
   .wtf-city-launch-card h2{margin:-4px 0 10px;color:#F59E0B;font-size:clamp(19px,5.7vw,25px);text-shadow:none;}
   .wtf-city-launch-card p{max-width:340px;color:#F59E0B;font-size:16px;line-height:1.27;letter-spacing:-.01em;text-shadow:none;}
-  .wtf-city-inline-logo.new-wtf-logo{position:relative;top:-7px;display:inline-block;width:88px;height:52px;margin:0 -12px -18px -12px;background-size:contain;background-position:center;background-repeat:no-repeat;vertical-align:baseline;}
+  .wtf-city-inline-logo.new-wtf-logo{position:relative;top:-10px;display:inline-block;width:88px;height:52px;margin:0 -15px -18px -15px;background-size:contain;background-position:center;background-repeat:no-repeat;vertical-align:baseline;}
   .wtf-city-launch-card label{color:#F59E0B;}
   .wtf-city-select{border-color:#F59E0B;background-color:#050505;color:#F59E0B;}
   .wtf-city-select[aria-expanded="true"]{border-radius:22px 22px 0 0;}
@@ -18591,7 +18593,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <button class="wtf-city-launch-close" id="wtfCityLaunchClose" type="button" aria-label="Close city selection">×</button>
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
     <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
-          <p>★ This month <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets - cultivating the cutting edge of weed, tobacco, and food simplicity, one city at a time...</p>
+          <p>★ This month <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets - cultivating the cutting edge of weed, tobacco, and food simplicity and direction, one city at a time...</p>
     <div class="wtf-city-select-wrap">
       <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Search…" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Search cities" aria-haspopup="listbox" aria-expanded="false"/>
       <div class="wtf-city-powered-by" aria-hidden="true">
@@ -18821,6 +18823,52 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     document.addEventListener('click',function(e){if(e.target.closest('#shuttleClose,#nearMeClose,#wtfNewsletterClose,#hhClose,#thc24Back')){document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="wtf-sitewide-view-reset">
+(function(){
+  'use strict';
+  if('scrollRestoration' in history)history.scrollRestoration='manual';
+
+  function resetRootView(){
+    window.scrollTo(0,0);
+    if(document.scrollingElement)document.scrollingElement.scrollTop=0;
+    document.documentElement.scrollTop=0;
+    document.body.scrollTop=0;
+  }
+
+  function resetOpenedPage(el){
+    if(!el||el.nodeType!==1||el.hasAttribute('data-preserve-scroll'))return;
+    var style=window.getComputedStyle(el);
+    if(style.display==='none'||style.visibility==='hidden')return;
+    var isPageLayer=style.position==='fixed'||style.position==='absolute'||el.getAttribute('role')==='dialog';
+    if(!isPageLayer)return;
+    el.scrollTop=0;
+    el.scrollLeft=0;
+  }
+
+  function resetRestoredView(){
+    resetRootView();
+    document.querySelectorAll('.open,.show,[aria-hidden="false"]').forEach(resetOpenedPage);
+  }
+
+  window.addEventListener('pageshow',function(){
+    resetRestoredView();
+    setTimeout(resetRestoredView,60);
+    setTimeout(resetRestoredView,240);
+  });
+  window.addEventListener('load',resetRestoredView);
+  window.addEventListener('pagehide',resetRootView);
+
+  var observer=new MutationObserver(function(records){
+    records.forEach(function(record){
+      var el=record.target;
+      if(el.matches&&el.matches('.open,.show,[aria-hidden="false"]')){
+        requestAnimationFrame(function(){resetOpenedPage(el);});
+      }
+    });
+  });
+  observer.observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['class','style','aria-hidden']});
 })();
 </script>
 </body>
