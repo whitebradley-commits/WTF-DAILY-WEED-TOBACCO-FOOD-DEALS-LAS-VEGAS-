@@ -733,9 +733,8 @@
     text-align:center;
     margin:110px auto 0;
     padding-bottom:10px;
-    text-shadow:
-      0 0 5px rgba(245,166,35,0.7),
-      0 0 12px rgba(245,166,35,0.4);
+    text-shadow:0 1px 0 #000;
+    transform:translateY(-14px);
   }
   .hh-title::after{
     content:"";
@@ -747,11 +746,10 @@
     height:3px;
     background:#F59E0B;
     border-radius:2px;
-    box-shadow:
-      0 0 5px rgba(245,166,35,0.7),
-      0 0 10px rgba(245,166,35,0.4);
+    box-shadow:none;
   }
   .hh-sub{font-family:'Archivo Narrow',sans-serif;font-size:15px;color:var(--text-dim);max-width:420px;margin:4px auto 0;line-height:1.5;}
+  .hh-sub-spacer{height:27px;margin:4px auto 0;}
   .hh-best-wrap{
     position:absolute;
     top:14px;
@@ -787,7 +785,7 @@
     width:74px;
     height:74px;
     border-radius:50%;
-    border:2px solid #F59E0B;
+    border:0;
     padding:0;
     cursor:pointer;
     font-family:'Archivo Black', sans-serif;
@@ -796,12 +794,14 @@
     line-height:1.15;
     text-transform:uppercase;
     letter-spacing:0.2px;
-    color:#000;
+    color:inherit;
     text-decoration:none;
     text-align:center;
-    background:#F59E0B;
-    animation:hubSunGlow 2s ease-in-out infinite;
+    background:transparent;
+    animation:none;
   }
+  .hh-best-link .hub-best-mini-badge{width:74px;height:74px;box-shadow:0 0 0 1px #000,0 0 8px rgba(245,166,35,.22);}
+  .hh-best-link .hub-best-mini-label{font-size:.72rem}.hh-best-link .hub-best-mini-city{font-size:.56rem}.hh-best-link .hub-best-mini-period{font-size:.59rem}
   .hh-best-link:hover{ transform:scale(1.06); }
   @media (prefers-reduced-motion: reduce){
     .hh-best-link{ animation:none; }
@@ -837,11 +837,11 @@
     text-align:center;
     margin:56px auto 48px;
     max-width:420px;
-    box-shadow:0 0 6px rgba(245,166,35,0.5), 0 0 16px rgba(245,166,35,0.25);
+    box-shadow:0 0 3px rgba(245,166,35,0.22);
   }
   .hh-billboard h3{
     font-family:'Archivo Black',sans-serif;font-size:21px;color:#F59E0B;margin:0 0 4px;letter-spacing:0.04em;
-    text-shadow:0 0 6px rgba(245,166,35,0.6);
+    text-shadow:none;
   }
   .area-heading{
     font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:19px;letter-spacing:0.3px;
@@ -7509,7 +7509,7 @@ button[id*="back"] svg,
 <div aria-hidden="true" aria-labelledby="nearMeTitle" class="near-me-overlay" id="nearMeOverlay" role="dialog">
   <div class="near-me-panel">
     <div class="near-me-head">
-      <h2 id="nearMeTitle">Find WTF Near Me</h2>
+      <h2 id="nearMeTitle"><span>FIND</span><span class="new-wtf-logo near-title-logo" role="img" aria-label="WTF"></span><span>NEAR ME</span></h2>
       <button aria-label="Close Near Me" class="near-me-close" id="nearMeClose" type="button" onclick="window.WTFUI&&window.WTFUI.closeNearMe();return false;">×</button>
     </div>
     <div class="near-me-controls">
@@ -7706,10 +7706,9 @@ button[id*="back"] svg,
 <div class="hh-logo-wrap">
 <h1 class="hh-title">High &amp; Hungry</h1>
 </div>
-<p class="hh-sub">Sign up for the <span aria-label="WTF logo, jump to newsletter signup" class="new-wtf-logo wtf-inline-logo goto-newsletter-link" role="button" tabindex="0"></span> Newsletter to receive insane deals.</p>
+<div class="hh-sub-spacer" aria-hidden="true"></div>
 <div class="hh-best-wrap">
-<a class="hh-best-link" href="https://bestofperiod.com" id="bestOfExternalLink" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none;" target="_blank">The<br/>Best<br/>Of</a>
-<span class="hh-best-hint">← Click<br/>Here</span>
+<a aria-label="Visit Best Of Period" class="hh-best-link" href="https://bestofperiod.com" id="bestOfExternalLink" rel="noopener" target="_blank"><span class="hub-best-mini-badge"><span class="ring-outer"></span><span class="ring-inner"></span><span class="hub-best-mini-label">Best Of</span><span class="hub-best-mini-city is-active" id="hhBestMiniCity">Vegas</span><span class="hub-best-mini-period">Period<span class="period-mark">©</span></span></span></a>
 </div>
 <div class="hh-list" id="hhList">
 <!-- populated by JS -->
@@ -9265,17 +9264,20 @@ function setupDirectionsPopup(){
     });
   }
 
-  setInterval(function(){
-    document.querySelectorAll('[data-directions-popup]').forEach(function(btn){
-      if(btn.dataset.dirWired) return;
-      btn.dataset.dirWired = '1';
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        openDirectionsPopup(btn.getAttribute('data-directions-popup'), btn.getAttribute('data-directions-name'));
-      });
-    });
-  }, 300);
+  // One delegated handler covers the original cards plus every directory card
+  // rendered later.  This is more reliable in mobile webviews than repeatedly
+  // scanning the page and attaching hundreds of individual listeners.
+  if(!document.documentElement.dataset.directionsPopupDelegated){
+    document.documentElement.dataset.directionsPopupDelegated = '1';
+    document.addEventListener('click', function(e){
+      var target = e.target;
+      var btn = target && target.closest ? target.closest('[data-directions-popup]') : null;
+      if(!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openDirectionsPopup(btn.getAttribute('data-directions-popup'), btn.getAttribute('data-directions-name'));
+    }, true);
+  }
 }
 
 // ---- Phone popup ----
@@ -9327,18 +9329,19 @@ function setupPhonePopup(){
     });
   }
 
-  // Cards render continuously, so wire new phone buttons as they appear.
-  setInterval(function(){
-    document.querySelectorAll('[data-phone-popup]').forEach(function(btn){
-      if(btn.dataset.phoneWired) return;
-      btn.dataset.phoneWired = '1';
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        openPhonePopup(btn.getAttribute('data-phone-popup'), btn.getAttribute('data-phone-display'));
-      });
-    });
-  }, 300);
+  // Cards are rebuilt as visitors change categories and neighborhoods.  A
+  // permanent delegated handler makes every present and future call icon work.
+  if(!document.documentElement.dataset.phonePopupDelegated){
+    document.documentElement.dataset.phonePopupDelegated = '1';
+    document.addEventListener('click', function(e){
+      var target = e.target;
+      var btn = target && target.closest ? target.closest('[data-phone-popup]') : null;
+      if(!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openPhonePopup(btn.getAttribute('data-phone-popup'), btn.getAttribute('data-phone-display'));
+    }, true);
+  }
 }
 
 // ---- Menu popup ----
@@ -16904,6 +16907,7 @@ function setupBopLandingBadge(){
 
 function setupBopMiniBadge(){
   startBopCityCycler('hubBestMiniCity', BOP_MINI_CITIES, 3000, 260, 140, 180);
+  startBopCityCycler('hhBestMiniCity', BOP_MINI_CITIES, 3000, 260, 140, 180);
 }
 
 function setupWtfCitiesToggle(){
@@ -18368,7 +18372,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   @keyframes wtf2FloatReverse{0%{transform:translateX(20px) translateY(0) rotate(0)}50%{transform:translateX(-55vw) translateY(-7px) rotate(-8deg)}100%{transform:translateX(calc(-100vw - 80px)) translateY(1px) rotate(5deg)}}
   @keyframes wtf2BusReverse{0%{transform:translateX(105px)}41%{transform:translateX(-52vw)}41%,56%{transform:translateX(-52vw)}100%{transform:translateX(calc(-100vw - 170px))}}
   @keyframes wtf2PlaneReverse{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 360px))}}
-  .wtf2-popular-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 2px 12px;}
+  .wtf2-popular-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:24px 2px 20px;}
   .wtf2-popular-head h2{margin:0;color:#fff;font:900 20px/1 'Archivo Black',sans-serif;text-transform:uppercase;}
   .wtf2-popular-head span{color:#777;font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
   .wtf2-featured{display:grid;gap:9px;}
@@ -18390,14 +18394,14 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-old-site-pin{appearance:none;border:0;background:transparent;color:#080808;font:700 8px/1 'Archivo Narrow',sans-serif;letter-spacing:.08em;padding:8px;cursor:pointer;}
   .wtf2-deals-modal{position:fixed;inset:0;z-index:100010;display:none;place-items:center;padding:22px;background:rgba(255,255,255,.18);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}.wtf2-deals-modal.open{display:grid}.wtf2-deals-card{position:relative;width:min(100%,390px);padding:34px 25px 25px;border:1px solid rgba(255,255,255,.8);border-radius:22px;background:rgba(255,255,255,.9);color:#080808;text-align:center;box-shadow:0 20px 70px rgba(0,0,0,.55)}.wtf2-deals-card h2{margin:0 0 14px;font:900 25px/1.05 'Archivo Black',sans-serif;text-transform:uppercase}.wtf2-deals-card p{margin:0 0 22px;font-size:17px;line-height:1.4}.wtf2-deals-card p strong{color:#1f6c38}.wtf2-deals-signup{padding:13px 22px;border:0;border-radius:999px;background:#000;color:#fff;font:900 13px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 0 2px var(--wtf2-orange)}.wtf2-deals-close{position:absolute;right:11px;top:11px;width:38px;height:38px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#000;color:var(--wtf2-red);font:900 20px/1 'Archivo Black',sans-serif;cursor:pointer}
   .wtf2-directory{display:none;}.wtf2-directory.open{display:block;position:fixed;inset:0;z-index:100002;overflow:auto;background:#000;}
-  .wtf2-directory-inner{width:min(100%,760px);min-height:100vh;margin:auto;padding:18px 15px 50px;}
-  .wtf2-dir-top{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;margin-bottom:16px;}
+  .wtf2-directory-inner{width:min(100%,760px);min-height:100vh;margin:auto;padding:28px 15px 50px;}
+  .wtf2-dir-top{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;margin-bottom:28px;}
   .wtf2-dir-back{width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 23px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.4),inset 0 0 10px rgba(245,158,11,.09);}
   .wtf2-dir-back,.wtf2-exit{color:var(--wtf2-red)!important;-webkit-text-fill-color:var(--wtf2-red)!important;}
   .wtf2-dir-back svg,.wtf2-exit svg{display:block;width:20px;height:20px;margin:auto;stroke:var(--wtf2-red)!important;color:var(--wtf2-red)!important;stroke-width:4;stroke-linecap:round;pointer-events:none;filter:drop-shadow(0 0 3px rgba(201,2,1,.55));}
   #wtf2Directory .wtf2-dir-back path{stroke:#C90201!important;}
-  .wtf2-dir-title{margin:0;text-align:center;font:900 22px/1 'Archivo Black',sans-serif;text-transform:uppercase;}
-  .wtf2-area-row{display:flex;gap:8px;overflow:auto;padding:4px 0 15px;scrollbar-width:none;}.wtf2-area-row::-webkit-scrollbar{display:none;}
+  .wtf2-dir-title{margin:0 5px;padding:14px 18px;border:1px solid var(--wtf2-directory-accent,#8b6a2d);border-radius:4px;background:radial-gradient(circle at 8px 8px,var(--wtf2-orange) 0 2px,transparent 2.6px),radial-gradient(circle at calc(100% - 8px) 8px,var(--wtf2-orange) 0 2px,transparent 2.6px),radial-gradient(circle at 8px calc(100% - 8px),var(--wtf2-orange) 0 2px,transparent 2.6px),radial-gradient(circle at calc(100% - 8px) calc(100% - 8px),var(--wtf2-orange) 0 2px,transparent 2.6px),linear-gradient(145deg,#0b0b0b,#030303);box-shadow:inset 0 0 0 1px #181818;text-align:center;font:900 clamp(14px,4vw,20px)/1.08 'Archivo Black',sans-serif;letter-spacing:.025em;text-transform:uppercase;}
+  .wtf2-area-row{display:flex;gap:8px;overflow:auto;padding:5px 0 22px;scrollbar-width:none;}.wtf2-area-row::-webkit-scrollbar{display:none;}
   .wtf2-area{flex:0 0 auto;padding:9px 14px;border:1px solid #333;border-radius:999px;background:#070707;color:#aaa;font-weight:800;cursor:pointer;}.wtf2-area.active{color:#fff;border-color:var(--wtf2-red);box-shadow:0 0 10px rgba(215,38,61,.3);}
   #wtf2DirList .directory-area{color:var(--wtf2-orange);}
   #wtf2DirList .listing-card{background:#080808;border-color:#242424;margin-bottom:9px;box-shadow:0 5px 18px rgba(0,0,0,.35);}
@@ -18414,6 +18418,8 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay,body.wtf2-child-open #thc24Overlay{z-index:100005!important;}
   body.wtf2-child-open #shuttleClose,body.wtf2-child-open #nearMeClose,body.wtf2-child-open #hhClose,body.wtf2-child-open #wtfNewsletterClose,body.wtf2-child-open #thc24Back{width:46px!important;height:46px!important;border:2px solid var(--wtf2-orange)!important;border-radius:50%!important;background:#020202!important;color:var(--wtf2-red)!important;font:900 23px/1 'Archivo Black',sans-serif!important;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09)!important;}
   body.wtf2-child-open #thc24Back{color:#C90201!important;-webkit-text-fill-color:#C90201!important;text-shadow:none!important;}
+  body.wtf2-child-open #nearMeTitle{display:flex;align-items:center;justify-content:flex-start;gap:8px;color:var(--wtf2-orange)!important;-webkit-text-fill-color:var(--wtf2-orange)!important;font-size:clamp(15px,4.5vw,30px)!important;text-shadow:none!important;filter:none!important;white-space:nowrap;}
+  body.wtf2-child-open #nearMeTitle .near-title-logo.new-wtf-logo{display:inline-block;width:61px;height:41px;flex:0 0 61px;margin:0;background-size:contain;background-position:center;background-repeat:no-repeat;}
   body.wtf2-thc24-active #thc24Overlay .directory-panel{border-color:#345d39;box-shadow:0 0 0 1px rgba(245,158,11,.2),0 0 32px rgba(79,174,104,.24),inset 0 0 24px rgba(79,174,104,.04);background:radial-gradient(circle at 50% 0,rgba(79,174,104,.12),transparent 28%),#000;}
   body.wtf2-thc24-active #thc24Title{font-size:clamp(1.75rem,7vw,2.35rem)!important;color:#78df85!important;text-shadow:0 0 13px rgba(79,174,104,.5);letter-spacing:.02em;}
   body.wtf2-thc24-active #thc24Overlay .directory-area{margin-top:26px;color:#3fa55a;font-size:1rem;letter-spacing:.04em;text-shadow:0 0 8px rgba(79,174,104,.22);}
@@ -18463,7 +18469,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     </div>
     <div class="wtf2-tools">
       <button class="wtf2-tool wtf2-tool-shuttle" id="wtf2Shuttle" type="button"><strong>🚌</strong>Free Shuttle</button>
-      <button class="wtf2-tool wtf2-tool-hh" id="wtf2HH" type="button"><strong>🍽</strong>High &amp; Hungry</button>
+      <button class="wtf2-tool wtf2-tool-hh" id="wtf2HH" type="button"><strong>🍔</strong>High &amp; Hungry</button>
       <button class="wtf2-tool wtf2-tool-deals" id="wtf2Deals" type="button"><strong>✦</strong>Daily Deals</button>
       <button class="wtf2-tool wtf2-tool-news" id="wtf2Newsletter" type="button"><strong>▤</strong>Newsletter</button>
     </div>
@@ -18476,7 +18482,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <span class="wtf2-pixel wtf2-food1">🍕</span><span class="wtf2-pixel wtf2-food2">🍔</span>
       <span class="wtf2-pixel wtf2-mini-bus"></span>
     </div>
-    <div class="wtf2-popular-head"><h2>Popular Right Now</h2><span>Tap a category above</span></div>
+    <div class="wtf2-popular-head"><h2>Trending Right Now</h2></div>
     <div class="wtf2-featured">
       <div class="wtf2-feature-card" data-category="weed"><b>Planet 13</b><small>Weed · The Strip · Free shuttle available</small><em>VIEW WEED</em></div>
       <div class="wtf2-feature-card" data-category="tobacco"><b>Puff Vegas Smoke Shop</b><small>Tobacco · The Strip · Open 24 hours</small><em>VIEW TOBACCO</em></div>
