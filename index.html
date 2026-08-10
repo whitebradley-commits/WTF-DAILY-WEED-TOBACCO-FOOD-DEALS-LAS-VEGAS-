@@ -7836,6 +7836,7 @@ button[id*="back"] svg,
 <p class="fine-print"><button class="footer-hotlink" data-dest="wtf" type="button">WTF</button> <button class="footer-hotlink" data-dest="lv" type="button">LV Steam</button> <button class="footer-hotlink" data-dest="tpa" type="button">TPA</button> <button class="footer-hotlink" data-dest="best" type="button">BOP</button> are independent listing services developed by <button class="footer-hotlink" data-dest="about" type="button">BJS CO.</button><svg height="13" style="vertical-align:-2px;margin:0 2px 0 3px;" viewbox="0 0 40 40" width="13"><circle cx="20" cy="20" fill="#0a0a0a" r="18" stroke="#F59E0B" stroke-width="2"></circle><text fill="#F59E0B" font-family="Archivo Black, sans-serif" font-size="12" text-anchor="middle" x="20" y="24">BJS</text></svg> and are not affiliated with, endorsed by, or operated on behalf of any business shown here. Specials are submitted by businesses or their staff and may change without notice — always confirm details directly. 21+ for alcohol and cannabis listings. Please consume responsibly.</p>
 <p class="fine-print" style="margin-top:14px;">For further information <a href="mailto:info@bestofperiod.com" style="color:#fff;text-decoration:underline;">info@bestofperiod.com</a></p>
 <p class="fine-print" style="margin-top:10px;"><button class="footer-hotlink wtf-newsletter-open" style="color:#F59E0B;font-weight:700;animation:newsletterGlow 1.8s ease-in-out infinite;" type="button">Newsletter</button></p>
+<p class="fine-print" style="margin:18px 0 8px;text-align:center;"><button id="wtf2SecretLink" type="button" aria-label="Open WTF2 preview" style="appearance:none;border:0;background:transparent;color:#090909;font:600 9px/1 'Archivo Narrow',sans-serif;letter-spacing:.08em;padding:7px 12px;cursor:pointer;">WTF2</button></p>
 </footer>
 
 
@@ -18283,5 +18284,165 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 })();
 </script>
 
+<!-- ===== WTF2 private working preview: isolated from the live WTF experience ===== -->
+<style id="wtf2-private-preview-styles">
+  :root{--wtf2-red:#D7263D;--wtf2-orange:#F59E0B;--wtf2-weed:#4FAE68;--wtf2-tobacco:#8C603F;--wtf2-food:#F4CF45;}
+  #wtf2Overlay{position:fixed;inset:0;z-index:100000;display:none;overflow:auto;background:#000;color:#f7f3ea;font-family:'Archivo Narrow',sans-serif;overscroll-behavior:contain;}
+  #wtf2Overlay.open{display:block;}
+  .wtf2-shell{width:min(100%,760px);min-height:100vh;margin:0 auto;padding:20px 16px 50px;background:radial-gradient(circle at 50% -8%,rgba(215,38,61,.12),transparent 31%),#000;}
+  .wtf2-top{position:relative;display:flex;justify-content:center;align-items:center;min-height:124px;margin-bottom:4px;}
+  .wtf2-exit{position:absolute;left:0;top:3px;width:42px;height:42px;border:1px solid #3a171c;border-radius:50%;background:#050505;color:#8d8d8d;font-size:21px;cursor:pointer;}
+  .wtf2-logo{display:block!important;width:min(72vw,330px)!important;height:112px!important;margin:0 auto!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:drop-shadow(0 0 11px rgba(215,38,61,.18));}
+  .wtf2-redline{width:76%;height:2px;margin:-4px auto 22px;background:linear-gradient(90deg,transparent,var(--wtf2-red),var(--wtf2-orange),transparent);box-shadow:0 0 10px rgba(215,38,61,.55);}
+  .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;}
+  .wtf2-category{position:relative;min-height:118px;padding:15px 6px 12px;border-radius:20px;background:#070707;color:#fff;font:900 clamp(14px,4.2vw,20px)/1 'Archivo Black',sans-serif;text-transform:uppercase;cursor:pointer;overflow:hidden;}
+  .wtf2-category:before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid currentColor;opacity:.9;box-shadow:inset 0 0 18px currentColor;pointer-events:none;}
+  .wtf2-category .wtf2-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 10px;border:1px solid currentColor;border-radius:50%;font-size:25px;background:#020202;box-shadow:0 0 17px currentColor;}
+  .wtf2-category[data-cat="Weed"]{color:var(--wtf2-weed);}
+  .wtf2-category[data-cat="Tobacco"]{color:var(--wtf2-tobacco);}
+  .wtf2-category[data-cat="Food"]{color:var(--wtf2-food);}
+  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;margin:0 0 18px;border:2px solid var(--wtf2-red);border-radius:999px;background:#070707;color:#fff;font:900 16px/1 'Archivo Black',sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 0 18px rgba(215,38,61,.38),inset 0 0 15px rgba(245,158,11,.09);}
+  .wtf2-near span{color:var(--wtf2-orange);font-size:22px;}
+  .wtf2-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:26px;}
+  .wtf2-tool{min-height:78px;border:1px solid #282828;border-radius:16px;background:linear-gradient(145deg,#0c0c0c,#030303);color:#f3efe6;font:800 14px/1.12 'Archivo Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
+  .wtf2-tool strong{display:block;margin-bottom:7px;color:var(--wtf2-orange);font-size:21px;}
+  .wtf2-tool-shuttle{border-color:#3D6B9A;box-shadow:0 0 13px rgba(61,107,154,.22);}
+  .wtf2-tool-hh{border-color:var(--wtf2-food);box-shadow:0 0 13px rgba(244,207,69,.16);}
+  .wtf2-tool-deals{border-color:var(--wtf2-red);box-shadow:0 0 13px rgba(215,38,61,.16);}
+  .wtf2-tool-news{border-color:var(--wtf2-weed);box-shadow:0 0 13px rgba(79,174,104,.16);}
+  .wtf2-arcade-strip{position:relative;height:72px;margin:2px 0 24px;border-top:1px solid #1b1b1b;border-bottom:1px solid #1b1b1b;overflow:hidden;background:linear-gradient(180deg,#020202,#080808 70%,#030303);}
+  .wtf2-arcade-strip:before{content:"";position:absolute;left:0;right:0;bottom:13px;height:1px;background:linear-gradient(90deg,transparent,var(--wtf2-red) 18%,var(--wtf2-orange) 52%,var(--wtf2-red) 82%,transparent);opacity:.6;box-shadow:0 0 8px rgba(215,38,61,.35);}
+  .wtf2-pixel{position:absolute;bottom:17px;display:block;filter:saturate(.88) drop-shadow(0 0 4px rgba(255,255,255,.12));will-change:transform;}
+  .wtf2-p1{left:-38px;font-size:24px;animation:wtf2Walk 20s linear infinite;}.wtf2-p2{left:-95px;font-size:21px;animation:wtf2Walk 25s linear 8s infinite;}
+  .wtf2-food1{left:-24px;bottom:39px;font-size:17px;animation:wtf2Float 18s linear 3s infinite;}.wtf2-food2{left:-24px;bottom:38px;font-size:16px;animation:wtf2Float 23s linear 11s infinite;}
+  .wtf2-mini-bus{left:-92px;bottom:15px;width:76px;height:27px;border:2px solid #101010;border-radius:7px 9px 4px 4px;background:linear-gradient(#f2e9d8 0 38%,#3D6B9A 39% 100%);animation:wtf2Bus 28s linear 1s infinite;box-shadow:0 0 9px rgba(61,107,154,.45);}
+  .wtf2-mini-bus:before{content:"W T F";position:absolute;left:9px;top:8px;color:#fff;font:900 8px/1 'Archivo Black',sans-serif;letter-spacing:2px;}.wtf2-mini-bus:after{content:"●     ●";position:absolute;left:10px;bottom:-7px;color:#777;font-size:12px;letter-spacing:18px;}
+  .wtf2-arcade-caption{position:absolute;right:8px;top:6px;color:#3c3c3c;font:700 8px/1 'Archivo Narrow',sans-serif;letter-spacing:.13em;text-transform:uppercase;}
+  @keyframes wtf2Walk{from{transform:translateX(-15px)}to{transform:translateX(calc(100vw + 150px))}}
+  @keyframes wtf2Float{0%{transform:translateX(-20px) translateY(0) rotate(0)}50%{transform:translateX(55vw) translateY(-9px) rotate(9deg)}100%{transform:translateX(calc(100vw + 80px)) translateY(1px) rotate(-5deg)}}
+  @keyframes wtf2Bus{0%{transform:translateX(-100px)}42%,54%{transform:translateX(48vw)}54%,58%{transform:translateX(48vw)}100%{transform:translateX(calc(100vw + 170px))}}
+  .wtf2-popular-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:4px 2px 12px;}
+  .wtf2-popular-head h2{margin:0;color:#fff;font:900 20px/1 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf2-popular-head span{color:#777;font-size:11px;text-transform:uppercase;letter-spacing:.08em;}
+  .wtf2-featured{display:grid;gap:9px;}
+  .wtf2-feature-card{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;padding:14px;border:1px solid #292929;border-left:3px solid var(--wtf2-red);border-radius:13px;background:#080808;text-align:left;}
+  .wtf2-feature-card b{font-size:17px;color:#fff;}.wtf2-feature-card small{grid-column:1;color:#898989;font-size:12px;}.wtf2-feature-card em{grid-column:2;grid-row:1/3;color:var(--wtf2-orange);font-style:normal;font-weight:800;font-size:11px;}
+  .wtf2-footer{margin-top:36px;padding-top:18px;border-top:1px solid #171717;text-align:center;color:#555;font-size:11px;}
+  .wtf2-directory{display:none;}.wtf2-directory.open{display:block;position:fixed;inset:0;z-index:100002;overflow:auto;background:#000;}
+  .wtf2-directory-inner{width:min(100%,760px);min-height:100vh;margin:auto;padding:18px 15px 50px;}
+  .wtf2-dir-top{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;margin-bottom:16px;}
+  .wtf2-dir-back{width:44px;height:44px;border:1px solid #333;border-radius:50%;background:#080808;color:#aaa;font-size:20px;cursor:pointer;}
+  .wtf2-dir-title{margin:0;text-align:center;font:900 22px/1 'Archivo Black',sans-serif;text-transform:uppercase;}
+  .wtf2-area-row{display:flex;gap:8px;overflow:auto;padding:4px 0 15px;scrollbar-width:none;}.wtf2-area-row::-webkit-scrollbar{display:none;}
+  .wtf2-area{flex:0 0 auto;padding:9px 14px;border:1px solid #333;border-radius:999px;background:#070707;color:#aaa;font-weight:800;cursor:pointer;}.wtf2-area.active{color:#fff;border-color:var(--wtf2-red);box-shadow:0 0 10px rgba(215,38,61,.3);}
+  #wtf2DirList .directory-area{color:var(--wtf2-orange);}
+  #wtf2DirList .listing-card{background:#080808;border-color:#242424;}
+  body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay{z-index:100005!important;}
+  body.wtf2-shuttle-active #shuttleOverlay .directory-panel{background:radial-gradient(circle at 50% 15%,rgba(61,107,154,.13),transparent 40%),#000;}
+  body.wtf2-shuttle-active #shuttleOverlay .shuttle-scene{border-color:#355f88;box-shadow:0 0 0 1px rgba(215,38,61,.16),0 0 24px rgba(61,107,154,.22);}
+  body.wtf2-shuttle-active #shuttleOverlay .shuttle-bus{filter:drop-shadow(0 7px 6px rgba(0,0,0,.45)) drop-shadow(0 0 6px rgba(61,107,154,.35));animation-duration:12s!important;}
+  body.wtf2-shuttle-active #shuttleOverlay .stop-person{animation:wtf2Passenger 2.4s ease-in-out infinite alternate;}
+  body.wtf2-shuttle-active #shuttleOverlay .stop-person:nth-child(3){animation-delay:.4s}body.wtf2-shuttle-active #shuttleOverlay .stop-person:nth-child(4){animation-delay:.8s}
+  @keyframes wtf2Passenger{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+  @media(min-width:600px){.wtf2-shell{padding-left:36px;padding-right:36px}.wtf2-category{min-height:138px}.wtf2-tools{grid-template-columns:repeat(4,1fr)}.wtf2-tool{min-height:92px}}
+  @media(prefers-reduced-motion:reduce){#wtf2Overlay *{animation:none!important;transition:none!important;}}
+</style>
+
+<section id="wtf2Overlay" aria-hidden="true">
+  <div class="wtf2-shell">
+    <div class="wtf2-top">
+      <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Return to current WTF">×</button>
+      <span class="new-wtf-logo wtf2-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
+    </div>
+    <div class="wtf2-redline"></div>
+    <div class="wtf2-category-grid" aria-label="Browse categories">
+      <button class="wtf2-category" data-cat="Weed" type="button"><span class="wtf2-icon">🌿</span>Weed</button>
+      <button class="wtf2-category" data-cat="Tobacco" type="button"><span class="wtf2-icon">♨</span>Tobacco</button>
+      <button class="wtf2-category" data-cat="Food" type="button"><span class="wtf2-icon">🍴</span>Food</button>
+    </div>
+    <button class="wtf2-near" id="wtf2Near" type="button"><span>⌖</span> FIND WTF NEAR ME</button>
+    <div class="wtf2-tools">
+      <button class="wtf2-tool wtf2-tool-shuttle" id="wtf2Shuttle" type="button"><strong>🚌</strong>Free Shuttle</button>
+      <button class="wtf2-tool wtf2-tool-hh" id="wtf2HH" type="button"><strong>🍽</strong>High &amp; Hungry</button>
+      <button class="wtf2-tool wtf2-tool-deals" id="wtf2Deals" type="button"><strong>✦</strong>Daily Deals</button>
+      <button class="wtf2-tool wtf2-tool-news" id="wtf2Newsletter" type="button"><strong>▤</strong>Newsletter</button>
+    </div>
+    <div class="wtf2-arcade-strip" aria-hidden="true">
+      <span class="wtf2-arcade-caption">The WTF route</span>
+      <span class="wtf2-pixel wtf2-p1">🚶</span><span class="wtf2-pixel wtf2-p2">🚶‍♀️</span>
+      <span class="wtf2-pixel wtf2-food1">🍕</span><span class="wtf2-pixel wtf2-food2">🍔</span>
+      <span class="wtf2-pixel wtf2-mini-bus"></span>
+    </div>
+    <div class="wtf2-popular-head"><h2>Popular Right Now</h2><span>Tap a category above</span></div>
+    <div class="wtf2-featured">
+      <div class="wtf2-feature-card"><b>Planet 13</b><small>Weed · The Strip · Free shuttle available</small><em>VIEW WEED</em></div>
+      <div class="wtf2-feature-card"><b>Puff Vegas Smoke Shop</b><small>Tobacco · The Strip · Open 24 hours</small><em>VIEW TOBACCO</em></div>
+      <div class="wtf2-feature-card"><b>Carson Kitchen</b><small>Food · Downtown · High &amp; Hungry</small><em>VIEW FOOD</em></div>
+    </div>
+    <div class="wtf2-footer">Private WTF2 working preview · BJS Co.</div>
+  </div>
+</section>
+
+<section class="wtf2-directory" id="wtf2Directory" aria-hidden="true">
+  <div class="wtf2-directory-inner">
+    <div class="wtf2-dir-top"><button class="wtf2-dir-back" id="wtf2DirBack" type="button">←</button><h1 class="wtf2-dir-title" id="wtf2DirTitle">WEED</h1><span></span></div>
+    <div class="wtf2-area-row" id="wtf2AreaRow">
+      <button class="wtf2-area active" data-area="All" type="button">Popular</button>
+      <button class="wtf2-area" data-area="The Strip" type="button">The Strip</button>
+      <button class="wtf2-area" data-area="Downtown" type="button">Downtown</button>
+      <button class="wtf2-area" data-area="Henderson" type="button">Henderson</button>
+      <button class="wtf2-area" data-area="Summerlin" type="button">Summerlin</button>
+    </div>
+    <p style="margin:0 0 13px;color:#777;font-size:12px;">Tap a name for address, directions, website, and further information.</p>
+    <div id="wtf2DirList"></div>
+  </div>
+</section>
+
+<script id="wtf2-private-preview-script">
+(function(){
+  var overlay,dir,currentCat='Weed',currentArea='All';
+  function q(id){return document.getElementById(id);}
+  function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
+  function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
+  function closeWtf2(){setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.style.overflow='';}
+  function entriesFor(cat,area){
+    if(cat==='Food'){
+      var food=(window.HIGH_HUNGRY_LIST||[]);
+      if(!food.length && typeof HIGH_HUNGRY_LIST!=='undefined')food=HIGH_HUNGRY_LIST;
+      return area==='All'?food.slice(0,12):food.filter(function(x){return x.area===area;});
+    }
+    var source=(typeof BUSINESS_DIRECTORY!=='undefined'&&BUSINESS_DIRECTORY[cat])?BUSINESS_DIRECTORY[cat]:{};
+    if(area!=='All')return source[area]||[];
+    var order=['The Strip','Downtown','Henderson','Summerlin'],out=[];
+    order.forEach(function(a){(source[a]||[]).slice(0,3).forEach(function(x){out.push(x);});});
+    return out.slice(0,12);
+  }
+  function render(){
+    var list=q('wtf2DirList'),items=entriesFor(currentCat,currentArea),areaLabel=currentArea==='All'?'Most Popular':currentArea;
+    q('wtf2DirTitle').textContent=currentCat+' · '+areaLabel;
+    if(typeof renderEntryList==='function'){
+      list.innerHTML='<div class="directory-area">'+areaLabel+'</div><ul class="directory-list">'+renderEntryList(items,currentCat,areaLabel)+'</ul>';
+    }else{
+      list.innerHTML=items.map(function(x){return '<div class="wtf2-feature-card"><b>'+x.name+'</b><small>'+(x.address||x.specialty||areaLabel)+'</small></div>';}).join('');
+    }
+  }
+  function openDirectory(cat){currentCat=cat;currentArea='All';document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(b){b.classList.toggle('active',b.dataset.area==='All');});render();setOpen(dir,true);dir.scrollTop=0;}
+  function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
+  function init(){
+    overlay=q('wtf2Overlay');dir=q('wtf2Directory');
+    q('wtf2SecretLink').addEventListener('click',openWtf2);q('wtf2Exit').addEventListener('click',closeWtf2);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
+    document.querySelectorAll('.wtf2-category').forEach(function(b){b.addEventListener('click',function(){openDirectory(b.dataset.cat);});});
+    document.querySelectorAll('.wtf2-feature-card em').forEach(function(e){e.parentElement.addEventListener('click',function(){var t=e.textContent;openDirectory(t.indexOf('TOBACCO')>-1?'Tobacco':t.indexOf('FOOD')>-1?'Food':'Weed');});e.parentElement.style.cursor='pointer';});
+    q('wtf2AreaRow').addEventListener('click',function(e){var b=e.target.closest('.wtf2-area');if(!b)return;currentArea=b.dataset.area;document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(x){x.classList.toggle('active',x===b);});render();});
+    q('wtf2Shuttle').addEventListener('click',function(){document.body.classList.add('wtf2-shuttle-active');openChild('shuttleOverlay');});
+    q('wtf2Near').addEventListener('click',function(){openChild('nearMeOverlay',function(){if(window.WTFUI&&window.WTFUI.openNearMe)window.WTFUI.openNearMe();else setOpen(q('nearMeOverlay'),true);});});
+    q('wtf2HH').addEventListener('click',function(){openDirectory('Food');});
+    q('wtf2Deals').addEventListener('click',function(){closeWtf2();window.scrollTo({top:0,behavior:'smooth'});});
+    q('wtf2Newsletter').addEventListener('click',function(){openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
+    document.addEventListener('click',function(e){if(e.target.closest('#shuttleClose,#nearMeClose,#wtfNewsletterClose,#hhClose')){document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>
