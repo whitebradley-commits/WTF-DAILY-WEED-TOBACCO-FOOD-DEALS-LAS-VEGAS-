@@ -18570,11 +18570,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-launch-logo.new-wtf-logo{width:145px;height:95px;margin:-31px auto 11px;}
   .wtf-city-launch-card h2{margin:-4px 0 10px;color:#F59E0B;font-size:clamp(19px,5.7vw,25px);text-shadow:none;}
   .wtf-city-launch-card p{max-width:340px;color:#F59E0B;font-size:16px;line-height:1.27;letter-spacing:-.01em;text-shadow:none;}
-  .wtf-city-inline-logo.new-wtf-logo{position:relative;top:-10px;display:inline-block;width:88px;height:52px;margin:0 2px -18px;background-size:contain;background-position:center;background-repeat:no-repeat;vertical-align:baseline;}
+  .wtf-city-inline-logo.new-wtf-logo{position:relative;top:-10px;display:inline-block;width:88px;height:52px;margin:0 -12px -18px;background-size:contain;background-position:center;background-repeat:no-repeat;vertical-align:baseline;mix-blend-mode:screen;}
   .wtf-city-launch-card label{color:#F59E0B;}
   .wtf-city-select{border-color:#F59E0B;background-color:#050505;color:#F59E0B;}
   .wtf-city-select[aria-expanded="true"]{border-radius:22px 22px 0 0;}
-  .wtf-city-menu{position:absolute;z-index:20;left:0;right:0;top:calc(100% - 2px);max-height:255px;overflow-y:auto;border:2px solid #F59E0B;border-top:1px solid rgba(245,158,11,.45);border-radius:0 0 14px 14px;background:rgba(3,3,3,.98);box-shadow:0 16px 28px rgba(0,0,0,.82);}
+  .wtf-city-menu{position:absolute;z-index:20;left:0;right:0;top:calc(100% - 2px);display:flex;flex-direction:column;max-height:255px;overflow-y:auto;border:2px solid #F59E0B;border-top:1px solid rgba(245,158,11,.45);border-radius:0 0 14px 14px;background:rgba(3,3,3,.98);box-shadow:0 16px 28px rgba(0,0,0,.82);}
   .wtf-city-menu[hidden]{display:none;}
   .wtf-city-option{display:flex;align-items:center;width:100%;min-height:46px;padding:10px 15px;border:0;border-bottom:1px solid rgba(245,158,11,.28);background:#050505;color:#F59E0B;font:900 15px/1.1 'Archivo Narrow',sans-serif;text-align:left;cursor:pointer;}
   .wtf-city-option:last-child{border-bottom:0}.wtf-city-option:active,.wtf-city-option:hover{background:#171006;color:#FFC14D;}
@@ -18582,7 +18582,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-option.wtf-city-live{color:#FFC14D;font-size:16px;font-weight:900;box-shadow:inset 0 0 12px rgba(245,158,11,.09);}
   .wtf-city-option.wtf-city-future{color:#6f6f6f;border-bottom-color:#242424;cursor:default;}
   .wtf-city-option.wtf-city-future:hover,.wtf-city-option.wtf-city-future:active{background:#050505;color:#6f6f6f;}
-  .wtf-city-enter{display:block;width:auto;min-width:72px;margin:14px auto 0;padding:10px 22px;background:#050505;color:#F59E0B;font-size:11px;box-shadow:0 0 0 1px #F59E0B,0 0 9px rgba(245,158,11,.2);}
+  .wtf-city-enter{display:none;width:auto;min-width:72px;margin:14px auto 0;padding:10px 22px;background:#050505;color:#F59E0B;font-size:11px;box-shadow:0 0 0 1px #F59E0B,0 0 9px rgba(245,158,11,.2);}
   .wtf-city-enter:disabled{color:#76561f;box-shadow:0 0 0 1px #76561f;opacity:.72;cursor:default;}
   .wtf-city-launch-note{color:#A97722;}
   .wtf-city-shell{z-index:100018;background:rgba(0,0,0,.18);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);overflow:hidden;}
@@ -18598,7 +18598,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <button class="wtf-city-launch-close" id="wtfCityLaunchClose" type="button" aria-label="Close city selection" disabled>×</button>
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
     <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
-          <p>★ This month <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets - cultivating the cutting edge of weed, tobacco, and food, simplicity and direction, one city at a time...</p>
+          <p>★ This month <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets - cultivating the cutting edge of weed, tobacco, and food while staying focused on simplicity and direction, one city at a time...</p>
     <div class="wtf-city-select-wrap">
       <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Search…" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Search cities" aria-haspopup="listbox" aria-expanded="false"/>
       <div class="wtf-city-powered-by" aria-hidden="true">
@@ -18624,6 +18624,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Indianapolis" role="option" aria-disabled="true">Indianapolis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Jacksonville" role="option" aria-disabled="true">Jacksonville</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Kansas City" role="option" aria-disabled="true">Kansas City</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Lincoln" role="option" aria-disabled="true">Lincoln</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Long Beach" role="option" aria-disabled="true">Long Beach</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Louisville" role="option" aria-disabled="true">Louisville</button>
         <button class="wtf-city-option wtf-city-planned" type="button" data-city="Los Angeles" role="option">Los Angeles</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Memphis" role="option" aria-disabled="true">Memphis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Milwaukee" role="option" aria-disabled="true">Milwaukee</button>
@@ -18824,12 +18827,13 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
     q('wtfCityEnter').addEventListener('click',enterSelectedCity);
     q('wtfCityLaunchClose').addEventListener('click',function(){if(this.disabled)return;setOpen(q('wtfCityLaunch'),false);overlay.scrollTop=0;});
-    function openCityMenu(){var menu=q('wtfCityMenu'),select=q('wtfCitySelect');menu.removeAttribute('hidden');select.setAttribute('aria-expanded','true');}
-    q('wtfCitySelect').addEventListener('focus',openCityMenu);
-    q('wtfCitySelect').addEventListener('click',function(e){e.stopPropagation();openCityMenu();});
-    q('wtfCitySelect').addEventListener('input',function(){var query=this.value.trim().toLowerCase(),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose'),matches=[];this.dataset.value='';go.disabled=true;close.disabled=true;document.querySelectorAll('#wtfCityMenu .wtf-city-option').forEach(function(option){var starts=option.dataset.city.toLowerCase().startsWith(query),future=option.classList.contains('wtf-city-future'),match=future?(query.length>=2&&starts):(!query||starts);option.hidden=!match;if(match)matches.push(option);});if(matches.length===1&&!matches[0].classList.contains('wtf-city-future')&&matches[0].dataset.city.toLowerCase()===query){this.dataset.value=matches[0].dataset.city;go.disabled=false;close.disabled=false;}openCityMenu();});
+    function rankCityOptions(options,query){return options.slice().sort(function(a,b){var an=a.dataset.city.toLowerCase(),bn=b.dataset.city.toLowerCase(),as=an.startsWith(query)?0:1,bs=bn.startsWith(query)?0:1;return as-bs||an.localeCompare(bn);});}
+    function renderCityMenu(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),query=select.value.trim().toLowerCase(),all=[].slice.call(menu.querySelectorAll('.wtf-city-option'));all.forEach(function(option){option.hidden=true;option.style.order='';});if(!query){menu.setAttribute('hidden','');select.setAttribute('aria-expanded','false');return [];}var gold=all.filter(function(option){return !option.classList.contains('wtf-city-future');}),future=all.filter(function(option){return option.classList.contains('wtf-city-future');}),matchingGold=rankCityOptions(gold.filter(function(option){return option.dataset.city.toLowerCase().includes(query);}),query),featured=['Las Vegas','Silicon Valley','San Diego'].map(function(name){return gold.find(function(option){return option.dataset.city===name;});}).filter(Boolean),displayed=matchingGold.length?matchingGold:featured,previews=rankCityOptions(future.filter(function(option){return option.dataset.city.toLowerCase().includes(query);}),query).slice(0,3),visible=displayed.concat(previews);visible.forEach(function(option,index){option.hidden=false;option.style.order=String(index);});menu.removeAttribute('hidden');select.setAttribute('aria-expanded','true');return visible;}
+    q('wtfCitySelect').addEventListener('focus',renderCityMenu);
+    q('wtfCitySelect').addEventListener('click',function(e){e.stopPropagation();renderCityMenu();});
+    q('wtfCitySelect').addEventListener('input',function(){var query=this.value.trim().toLowerCase(),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose'),matches;this.dataset.value='';go.disabled=true;close.disabled=true;matches=renderCityMenu();if(matches.length===1&&!matches[0].classList.contains('wtf-city-future')&&matches[0].dataset.city.toLowerCase()===query){this.dataset.value=matches[0].dataset.city;go.disabled=false;close.disabled=false;}});
     q('wtfCitySelect').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var visible=[].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option')).filter(function(option){return !option.hidden;});if(!this.dataset.value&&visible.length===1&&!visible[0].classList.contains('wtf-city-future')){this.value=visible[0].dataset.city;this.dataset.value=visible[0].dataset.city;q('wtfCityEnter').disabled=false;q('wtfCityLaunchClose').disabled=false;}if(this.dataset.value){e.preventDefault();enterSelectedCity();}});
-    q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option||option.classList.contains('wtf-city-future'))return;var select=q('wtfCitySelect'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');select.dataset.value=option.dataset.city;select.value=option.dataset.city;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;close.disabled=false;go.textContent='Go';});
+    q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option||option.classList.contains('wtf-city-future'))return;var select=q('wtfCitySelect'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');select.dataset.value=option.dataset.city;select.value=option.dataset.city;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;close.disabled=false;go.textContent='Go';select.blur();enterSelectedCity();});
     document.addEventListener('click',function(e){var wrap=e.target.closest('.wtf-city-select-wrap');if(wrap)return;var menu=q('wtfCityMenu'),select=q('wtfCitySelect');if(menu)menu.setAttribute('hidden','');if(select)select.setAttribute('aria-expanded','false');});
     q('wtfCityChange').addEventListener('click',showCityLaunch);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
