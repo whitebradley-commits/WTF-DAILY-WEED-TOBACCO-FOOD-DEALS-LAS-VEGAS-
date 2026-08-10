@@ -5,6 +5,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>WTFdd.com — Weed · Tobacco · Food</title>
+<meta property="og:title" content="WTF! Check this out!"/>
+<meta property="og:description" content="Weed · Tobacco · Food 🌿🍂🍔"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="WTF! Check this out!"/>
+<meta name="twitter:description" content="Weed · Tobacco · Food 🌿🍂🍔"/>
 <meta name="wtf-newsletter-build" content="012-LOCKED-INTERNAL">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Archivo+Narrow:wght@400;500;600;700&amp;family=Baloo+2:wght@600;700;800&amp;family=Bebas+Neue&amp;family=Alfa+Slab+One&amp;family=Roboto+Condensed:wght@300;400&amp;family=IBM+Plex+Sans+Condensed:wght@400;700&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Oswald:wght@400;500&amp;display=swap" rel="stylesheet"/>
@@ -6011,6 +6016,7 @@ button[id*="back"] svg,
 <button class="tbotr-enter-circle" id="wtfLandingEnterBtn" style="width:auto;height:auto;border-radius:999px;padding:0.85rem 1.8rem;font-size:0.85rem;" type="button">I AM 21+<br/>ENTER</button>
 </div>
 </div>
+<button class="wtf2-share-page" id="wtf2SharePage" type="button" aria-label="Share this page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.7 10.7l6.6-4.2M8.7 13.3l6.6 4.2"></path></svg><span class="share-label">SHARE<br/>PAGE</span></button>
 <div aria-label="BJS Co." class="landing-bjs-corner"><svg height="52" viewbox="0 0 40 40" width="52"><circle cx="20" cy="20" fill="#0a0a0a" r="18" stroke="#FF9800" stroke-width="2"></circle><text fill="#FF9800" font-family="Archivo Black, sans-serif" font-size="12" text-anchor="middle" x="20" y="24">BJS</text></svg></div></div>
 <div class="thank-you-overlay" id="thankYouOverlay">
 <div aria-hidden="true" class="ty-sky">
@@ -18287,12 +18293,17 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 <!-- ===== WTF2 private working preview: isolated from the live WTF experience ===== -->
 <style id="wtf2-private-preview-styles">
   :root{--wtf2-red:#D7263D;--wtf2-orange:#F59E0B;--wtf2-weed:#4FAE68;--wtf2-tobacco:#8C603F;--wtf2-food:#F4CF45;}
+  /* 21+ entrance: preserve the approved gold/orange rings; red lettering only. */
+  #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{color:var(--wtf2-red)!important;}
+  #wtfLandingOverlay .landing-bjs-corner text{fill:var(--wtf2-red)!important;}
+  #wtfLandingOverlay .wtf-landing-logo.new-wtf-logo{width:min(66vw,235px)!important;height:min(44vw,157px)!important;}
+  #wtfLandingEnterBtn{padding:.75rem 1.55rem!important;font-size:.76rem!important;}
   #wtf2Overlay{position:fixed;inset:0;z-index:100000;display:none;overflow:auto;background:#000;color:#f7f3ea;font-family:'Archivo Narrow',sans-serif;overscroll-behavior:contain;}
   #wtf2Overlay.open{display:block;}
   .wtf2-shell{width:min(100%,760px);min-height:100vh;margin:0 auto;padding:20px 16px 50px;background:radial-gradient(circle at 50% 2%,rgba(215,38,61,.13),transparent 34%),#000;}
   .wtf2-top{position:relative;display:flex;justify-content:center;align-items:center;min-height:340px;margin:0 -16px 8px;overflow:hidden;isolation:isolate;}
-  .wtf2-exit{position:absolute;left:0;top:3px;width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 24px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09);}
-  .wtf2-logo{position:relative;z-index:3;display:block!important;width:min(94vw,490px)!important;height:205px!important;margin:30px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:drop-shadow(0 0 14px rgba(215,38,61,.24));}
+  .wtf2-exit{position:absolute;z-index:8;left:0;top:3px;width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 24px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09);}
+  .wtf2-logo{position:relative;z-index:6;display:block!important;width:min(94vw,490px)!important;height:205px!important;margin:30px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:drop-shadow(0 0 14px rgba(215,38,61,.24));}
   .wtf2-redline{width:82%;height:2px;margin:-2px auto 30px;background:linear-gradient(90deg,transparent,var(--wtf2-red),var(--wtf2-orange),transparent);box-shadow:0 0 10px rgba(215,38,61,.55);}
   .wtf2-hero-fx{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;}
   .wtf2-smoke{position:absolute;width:19px;height:19px;border-radius:50%;background:radial-gradient(circle,rgba(238,238,238,.58),rgba(180,180,180,.2) 48%,transparent 72%);filter:blur(1px);opacity:0;animation:wtf2Smoke 5.6s ease-out infinite;}
@@ -18306,8 +18317,8 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-smoker svg,.wtf2-chef svg,.wtf2-cloud-picnic svg{width:100%;height:100%;display:block;overflow:visible}.wtf2-smoker-puff{position:absolute;left:82px;top:24px;width:15px;height:15px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.62),transparent 70%);animation:wtf2Smoke 3.7s ease-out infinite;}
   .wtf2-chef{position:absolute;right:0;bottom:0;width:148px;height:150px;animation:wtf2CharacterBob 3.4s ease-in-out infinite reverse;filter:drop-shadow(0 5px 6px rgba(0,0,0,.55));}
   .wtf2-toss{position:absolute;right:53px;bottom:102px;font-size:23px;animation:wtf2Toss 2.4s ease-in-out infinite}.wtf2-toss.t2{right:92px;animation-delay:.8s}.wtf2-toss.t3{right:15px;animation-delay:1.6s}
-  .wtf2-cloud-picnic{position:absolute;left:50%;top:15px;width:180px;height:84px;transform:translateX(-50%);animation:wtf2CloudDrift 10s ease-in-out infinite;opacity:.92;}
-  @keyframes wtf2CloudDrift{0%,100%{transform:translateX(-53%) translateY(0)}50%{transform:translateX(-47%) translateY(8px)}}
+  .wtf2-cloud-picnic{position:absolute;left:51px;top:13px;width:112px;height:55px;animation:wtf2CloudDrift 10s ease-in-out infinite;opacity:.82;}
+  @keyframes wtf2CloudDrift{0%,100%{transform:translateX(-4px) translateY(0)}50%{transform:translateX(5px) translateY(6px)}}
   @keyframes wtf2Toss{0%,100%{transform:translate(0,20px) rotate(0);opacity:.25}50%{transform:translate(-15px,-44px) rotate(220deg);opacity:1}}
   @keyframes wtf2CharacterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
   .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;}
@@ -18317,8 +18328,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-category[data-cat="Weed"]{color:var(--wtf2-weed);}
   .wtf2-category[data-cat="Tobacco"]{color:var(--wtf2-tobacco);}
   .wtf2-category[data-cat="Food"]{color:var(--wtf2-food);}
-  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;margin:0 0 18px;border:2px solid var(--wtf2-red);border-radius:999px;background:#070707;color:#fff;font:900 16px/1 'Archivo Black',sans-serif;letter-spacing:.04em;cursor:pointer;box-shadow:0 0 18px rgba(215,38,61,.38),inset 0 0 15px rgba(245,158,11,.09);}
+  .wtf2-primary-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px;}
+  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:68px;margin:0;border:2px solid var(--wtf2-red);border-radius:18px;background:#070707;color:#fff;font:900 clamp(10px,3vw,14px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 18px rgba(215,38,61,.3),inset 0 0 15px rgba(245,158,11,.08);}
   .wtf2-near span{color:var(--wtf2-orange);font-size:22px;}
+  .wtf2-thc24{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:68px;border:2px solid var(--wtf2-weed);border-radius:18px;background:radial-gradient(circle at 25% 50%,rgba(79,174,104,.14),transparent 48%),#050805;color:#78df85;font:900 clamp(11px,3.1vw,15px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 18px rgba(79,174,104,.34),inset 0 0 16px rgba(79,174,104,.1);text-transform:uppercase;}
+  .wtf2-thc24 svg{width:34px;height:42px;overflow:visible;filter:drop-shadow(0 0 5px rgba(79,174,104,.6));flex:0 0 auto}.wtf2-thc24 span{display:block;text-align:left}
   .wtf2-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:26px;}
   .wtf2-tool{min-height:78px;border:1px solid #282828;border-radius:16px;background:linear-gradient(145deg,#0c0c0c,#030303);color:#f3efe6;font:800 14px/1.12 'Archivo Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
   .wtf2-tool strong{display:block;margin-bottom:7px;color:var(--wtf2-orange);font-size:21px;}
@@ -18352,6 +18366,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-feature-card b{font-size:17px;color:#fff;}.wtf2-feature-card small{grid-column:1;color:#898989;font-size:12px;}.wtf2-feature-card em{grid-column:2;grid-row:1/3;color:var(--wtf2-orange);font-style:normal;font-weight:800;font-size:11px;}
   .wtf2-footer{margin-top:36px;padding-top:18px;border-top:1px solid #171717;text-align:center;color:#555;font-size:11px;}
   .wtf2-full-footer{margin-top:38px;padding:24px 6px 10px;border-top:1px solid #202020;text-align:center}.wtf2-full-footer .fine-print{color:#777!important;font-size:.7rem!important;line-height:1.55!important}.wtf2-full-footer .footer-hotlink{color:#8a8a8a}.wtf2-full-footer a{color:#aaa!important}
+  .wtf2-music-toggle{position:fixed;z-index:100009;right:13px;top:13px;width:58px;height:58px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 14px rgba(245,158,11,.45),inset 0 0 11px rgba(245,158,11,.1);}.wtf2-music-toggle .note{display:block;margin-bottom:3px;font-size:17px;color:var(--wtf2-red)}.wtf2-music-toggle.is-muted{color:#777;border-color:#7b551b;box-shadow:0 0 8px rgba(245,158,11,.2)}
+  .wtf2-share-page{position:fixed;z-index:100009;left:13px;bottom:13px;width:64px;height:64px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.035em;cursor:pointer;box-shadow:0 0 12px rgba(245,158,11,.42),inset 0 0 11px rgba(245,158,11,.09);animation:wtf2SharePulse 2.2s ease-in-out infinite;}.wtf2-share-page svg{display:block;width:18px;height:18px;margin:0 auto 4px;fill:none;stroke:var(--wtf2-red);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.wtf2-share-page.is-copied{color:#75dd82;animation:none}.wtf2-share-page.is-copied svg{stroke:#75dd82}
+  .wtf2-main-share-wrap{display:flex;justify-content:flex-end;align-items:center;margin:-5px 3px 11px;}.wtf2-main-share-wrap:before{content:"SEND THIS PAGE";margin-right:9px;color:#6e6e6e;font:800 9px/1 'Archivo Narrow',sans-serif;letter-spacing:.11em;}
+  .wtf2-main-share-wrap .wtf2-share-page{position:relative;z-index:1;left:auto;bottom:auto;width:66px;height:66px;flex:0 0 auto;}
+  @keyframes wtf2SharePulse{0%,100%{box-shadow:0 0 9px rgba(245,158,11,.35),inset 0 0 9px rgba(245,158,11,.07);transform:scale(1)}50%{box-shadow:0 0 22px rgba(245,158,11,.72),0 0 34px rgba(215,38,61,.16),inset 0 0 13px rgba(245,158,11,.13);transform:scale(1.035)}}
   .wtf2-old-site-pin{appearance:none;border:0;background:transparent;color:#080808;font:700 8px/1 'Archivo Narrow',sans-serif;letter-spacing:.08em;padding:8px;cursor:pointer;}
   .wtf2-deals-modal{position:fixed;inset:0;z-index:100010;display:none;place-items:center;padding:22px;background:rgba(255,255,255,.18);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}.wtf2-deals-modal.open{display:grid}.wtf2-deals-card{position:relative;width:min(100%,390px);padding:34px 25px 25px;border:1px solid rgba(255,255,255,.8);border-radius:22px;background:rgba(255,255,255,.9);color:#080808;text-align:center;box-shadow:0 20px 70px rgba(0,0,0,.55)}.wtf2-deals-card h2{margin:0 0 14px;font:900 25px/1.05 'Archivo Black',sans-serif;text-transform:uppercase}.wtf2-deals-card p{margin:0 0 22px;font-size:17px;line-height:1.4}.wtf2-deals-card p strong{color:#1f6c38}.wtf2-deals-signup{padding:13px 22px;border:0;border-radius:999px;background:#000;color:#fff;font:900 13px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 0 2px var(--wtf2-orange)}.wtf2-deals-close{position:absolute;right:11px;top:11px;width:38px;height:38px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#000;color:var(--wtf2-red);font:900 20px/1 'Archivo Black',sans-serif;cursor:pointer}
   .wtf2-directory{display:none;}.wtf2-directory.open{display:block;position:fixed;inset:0;z-index:100002;overflow:auto;background:#000;}
@@ -18365,20 +18384,30 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   #wtf2DirList .directory-area{color:var(--wtf2-orange);}
   #wtf2DirList .listing-card{background:#080808;border-color:#242424;margin-bottom:9px;box-shadow:0 5px 18px rgba(0,0,0,.35);}
   .wtf2-result-count{margin:-5px 0 13px;color:#777;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
-  body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay{z-index:100005!important;}
-  body.wtf2-child-open #shuttleClose,body.wtf2-child-open #nearMeClose,body.wtf2-child-open #hhClose,body.wtf2-child-open #wtfNewsletterClose{width:46px!important;height:46px!important;border:2px solid var(--wtf2-orange)!important;border-radius:50%!important;background:#020202!important;color:var(--wtf2-red)!important;font:900 23px/1 'Archivo Black',sans-serif!important;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09)!important;}
+  body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay,body.wtf2-child-open #thc24Overlay{z-index:100005!important;}
+  body.wtf2-child-open #shuttleClose,body.wtf2-child-open #nearMeClose,body.wtf2-child-open #hhClose,body.wtf2-child-open #wtfNewsletterClose,body.wtf2-child-open #thc24Back{width:46px!important;height:46px!important;border:2px solid var(--wtf2-orange)!important;border-radius:50%!important;background:#020202!important;color:var(--wtf2-red)!important;font:900 23px/1 'Archivo Black',sans-serif!important;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09)!important;}
+  body.wtf2-thc24-active #thc24Overlay .directory-panel{border-color:#345d39;box-shadow:0 0 0 1px rgba(245,158,11,.2),0 0 32px rgba(79,174,104,.24),inset 0 0 24px rgba(79,174,104,.04);background:radial-gradient(circle at 50% 0,rgba(79,174,104,.12),transparent 28%),#000;}
+  body.wtf2-thc24-active #thc24Title{font-size:clamp(1.75rem,7vw,2.35rem)!important;color:#78df85!important;text-shadow:0 0 13px rgba(79,174,104,.5);letter-spacing:.02em;}
+  body.wtf2-thc24-active #thc24Overlay .directory-area{margin-top:26px;color:#3fa55a;font-size:1rem;letter-spacing:.04em;text-shadow:0 0 8px rgba(79,174,104,.22);}
+  body.wtf2-thc24-active #thc24Overlay .directory-list li{padding:15px 0!important;border-bottom-color:#243126!important;}
+  body.wtf2-thc24-active #thc24Overlay .directory-list li>div:first-child{font-size:1rem;color:#fff!important;}
+  body.wtf2-thc24-active #thc24Overlay a{color:#78df85!important;font-weight:700;}
   body.wtf2-shuttle-active #shuttleOverlay .directory-panel{background:radial-gradient(circle at 50% 15%,rgba(61,107,154,.13),transparent 40%),#000;}
   body.wtf2-shuttle-active #shuttleOverlay .shuttle-scene{border-color:#355f88;box-shadow:0 0 0 1px rgba(215,38,61,.16),0 0 24px rgba(61,107,154,.22);}
   body.wtf2-shuttle-active #shuttleOverlay .shuttle-bus{filter:drop-shadow(0 7px 6px rgba(0,0,0,.45)) drop-shadow(0 0 6px rgba(61,107,154,.35));animation-duration:12s!important;}
   body.wtf2-shuttle-active #shuttleOverlay .stop-person{animation:wtf2Passenger 2.4s ease-in-out infinite alternate;}
   body.wtf2-shuttle-active #shuttleOverlay .stop-person:nth-child(3){animation-delay:.4s}body.wtf2-shuttle-active #shuttleOverlay .stop-person:nth-child(4){animation-delay:.8s}
   @keyframes wtf2Passenger{from{transform:translateY(0)}to{transform:translateY(-3px)}}
-  @media(max-width:420px){.wtf2-top{min-height:325px}.wtf2-logo{height:188px!important}.wtf2-smoker{width:88px;height:111px}.wtf2-chef{width:125px;height:132px}.wtf2-cloud-picnic{width:155px;height:75px}}
+  @media(max-width:420px){.wtf2-top{min-height:325px}.wtf2-logo{height:188px!important}.wtf2-smoker{width:88px;height:111px}.wtf2-chef{width:125px;height:132px}.wtf2-cloud-picnic{left:45px;top:16px;width:92px;height:47px}.wtf2-music-toggle{width:52px;height:52px;font-size:7px}.wtf2-share-page{width:58px;height:58px;font-size:7px}}
+  #wtfLandingOverlay>.wtf2-share-page{left:12px;bottom:12px;width:52px;height:52px;font-size:6px;letter-spacing:.02em;}
+  #wtfLandingOverlay>.wtf2-share-page svg{width:14px;height:14px;margin-bottom:2px;}
+  @media(max-width:520px){#wtfLandingOverlay>.wtf2-share-page{width:44px;height:44px;font-size:5.5px;}#wtfLandingOverlay>.wtf2-share-page svg{width:12px;height:12px;margin-bottom:1px;}}
   @media(min-width:600px){.wtf2-shell{padding-left:36px;padding-right:36px}.wtf2-top{min-height:330px}.wtf2-logo{width:540px!important;height:245px!important}.wtf2-category{min-height:138px}.wtf2-tools{grid-template-columns:repeat(4,1fr)}.wtf2-tool{min-height:92px}}
   @media(prefers-reduced-motion:reduce){#wtf2Overlay *{animation:none!important;transition:none!important;}}
 </style>
 
 <section id="wtf2Overlay" aria-hidden="true">
+  <button class="wtf2-music-toggle is-muted" id="wtf2MusicToggle" type="button" aria-pressed="false" aria-label="Turn music on"><span class="note">♫</span><span class="music-label">MUSIC ON</span></button>
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Return to current WTF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -18397,7 +18426,11 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-category" data-cat="Tobacco" type="button"><span class="wtf2-icon">♨</span>Tobacco</button>
       <button class="wtf2-category" data-cat="Food" type="button"><span class="wtf2-icon">🍴</span>Food</button>
     </div>
-    <button class="wtf2-near" id="wtf2Near" type="button"><span>⌖</span> FIND WTF NEAR ME</button>
+    <div class="wtf2-main-share-wrap"><button class="wtf2-share-page" id="wtf2SharePageMain" type="button" aria-label="Share this page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.7 10.7l6.6-4.2M8.7 13.3l6.6 4.2"></path></svg><span class="share-label">SHARE<br>PAGE</span></button></div>
+    <div class="wtf2-primary-row">
+      <button class="wtf2-near" id="wtf2Near" type="button"><span>⌖</span> FIND WTF<br>NEAR ME</button>
+      <button class="wtf2-thc24" id="wtf2Thc24" type="button"><svg viewBox="0 0 50 64" aria-hidden="true"><path d="M8 57C20 39 29 22 42 6" fill="none" stroke="#62cf70" stroke-width="3" stroke-linecap="round"/><path d="M25 32C13 34 7 27 7 19c11-1 19 3 18 13zM31 23c-2-11 5-18 15-19 1 10-4 18-15 19zM19 43C9 45 3 40 2 32c9-2 16 2 17 11zM35 39c-2-10 4-17 13-19 2 9-3 17-13 19zM12 53C5 54 1 50 1 44c7-1 12 2 11 9z" fill="#71df78" stroke="#2f923e" stroke-width="1"/></svg><span>24 Hour<br>THC</span></button>
+    </div>
     <div class="wtf2-tools">
       <button class="wtf2-tool wtf2-tool-shuttle" id="wtf2Shuttle" type="button"><strong>🚌</strong>Free Shuttle</button>
       <button class="wtf2-tool wtf2-tool-hh" id="wtf2HH" type="button"><strong>🍽</strong>High &amp; Hungry</button>
@@ -18452,11 +18485,29 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 <script id="wtf2-private-preview-script">
 (function(){
   var overlay,dir,currentCat='Weed',currentArea='All';
+  var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false;
   function q(id){return document.getElementById(id);}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
-  function closeWtf2(){setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.style.overflow='';}
-  function returnToAgeGate(){closeWtf2();var gate=q('wtfLandingOverlay');if(gate)gate.classList.add('open');document.body.style.overflow='hidden';}
+  function closeWtf2(){setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
+  function returnToAgeGate(){stopMusic();closeWtf2();var gate=q('wtfLandingOverlay');if(gate)gate.classList.add('open');document.body.style.overflow='hidden';}
+  function musicTone(freq,when,duration,type,volume){
+    if(!musicCtx||!musicMaster)return;var osc=musicCtx.createOscillator(),gain=musicCtx.createGain();osc.type=type||'sine';osc.frequency.setValueAtTime(freq,when);gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.012);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);osc.connect(gain);gain.connect(musicMaster);osc.start(when);osc.stop(when+duration+.03);
+  }
+  function musicBeat(){
+    if(!musicOn||!musicCtx)return;var t=musicCtx.currentTime+.025,bass=[110,110,146.83,98,110,164.81,146.83,98],lead=[440,0,523.25,0,659.25,0,523.25,392];var i=musicStep%8;
+    musicTone(bass[i],t,.24,'triangle',.12);if(lead[i])musicTone(lead[i],t+.04,.12,'square',.022);if(i%2===0){musicTone(58,t,.09,'sine',.18);}if(i===3||i===7)musicTone(2200,t,.035,'square',.009);musicStep++;
+  }
+  function updateMusicButton(){var b=q('wtf2MusicToggle');if(!b)return;b.classList.toggle('is-muted',!musicOn);b.setAttribute('aria-pressed',musicOn?'true':'false');b.setAttribute('aria-label',musicOn?'Turn music off':'Turn music on');var l=b.querySelector('.music-label');if(l)l.textContent=musicOn?'MUSIC OFF':'MUSIC ON';}
+  function startMusic(){
+    try{if(!musicCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;musicCtx=new AC();musicMaster=musicCtx.createGain();musicMaster.gain.value=.17;musicMaster.connect(musicCtx.destination);}if(musicCtx.state==='suspended')musicCtx.resume();if(musicOn)return;musicOn=true;musicStep=0;musicBeat();musicTimer=setInterval(musicBeat,330);updateMusicButton();}catch(_e){}
+  }
+  function stopMusic(){musicOn=false;if(musicTimer){clearInterval(musicTimer);musicTimer=null;}if(musicMaster)musicMaster.gain.setTargetAtTime(.0001,musicCtx.currentTime,.035);updateMusicButton();}
+  function toggleMusic(){if(musicOn){stopMusic();}else{if(musicMaster)musicMaster.gain.setValueAtTime(.17,musicCtx.currentTime);startMusic();}}
+  async function shareWtf2(button){
+    var b=button||q('wtf2SharePage'),label=b&&b.querySelector('.share-label'),url=window.location.href,title='WTF! Check this out!',shareText='WTF! Check this out! 🌿🍂🍔';
+    try{if(navigator.share){await navigator.share({title:title,text:shareText,url:url});return;}var copied=shareText+' '+url;if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(copied);}else{var t=document.createElement('textarea');t.value=copied;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}if(b&&label){b.classList.add('is-copied');label.innerHTML='LINK<br>COPIED';setTimeout(function(){b.classList.remove('is-copied');label.innerHTML='SHARE<br>PAGE';},1800);}}catch(_e){}
+  }
   function entriesFor(cat,area){
     if(cat==='Food'){
       var food=(window.HIGH_HUNGRY_LIST||[]);
@@ -18490,21 +18541,25 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
-    q('wtf2SecretLink').addEventListener('click',openWtf2);q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
-    var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){setTimeout(openWtf2,40);});
+    q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
+    var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2,40);});
+    q('wtf2MusicToggle').addEventListener('click',toggleMusic);
+    q('wtf2SharePage').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
+    q('wtf2SharePageMain').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
     document.querySelectorAll('.wtf2-category').forEach(function(b){b.addEventListener('click',function(){openDirectory(b.dataset.cat);});});
     document.querySelectorAll('.wtf2-feature-card em').forEach(function(e){e.parentElement.addEventListener('click',function(){var t=e.textContent;openDirectory(t.indexOf('TOBACCO')>-1?'Tobacco':t.indexOf('FOOD')>-1?'Food':'Weed');});e.parentElement.style.cursor='pointer';});
     q('wtf2AreaRow').addEventListener('click',function(e){var b=e.target.closest('.wtf2-area');if(!b)return;currentArea=b.dataset.area;document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(x){x.classList.toggle('active',x===b);});render();});
     q('wtf2Shuttle').addEventListener('click',function(){document.body.classList.add('wtf2-shuttle-active');openChild('shuttleOverlay');});
     q('wtf2Near').addEventListener('click',function(){openChild('nearMeOverlay',function(){if(window.WTFUI&&window.WTFUI.openNearMe)window.WTFUI.openNearMe();else setOpen(q('nearMeOverlay'),true);});});
+    q('wtf2Thc24').addEventListener('click',function(){document.body.classList.add('wtf2-thc24-active');openChild('thc24Overlay');});
     q('wtf2HH').addEventListener('click',function(){openDirectory('Food');});
     q('wtf2Deals').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),true);});
     q('wtf2DealsClose').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);});
     q('wtf2DealsSignup').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
-    q('wtf2OldSitePin').addEventListener('click',closeWtf2);
+    q('wtf2OldSitePin').addEventListener('click',function(){stopMusic();closeWtf2();});
     q('wtf2Overlay').addEventListener('click',function(e){var b=e.target.closest('.wtf2-full-footer [data-dest="wtf"]');if(!b)return;e.preventDefault();e.stopPropagation();overlay.scrollTo({top:0,behavior:'smooth'});});
     q('wtf2Newsletter').addEventListener('click',function(){openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
-    document.addEventListener('click',function(e){if(e.target.closest('#shuttleClose,#nearMeClose,#wtfNewsletterClose,#hhClose')){document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');}});
+    document.addEventListener('click',function(e){if(e.target.closest('#shuttleClose,#nearMeClose,#wtfNewsletterClose,#hhClose,#thc24Back')){document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
