@@ -18327,22 +18327,24 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   @keyframes wtf2TinyDriftLeft{0%{transform:translate3d(20px,0,0) rotate(5deg);opacity:0}8%{opacity:.92}48%{transform:translate3d(-54vw,16px,0) rotate(-4deg)}92%{opacity:.92}100%{transform:translate3d(calc(-100vw - 90px),-3px,0) rotate(4deg);opacity:0}}
   @keyframes wtf2CharacterBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
   .wtf2-category-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 auto 18px;transform:translateY(-10px);}
-  .wtf2-category{position:relative;min-height:118px;padding:15px 6px 12px;border-radius:20px;background:#070707;color:#fff;font:900 clamp(14px,4.2vw,20px)/1 'Archivo Black',sans-serif;text-transform:uppercase;cursor:pointer;overflow:hidden;}
+  .wtf2-category{position:relative;min-height:118px;padding:15px 6px 12px;border-radius:20px;background:#070707;color:#fff;font:900 clamp(14px,4.2vw,20px)/1 'Archivo Black',sans-serif;text-transform:uppercase;cursor:pointer;overflow:hidden;animation:wtf2SoftTilePulse 4.8s ease-in-out infinite;}
   .wtf2-category:before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid currentColor;opacity:.9;box-shadow:inset 0 0 18px currentColor;pointer-events:none;}
   .wtf2-category .wtf2-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 10px;border:1px solid currentColor;border-radius:50%;font-size:25px;background:#020202;box-shadow:0 0 17px currentColor;}
   .wtf2-category[data-cat="Weed"]{color:var(--wtf2-weed);}
   .wtf2-category[data-cat="Tobacco"]{color:var(--wtf2-tobacco);}
   .wtf2-category[data-cat="Food"]{color:var(--wtf2-food);}
   .wtf2-primary-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 24px;transform:translateY(6px);}
-  .wtf2-near{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:68px;margin:0;border:2px solid var(--wtf2-red);border-radius:18px;background:#070707;color:#fff;font:900 clamp(10px,3vw,14px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;animation:wtf2NearTilePulse 2.5s ease-in-out infinite;}
-  .wtf2-near .wtf2-near-logo.new-wtf-logo{display:block;width:49px;height:33px;flex:0 0 49px;margin:0;background-size:contain;background-position:center;background-repeat:no-repeat;}
-  .wtf2-near .wtf2-near-text{display:block;background:linear-gradient(90deg,#55B76B 0%,#8C603F 50%,#F4CF45 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-align:left;text-shadow:none;filter:none;}
-  .wtf2-thc24{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:68px;border:2px solid var(--wtf2-weed);border-radius:18px;background:radial-gradient(circle at 25% 50%,rgba(79,174,104,.14),transparent 48%),#050805;color:#78df85;font:900 clamp(11px,3.1vw,15px)/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;text-transform:uppercase;animation:wtf2ThcTilePulse 2.5s ease-in-out infinite;}
-  .wtf2-thc24 svg{width:34px;height:42px;overflow:visible;filter:drop-shadow(0 0 5px rgba(79,174,104,.6));flex:0 0 auto}.wtf2-thc24 span{display:block;text-align:left}
-  @keyframes wtf2NearTilePulse{0%,100%{box-shadow:0 0 10px rgba(201,2,1,.24),inset 0 0 12px rgba(245,158,11,.05)}50%{box-shadow:0 0 23px rgba(201,2,1,.62),inset 0 0 18px rgba(201,2,1,.11)}}
-  @keyframes wtf2ThcTilePulse{0%,100%{box-shadow:0 0 10px rgba(79,174,104,.25),inset 0 0 12px rgba(79,174,104,.06)}50%{box-shadow:0 0 24px rgba(79,174,104,.68),inset 0 0 19px rgba(79,174,104,.14)}}
+  .wtf2-near{display:grid;grid-template-columns:49px 1fr 25px;align-items:center;gap:5px;width:100%;min-height:68px;margin:0;padding:5px 10px 5px 5px;border:2px solid var(--wtf2-red);border-radius:18px;background:#070707;color:var(--wtf2-orange);font:900 clamp(12px,3.4vw,16px)/1 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;animation:wtf2NearTilePulse 1.65s ease-in-out infinite;}
+  .wtf2-near .wtf2-near-logo.new-wtf-logo{display:block;width:49px;height:33px;margin:0;background-size:contain;background-position:center;background-repeat:no-repeat;}
+  .wtf2-near .wtf2-near-text{display:block;color:var(--wtf2-orange);-webkit-text-fill-color:var(--wtf2-orange);text-align:center;text-shadow:none;filter:none;white-space:nowrap;}
+  .wtf2-near-pin{display:block;width:23px;height:27px;color:var(--wtf2-orange);filter:none;}
+  .wtf2-thc24{display:grid;grid-template-columns:36px 1fr;align-items:center;justify-content:center;gap:5px;width:100%;min-height:68px;padding:5px 8px 5px 7px;border:2px solid var(--wtf2-weed);border-radius:18px;background:radial-gradient(circle at 25% 50%,rgba(79,174,104,.14),transparent 48%),#050805;color:#78df85;font:900 clamp(10px,3.25vw,15px)/1 'Archivo Black',sans-serif;letter-spacing:.01em;cursor:pointer;text-transform:uppercase;animation:wtf2ThcTilePulse 1.65s ease-in-out infinite;}
+  .wtf2-thc24 svg{width:34px;height:42px;overflow:visible;filter:drop-shadow(0 0 5px rgba(79,174,104,.6));}.wtf2-thc24 span{display:block;text-align:center;white-space:nowrap}
+  @keyframes wtf2NearTilePulse{0%,100%{box-shadow:0 0 9px rgba(201,2,1,.3),inset 0 0 10px rgba(245,158,11,.05);transform:scale(1)}50%{box-shadow:0 0 31px rgba(201,2,1,.88),0 0 42px rgba(245,158,11,.32),inset 0 0 21px rgba(201,2,1,.16);transform:scale(1.035)}}
+  @keyframes wtf2ThcTilePulse{0%,100%{box-shadow:0 0 9px rgba(79,174,104,.3),inset 0 0 10px rgba(79,174,104,.06);transform:scale(1)}50%{box-shadow:0 0 32px rgba(79,174,104,.9),0 0 43px rgba(79,174,104,.32),inset 0 0 22px rgba(79,174,104,.18);transform:scale(1.035)}}
+  @keyframes wtf2SoftTilePulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.008);filter:brightness(1.08)}}
   .wtf2-tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:26px;}
-  .wtf2-tool{min-height:78px;border:1px solid #282828;border-radius:16px;background:linear-gradient(145deg,#0c0c0c,#030303);color:#f3efe6;font:800 14px/1.12 'Archivo Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);}
+  .wtf2-tool{min-height:78px;border:1px solid #282828;border-radius:16px;background:linear-gradient(145deg,#0c0c0c,#030303);color:#f3efe6;font:800 14px/1.12 'Archivo Narrow',sans-serif;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);animation:wtf2SoftTilePulse 4.8s ease-in-out infinite;}
   .wtf2-tool strong{display:block;margin-bottom:7px;color:var(--wtf2-orange);font-size:21px;}
   .wtf2-tool-shuttle{border-color:#3D6B9A;box-shadow:0 0 13px rgba(61,107,154,.22);}
   .wtf2-tool-hh{border-color:var(--wtf2-food);box-shadow:0 0 13px rgba(244,207,69,.16);}
@@ -18375,6 +18377,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-feature-card[data-category="weed"]{border-left-color:var(--wtf2-weed)}.wtf2-feature-card[data-category="weed"] em{color:#78DF85}
   .wtf2-feature-card[data-category="tobacco"]{border-left-color:var(--wtf2-tobacco)}.wtf2-feature-card[data-category="tobacco"] em{color:#9A633A}
   .wtf2-feature-card[data-category="food"]{border-left-color:var(--wtf2-food)}.wtf2-feature-card[data-category="food"] em{color:#EE8800}
+  .wtf2-feature-card[data-category="weed"] b{color:#78DF85}.wtf2-feature-card[data-category="tobacco"] b{color:#9A633A}.wtf2-feature-card[data-category="food"] b{color:#EE8800}
   .wtf2-footer{margin-top:36px;padding-top:18px;border-top:1px solid #171717;text-align:center;color:#555;font-size:11px;}
   .wtf2-full-footer{margin-top:38px;padding:24px 6px 10px;border-top:1px solid #202020;text-align:center}.wtf2-full-footer .fine-print{color:#777!important;font-size:.7rem!important;line-height:1.55!important}.wtf2-full-footer .footer-hotlink{color:#8a8a8a}.wtf2-full-footer a{color:#aaa!important}
   .wtf2-music-toggle{position:fixed;z-index:100009;right:13px;top:13px;width:58px;height:58px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 14px rgba(245,158,11,.45),inset 0 0 11px rgba(245,158,11,.1);}.wtf2-music-toggle .note{display:block;margin-bottom:3px;font-size:17px;color:var(--wtf2-red)}.wtf2-music-toggle.is-muted{color:#777;border-color:#7b551b;box-shadow:0 0 8px rgba(245,158,11,.2)}
@@ -18455,8 +18458,8 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-category" data-cat="Food" type="button"><span class="wtf2-icon">🍴</span>Food</button>
     </div>
     <div class="wtf2-primary-row">
-      <button class="wtf2-near" id="wtf2Near" type="button"><span class="new-wtf-logo wtf2-near-logo" role="img" aria-label="WTF"></span><span class="wtf2-near-text">NEAR ME</span></button>
-      <button class="wtf2-thc24" id="wtf2Thc24" type="button"><svg viewBox="0 0 50 64" aria-hidden="true"><path d="M8 57C20 39 29 22 42 6" fill="none" stroke="#62cf70" stroke-width="3" stroke-linecap="round"/><path d="M25 32C13 34 7 27 7 19c11-1 19 3 18 13zM31 23c-2-11 5-18 15-19 1 10-4 18-15 19zM19 43C9 45 3 40 2 32c9-2 16 2 17 11zM35 39c-2-10 4-17 13-19 2 9-3 17-13 19zM12 53C5 54 1 50 1 44c7-1 12 2 11 9z" fill="#71df78" stroke="#2f923e" stroke-width="1"/></svg><span>24 Hour<br>THC</span></button>
+      <button class="wtf2-near" id="wtf2Near" type="button"><span class="new-wtf-logo wtf2-near-logo" role="img" aria-label="WTF"></span><span class="wtf2-near-text">NEAR ME</span><svg class="wtf2-near-pin" viewBox="0 0 24 30" aria-hidden="true"><path d="M12 28S3 18.2 3 11a9 9 0 1 1 18 0c0 7.2-9 17-9 17Z" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="11" r="3.2" fill="currentColor"/></svg></button>
+      <button class="wtf2-thc24" id="wtf2Thc24" type="button"><svg viewBox="0 0 50 64" aria-hidden="true"><path d="M8 57C20 39 29 22 42 6" fill="none" stroke="#62cf70" stroke-width="3" stroke-linecap="round"/><path d="M25 32C13 34 7 27 7 19c11-1 19 3 18 13zM31 23c-2-11 5-18 15-19 1 10-4 18-15 19zM19 43C9 45 3 40 2 32c9-2 16 2 17 11zM35 39c-2-10 4-17 13-19 2 9-3 17-13 19zM12 53C5 54 1 50 1 44c7-1 12 2 11 9z" fill="#71df78" stroke="#2f923e" stroke-width="1"/></svg><span>24 HOUR THC</span></button>
     </div>
     <div class="wtf2-tools">
       <button class="wtf2-tool wtf2-tool-shuttle" id="wtf2Shuttle" type="button"><strong>🚌</strong>Free Shuttle</button>
