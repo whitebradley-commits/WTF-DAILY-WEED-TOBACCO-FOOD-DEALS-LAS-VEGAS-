@@ -18372,6 +18372,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-featured{display:grid;gap:9px;}
   .wtf2-feature-card{display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;padding:14px;border:1px solid #292929;border-left:3px solid var(--wtf2-red);border-radius:13px;background:#080808;text-align:left;}
   .wtf2-feature-card b{font-size:17px;color:#fff;}.wtf2-feature-card small{grid-column:1;color:#898989;font-size:12px;}.wtf2-feature-card em{grid-column:2;grid-row:1/3;color:var(--wtf2-orange);font-style:normal;font-weight:800;font-size:11px;}
+  .wtf2-feature-card[data-category="weed"]{border-left-color:var(--wtf2-weed)}.wtf2-feature-card[data-category="weed"] em{color:#78DF85}
+  .wtf2-feature-card[data-category="tobacco"]{border-left-color:var(--wtf2-tobacco)}.wtf2-feature-card[data-category="tobacco"] em{color:#9A633A}
+  .wtf2-feature-card[data-category="food"]{border-left-color:var(--wtf2-food)}.wtf2-feature-card[data-category="food"] em{color:#EE8800}
   .wtf2-footer{margin-top:36px;padding-top:18px;border-top:1px solid #171717;text-align:center;color:#555;font-size:11px;}
   .wtf2-full-footer{margin-top:38px;padding:24px 6px 10px;border-top:1px solid #202020;text-align:center}.wtf2-full-footer .fine-print{color:#777!important;font-size:.7rem!important;line-height:1.55!important}.wtf2-full-footer .footer-hotlink{color:#8a8a8a}.wtf2-full-footer a{color:#aaa!important}
   .wtf2-music-toggle{position:fixed;z-index:100009;right:13px;top:13px;width:58px;height:58px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 14px rgba(245,158,11,.45),inset 0 0 11px rgba(245,158,11,.1);}.wtf2-music-toggle .note{display:block;margin-bottom:3px;font-size:17px;color:var(--wtf2-red)}.wtf2-music-toggle.is-muted{color:#777;border-color:#7b551b;box-shadow:0 0 8px rgba(245,158,11,.2)}
@@ -18400,6 +18403,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   #wtf2Directory[data-category="food"]{--wtf2-directory-accent:#EE8800;}
   #wtf2Directory[data-category] .wtf2-dir-title,#wtf2Directory[data-category] #wtf2DirList .directory-area,#wtf2Directory[data-category] #wtf2DirList .listing-name{color:var(--wtf2-directory-accent)!important;text-shadow:none;}
   #wtf2Directory[data-category] #wtf2DirList .listing-name{font-weight:800;}
+  #wtf2Directory[data-category="weed"] #wtf2DirList .directory-area,#wtf2Directory[data-category="tobacco"] #wtf2DirList .directory-area{color:var(--wtf2-orange)!important;font-weight:900;}
+  #wtf2Directory[data-category="food"] #wtf2DirList .directory-area{font-weight:900;}
+  #wtf2Directory[data-category="food"] #wtf2DirList .listing-name{font-weight:500;}
   #wtf2Directory[data-category] #wtf2DirList .entry-detail,#wtf2Directory[data-category] #wtf2DirList .entry-claim,#wtf2Directory[data-category] .wtf2-result-count,#wtf2Directory[data-category] #wtf2DirList .listing-chevron{color:var(--wtf2-directory-accent)!important;opacity:.78;text-shadow:none;}
   .wtf2-result-count{margin:-5px 0 13px;color:#777;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
   body.wtf2-child-open #shuttleOverlay,body.wtf2-child-open #nearMeOverlay,body.wtf2-child-open #hhOverlay,body.wtf2-child-open #wtfNewsletterOverlay,body.wtf2-child-open #thc24Overlay{z-index:100005!important;}
@@ -18469,12 +18475,12 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     </div>
     <div class="wtf2-popular-head"><h2>Popular Right Now</h2><span>Tap a category above</span></div>
     <div class="wtf2-featured">
-      <div class="wtf2-feature-card"><b>Planet 13</b><small>Weed · The Strip · Free shuttle available</small><em>VIEW WEED</em></div>
-      <div class="wtf2-feature-card"><b>Puff Vegas Smoke Shop</b><small>Tobacco · The Strip · Open 24 hours</small><em>VIEW TOBACCO</em></div>
-      <div class="wtf2-feature-card"><b>Carson Kitchen</b><small>Food · Downtown · High &amp; Hungry</small><em>VIEW FOOD</em></div>
-      <div class="wtf2-feature-card"><b>NuWu Cannabis</b><small>Weed · Downtown · 24-hour drive-thru</small><em>VIEW WEED</em></div>
-      <div class="wtf2-feature-card"><b>Mr. Bill's Pipe &amp; Tobacco Co.</b><small>Tobacco · Downtown · Local favorite</small><em>VIEW TOBACCO</em></div>
-      <div class="wtf2-feature-card"><b>Joël Robuchon</b><small>Food · The Strip · High &amp; Hungry</small><em>VIEW FOOD</em></div>
+      <div class="wtf2-feature-card" data-category="weed"><b>Planet 13</b><small>Weed · The Strip · Free shuttle available</small><em>VIEW WEED</em></div>
+      <div class="wtf2-feature-card" data-category="tobacco"><b>Puff Vegas Smoke Shop</b><small>Tobacco · The Strip · Open 24 hours</small><em>VIEW TOBACCO</em></div>
+      <div class="wtf2-feature-card" data-category="food"><b>Carson Kitchen</b><small>Food · Downtown · High &amp; Hungry</small><em>VIEW FOOD</em></div>
+      <div class="wtf2-feature-card" data-category="weed"><b>NuWu Cannabis</b><small>Weed · Downtown · 24-hour drive-thru</small><em>VIEW WEED</em></div>
+      <div class="wtf2-feature-card" data-category="tobacco"><b>Mr. Bill's Pipe &amp; Tobacco Co.</b><small>Tobacco · Downtown · Local favorite</small><em>VIEW TOBACCO</em></div>
+      <div class="wtf2-feature-card" data-category="food"><b>Joël Robuchon</b><small>Food · The Strip · High &amp; Hungry</small><em>VIEW FOOD</em></div>
     </div>
     <div class="wtf2-full-footer">
       <p class="fine-print"><button class="footer-hotlink" data-dest="wtf" type="button">WTF</button> <button class="footer-hotlink" data-dest="lv" type="button">LV Steam</button> <button class="footer-hotlink" data-dest="tpa" type="button">TPA</button> <button class="footer-hotlink" data-dest="best" type="button">BOP</button> are independent listing services developed by <button class="footer-hotlink" data-dest="about" type="button">BJS CO.</button><svg height="13" style="vertical-align:-2px;margin:0 2px 0 3px;" viewBox="0 0 40 40" width="13"><circle cx="20" cy="20" fill="#0a0a0a" r="18" stroke="#F59E0B" stroke-width="2"></circle><text fill="#F59E0B" font-family="Archivo Black, sans-serif" font-size="12" text-anchor="middle" x="20" y="24">BJS</text></svg> and are not affiliated with, endorsed by, or operated on behalf of any business shown here. Specials are submitted by businesses or their staff and may change without notice — always confirm details directly. 21+ for alcohol and cannabis listings. Please consume responsibly.</p>
