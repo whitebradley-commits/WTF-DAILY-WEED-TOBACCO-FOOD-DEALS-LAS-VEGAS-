@@ -18606,55 +18606,63 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <div class="wtf-city-inline-coming" id="wtfCityInlineComing" role="status" aria-live="polite" hidden><span class="wtf-city-inline-coming-city" id="wtfCityInlineComingCity"></span><strong>Coming Soon</strong></div>
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
     <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
-          <p>★ This month <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is expanding into nine of the nation’s largest and most exciting markets - cultivating the cutting edge of weed, tobacco, and food while staying focused on simplicity and direction, one city at a time...</p>
+          <p>★ <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is now live in 20 of the nation’s leading weed, tobacco, and food markets — simple direction, one city at a time.</p>
     <div class="wtf-city-select-wrap">
-      <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Search…" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Search cities" aria-haspopup="listbox" aria-expanded="false"/>
+      <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Enter your city" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Enter your city" aria-haspopup="listbox" aria-expanded="false"/>
       <div class="wtf-city-powered-by" aria-hidden="true">
         ⚡ Powered by
         <svg height="15" viewBox="0 0 40 40" width="15"><circle cx="20" cy="20" fill="#0a0a0a" r="18" stroke="#F59E0B" stroke-width="2"></circle><text fill="#F59E0B" font-family="Archivo Black, sans-serif" font-size="12" text-anchor="middle" x="20" y="24">BJS</text></svg>
       </div>
       <div class="wtf-city-menu" id="wtfCityMenu" role="listbox" hidden>
         <button class="wtf-city-option wtf-city-live" type="button" data-city="Las Vegas" role="option">★ Las Vegas</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Albuquerque" role="option" aria-disabled="true">Albuquerque</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Albuquerque" role="option">★ Albuquerque</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Anchorage" role="option">★ Anchorage</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Atlanta" role="option" aria-disabled="true">Atlanta</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Austin" role="option" aria-disabled="true">Austin</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Baltimore" role="option" aria-disabled="true">Baltimore</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Boston" role="option">Boston</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Boise" role="option" aria-disabled="true">Boise</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Boulder" role="option" aria-disabled="true">Boulder</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Boston" role="option">★ Boston</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Charlotte" role="option" aria-disabled="true">Charlotte</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Chicago" role="option">Chicago</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Chicago" role="option">★ Chicago</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Cleveland" role="option" aria-disabled="true">Cleveland</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Columbus" role="option" aria-disabled="true">Columbus</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Colorado Springs" role="option" aria-disabled="true">Colorado Springs</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Dallas" role="option" aria-disabled="true">Dallas</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Denver" role="option">Denver</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Detroit" role="option">Detroit</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Denver" role="option">★ Denver</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Detroit" role="option">★ Detroit</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Helsinki" role="option" aria-disabled="true">Helsinki</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Houston" role="option" aria-disabled="true">Houston</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Indianapolis" role="option" aria-disabled="true">Indianapolis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Jacksonville" role="option" aria-disabled="true">Jacksonville</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Kansas City" role="option" aria-disabled="true">Kansas City</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Kansas City" role="option">★ Kansas City</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Lincoln" role="option" aria-disabled="true">Lincoln</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Long Beach" role="option" aria-disabled="true">Long Beach</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Louisville" role="option" aria-disabled="true">Louisville</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Los Angeles" role="option">Los Angeles</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Los Angeles" role="option">★ Los Angeles</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Memphis" role="option" aria-disabled="true">Memphis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Milwaukee" role="option" aria-disabled="true">Milwaukee</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Miami" role="option" aria-disabled="true">Miami</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Minneapolis" role="option" aria-disabled="true">Minneapolis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Nashville" role="option" aria-disabled="true">Nashville</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="New Orleans" role="option" aria-disabled="true">New Orleans</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="New York City" role="option">New York City</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Oklahoma City" role="option" aria-disabled="true">Oklahoma City</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="New York City" role="option">★ New York City</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Oakland / Berkeley" role="option">★ Oakland / Berkeley</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Oklahoma City" role="option">★ Oklahoma City</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Orlando" role="option" aria-disabled="true">Orlando</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Philadelphia" role="option" aria-disabled="true">Philadelphia</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Phoenix" role="option" aria-disabled="true">Phoenix</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Portland" role="option">Portland</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Phoenix / Scottsdale" role="option">★ Phoenix / Scottsdale</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Portland" role="option">★ Portland</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Raleigh" role="option" aria-disabled="true">Raleigh</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Sacramento" role="option" aria-disabled="true">Sacramento</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Sacramento" role="option">★ Sacramento</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Salt Lake City" role="option" aria-disabled="true">Salt Lake City</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="San Diego" role="option">San Diego</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Seattle" role="option" aria-disabled="true">Seattle</button>
-        <button class="wtf-city-option wtf-city-planned" type="button" data-city="Silicon Valley" role="option">Silicon Valley</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="St. Louis" role="option" aria-disabled="true">St. Louis</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="San Diego" role="option">★ San Diego</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="San Francisco" role="option">★ San Francisco</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Seattle" role="option">★ Seattle</button>
+        <button class="wtf-city-option wtf-city-future" type="button" data-city="Silicon Valley" role="option" aria-disabled="true">Silicon Valley</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="St. Louis" role="option">★ St. Louis</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Tampa" role="option" aria-disabled="true">Tampa</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Tulsa" role="option">★ Tulsa</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Washington, D.C." role="option" aria-disabled="true">Washington, D.C.</button>
       </div>
     </div>
@@ -18752,22 +18760,111 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   </div>
 </section>
 
+<script id="wtf-multi-city-data">
+/* Starter directories for the 19 new live markets. Las Vegas continues to use
+   its full, hand-built directory above. Map-search links keep every starter
+   listing useful while addresses, hours and direct vendor links are expanded. */
+const WTF_CITY_STARTERS = {
+  'Los Angeles': {
+    weed: ['The Artist Tree','Green Qween','ERBA Markets','Off The Charts','STIIIZY Downtown Los Angeles'],
+    food: ['Howlin’ Ray’s','Guisados','Langer’s Delicatessen','Sonoratown','Kogi BBQ']
+  },
+  'Denver': {
+    weed: ['Simply Pure','Verde Natural','Lightshade','The Joint by Cannabis','Native Roots'],
+    food: ['My Brother’s Bar','Biker Jim’s Gourmet Dogs','Denver Biscuit Company','Blue Pan Pizza','Sam’s No. 3']
+  },
+  'Portland': {
+    weed: ['Farma','Archive Portland','TreeHouse Collective','Electric Lettuce','Kings of Canna'],
+    food: ['Jojo','Matt’s BBQ','Eem','Screen Door','Hawthorne Asylum']
+  },
+  'New York City': {
+    weed: ['Housing Works Cannabis Co.','The Travel Agency Union Square','Gotham','CONBUD','Dazed Cannabis'],
+    food: ['Katz’s Delicatessen','Prince Street Pizza','Los Tacos No. 1','Gray’s Papaya','Mamoun’s Falafel']
+  },
+  'Seattle': {
+    weed: ['Dockside Cannabis','Uncle Ike’s','Ruckus Recreational','The Reef Cannabis','Have a Heart Seattle'],
+    food: ['Dick’s Drive-In','Un Bien','Tats Delicatessen','Piroshky Piroshky','Kau Kau BBQ']
+  },
+  'San Francisco': {
+    weed: ['The Apothecarium','Moe Greens','SPARC','Barbary Coast','Purple Star MD'],
+    food: ['Taqueria El Farolito','Golden Boy Pizza','House of Prime Rib','Swan Oyster Depot','Burma Superstar']
+  },
+  'Chicago': {
+    weed: ['Dispensary 33','Sunnyside River North','Ascend River North','Ivy Hall','Grasshopper Club'],
+    food: ['Johnnie’s Beef','Red Hot Ranch','Jim’s Original','Pequod’s Pizza','Harold’s Chicken Shack']
+  },
+  'Phoenix / Scottsdale': {
+    weed: ['Sol Flower','Sunday Goods','The Mint Cannabis','Curaleaf Scottsdale','Trulieve Phoenix'],
+    food: ['Pizzeria Bianco','Tacos Chiwas','Little Miss BBQ','The Stand Arcadia','Welcome Diner']
+  },
+  'Detroit': {
+    weed: ['House of Dank','Luxury Loud','The Reef Detroit','Green Door Alternative','JARS Cannabis Detroit'],
+    food: ['Lafayette Coney Island','Green Dot Stables','Bucharest Grill','Buddy’s Pizza','Mudgie’s Deli']
+  },
+  'Boston': {
+    weed: ['Pure Oasis','Berkshire Roots East Boston','SEED','Happy Valley East Boston','Ascend Boston'],
+    food: ['Regina Pizzeria','Sullivan’s Castle Island','Sam LaGrassa’s','Mike & Patty’s','Yume Wo Katare']
+  },
+  'San Diego': {
+    weed: ['March and Ash','Mankind Cannabis','Urbn Leaf','Cannabis 21+','Wellgreens'],
+    food: ['The Taco Stand','Hodad’s','Las Cuatro Milpas','Grand Ole BBQ','Mona Lisa Italian Foods']
+  },
+  'Sacramento': {
+    weed: ['A Therapeutic Alternative','Perfect Union','Connected Cannabis Co.','Mainstage Sacramento','Vibe by California'],
+    food: ['Squeeze Inn','Gunther’s Ice Cream','South','Whitey’s Jolly Kone','Tank House BBQ']
+  },
+  'Oakland / Berkeley': {
+    weed: ['Harborside Oakland','Root’d in the 510','ECO Cannabis','Farmacy Berkeley','Blüm Oakland'],
+    food: ['Zachary’s Chicago Pizza','Top Dog Berkeley','Cheeseboard Pizza','Tacos Oscar','Fentons Creamery']
+  },
+  'Albuquerque': {
+    weed: ['R. Greenleaf','Ultra Health','Everest Cannabis Co.','The Verdes Foundation','Minerva Canna'],
+    food: ['Frontier Restaurant','The Dog House Drive In','Duran Central Pharmacy','Golden Pride','Mary & Tito’s Cafe']
+  },
+  'St. Louis': {
+    weed: ['Swade Cannabis','Luxury Leaf','Greenlight Dispensary','Feel State Florissant','Proper Cannabis'],
+    food: ['Blues City Deli','Gioia’s Deli','The Gramophone','Crown Candy Kitchen','Seoul Taco']
+  },
+  'Kansas City': {
+    weed: ['From the Earth','Greenlight Kansas City','BesaMe Wellness','Local Cannabis Company','Fresh Green'],
+    food: ['Joe’s Kansas City Bar-B-Que','Town Topic','Kitty’s Cafe','Pigwich','Mugs-Up Drive In']
+  },
+  'Oklahoma City': {
+    weed: ['Likewise Cannabis','Mango Cannabis','Joe’s Herb Cabinet','Great Barrier Reefer','The Peak Dispensary'],
+    food: ['Nic’s Grill','Tucker’s Onion Burgers','Bobo’s Chicken','Braum’s','Big Truck Tacos']
+  },
+  'Tulsa': {
+    weed: ['Eufloria Dispensary','Seed Cannabis Co.','Mango Cannabis Tulsa','Method Cannabis','Okie Wonderland'],
+    food: ['Mother Road Market','Tally’s Good Food Cafe','Hank’s Hamburgers','El Rio Verde','Andolini’s Pizzeria']
+  },
+  'Anchorage': {
+    weed: ['Enlighten Alaska','Raspberry Roots','Great Northern Cannabis','Cannabaska','AK Frost'],
+    food: ['Tommy’s Burger Stop','Moose’s Tooth','Snow City Cafe','International House of Hot Dogs','Lucky Wishbone']
+  }
+};
+function wtfStarterEntries(city,kind){
+  var market=WTF_CITY_STARTERS[city],names=market&&market[kind]||[];
+  return names.map(function(name){
+    var query=name+' '+city;
+    return {name:name,area:'Citywide',address:city,specialty:kind==='weed'?'Featured '+city+' dispensary':'High & Hungry '+city+' pick',url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(query),rating:null,priceLevel:kind==='food'?2:null};
+  });
+}
+</script>
+
 <script id="wtf2-private-preview-script">
 (function(){
-  var overlay,dir,currentCat='Weed',currentArea='All';
+  var overlay,dir,currentCat='Weed',currentArea='All',selectedCity='Las Vegas';
   var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false,musicTrack=0;
   function q(id){return document.getElementById(id);}
-  function setWtfCityBadge(city){var badge=q('wtf2CityBadge');if(!badge)return;badge.textContent=city||'Las Vegas';badge.classList.toggle('is-long',(city||'Las Vegas').length>10);}
+  function setWtfCityBadge(city){selectedCity=city||'Las Vegas';var badge=q('wtf2CityBadge');if(badge){badge.textContent=selectedCity;badge.classList.toggle('is-long',selectedCity.length>10);}document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(button){button.hidden=selectedCity!=='Las Vegas'&&button.dataset.area!=='All';});}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
   function showCityLaunch(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),close=q('wtfCityLaunchClose'),notice=q('wtfCityInlineComing');setOpen(q('wtfCityShell'),false);if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}setOpen(q('wtfCityLaunch'),true);if(close)close.disabled=true;document.body.style.overflow='hidden';}
   function enterSelectedCity(){
     var select=q('wtfCitySelect'),city=select?select.dataset.value:'';
     if(!city)return;
-    if(city==='Las Vegas'){setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);overlay.scrollTop=0;return;}
-    var notice=q('wtfCityInlineComing'),title=q('wtfCityInlineComingCity'),menu=q('wtfCityMenu'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');
-    if(title)title.textContent=city;if(notice)notice.hidden=false;if(close)close.disabled=true;
-    setTimeout(function(){if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(go)go.disabled=true;if(close)close.disabled=true;overlay.scrollTop=0;if(select)select.focus();},1750);
+    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}
+    setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;
   }
   function openWtf2WithCities(){openWtf2();setTimeout(showCityLaunch,90);}
   function closeWtf2(){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
@@ -18800,6 +18897,10 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     try{if(navigator.share){await navigator.share({title:title,text:shareText,url:url});return;}var copied=shareText+' '+url;if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(copied);}else{var t=document.createElement('textarea');t.value=copied;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();}if(b&&label){b.classList.add('is-copied');label.innerHTML='LINK<br>COPIED';setTimeout(function(){b.classList.remove('is-copied');label.innerHTML='SHARE<br>PAGE';},1800);}}catch(_e){}
   }
   function entriesFor(cat,area){
+    if(selectedCity!=='Las Vegas'){
+      var starter=cat==='Weed'?wtfStarterEntries(selectedCity,'weed'):cat==='Food'?wtfStarterEntries(selectedCity,'food'):[];
+      return area==='All'||area==='Citywide'?starter:[];
+    }
     if(cat==='Food'){
       var food=(window.HIGH_HUNGRY_LIST||[]);
       if(!food.length && typeof HIGH_HUNGRY_LIST!=='undefined')food=HIGH_HUNGRY_LIST;
@@ -18818,9 +18919,9 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtf2DirTitle').textContent=currentCat+' · '+areaLabel;
     if(typeof renderEntryList==='function'){
       if(currentArea==='All'){
-        var areas=currentCat==='Food'?['The Strip','Downtown','Henderson','Summerlin','Off-Strip']:['The Strip','Downtown','Henderson','Summerlin'];
+        var areas=selectedCity==='Las Vegas'?(currentCat==='Food'?['The Strip','Downtown','Henderson','Summerlin','Off-Strip']:['The Strip','Downtown','Henderson','Summerlin']):['Citywide'];
         var grouped=areas.map(function(a){var group=items.filter(function(x){return x.area===a || (currentCat!=='Food' && ((typeof BUSINESS_DIRECTORY!=='undefined'&&BUSINESS_DIRECTORY[currentCat]&&BUSINESS_DIRECTORY[currentCat][a])||[]).some(function(y){return y.name===x.name;}));});return group.length?'<div class="directory-area">'+a+' · '+group.length+'</div><ul class="directory-list">'+renderEntryList(group,currentCat,a)+'</ul>':'';}).join('');
-        list.innerHTML='<div class="wtf2-result-count">'+items.length+' listings across Las Vegas</div>'+grouped;
+        list.innerHTML='<div class="wtf2-result-count">'+items.length+' listings across '+selectedCity+'</div>'+grouped;
       }else{
         list.innerHTML='<div class="wtf2-result-count">'+items.length+' listings</div><div class="directory-area">'+areaLabel+'</div><ul class="directory-list">'+renderEntryList(items,currentCat,areaLabel)+'</ul>';
       }
@@ -18832,7 +18933,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
-    try{var savedCity=sessionStorage.getItem('wtfSelectedCity');setWtfCityBadge(savedCity==='Las Vegas'?savedCity:'Las Vegas');if(savedCity&&savedCity!=='Las Vegas')sessionStorage.removeItem('wtfSelectedCity');}catch(e){setWtfCityBadge('Las Vegas');}
+    try{var savedCity=sessionStorage.getItem('wtfSelectedCity');setWtfCityBadge(savedCity&&WTF_CITY_STARTERS[savedCity]||savedCity==='Las Vegas'?savedCity:'Las Vegas');}catch(e){setWtfCityBadge('Las Vegas');}
     document.querySelectorAll('#wtfCityMenu .wtf-city-future').forEach(function(option){option.hidden=true;});
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
@@ -18842,7 +18943,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtfCityMenu').innerHTML='';
     function rankCityRecords(records,query){return records.slice().sort(function(a,b){var an=a.name.toLowerCase(),bn=b.name.toLowerCase(),as=an.startsWith(query)?0:1,bs=bn.startsWith(query)?0:1;return as-bs||an.localeCompare(bn);});}
     function makeCityOption(record){var option=document.createElement('button');option.type='button';option.className='wtf-city-option wtf-city-'+record.tier;option.dataset.city=record.name;option.setAttribute('role','option');if(record.tier==='future')option.setAttribute('aria-disabled','true');option.textContent=(record.tier==='live'?'★ ':'')+record.name;return option;}
-    function renderCityMenu(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),query=select.value.trim().toLowerCase();menu.innerHTML='';menu.scrollTop=0;if(!query){menu.setAttribute('hidden','');select.setAttribute('aria-expanded','false');return [];}var gold=cityCatalog.filter(function(city){return city.tier!=='future';}),future=cityCatalog.filter(function(city){return city.tier==='future';}),live=gold.find(function(city){return city.name==='Las Vegas';}),matchingGold=rankCityRecords(gold.filter(function(city){return city.name.toLowerCase().includes(query);}),query),featured=['Las Vegas','Silicon Valley','San Diego'].map(function(name){return gold.find(function(city){return city.name===name;});}).filter(Boolean),displayed=matchingGold.length?(matchingGold.concat(matchingGold.indexOf(live)===-1?[live]:[])):featured,previews=rankCityRecords(future.filter(function(city){return city.name.toLowerCase().includes(query);}),query).slice(0,3),visibleRecords=displayed.concat(previews),visibleOptions=visibleRecords.map(makeCityOption);visibleOptions.forEach(function(option){menu.appendChild(option);});menu.removeAttribute('hidden');menu.scrollTop=0;select.setAttribute('aria-expanded','true');return visibleOptions;}
+    function renderCityMenu(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),query=select.value.trim().toLowerCase();menu.innerHTML='';menu.scrollTop=0;var live=cityCatalog.filter(function(city){return city.tier==='live';}),future=cityCatalog.filter(function(city){return city.tier==='future';}),visibleRecords=query?rankCityRecords(live.filter(function(city){return city.name.toLowerCase().includes(query);}),query).concat(rankCityRecords(future.filter(function(city){return city.name.toLowerCase().includes(query);}),query).slice(0,5)):rankCityRecords(live,'');var visibleOptions=visibleRecords.map(makeCityOption);visibleOptions.forEach(function(option){menu.appendChild(option);});menu.removeAttribute('hidden');menu.scrollTop=0;select.setAttribute('aria-expanded','true');return visibleOptions;}
     q('wtfCitySelect').addEventListener('focus',renderCityMenu);
     q('wtfCitySelect').addEventListener('click',function(e){e.stopPropagation();renderCityMenu();});
     q('wtfCitySelect').addEventListener('input',function(){var query=this.value.trim().toLowerCase(),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose'),matches;this.dataset.value='';go.disabled=true;close.disabled=true;matches=renderCityMenu();if(matches.length===1&&!matches[0].classList.contains('wtf-city-future')&&matches[0].dataset.city.toLowerCase()===query){this.dataset.value=matches[0].dataset.city;go.disabled=false;close.disabled=false;}});
@@ -18866,7 +18967,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     q('wtf2ArcadeShuttle').addEventListener('click',openShuttlePage);
     q('wtf2Near').addEventListener('click',function(){openChild('nearMeOverlay',function(){if(window.WTFUI&&window.WTFUI.openNearMe)window.WTFUI.openNearMe();else setOpen(q('nearMeOverlay'),true);});});
     q('wtf2Thc24').addEventListener('click',function(){document.body.classList.add('wtf2-thc24-active');openChild('thc24Overlay');});
-    q('wtf2HH').addEventListener('click',function(){openChild('hhOverlay',function(){if(typeof renderHighHungry==='function')renderHighHungry();setOpen(q('hhOverlay'),true);});});
+    q('wtf2HH').addEventListener('click',function(){openChild('hhOverlay',function(){if(selectedCity==='Las Vegas'){if(typeof renderHighHungry==='function')renderHighHungry();}else{var el=q('hhList'),items=wtfStarterEntries(selectedCity,'food');if(el)el.innerHTML='<div class="hh-billboard"><h3>'+selectedCity.toUpperCase()+'</h3><span class="dive-spots-tag">HIGH &amp; HUNGRY STARTERS</span></div><p style="text-align:left;color:#F59E0B;font-size:0.75rem;margin:8px 0 10px;">Tap a restaurant for directions and further information ▾</p><ul class="directory-list">'+renderEntryList(items,'Food','Citywide')+'</ul>';}setOpen(q('hhOverlay'),true);});});
     q('wtf2Deals').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),true);});
     q('wtf2DealsClose').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);});
     q('wtf2DealsSignup').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
