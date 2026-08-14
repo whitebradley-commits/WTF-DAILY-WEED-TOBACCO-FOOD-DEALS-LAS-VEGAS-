@@ -9757,7 +9757,7 @@ function renderEntryList(entries, catLabel, area){
       : '<div class="entry-claim">Not yet rated \u2014 this business hasn\u2019t claimed its profile. <button class="claim-btn" type="button">Claim &amp; Upgrade Listing \u2192</button></div>';
 
     const siteBtn = siteButtonHTML(d.url);
-    const laFullBtn = catLabel === 'Weed' && /Los Angeles/i.test(d.address || '')
+    const laFullBtn = catLabel === 'Weed'
       ? '<button type="button" class="menu-text-btn la-full-dispensary-btn" data-la-full-name="' + String(d.name || '').replace(/"/g,'&quot;') + '" data-la-full-address="' + String(d.address || '').replace(/"/g,'&quot;') + '" data-la-full-phone="' + String(d.phone || '').replace(/"/g,'&quot;') + '">BIZ PAGE</button>'
       : '';
 
@@ -18861,79 +18861,79 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
    listing useful while addresses, hours and direct vendor links are expanded. */
 const WTF_CITY_STARTERS = {
   'Los Angeles': {
-    weed: ['The Artist Tree','Green Qween','ERBA Markets','Off The Charts','STIIIZY Downtown Los Angeles'],
+    weed: ['The Artist Tree','Green Qween','ERBA Markets','Off The Charts','STIIIZY Downtown Los Angeles','The Pottery','Sweet Flower','The Higher Path','MMD Hollywood','Cornerstone Wellness'],
     food: ['Howlin’ Ray’s','Guisados','Langer’s Delicatessen','Sonoratown','Kogi BBQ']
   },
   'Denver': {
-    weed: ['Simply Pure','Verde Natural','Lightshade','The Joint by Cannabis','Native Roots'],
+    weed: ['Simply Pure','Verde Natural','Lightshade','The Joint by Cannabis','Native Roots','LivWell Enlightened Health','The Green Solution','L’Eagle Services','Good Chemistry Denver','Colorado Harvest Company'],
     food: ['My Brother’s Bar','Biker Jim’s Gourmet Dogs','Denver Biscuit Company','Blue Pan Pizza','Sam’s No. 3']
   },
   'Portland': {
-    weed: ['Farma','Archive Portland','TreeHouse Collective','Electric Lettuce','Kings of Canna'],
+    weed: ['Farma','Archive Portland','TreeHouse Collective','Electric Lettuce','Kings of Canna','Serra Dispensary','Homegrown Oregon','Broadway Cannabis Market','Oregon’s Finest','AmericannaRX'],
     food: ['Jojo','Matt’s BBQ','Eem','Screen Door','Hawthorne Asylum']
   },
   'New York City': {
-    weed: ['Housing Works Cannabis Co.','The Travel Agency Union Square','Gotham','CONBUD','Dazed Cannabis'],
+    weed: ['Housing Works Cannabis Co.','The Travel Agency Union Square','Gotham','CONBUD','Dazed Cannabis','Smacked Village','Culture House NYC','Trends Dispensaries','Verdi Cannabis','Etain Manhattan'],
     food: ['Katz’s Delicatessen','Prince Street Pizza','Los Tacos No. 1','Gray’s Papaya','Mamoun’s Falafel']
   },
   'Seattle': {
-    weed: ['Dockside Cannabis','Uncle Ike’s','Ruckus Recreational','The Reef Cannabis','Have a Heart Seattle'],
+    weed: ['Dockside Cannabis','Uncle Ike’s','Ruckus Recreational','The Reef Cannabis','Have a Heart Seattle','Lux Pot Shop','Oz Cannabis','Clutch Cannabis','American Mary','Kush21 Seattle'],
     food: ['Dick’s Drive-In','Un Bien','Tats Delicatessen','Piroshky Piroshky','Kau Kau BBQ']
   },
   'San Francisco': {
-    weed: ['The Apothecarium','Moe Greens','SPARC','Barbary Coast','Purple Star MD'],
+    weed: ['The Apothecarium','Moe Greens','SPARC','Barbary Coast','Purple Star MD','Harborside San Francisco','Urbana','Mission Cannabis Club','Fig & Thistle Apothecary','Grass Roots'],
     food: ['Taqueria El Farolito','Golden Boy Pizza','House of Prime Rib','Swan Oyster Depot','Burma Superstar']
   },
   'Chicago': {
-    weed: ['Dispensary 33','Sunnyside River North','Ascend River North','Ivy Hall','Grasshopper Club'],
+    weed: ['Dispensary 33','Sunnyside River North','Ascend River North','Ivy Hall','Grasshopper Club','nuEra Chicago','Zen Leaf Chicago','Curaleaf Weed Street','Mission Dispensary South Chicago','Karma Club'],
     food: ['Johnnie’s Beef','Red Hot Ranch','Jim’s Original','Pequod’s Pizza','Harold’s Chicken Shack']
   },
   'Phoenix / Scottsdale': {
-    weed: ['Sol Flower','Sunday Goods','The Mint Cannabis','Curaleaf Scottsdale','Trulieve Phoenix'],
+    weed: ['Sol Flower','Sunday Goods','The Mint Cannabis','Curaleaf Scottsdale','Trulieve Phoenix','Harvest of Scottsdale','JARS Cannabis Phoenix','Giving Tree Dispensary','Sticky Saguaro','Arizona Natural Concepts'],
     food: ['Pizzeria Bianco','Tacos Chiwas','Little Miss BBQ','The Stand Arcadia','Welcome Diner']
   },
   'Detroit': {
-    weed: ['House of Dank','Luxury Loud','The Reef Detroit','Green Door Alternative','JARS Cannabis Detroit'],
+    weed: ['House of Dank','Luxury Loud','The Reef Detroit','Green Door Alternative','JARS Cannabis Detroit','Cookies Detroit','Quality Roots Detroit','Puff Cannabis Detroit','The Flower Bowl','High Profile Detroit'],
     food: ['Lafayette Coney Island','Green Dot Stables','Bucharest Grill','Buddy’s Pizza','Mudgie’s Deli']
   },
   'Boston': {
-    weed: ['Pure Oasis','Berkshire Roots East Boston','SEED','Happy Valley East Boston','Ascend Boston'],
+    weed: ['Pure Oasis','Berkshire Roots East Boston','SEED','Happy Valley East Boston','Ascend Boston','Ayr Back Bay','Cannabist Boston','Rooted In Roxbury','Mayflower Medicinals','Ethos Dorchester'],
     food: ['Regina Pizzeria','Sullivan’s Castle Island','Sam LaGrassa’s','Mike & Patty’s','Yume Wo Katare']
   },
   'San Diego': {
-    weed: ['March and Ash','Mankind Cannabis','Urbn Leaf','Cannabis 21+','Wellgreens'],
+    weed: ['March and Ash','Mankind Cannabis','Urbn Leaf','Catalyst Cannabis','Wellgreens','The Healing Center San Diego','Goldn Bloom','Buzz Cannabis Mission Valley','Emjay San Diego','Cookies Mission Valley'],
     food: ['The Taco Stand','Hodad’s','Las Cuatro Milpas','Grand Ole BBQ','Mona Lisa Italian Foods']
   },
   'Sacramento': {
-    weed: ['A Therapeutic Alternative','Perfect Union','Connected Cannabis Co.','Mainstage Sacramento','Vibe by California'],
+    weed: ['A Therapeutic Alternative','Perfect Union','Connected Cannabis Co.','Mainstage Sacramento','Vibe by California','All About Wellness','Abatin Wellness Center','NUG Sacramento','Cookies Sacramento','1841 El Camino'],
     food: ['Squeeze Inn','Gunther’s Ice Cream','South','Whitey’s Jolly Kone','Tank House BBQ']
   },
   'Oakland / Berkeley': {
-    weed: ['Harborside Oakland','Root’d in the 510','ECO Cannabis','Farmacy Berkeley','Blüm Oakland'],
+    weed: ['Harborside Oakland','Root’d in the 510','ECO Cannabis','Farmacy Berkeley','Blüm Oakland','CBCB Berkeley','Hi Fidelity','Purple Heart Patient Center','NUG Oakland','Lakeside Remedy'],
     food: ['Zachary’s Chicago Pizza','Top Dog Berkeley','Cheeseboard Pizza','Tacos Oscar','Fentons Creamery']
   },
   'Albuquerque': {
-    weed: ['R. Greenleaf','Ultra Health','Everest Cannabis Co.','The Verdes Foundation','Minerva Canna'],
+    weed: ['R. Greenleaf','Ultra Health','Everest Cannabis Co.','The Verdes Foundation','Minerva Canna','Carver Family Farm','Sandia Botanicals','PurLife','Urban Wellness','Seven Clover'],
     food: ['Frontier Restaurant','The Dog House Drive In','Duran Central Pharmacy','Golden Pride','Mary & Tito’s Cafe']
   },
   'St. Louis': {
-    weed: ['Swade Cannabis','Luxury Leaf','Greenlight Dispensary','Feel State Florissant','Proper Cannabis'],
+    weed: ['Swade Cannabis','Luxury Leaf','Greenlight Dispensary','Feel State Florissant','Proper Cannabis','Root 66','Beyond Hello St. Louis','Viola STL','High Profile St. Louis','Good Day Farm St. Louis'],
     food: ['Blues City Deli','Gioia’s Deli','The Gramophone','Crown Candy Kitchen','Seoul Taco']
   },
   'Kansas City': {
-    weed: ['From the Earth','Greenlight Kansas City','BesaMe Wellness','Local Cannabis Company','Fresh Green'],
+    weed: ['From the Earth','Greenlight Kansas City','BesaMe Wellness','Local Cannabis Company','Fresh Green','KC Cannabis Company','ReLeaf Resources','The Forest Kansas City','Elevate Missouri','Proper Cannabis Kansas City'],
     food: ['Joe’s Kansas City Bar-B-Que','Town Topic','Kitty’s Cafe','Pigwich','Mugs-Up Drive In']
   },
   'Oklahoma City': {
-    weed: ['Likewise Cannabis','Mango Cannabis','Joe’s Herb Cabinet','Great Barrier Reefer','The Peak Dispensary'],
+    weed: ['Likewise Cannabis','Mango Cannabis','Joe’s Herb Cabinet','Great Barrier Reefer','The Peak Dispensary','High Society OKC','Craft Cannabis Company','Tegridy Market','Capital Dank','Prestige Cannabis Co.'],
     food: ['Nic’s Grill','Tucker’s Onion Burgers','Bobo’s Chicken','Braum’s','Big Truck Tacos']
   },
   'Tulsa': {
-    weed: ['Eufloria Dispensary','Seed Cannabis Co.','Mango Cannabis Tulsa','Method Cannabis','Okie Wonderland'],
+    weed: ['Eufloria Dispensary','Seed Cannabis Co.','Mango Cannabis Tulsa','Method Cannabis','Okie Wonderland','Nature’s Kiss Tulsa','Main Street Meds','Robot Pharmer','Tulsa Dispensary','Grasshopper Dispensary'],
     food: ['Mother Road Market','Tally’s Good Food Cafe','Hank’s Hamburgers','El Rio Verde','Andolini’s Pizzeria']
   },
   'Anchorage': {
-    weed: ['Enlighten Alaska','Raspberry Roots','Great Northern Cannabis','Cannabaska','AK Frost'],
+    weed: ['Enlighten Alaska','Raspberry Roots','Great Northern Cannabis','Cannabaska','AK Frost','The Frost Farms','Dankorage','Alaska Fireweed','Catalyst Cannabis Company','Secret Garden Cannabis'],
     food: ['Tommy’s Burger Stop','Moose’s Tooth','Snow City Cafe','International House of Hot Dogs','Lucky Wishbone']
   }
 };
@@ -18944,11 +18944,19 @@ const LA_DISPENSARY_DETAILS = {
   'Off The Charts': {address:'8448 Santa Monica Blvd, West Hollywood, CA 90069',phone:'(323) 498-0038',website:'https://www.offthechartsshop.com/west-hollywood/info',hours:'Daily 6 AM–10 PM',lat:34.0908,lng:-118.3746,story:'Off The Charts West Hollywood is a high-traffic Santa Monica Boulevard dispensary focused on a large cannabis selection and value pricing. The location is cash-only and has an on-site ATM.'},
   'STIIIZY Downtown Los Angeles': {address:'728 E Commercial St, Los Angeles, CA 90012',phone:'(323) 929-4201',website:'https://www.stiiizy.com/',hours:'Confirm current closing time before leaving',lat:34.0474,lng:-118.2343,instagram:'@stiiizy',story:'STIIIZY Downtown Los Angeles is the brand’s large flagship retail location. It carries the company’s own products alongside a broad multi-brand medical and recreational cannabis selection, with online ordering available.'}
 };
+const SAN_DIEGO_DISPENSARY_DETAILS = {
+  'March and Ash':{address:'2835 Camino del Rio S #100, San Diego, CA 92108',phone:'(619) 314-7336',website:'https://www.marchandash.com/mission-valley',hours:'Daily 7 AM–9:55 PM',lat:32.7691,lng:-117.1345,story:'March and Ash’s Mission Valley cannabis boutique focuses on customer education, safety, and a comfortable shopping experience. The location offers in-store shopping plus online ordering and delivery.'},
+  'Mankind Cannabis':{address:'7128 Miramar Rd #10, San Diego, CA 92121',phone:'(619) 333-0056',website:'https://mankindcannabis.com/',hours:'Daily 7 AM–10 PM',lat:32.8796,lng:-117.1615,story:'Mankind has served San Diego since 2016 as a licensed medical and recreational dispensary. Its Miramar location offers in-store shopping, curbside pickup, and delivery across much of San Diego County.'},
+  'Urbn Leaf':{address:'1028 Buenos Ave, San Diego, CA 92110',phone:'(619) 275-2235',website:'https://www.urbnleaf.com/',hours:'Daily 6 AM–10 PM',lat:32.7688,lng:-117.1993,story:'Urbn Leaf’s Bay Park store is part of one of San Diego’s largest dispensary groups. It carries flower, pre-rolls, vapes, edibles, and specialty cannabinoids, with pickup and delivery options.'},
+  'Catalyst Cannabis':{address:'5125 Convoy St #211, San Diego, CA 92111',phone:'(858) 256-4047',website:'https://catalyst-cannabis.com/dispensary-locations/san-diego-dispensary',hours:'Daily 9 AM–9:30 PM',lat:32.8302,lng:-117.1535,story:'Catalyst’s San Diego dispensary is located on Convoy Street between I-805 and the Cabrillo Freeway. It serves adult-use customers with in-store shopping and a broad California cannabis menu.'},
+  'Wellgreens':{address:'3703 Camino del Rio S #215-A, San Diego, CA 92108',phone:'(619) 850-9117',website:'https://www.wellgreens.store/locations/mission-valley-camino-del-rio-s',hours:'Daily 6 AM–9:55 PM',lat:32.7765,lng:-117.1135,story:'Wellgreens Mission Valley is a pickup-focused location near Snapdragon Stadium with a large parking lot and easy freeway access. The San Diego company has operated since 2018.'}
+};
+const MARKET_DISPENSARY_DETAILS={'Los Angeles':LA_DISPENSARY_DETAILS,'San Diego':SAN_DIEGO_DISPENSARY_DETAILS};
 function wtfStarterEntries(city,kind){
   var market=WTF_CITY_STARTERS[city],names=market&&market[kind]||[];
   return names.map(function(name){
     var query=name+' '+city;
-    var details=city==='Los Angeles'&&kind==='weed'&&LA_DISPENSARY_DETAILS[name]||{};
+    var details=kind==='weed'&&MARKET_DISPENSARY_DETAILS[city]&&MARKET_DISPENSARY_DETAILS[city][name]||{};
     return Object.assign({name:name,area:'Citywide',address:name+', '+city,specialty:kind==='weed'?'Featured '+city+' dispensary':'High & Hungry '+city+' pick',url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(query),rating:null,priceLevel:kind==='food'?2:null},details);
   });
 }
@@ -19170,54 +19178,88 @@ window.wtfPrepare24Hours=async function(city){
     order.forEach(function(a){(source[a]||[]).forEach(function(x){if(!out.some(function(y){return y.name===x.name;}))out.push(x);});});
     return out;
   }
-  var LA_NEAR_ZONES={
-    'Current Location':null,
-    'Hollywood':{lat:34.0928,lng:-118.3287},
-    'West Hollywood':{lat:34.0900,lng:-118.3617},
-    'Downtown':{lat:34.0407,lng:-118.2468},
-    'Culver City':{lat:34.0211,lng:-118.3965}
+  var CITY_NEAR_ZONES={
+    'Las Vegas':{'Current Location':null,'The Strip':{lat:36.1147,lng:-115.1728},'Downtown':{lat:36.1699,lng:-115.1398},'Summerlin':{lat:36.1817,lng:-115.3328},'Henderson':{lat:36.0395,lng:-114.9817},'North Las Vegas':{lat:36.1989,lng:-115.1175},'Pahrump':{lat:36.2083,lng:-115.9839}},
+    'Los Angeles':{'Current Location':null,'Hollywood':{lat:34.0928,lng:-118.3287},'West Hollywood':{lat:34.0900,lng:-118.3617},'Downtown':{lat:34.0407,lng:-118.2468},'Culver City':{lat:34.0211,lng:-118.3965}},
+    'Denver':{'Current Location':null,'Downtown':{lat:39.7392,lng:-104.9903},'RiNo':{lat:39.7663,lng:-104.9730},'Capitol Hill':{lat:39.7310,lng:-104.9725},'Lakewood':{lat:39.7047,lng:-105.0814},'Aurora':{lat:39.7294,lng:-104.8319}},
+    'Portland':{'Current Location':null,'Downtown':{lat:45.5152,lng:-122.6784},'Pearl District':{lat:45.5300,lng:-122.6819},'Hawthorne':{lat:45.5110,lng:-122.6224},'Alberta':{lat:45.5598,lng:-122.6432},'Beaverton':{lat:45.4871,lng:-122.8037}},
+    'New York City':{'Current Location':null,'Union Square':{lat:40.7359,lng:-73.9911},'SoHo':{lat:40.7233,lng:-74.0030},'Williamsburg':{lat:40.7081,lng:-73.9571},'Astoria':{lat:40.7644,lng:-73.9235},'Harlem':{lat:40.8116,lng:-73.9465}},
+    'Seattle':{'Current Location':null,'Downtown':{lat:47.6062,lng:-122.3321},'Capitol Hill':{lat:47.6253,lng:-122.3222},'Ballard':{lat:47.6687,lng:-122.3860},'Fremont':{lat:47.6510,lng:-122.3504},'Bellevue':{lat:47.6101,lng:-122.2015}},
+    'San Francisco':{'Current Location':null,'Downtown':{lat:37.7890,lng:-122.4010},'Mission':{lat:37.7599,lng:-122.4148},'SoMa':{lat:37.7785,lng:-122.3950},'Haight':{lat:37.7692,lng:-122.4481},'Oakland':{lat:37.8044,lng:-122.2712}},
+    'Chicago':{'Current Location':null,'The Loop':{lat:41.8819,lng:-87.6278},'River North':{lat:41.8924,lng:-87.6341},'Wicker Park':{lat:41.9088,lng:-87.6796},'Hyde Park':{lat:41.7943,lng:-87.5907},'Evanston':{lat:42.0451,lng:-87.6877}},
+    'Phoenix / Scottsdale':{'Current Location':null,'Downtown Phoenix':{lat:33.4484,lng:-112.0740},'Midtown':{lat:33.4800,lng:-112.0740},'Tempe':{lat:33.4255,lng:-111.9400},'Old Town Scottsdale':{lat:33.4942,lng:-111.9261},'North Scottsdale':{lat:33.6748,lng:-111.9236}},
+    'Detroit':{'Current Location':null,'Downtown':{lat:42.3314,lng:-83.0458},'Midtown':{lat:42.3505,lng:-83.0589},'Corktown':{lat:42.3317,lng:-83.0770},'Ferndale':{lat:42.4606,lng:-83.1346},'Royal Oak':{lat:42.4895,lng:-83.1446}},
+    'Boston':{'Current Location':null,'Downtown':{lat:42.3601,lng:-71.0589},'Back Bay':{lat:42.3503,lng:-71.0810},'Cambridge':{lat:42.3736,lng:-71.1097},'Somerville':{lat:42.3876,lng:-71.0995},'Brookline':{lat:42.3318,lng:-71.1212}},
+    'San Diego':{'Current Location':null,'Downtown':{lat:32.7157,lng:-117.1611},'North Park':{lat:32.7477,lng:-117.1293},'La Jolla':{lat:32.8328,lng:-117.2713},'Mission Valley':{lat:32.7678,lng:-117.1540},'Chula Vista':{lat:32.6401,lng:-117.0842},'Oceanside':{lat:33.1959,lng:-117.3795}},
+    'Sacramento':{'Current Location':null,'Downtown':{lat:38.5816,lng:-121.4944},'Midtown':{lat:38.5737,lng:-121.4687},'Arden':{lat:38.5960,lng:-121.4180},'Elk Grove':{lat:38.4088,lng:-121.3716},'Roseville':{lat:38.7521,lng:-121.2880}},
+    'Oakland / Berkeley':{'Current Location':null,'Downtown Oakland':{lat:37.8044,lng:-122.2712},'Uptown':{lat:37.8125,lng:-122.2684},'Temescal':{lat:37.8371,lng:-122.2626},'Downtown Berkeley':{lat:37.8715,lng:-122.2730},'West Berkeley':{lat:37.8665,lng:-122.2978}},
+    'Albuquerque':{'Current Location':null,'Downtown':{lat:35.0844,lng:-106.6504},'Nob Hill':{lat:35.0796,lng:-106.6006},'Uptown':{lat:35.1010,lng:-106.5680},'North Valley':{lat:35.1731,lng:-106.6240},'Rio Rancho':{lat:35.2328,lng:-106.6630}},
+    'St. Louis':{'Current Location':null,'Downtown':{lat:38.6270,lng:-90.1994},'Central West End':{lat:38.6415,lng:-90.2613},'Delmar Loop':{lat:38.6551,lng:-90.3044},'Soulard':{lat:38.6106,lng:-90.2090},'Clayton':{lat:38.6426,lng:-90.3237}},
+    'Kansas City':{'Current Location':null,'Downtown':{lat:39.0997,lng:-94.5786},'Crossroads':{lat:39.0910,lng:-94.5840},'Westport':{lat:39.0525,lng:-94.5920},'Country Club Plaza':{lat:39.0420,lng:-94.5950},'Overland Park':{lat:38.9822,lng:-94.6708}},
+    'Oklahoma City':{'Current Location':null,'Downtown':{lat:35.4676,lng:-97.5164},'Bricktown':{lat:35.4654,lng:-97.5080},'Midtown':{lat:35.4780,lng:-97.5200},'Edmond':{lat:35.6528,lng:-97.4781},'Norman':{lat:35.2226,lng:-97.4395}},
+    'Tulsa':{'Current Location':null,'Downtown':{lat:36.1540,lng:-95.9928},'Midtown':{lat:36.1330,lng:-95.9650},'Brookside':{lat:36.1130,lng:-95.9750},'South Tulsa':{lat:36.0609,lng:-95.9220},'Broken Arrow':{lat:36.0609,lng:-95.7975}},
+    'Anchorage':{'Current Location':null,'Downtown':{lat:61.2181,lng:-149.9003},'Midtown':{lat:61.1880,lng:-149.8810},'Spenard':{lat:61.1900,lng:-149.9160},'East Anchorage':{lat:61.2050,lng:-149.7500},'Eagle River':{lat:61.3214,lng:-149.5678}}
   };
-  function laNearShell(){
-    return '<section class="la-near-test" id="laNearTest"><h3>NEAREST DISPENSARIES</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose an LA neighborhood.</p><div class="la-near-zones">'+Object.keys(LA_NEAR_ZONES).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL LOS ANGELES DISPENSARY LIST</button></section>';
+  function activeNearZones(){return CITY_NEAR_ZONES[selectedCity]||{'Current Location':null,'Downtown':null};}
+  function laNearShell(){var zones=activeNearZones();
+    return '<section class="la-near-test" id="laNearTest"><h3>NEAREST DISPENSARIES</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose a '+laEsc(selectedCity)+' area.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' DISPENSARY LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function laEsc(v){return String(v||'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
-  function enrichLA(item){var n=String(item.name||'').toLowerCase(),key=Object.keys(LA_DISPENSARY_DETAILS).find(function(k){var short=k.toLowerCase().replace(' downtown los angeles','');return n===k.toLowerCase()||n.indexOf(short)>-1||short.indexOf(n)>-1;});return key?Object.assign({},item,LA_DISPENSARY_DETAILS[key],{name:key}):item;}
+  function enrichLA(item){var market=item.city||selectedCity,details=MARKET_DISPENSARY_DETAILS[market]||{},n=String(item.name||'').toLowerCase(),key=Object.keys(details).find(function(k){var short=k.toLowerCase().replace(' downtown los angeles','');return n===k.toLowerCase()||n.indexOf(short)>-1||short.indexOf(n)>-1;});return key?Object.assign({},item,details[key],{name:key,city:market}):item;}
   async function fetchLAOverpass(origin){
-    var query='[out:json][timeout:18];(nwr[shop=cannabis](around:24000,'+origin.lat+','+origin.lng+');nwr[healthcare=cannabis](around:24000,'+origin.lat+','+origin.lng+'););out center tags;';
-    var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-    for(var i=0;i<endpoints.length;i++){
-      try{var response=await fetch(endpoints[i],{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});if(!response.ok)throw new Error('lookup');var data=await response.json();return (data.elements||[]).map(function(el){var t=el.tags||{},lat=typeof el.lat==='number'?el.lat:el.center&&el.center.lat,lng=typeof el.lon==='number'?el.lon:el.center&&el.center.lon;if(!lat||!lng||!(t.name||t.brand))return null;var address=[t['addr:housenumber'],t['addr:street'],t['addr:city'],t['addr:state'],t['addr:postcode']].filter(Boolean).join(' ');return {name:t.name||t.brand,lat:lat,lng:lng,address:address,phone:t.phone||t['contact:phone']||'',website:t.website||t['contact:website']||'',facebook:t['contact:facebook']||'',instagram:t['contact:instagram']||'',hours:t.opening_hours||'',source:'OpenStreetMap'};}).filter(Boolean);}catch(err){}
+    var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.nchc.org.tw/api/interpreter'];
+    var radii=[40000,80000,160000],last=[];
+    for(var r=0;r<radii.length;r++){
+      var query='[out:json][timeout:22];(nwr[shop=cannabis](around:'+radii[r]+','+origin.lat+','+origin.lng+');nwr[healthcare=cannabis](around:'+radii[r]+','+origin.lat+','+origin.lng+'););out center tags;';
+      for(var i=0;i<endpoints.length;i++){
+        try{var response=await fetch(endpoints[i],{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});if(!response.ok)throw new Error('lookup');var data=await response.json();last=(data.elements||[]).map(function(el){var t=el.tags||{},lat=typeof el.lat==='number'?el.lat:el.center&&el.center.lat,lng=typeof el.lon==='number'?el.lon:el.center&&el.center.lon;if(!lat||!lng||!(t.name||t.brand))return null;var address=[t['addr:housenumber'],t['addr:street'],t['addr:city'],t['addr:state'],t['addr:postcode']].filter(Boolean).join(' ');return {name:t.name||t.brand,lat:lat,lng:lng,address:address,phone:t.phone||t['contact:phone']||'',website:t.website||t['contact:website']||'',facebook:t['contact:facebook']||'',instagram:t['contact:instagram']||'',hours:t.opening_hours||'',source:'OpenStreetMap'};}).filter(Boolean);if(last.length>=5)return last;break;}catch(err){}
+      }
     }
-    throw new Error('Nearby search did not respond');
+    if(last.length)return last;throw new Error('Nearby search did not respond');
   }
   function renderLANearest(rows,status,items,origin,label){
     var seen={},nearest=items.map(enrichLA).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
     window.__laNearestDispensaries=nearest;
     rows.innerHTML=nearest.map(function(x,i){return '<button class="la-near-row" type="button" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+'</strong><span class="la-near-distance">'+x.miles.toFixed(1)+' MI</span></button>';}).join('');
-    status.textContent=nearest.length?'Tap any dispensary for phone, directions, and full information.':'Choose another Los Angeles neighborhood to search again.';
+    status.textContent=nearest.length?'Tap any dispensary for phone, directions, and full information.':'Choose another '+selectedCity+' area to search again.';
   }
   async function fetchLAGoogle(origin){
     await loadGoogleMapsScript();
     if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
-    var found=await new Promise(function(resolve,reject){placesServiceInstance.textSearch({query:'cannabis dispensary Los Angeles',location:new google.maps.LatLng(origin.lat,origin.lng),radius:24000},function(results,s){if(s===google.maps.places.PlacesServiceStatus.OK&&results)resolve(results);else reject(new Error('No results'));});});
+    var found=await new Promise(function(resolve,reject){placesServiceInstance.textSearch({query:'cannabis dispensary '+selectedCity,location:new google.maps.LatLng(origin.lat,origin.lng),radius:40000},function(results,s){if(s===google.maps.places.PlacesServiceStatus.OK&&results)resolve(results);else reject(new Error('No results'));});});
     return found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){return {name:p.name,placeId:p.place_id,lat:p.geometry.location.lat(),lng:p.geometry.location.lng(),address:p.formatted_address||'',rating:p.rating||'',ratings:p.user_ratings_total||'',source:'Google Places'};});
   }
   async function loadLANearest(origin,label){
     var rows=q('laNearRows'),status=q('laNearStatus');if(!rows||!status)return;
     status.textContent='Finding the closest dispensaries to '+label+'…';rows.innerHTML='<div class="la-near-sub">Updating live distances…</div>';
     document.querySelectorAll('[data-la-zone]').forEach(function(b){b.classList.toggle('active',b.dataset.laZone===label);});
-    var launch=Object.keys(LA_DISPENSARY_DETAILS).map(function(name){return Object.assign({name:name},LA_DISPENSARY_DETAILS[name]);});
-    renderLANearest(rows,status,launch,origin,label);
+    if(MARKET_DISPENSARY_DETAILS[selectedCity]){
+      var fixed=MARKET_DISPENSARY_DETAILS[selectedCity],launch=Object.keys(fixed).map(function(name){return Object.assign({name:name,city:selectedCity},fixed[name]);});
+      renderLANearest(rows,status,launch,origin,label);
+      try{var expanded=await fetchLAOverpass(origin);expanded.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,launch.concat(expanded),origin,label);}catch(ignore){}
+      return;
+    }
+    try{
+      var found=await fetchLAOverpass(origin);found.forEach(function(x){x.city=selectedCity;});
+      if(found.length<5){try{found=found.concat(await fetchLAGoogle(origin));}catch(ignore){}}
+      renderLANearest(rows,status,found,origin,label);
+    }catch(err){
+      try{var googleFound=await fetchLAGoogle(origin);googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,googleFound,origin,label);}catch(ignore){
+        rows.innerHTML=wtfStarterEntries(selectedCity,'weed').map(function(x){return '<a class="la-near-row" href="'+x.url+'" target="_blank" rel="noopener"><strong>'+laEsc(x.name)+'</strong><span class="la-near-distance">MAP</span></a>';}).join('');status.textContent='Tap a dispensary to open its current map listing, or choose another area to refresh distances.';
+      }
+    }
   }
   async function openLADispensary(item){
     if(!item)return;item=enrichLA(item);var overlay=q('laDispensaryOverlay'),name=q('laDispensaryName'),address=q('laDispensaryAddress'),story=q('laDispensaryStory'),actions=q('laDispensaryActions'),info=q('laDispensaryInfo'),hero=q('laDispensaryHero');if(!overlay)return;
-    var mapQuery=item.placeId?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name)+'&query_place_id='+encodeURIComponent(item.placeId):'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+(item.address||'Los Angeles'));
-    var directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||'Los Angeles'));
+    var market=item.city||selectedCity||'Los Angeles';
+    var mapQuery=item.placeId?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name)+'&query_place_id='+encodeURIComponent(item.placeId):'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+(item.address||market));
+    var directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||market));
     function paint(){
       hero.style.backgroundImage='radial-gradient(circle at 50% 40%,rgba(79,210,103,.25),transparent 42%),linear-gradient(145deg,#102416,#030603)';
-      name.textContent=item.name;address.textContent=item.address||'Los Angeles, California';story.textContent=item.story||'A licensed Los Angeles-area cannabis retailer serving the selected neighborhood. This WTFDD Biz Page brings the location, contact information, directions, hours, and current web listing together in one place.';
-      actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||'Los Angeles')+'">FIND PHONE NUMBER</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a>'+(item.website?'<a href="'+laEsc(item.website)+'" target="_blank" rel="noopener">WEBSITE</a>':'')+'<a href="'+mapQuery+'" target="_blank" rel="noopener">MAP LISTING</a>';
+      name.textContent=item.name;address.textContent=item.address||market;story.textContent=item.story||'A licensed '+market+'-area cannabis retailer serving the selected neighborhood. This WTFDD Biz Page brings the location, contact information, directions, hours, and current web listing together in one place.';
+      var heroLabel=hero.querySelector('.la-dispensary-hero-label');if(heroLabel)heroLabel.textContent=market.toUpperCase()+' DISPENSARY';
+      actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">FIND PHONE NUMBER</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a>'+(item.website?'<a href="'+laEsc(item.website)+'" target="_blank" rel="noopener">WEBSITE</a>':'')+'<a href="'+mapQuery+'" target="_blank" rel="noopener">MAP LISTING</a>';
       info.innerHTML='<div class="la-dispensary-info-row"><b>Phone</b><span>'+(item.phone?laEsc(item.phone):'Tap Find Phone Number above')+'</span></div><div class="la-dispensary-info-row"><b>Hours</b><span>'+laEsc(item.hours||'Confirm current hours directly')+'</span></div><div class="la-dispensary-info-row"><b>Distance</b><span>'+Number(item.miles||0).toFixed(1)+' miles from the selected location</span></div>'+(item.rating?'<div class="la-dispensary-info-row"><b>Rating</b><span>'+laEsc(item.rating)+' from '+laEsc(item.ratings||'current')+' ratings</span></div>':'')+(item.instagram?'<div class="la-dispensary-info-row"><b>Instagram</b><span>'+laEsc(item.instagram)+'</span></div>':'')+(item.facebook?'<div class="la-dispensary-info-row"><b>Facebook</b><span>'+laEsc(item.facebook)+'</span></div>':'')+'<div class="la-dispensary-info-row"><b>Listing</b><span>Contact details, hours, menus, and inventory can change. Confirm directly before leaving.</span></div>';
       if(item.photo)hero.style.backgroundImage='linear-gradient(transparent 35%,#070907),url("'+item.photo.replace(/"/g,'%22')+'")';
       else if(item.lat&&item.lng)hero.style.backgroundImage='linear-gradient(transparent 35%,#070907),url("https://maps.googleapis.com/maps/api/streetview?size=900x520&location='+item.lat+','+item.lng+'&fov=80&heading=0&pitch=0&key='+GOOGLE_PLACES_API_KEY+'")';
@@ -19225,32 +19267,32 @@ window.wtfPrepare24Hours=async function(city){
     paint();overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';overlay.scrollTop=0;
     try{
       await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
-      var place=await new Promise(function(resolve,reject){if(item.placeId){placesServiceInstance.getDetails({placeId:item.placeId,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos','geometry']},function(d,s){s===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):reject(new Error('details'));});}else{placesServiceInstance.textSearch({query:item.name+' '+(item.address||'Los Angeles')},function(r,s){if(!(s===google.maps.places.PlacesServiceStatus.OK&&r&&r[0])){reject(new Error('details'));return;}placesServiceInstance.getDetails({placeId:r[0].place_id,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos','geometry']},function(d,ds){ds===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):resolve(r[0]);});});}});
+      var place=await new Promise(function(resolve,reject){if(item.placeId){placesServiceInstance.getDetails({placeId:item.placeId,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos','geometry']},function(d,s){s===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):reject(new Error('details'));});}else{placesServiceInstance.textSearch({query:item.name+' '+(item.address||market)},function(r,s){if(!(s===google.maps.places.PlacesServiceStatus.OK&&r&&r[0])){reject(new Error('details'));return;}placesServiceInstance.getDetails({placeId:r[0].place_id,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos','geometry']},function(d,ds){ds===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):resolve(r[0]);});});}});
       item.address=place.formatted_address||item.address;item.phone=place.formatted_phone_number||item.phone;item.website=place.website||item.website;item.rating=place.rating||item.rating;item.ratings=place.user_ratings_total||item.ratings;item.hours=place.opening_hours&&place.opening_hours.weekday_text?place.opening_hours.weekday_text.join(' · '):item.hours;if(place.geometry&&place.geometry.location){item.lat=place.geometry.location.lat();item.lng=place.geometry.location.lng();}if(place.photos&&place.photos[0])item.photo=place.photos[0].getUrl({maxWidth:1100});paint();
     }catch(ignore){}
   }
   function openLAMini(item){
     if(!item)return;window.__laMiniCurrent=item;var overlay=q('laDispensaryMini'),name=q('laDispensaryMiniName'),meta=q('laDispensaryMiniMeta'),actions=q('laDispensaryMiniActions');
     name.textContent=item.name;meta.textContent=Number(item.miles||0).toFixed(1)+' miles away'+(item.address?' · '+item.address:'');
-    var directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||'Los Angeles'));
-    actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||'Los Angeles')+'">FIND PHONE</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a><button type="button" id="laMiniViewFull">BIZ PAGE</button>';
+    var market=item.city||selectedCity||'Los Angeles',directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||market));
+    actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">FIND PHONE</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a><button type="button" id="laMiniViewFull">BIZ PAGE</button>';
     overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
     q('laMiniViewFull').addEventListener('click',function(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');openLADispensary(item);});
   }
   function setupLAWeedNear(){
-    var block=q('laNearTest');if(!block)return;
+    var block=q('laNearTest'),zones=activeNearZones();if(!block)return;
     block.querySelector('.la-near-full').addEventListener('click',function(){var next=block.nextElementSibling;if(next)next.scrollIntoView({behavior:'smooth',block:'start'});});
-    block.querySelectorAll('[data-la-zone]').forEach(function(b){b.addEventListener('click',function(){var name=b.dataset.laZone,point=LA_NEAR_ZONES[name];if(point)loadLANearest(point,name);else requestCurrent();});});
+    block.querySelectorAll('[data-la-zone]').forEach(function(b){b.addEventListener('click',function(){var name=b.dataset.laZone,point=zones[name];if(point)loadLANearest(point,name);else requestCurrent();});});
     function requestCurrent(){
       var status=q('laNearStatus');
-      if(!navigator.geolocation){status.textContent='Location is not supported. Choose an LA neighborhood.';return;}
+      if(!navigator.geolocation){status.textContent='Location is not supported. Choose a '+selectedCity+' area.';return;}
       status.textContent='Allow location access to find the closest five dispensaries.';
-      navigator.geolocation.getCurrentPosition(function(pos){loadLANearest({lat:pos.coords.latitude,lng:pos.coords.longitude},'Current Location');},function(){status.textContent='Location was not shared. Choose Hollywood, West Hollywood, Downtown, or Culver City.';},{enableHighAccuracy:true,timeout:12000,maximumAge:20000});
+      navigator.geolocation.getCurrentPosition(function(pos){loadLANearest({lat:pos.coords.latitude,lng:pos.coords.longitude},'Current Location');},function(){status.textContent='Location was not shared. Choose one of the '+selectedCity+' areas above.';},{enableHighAccuracy:true,timeout:12000,maximumAge:20000});
     }
     block.addEventListener('click',function(e){var button=e.target.closest('[data-la-dispensary]');if(button)openLAMini(window.__laNearestDispensaries&&window.__laNearestDispensaries[Number(button.dataset.laDispensary)]);});
     var miniClose=q('laDispensaryMiniClose');if(miniClose&&!miniClose.dataset.ready){miniClose.dataset.ready='1';miniClose.addEventListener('click',function(){var overlay=q('laDispensaryMini');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');});}
     var close=q('laDispensaryClose');if(close&&!close.dataset.ready){close.dataset.ready='1';close.addEventListener('click',function(){var overlay=q('laDispensaryOverlay');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';});}
-    if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();var details=LA_DISPENSARY_DETAILS[button.dataset.laFullName]||{};openLADispensary(Object.assign({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,source:'WTFDD Los Angeles directory'},details));});}
+    if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();var market=selectedCity,details=MARKET_DISPENSARY_DETAILS[market]&&MARKET_DISPENSARY_DETAILS[market][button.dataset.laFullName]||{};openLADispensary(Object.assign({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,city:market,source:'WTFDD '+market+' directory'},details));});}
     requestCurrent();
   }
   function render(){
@@ -19267,7 +19309,7 @@ window.wtfPrepare24Hours=async function(city){
     }else{
       list.innerHTML=items.map(function(x){return '<div class="wtf2-feature-card"><b>'+x.name+'</b><small>'+(x.address||x.specialty||areaLabel)+'</small></div>';}).join('');
     }
-    if(selectedCity==='Los Angeles'&&currentCat==='Weed'){
+    if(currentCat==='Weed'){
       list.insertAdjacentHTML('afterbegin',laNearShell());
       setupLAWeedNear();
     }
