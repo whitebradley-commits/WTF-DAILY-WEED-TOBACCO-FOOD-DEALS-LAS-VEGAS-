@@ -7601,9 +7601,10 @@ button[id*="back"] svg,
 
 <style id="wtf-london-unavailable-style">
   .wtf-unavailable-overlay{position:fixed;inset:0;z-index:100020;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  .wtf-unavailable-overlay.open{display:grid}.wtf-unavailable-card{position:relative;width:min(100%,520px);padding:38px 24px 26px;border:2px solid #78df85;border-radius:26px;background:radial-gradient(circle at 50% 0,rgba(79,210,103,.14),transparent 36%),#050705;box-shadow:0 0 34px rgba(79,210,103,.25),0 30px 90px #000;color:#eee}
+  .wtf-unavailable-overlay.open{display:grid}.wtf-unavailable-card{box-sizing:border-box;position:relative;width:min(100%,520px);max-width:calc(100vw - 28px);padding:38px 24px 26px;border:2px solid #78df85;border-radius:26px;background:radial-gradient(circle at 50% 0,rgba(79,210,103,.14),transparent 36%),#050705;box-shadow:0 0 34px rgba(79,210,103,.25),0 30px 90px #000;color:#eee;overflow:hidden}
   .wtf-unavailable-card h2{margin:0 44px 12px 0;font:900 clamp(25px,7vw,38px)/1.05 'Archivo Black',sans-serif;text-transform:uppercase}.wtf-unavailable-card>p{margin:0 0 20px;color:#aaa;font:700 16px/1.45 'Archivo Narrow',sans-serif}.wtf-unavailable-close{position:absolute;right:16px;top:16px;width:44px;height:44px;border:2px solid #f59e0b;border-radius:50%;background:#000;color:#ff3d47;font:900 24px/1 sans-serif;cursor:pointer}
-  .wtf-nearest-country-btn{width:100%;margin-top:9px;padding:15px;border:2px solid #78df85;border-radius:999px;background:#0a120c;color:#78df85;font:900 14px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf-nearest-country-btn.alt{border-color:#a16a3e;color:#c38959}.wtf-nearest-country-list{display:none;margin-top:20px;border-top:1px solid #24532e}.wtf-nearest-country-list.open{display:block}.wtf-nearest-country-list a{display:flex;justify-content:space-between;gap:15px;padding:15px 3px;border-bottom:1px solid #1d2b20;color:#eee;text-decoration:none;font-weight:900}.wtf-nearest-country-list a span{color:#ff4949;font-size:12px;text-shadow:0 0 7px rgba(255,73,73,.58)}.wtf-nearest-country-note{margin:15px 0 0!important;color:#888!important;font-size:12px!important}
+  .wtf-nearest-country-btn{box-sizing:border-box;width:100%;margin-top:9px;padding:15px;border:2px solid #78df85;border-radius:999px;background:#0a120c;color:#78df85;font:900 14px/1.15 'Archivo Black',sans-serif;cursor:pointer;white-space:normal;overflow-wrap:anywhere}.wtf-nearest-country-btn.alt{border-color:#a16a3e;color:#c38959}.wtf-nearest-country-list{display:none;margin-top:20px;border-top:1px solid #24532e}.wtf-nearest-country-list.open{display:block}.wtf-nearest-country-list a{display:flex;justify-content:space-between;gap:15px;padding:15px 3px;border-bottom:1px solid #1d2b20;color:#eee;text-decoration:none;font-weight:900}.wtf-nearest-country-list a span{color:#ff4949;font-size:12px;text-shadow:0 0 7px rgba(255,73,73,.58)}.wtf-nearest-country-note{margin:15px 0 0!important;color:#888!important;font-size:12px!important}.wtf-territory-x-note{color:#ff3d47!important;font-weight:900!important;text-shadow:0 0 8px rgba(255,61,71,.35)}
+  #wtfTerritoryOverlay .wtf-unavailable-card h2{font-size:clamp(24px,8vw,38px);overflow-wrap:anywhere}
 </style>
 <div class="wtf-unavailable-overlay" id="wtfUnavailableOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfUnavailableTitle">
   <div class="wtf-unavailable-card">
@@ -7646,7 +7647,7 @@ button[id*="back"] svg,
     <h2 id="wtfTerritoryTitle">You are searching outside your current territory.</h2>
     <p id="wtfTerritoryCopy">Enter your current territory for the closest locations, or simply X out to keep searching this city.</p>
     <button class="wtf-nearest-country-btn" id="wtfTerritoryEnter" type="button">ENTER HERE FOR CLOSEST LOCATIONS</button>
-    <p class="wtf-nearest-country-note">The red X keeps your selected city exactly as it is.</p>
+    <p class="wtf-nearest-country-note wtf-territory-x-note">★ The red X keeps your selected city exactly as selected.</p>
   </div>
 </div>
 
@@ -9426,8 +9427,22 @@ function openPhonePopup(digits, display, businessName){
     numEl.textContent = display || digits;
     numEl.setAttribute('href', 'tel:' + digits);
   }
-  if(callEl) callEl.setAttribute('href', 'tel:' + digits);
+  if(callEl){callEl.textContent='CALL NOW';callEl.setAttribute('href','tel:'+digits);callEl.removeAttribute('target');}
+  var copyEl=document.getElementById('phonePopupCopy');
+  if(copyEl)copyEl.style.display='';
   overlay.dataset.digits = digits;
+  overlay.classList.add('open');
+}
+
+function openPhoneUnavailablePopup(businessName, location){
+  var overlay=document.getElementById('phonePopupOverlay');
+  if(!overlay)return;
+  var numEl=document.getElementById('phonePopupNumber'),callEl=document.getElementById('phonePopupCall'),nameEl=document.getElementById('phonePopupName'),copyEl=document.getElementById('phonePopupCopy');
+  if(nameEl){nameEl.textContent=businessName||'BUSINESS';nameEl.style.display='';}
+  if(numEl){numEl.textContent='PHONE NOT PUBLICLY LISTED';numEl.removeAttribute('href');}
+  if(callEl){callEl.textContent='OPEN CURRENT LISTING';callEl.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((businessName||'business')+' '+(location||''));callEl.target='_blank';}
+  if(copyEl)copyEl.style.display='none';
+  overlay.dataset.digits='';
   overlay.classList.add('open');
 }
 
@@ -9505,7 +9520,7 @@ function setupPhonePopup(){
           if(directions&&detail.formatted_address)directions.setAttribute('data-directions-popup',detail.formatted_address);
           openPhonePopup(digits,phone,detail.name||businessName);
         }catch(err){
-          alert('A public phone number is not listed right now. Tap Directions to open the current business listing.');
+          openPhoneUnavailablePopup(businessName,location);
           lookupBtn.setAttribute('title',oldTitle);
         }finally{lookupBtn.disabled=false;}
         return;
@@ -18589,7 +18604,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-full-footer{margin-top:38px;padding:24px 6px 10px;border-top:1px solid #202020;text-align:center}.wtf2-full-footer .fine-print{color:#777!important;font-size:.7rem!important;line-height:1.55!important}.wtf2-full-footer .footer-hotlink{color:#8a8a8a}.wtf2-full-footer a{color:#aaa!important}
   a[href^="mailto:info@bestofperiod.com"]{color:#F59E0B!important;text-decoration:underline!important;text-underline-offset:2px;}
   .wtf2-music-toggle{position:fixed;z-index:100009;right:13px;top:13px;width:58px;height:58px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.03em;cursor:pointer;box-shadow:0 0 14px rgba(245,158,11,.45),inset 0 0 11px rgba(245,158,11,.1);}.wtf2-music-toggle .note{display:block;margin-bottom:3px;font-size:17px;color:var(--wtf2-red)}.wtf2-music-toggle.is-muted{color:#777;border-color:#7b551b;box-shadow:0 0 8px rgba(245,158,11,.2)}
-  .wtf2-groove-trigger{position:fixed;z-index:100009;left:11px;top:78px;display:flex;align-items:center;gap:5px;padding:8px 10px;border:2px solid var(--wtf2-orange);border-radius:999px;background:#020202;color:#fff;font:900 8px/1.05 'Archivo Black',sans-serif;letter-spacing:.025em;cursor:pointer;animation:wtf2GroovePulse 1.7s ease-in-out infinite}.wtf2-groove-trigger .arrow{color:var(--wtf2-red);font-size:15px;animation:wtf2ArrowNudge .8s ease-in-out infinite alternate}.wtf2-groove-trigger .note{color:var(--wtf2-red);font-size:15px}.wtf2-music-picker{position:fixed;inset:0;z-index:100012;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.74);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.wtf2-music-picker.open{display:grid}.wtf2-music-card{position:relative;width:min(100%,330px);padding:26px 22px 20px;border:2px solid var(--wtf2-orange);border-radius:22px;background:#050505;box-shadow:0 0 30px rgba(245,158,11,.28),0 22px 70px #000;font-family:'Archivo Narrow',sans-serif}.wtf2-music-card h2{margin:0 0 5px;color:#fff;font:900 22px/1 'Archivo Black',sans-serif;text-align:center}.wtf2-music-card p{margin:0 0 16px;color:#888;font-size:13px;text-align:center}.wtf2-groove-close{position:absolute;right:9px;top:9px;width:34px;height:34px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#000;color:var(--wtf2-red);font:900 18px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf2-track{display:block;width:100%;margin:8px 0;padding:12px 8px;border:1px solid #3b3b3b;border-radius:10px;background:#090909;color:#ddd;font:900 11px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf2-track.active{border-color:var(--wtf2-orange);color:var(--wtf2-red);box-shadow:0 0 11px rgba(245,158,11,.3)}
+  .wtf2-groove-trigger{position:fixed;z-index:100009;left:11px;top:78px;display:flex;align-items:center;gap:5px;padding:8px 10px;border:2px solid var(--wtf2-orange);border-radius:999px;background:#020202;color:#fff;font:900 8px/1.05 'Archivo Black',sans-serif;letter-spacing:.025em;cursor:pointer;animation:wtf2GroovePulse 1.7s ease-in-out infinite}.wtf2-groove-trigger .arrow{color:var(--wtf2-red);font-size:15px;animation:wtf2ArrowNudge .8s ease-in-out infinite alternate}.wtf2-groove-trigger .note{color:var(--wtf2-red);font-size:15px}.wtf2-music-picker{position:fixed;inset:0;z-index:100012;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.74);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.wtf2-music-picker.open{display:grid}.wtf2-music-card{position:relative;box-sizing:border-box;width:min(100%,330px);padding:26px 22px 20px;border:2px solid var(--wtf2-orange);border-radius:22px;background:#050505;box-shadow:0 0 30px rgba(245,158,11,.28),0 22px 70px #000;font-family:'Archivo Narrow',sans-serif}.wtf2-music-card h2{margin:0 0 5px;color:#fff;font:900 22px/1 'Archivo Black',sans-serif;text-align:center}.wtf2-music-card p{margin:0 0 16px;color:#888;font-size:13px;text-align:center}.wtf2-groove-close{position:absolute;right:9px;top:9px;width:34px;height:34px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#000;color:var(--wtf2-red);font:900 18px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf2-track{display:block;width:100%;margin:8px 0;padding:12px 8px;border:1px solid #3b3b3b;border-radius:10px;background:#090909;color:#ddd;font:900 11px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf2-track.active{border-color:var(--wtf2-orange);color:var(--wtf2-red);box-shadow:0 0 11px rgba(245,158,11,.3)}.wtf2-picker-music-off{display:block;margin:16px auto 0 0;padding:8px 12px;border:1px solid var(--wtf2-orange);border-radius:999px;background:#020202;color:var(--wtf2-red);font:900 9px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 8px rgba(245,158,11,.2)}
   @keyframes wtf2GroovePulse{0%,100%{box-shadow:0 0 8px rgba(245,158,11,.3);transform:scale(1)}50%{box-shadow:0 0 22px rgba(245,158,11,.78),0 0 28px rgba(201,2,1,.18);transform:scale(1.045)}}@keyframes wtf2ArrowNudge{from{transform:translateX(0)}to{transform:translateX(4px)}}
   .wtf2-share-page{position:fixed;z-index:100009;left:13px;bottom:13px;width:64px;height:64px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.035em;cursor:pointer;box-shadow:0 0 12px rgba(245,158,11,.42),inset 0 0 11px rgba(245,158,11,.09);animation:wtf2SharePulse 2.2s ease-in-out infinite;}.wtf2-share-page svg{display:block;width:18px;height:18px;margin:0 auto 4px;fill:none;stroke:var(--wtf2-red);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.wtf2-share-page.is-copied{color:#75dd82;animation:none}.wtf2-share-page.is-copied svg{stroke:#75dd82}
   .wtf2-main-share-wrap{display:flex;justify-content:center;align-items:center;margin:42px 0 10px;}
@@ -18835,7 +18850,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 <section id="wtf2Overlay" aria-hidden="true">
   <button class="wtf2-music-toggle is-muted" id="wtf2MusicToggle" type="button" aria-pressed="false" aria-label="Turn music on"><span class="note">♫</span><span class="music-label">MUSIC ON</span></button>
   <button class="wtf2-groove-trigger" id="wtf2GrooveTrigger" type="button" aria-haspopup="dialog" aria-controls="wtf2MusicPicker"><span class="arrow">➜</span><span class="note">♫</span><span>PICK YOUR<br>GROOVE</span></button>
-  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · VEGAS QUEST + NIGHT SHUTTLE</button><button class="wtf2-track" data-track="1" type="button">1 · VEGAS QUEST</button><button class="wtf2-track" data-track="2" type="button">2 · PIXEL PICNIC</button><button class="wtf2-track" data-track="3" type="button">3 · NIGHT SHUTTLE</button></div></div>
+  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · VEGAS QUEST + NIGHT SHUTTLE</button><button class="wtf2-track" data-track="1" type="button">1 · VEGAS QUEST</button><button class="wtf2-track" data-track="2" type="button">2 · PIXEL PICNIC</button><button class="wtf2-track" data-track="3" type="button">3 · NIGHT SHUTTLE</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Return to current WTF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -19023,8 +19038,8 @@ const LONDON_BUSINESS_DETAILS={
   'National Hemp Service':{address:'London',website:'https://nationalhempservice.co.uk/',lat:51.5074,lng:-0.1278,story:'A London hemp and CBD business offering oils, capsules, edibles, skincare and vape products. Confirm the current product range and regulatory status before purchasing.'},
   'The CBD Flower Shop London':{address:'London delivery service',website:'https://www.thecbdflowershop.co.uk/the-cbd-flower-shop-london/',lat:51.5074,lng:-0.1278,story:'An online CBD retailer serving London. This is a delivery listing rather than a recreational dispensary or walk-in cannabis shop.'},
   'Curaleaf Clinic':{address:'London medical cannabis service',website:'https://curaleafclinic.com/',lat:51.5150,lng:-0.1100,story:'A private specialist medical-cannabis clinic. Access is clinical and prescription-led; it is not adult-use retail and eligibility is determined by clinicians.'},
-  'Mamedica':{address:'London medical cannabis service',website:'https://mamedica.co.uk/',lat:51.5200,lng:-0.1000,story:'A UK private medical-cannabis clinic providing specialist assessment and prescription services for eligible patients. It is not a recreational dispensary.'},
-  'Alternaleaf':{address:'London medical cannabis service',website:'https://www.alternaleaf.co.uk/',lat:51.5000,lng:-0.1200,story:'A UK medical-cannabis access service. Treatment requires a clinical pathway and prescription; recreational sales remain unavailable.'},
+  'Mamedica':{address:'20 Midtown, London WC1V 6NX',phone:'0330 580 1170',website:'https://mamedica.co.uk/',lat:51.5200,lng:-0.1000,story:'A UK private medical-cannabis clinic providing specialist assessment and prescription services for eligible patients. It is not a recreational dispensary.'},
+  'Alternaleaf':{address:'Online medical cannabis clinic serving London',phone:'+44 1283 244025',website:'https://www.alternaleaf.co.uk/',lat:51.5000,lng:-0.1200,story:'A UK medical-cannabis access service. Treatment requires a clinical pathway and prescription; recreational sales remain unavailable.'},
   'Blacklist Lounge Camden':{address:'9 Camden High St, London NW1 7JE',phone:'+44 7385 599005',website:'https://blacklist-lounge.com/',lat:51.5368,lng:-0.1399,story:'A Camden restaurant and premium shisha lounge serving food, drinks and hookah. Shisha service is separate from cannabis and remains subject to age and smoking rules.'},
   'Sapores Lounge':{address:'Camden, London',website:'https://sapores.co.uk/en',lat:51.5390,lng:-0.1426,story:'A Camden restaurant and shisha lounge pairing dining with hookah service. Confirm outdoor-service arrangements, age policy and current hours.'},
   'Laika Shisha Lounge':{address:'Inside ZIMA, Soho, London',website:'https://www.laikalounge.com/',lat:51.5118,lng:-0.1320,story:'A central London shisha lounge founded in 2022, located inside ZIMA restaurant. Shisha is tobacco or herbal hookah service—not cannabis.'},
@@ -19120,6 +19135,7 @@ window.wtfPrepare24Hours=async function(city){
 .la-near-test h3{margin:0;color:#fff;font:900 18px/1.1 'Archivo Black',sans-serif;letter-spacing:.02em;}
 .la-near-sub{margin:5px 0 11px;color:#aaa;font:700 12px/1.35 'Archivo Narrow',sans-serif;}
 .la-near-zones{display:flex;gap:7px;overflow-x:auto;padding:1px 0 10px;scrollbar-width:none;}
+.la-near-basis{margin:0 2px 11px;color:#858585;font:700 11px/1.38 'Archivo Narrow',sans-serif;}.la-near-basis strong{color:#f59e0b;}
 .la-near-zones button{flex:0 0 auto;border:1px solid #3f3f3f;border-radius:999px;background:#111;color:#ddd;padding:8px 11px;font:800 12px 'Archivo Narrow',sans-serif;}
 .la-near-zones button.active{border-color:#69df7d;color:#8bf09b;box-shadow:0 0 9px rgba(79,210,103,.3);}
 .la-near-row{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(68px,auto);gap:12px;align-items:center;padding:12px 2px;border:0;border-bottom:1px solid #202820;background:transparent;text-align:left;cursor:pointer;}
@@ -19313,7 +19329,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
-    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose a '+laEsc(selectedCity)+' area.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
+    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose a '+laEsc(selectedCity)+' area.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Current Location uses your phone’s live position. Named areas use the center point of that area.</p><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
@@ -19481,6 +19497,7 @@ window.wtfPrepare24Hours=async function(city){
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
     q('wtf2GrooveTrigger').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});
     q('wtf2GrooveClose').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),false);});
+    q('wtf2PickerMusicOff').addEventListener('click',function(){stopMusic();this.textContent='MUSIC OFF';});
     q('wtf2MusicPicker').addEventListener('click',function(e){if(e.target===e.currentTarget)setOpen(e.currentTarget,false);});
     document.querySelectorAll('.wtf2-track').forEach(function(b){b.addEventListener('click',function(){selectMusic(b.dataset.track);});});
     q('wtf2SharePage').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
