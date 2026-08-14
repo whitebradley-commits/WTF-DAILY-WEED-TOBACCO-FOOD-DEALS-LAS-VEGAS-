@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" name="viewport"/>
 <title>WTFdd.com — Weed · Tobacco · Food</title>
 <meta property="og:title" content="WTF! Check this out!"/>
 <meta property="og:description" content="Weed · Tobacco · Food 🌿🍂🍔"/>
@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Archivo+Narrow:wght@400;500;600;700&amp;family=Baloo+2:wght@600;700;800&amp;family=Bebas+Neue&amp;family=Alfa+Slab+One&amp;family=Roboto+Condensed:wght@300;400&amp;family=IBM+Plex+Sans+Condensed:wght@400;700&amp;family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Oswald:wght@400;500&amp;display=swap" rel="stylesheet"/>
 <style>
-  html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;}
+  html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-x:none;overscroll-behavior-y:auto;touch-action:pan-y pinch-zoom;}
   button,a,input,select,[role="button"]{touch-action:manipulation;}
   :root{
     --bg:#000000;
@@ -50,7 +50,12 @@
     font-family:'Archivo Narrow',sans-serif;
     min-height:100vh;
     overflow-x:hidden;
+    width:100%;max-width:100vw;
+    -webkit-overflow-scrolling:touch;
   }
+  img,svg,video,canvas{max-width:100%;}
+  #wtf2Overlay,#wtf2Directory,.wtf2-legend-overlay,.wtf-unavailable-overlay,.wtf-unavailable-detail-overlay,.la-dispensary-overlay,.near-me-overlay{max-width:100vw;overflow-x:hidden;touch-action:pan-y pinch-zoom;-webkit-overflow-scrolling:touch;}
+  #nearMeMap,[id*="Map"],.leaflet-container,.gm-style{touch-action:pan-x pan-y pinch-zoom!important;overscroll-behavior:contain;}
   ::selection{background:var(--red);color:#fff;}
   a{color:#3D8B4C;}
 
