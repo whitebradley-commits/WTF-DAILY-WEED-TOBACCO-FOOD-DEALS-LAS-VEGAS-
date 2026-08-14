@@ -7613,6 +7613,8 @@ button[id*="back"] svg,
     <p>London does not have recreational cannabis dispensaries. Prescription medical cannabis is a separate, specialist-led route.</p>
     <button class="wtf-nearest-country-btn" id="wtfNearestCountries" type="button">NEAREST LOCATIONS</button>
     <button class="wtf-nearest-country-btn alt" id="wtfLondonLegalAlternatives" type="button">LOCAL LEGAL ALTERNATIVES</button>
+    <button class="wtf-nearest-country-btn" id="wtfLondonAlternativeDirectory" type="button">VIEW ALL 10 LONDON ALTERNATIVES</button>
+    <button class="wtf-nearest-country-btn" id="wtfLondonLawButton" type="button">READ THE LONDON / UK RULES</button>
     <div class="wtf-nearest-country-list" id="wtfNearestCountryList">
       <a data-near-lat="52.0705" data-near-lng="4.3007" href="https://www.google.com/maps/search/?api=1&query=cannabis+coffeeshops+The+Hague+Netherlands" target="_blank" rel="noopener">The Hague, Netherlands <span>194 MI</span></a>
       <a data-near-lat="51.9244" data-near-lng="4.4777" href="https://www.google.com/maps/search/?api=1&query=cannabis+coffeeshops+Rotterdam+Netherlands" target="_blank" rel="noopener">Rotterdam, Netherlands <span>199 MI</span></a>
@@ -7627,6 +7629,24 @@ button[id*="back"] svg,
       <a data-near-lat="51.5390" data-near-lng="-0.1426" href="https://www.google.com/maps/search/?api=1&query=tobacco+smoke+shops+Camden+London" target="_blank" rel="noopener">Tobacco and smoke shops near Camden <span>—</span></a>
       <p class="wtf-nearest-country-note">These are legal-category searches, not recreational cannabis venues. Confirm age rules, indoor-smoking rules, products, and hours directly.</p>
     </div>
+    <div class="wtf-nearest-country-list" id="wtfLondonLawList">
+      <a href="https://www.gov.uk/government/publications/cannabis-cbd-and-other-cannabinoids-drug-licensing-factsheet/drug-licensing-factsheet-cannabis-cbd-and-other-cannabinoids" target="_blank" rel="noopener">Cannabis and CBD controls <span>GOV.UK</span></a>
+      <a href="https://www.gov.uk/government/news/government-announces-that-medicinal-cannabis-is-legal" target="_blank" rel="noopener">Specialist medical prescriptions <span>GOV.UK</span></a>
+      <a href="https://www.gov.uk/government/publications/circular-0182018-rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans/rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans-accessible-version" target="_blank" rel="noopener">Smoking medical cannabis prohibited <span>GOV.UK</span></a>
+      <a href="https://www.gov.uk/government/publications/mhra-statement-on-products-containing-cannabidiol-cbd/mhra-statement-on-products-containing-cannabidiol-cbd" target="_blank" rel="noopener">CBD food authorisation <span>GOV.UK</span></a>
+      <p class="wtf-nearest-country-note">WTFDD provides directory information, not legal or medical advice. Read the official source and confirm current rules before acting.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wtf-unavailable-overlay" id="wtfTerritoryOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfTerritoryTitle">
+  <div class="wtf-unavailable-card">
+    <button class="wtf-unavailable-close" id="wtfTerritoryClose" type="button" aria-label="Keep searching this city">×</button>
+    <div class="la-dispensary-kicker">WTFDD · LOCATION NOTICE</div>
+    <h2 id="wtfTerritoryTitle">You are searching outside your current territory.</h2>
+    <p id="wtfTerritoryCopy">Enter your current territory for the closest locations, or simply X out to keep searching this city.</p>
+    <button class="wtf-nearest-country-btn" id="wtfTerritoryEnter" type="button">ENTER HERE FOR CLOSEST LOCATIONS</button>
+    <p class="wtf-nearest-country-note">The red X keeps your selected city exactly as it is.</p>
   </div>
 </div>
 
@@ -18486,6 +18506,8 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-logo{position:relative;z-index:6;display:block!important;width:min(84.6vw,441px)!important;height:185px!important;margin:96px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:none;}
   .wtf2-city-badge{position:absolute;z-index:7;left:50%;bottom:11px;display:block;width:calc(100% - 30px);max-width:730px;padding:0 3px 7px;color:#F5A623;border-bottom:2px solid rgba(245,166,35,.7);border-radius:0 0 50% 50%;font:900 clamp(52px,15vw,86px)/.94 'Archivo Black',sans-serif;letter-spacing:-.04em;text-align:center;text-transform:uppercase;white-space:nowrap;transform:translateX(-50%) scale(1);transform-origin:center center;text-shadow:0 0 3px rgba(245,166,35,.4);animation:wtf2CityBadgePulse 2.35s ease-in-out infinite;pointer-events:none;}
   .wtf2-city-badge.is-long{font-size:clamp(29px,8.2vw,48px);letter-spacing:-.045em;}
+  .wtf2-city-quick-change{position:absolute;z-index:9;right:12px;bottom:66px;width:58px;height:58px;padding:7px;border:2px solid #F59E0B;border-radius:50%;background:#020202;color:#F4C15B;font:900 7px/1.05 'Archivo Black',sans-serif;letter-spacing:.015em;text-align:center;text-transform:uppercase;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.4),inset 0 0 9px rgba(245,158,11,.08);}
+  .wtf2-city-quick-change:hover,.wtf2-city-quick-change:focus-visible{color:#fff;box-shadow:0 0 21px rgba(245,158,11,.7)}
   @keyframes wtf2CityBadgePulse{0%,100%{opacity:.93;filter:drop-shadow(0 0 1px rgba(245,158,11,.18));transform:translateX(-50%) scale(1)}50%{opacity:1;filter:drop-shadow(0 0 3px rgba(245,158,11,.4));transform:translateX(-50%) scale(1.014)}}
   .wtf2-redline{width:82%;height:0;margin:0 auto 30px;background:none;box-shadow:none;}
   .wtf2-hero-fx{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;}
@@ -18819,6 +18841,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Return to current WTF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
       <span class="new-wtf-logo wtf2-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
       <span class="wtf2-city-badge" id="wtf2CityBadge">Las Vegas</span>
+      <button class="wtf2-city-quick-change" id="wtf2CityQuickChange" type="button" aria-label="Choose another city">CHOOSE<br>ANOTHER<br>CITY</button>
       <div class="wtf2-hero-fx" aria-hidden="true">
         <span class="wtf2-smoke wtf2-sm1"></span><span class="wtf2-smoke wtf2-sm2"></span><span class="wtf2-smoke wtf2-sm3"></span><span class="wtf2-smoke wtf2-sm4"></span>
         <span class="wtf2-hero-food wtf2-hf1">🍔</span><span class="wtf2-hero-food wtf2-hf2">🍕</span><span class="wtf2-hero-food wtf2-hf3">🍣</span><span class="wtf2-hero-food wtf2-hf4">🥢</span><span class="wtf2-hero-food wtf2-hf5">🍱</span><span class="wtf2-hero-food wtf2-hf6">🍣</span>
@@ -18972,6 +18995,8 @@ const WTF_CITY_STARTERS = {
   },
   'London': {
     weed: [],
+    alternative: ['CamdenTown CBD','Canna Power CBD','LDN CBD','Mr Nice Soho','Soho CBD & Canna Museum','National Hemp Service','The CBD Flower Shop London','Curaleaf Clinic','Mamedica','Alternaleaf'],
+    tobacco: ['Blacklist Lounge Camden','Sapores Lounge','Laika Shisha Lounge','Aladdins Shisha Lounge','Dhoompan','Arabian Lounge','FLVRS','MURK Lounge','NOIR Restaurant & Lounge','Jumeirah Garden'],
     food: ['Dishoom Covent Garden','Borough Market','Flat Iron Soho','Padella Borough Market','Hawksmoor Seven Dials','Beigel Bake Brick Lane','The Breakfast Club Soho','Aladin Brick Lane','Honest Burgers Soho','Duck & Waffle']
   }
 };
@@ -18989,12 +19014,28 @@ const SAN_DIEGO_DISPENSARY_DETAILS = {
   'Catalyst Cannabis':{address:'5125 Convoy St #211, San Diego, CA 92111',phone:'(858) 256-4047',website:'https://catalyst-cannabis.com/dispensary-locations/san-diego-dispensary',hours:'Daily 9 AM–9:30 PM',lat:32.8302,lng:-117.1535,story:'Catalyst’s San Diego dispensary is located on Convoy Street between I-805 and the Cabrillo Freeway. It serves adult-use customers with in-store shopping and a broad California cannabis menu.'},
   'Wellgreens':{address:'3703 Camino del Rio S #215-A, San Diego, CA 92108',phone:'(619) 850-9117',website:'https://www.wellgreens.store/locations/mission-valley-camino-del-rio-s',hours:'Daily 6 AM–9:55 PM',lat:32.7765,lng:-117.1135,story:'Wellgreens Mission Valley is a pickup-focused location near Snapdragon Stadium with a large parking lot and easy freeway access. The San Diego company has operated since 2018.'}
 };
-const MARKET_DISPENSARY_DETAILS={'Los Angeles':LA_DISPENSARY_DETAILS,'San Diego':SAN_DIEGO_DISPENSARY_DETAILS};
+const LONDON_BUSINESS_DETAILS={
+  'CamdenTown CBD':{address:'Unit 524, Camden Market, London NW1 8AH',website:'https://camdentowncbd.com/pages/camden-market-shop',lat:51.5413,lng:-0.1462,story:'A Camden Market CBD retailer carrying oils, edibles, e-liquids, vapes and skincare. CBD retail is not a recreational cannabis dispensary; product status and age requirements should be confirmed directly.'},
+  'Canna Power CBD':{address:'The Stables Market, Chalk Farm Rd, London NW1 8AH',lat:51.5417,lng:-0.1468,story:'A specialist CBD retailer in Camden’s Stables Market. Products sold as CBD or hemp are legally distinct from controlled recreational cannabis.'},
+  'LDN CBD':{address:'126 Camden Rd, London NW1 9EE',lat:51.5435,lng:-0.1380,story:'A London CBD shop offering hemp-derived wellness products. This listing is an alternative retail destination, not a cannabis dispensary.'},
+  'Mr Nice Soho':{address:'23 Noel St, Soho, London W1F 8GT',lat:51.5147,lng:-0.1356,story:'A Soho cannabis-lifestyle and CBD shop inspired by Howard Marks. It does not sell recreational cannabis.'},
+  'Soho CBD & Canna Museum':{address:'Soho, London',lat:51.5136,lng:-0.1365,story:'A Soho CBD-focused shop and cannabis-culture destination. Visitors should distinguish legal CBD merchandise from controlled cannabis products.'},
+  'National Hemp Service':{address:'London',website:'https://nationalhempservice.co.uk/',lat:51.5074,lng:-0.1278,story:'A London hemp and CBD business offering oils, capsules, edibles, skincare and vape products. Confirm the current product range and regulatory status before purchasing.'},
+  'The CBD Flower Shop London':{address:'London delivery service',website:'https://www.thecbdflowershop.co.uk/the-cbd-flower-shop-london/',lat:51.5074,lng:-0.1278,story:'An online CBD retailer serving London. This is a delivery listing rather than a recreational dispensary or walk-in cannabis shop.'},
+  'Curaleaf Clinic':{address:'London medical cannabis service',website:'https://curaleafclinic.com/',lat:51.5150,lng:-0.1100,story:'A private specialist medical-cannabis clinic. Access is clinical and prescription-led; it is not adult-use retail and eligibility is determined by clinicians.'},
+  'Mamedica':{address:'London medical cannabis service',website:'https://mamedica.co.uk/',lat:51.5200,lng:-0.1000,story:'A UK private medical-cannabis clinic providing specialist assessment and prescription services for eligible patients. It is not a recreational dispensary.'},
+  'Alternaleaf':{address:'London medical cannabis service',website:'https://www.alternaleaf.co.uk/',lat:51.5000,lng:-0.1200,story:'A UK medical-cannabis access service. Treatment requires a clinical pathway and prescription; recreational sales remain unavailable.'},
+  'Blacklist Lounge Camden':{address:'9 Camden High St, London NW1 7JE',phone:'+44 7385 599005',website:'https://blacklist-lounge.com/',lat:51.5368,lng:-0.1399,story:'A Camden restaurant and premium shisha lounge serving food, drinks and hookah. Shisha service is separate from cannabis and remains subject to age and smoking rules.'},
+  'Sapores Lounge':{address:'Camden, London',website:'https://sapores.co.uk/en',lat:51.5390,lng:-0.1426,story:'A Camden restaurant and shisha lounge pairing dining with hookah service. Confirm outdoor-service arrangements, age policy and current hours.'},
+  'Laika Shisha Lounge':{address:'Inside ZIMA, Soho, London',website:'https://www.laikalounge.com/',lat:51.5118,lng:-0.1320,story:'A central London shisha lounge founded in 2022, located inside ZIMA restaurant. Shisha is tobacco or herbal hookah service—not cannabis.'},
+  'Dishoom Covent Garden':{address:'12 Upper St Martin’s Ln, London WC2H 9FB',website:'https://www.dishoom.com/covent-garden/',lat:51.5124,lng:-0.1269,story:'Dishoom’s Covent Garden café is inspired by the old Irani cafés of Bombay, serving breakfast through late dinner in a theatrical central-London setting.'}
+};
+const MARKET_DISPENSARY_DETAILS={'Los Angeles':LA_DISPENSARY_DETAILS,'San Diego':SAN_DIEGO_DISPENSARY_DETAILS,'London':LONDON_BUSINESS_DETAILS};
 function wtfStarterEntries(city,kind){
   var market=WTF_CITY_STARTERS[city],names=market&&market[kind]||[];
-  return names.map(function(name){
+  return names.map(function(record){var name=typeof record==='string'?record:record.name;
     var query=name+' '+city;
-    var details=kind==='weed'&&MARKET_DISPENSARY_DETAILS[city]&&MARKET_DISPENSARY_DETAILS[city][name]||{};
+    var details=MARKET_DISPENSARY_DETAILS[city]&&MARKET_DISPENSARY_DETAILS[city][name]||{};
     return Object.assign({name:name,area:'Citywide',address:name+', '+city,specialty:kind==='weed'?'Featured '+city+' dispensary':'High & Hungry '+city+' pick',url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(query),rating:null,priceLevel:kind==='food'?2:null},details);
   });
 }
@@ -19121,7 +19162,7 @@ window.wtfPrepare24Hours=async function(city){
 (function(){
   var issue='013',release='Week of August 13, 2026';
   var calendars={
-    'Los Angeles':'https://www.discoverlosangeles.com/events','Denver':'https://www.denver.org/events/','Portland':'https://www.travelportland.com/events/','New York City':'https://www.nyctourism.com/events/','Seattle':'https://visitseattle.org/things-to-do/events/','San Francisco':'https://www.sftravel.com/events','Chicago':'https://www.choosechicago.com/events/','Phoenix / Scottsdale':'https://www.visitphoenix.com/events/','Detroit':'https://visitdetroit.com/events/','Boston':'https://www.meetboston.com/events/','San Diego':'https://www.sandiego.org/explore/events','Sacramento':'https://www.visitsacramento.com/events/','Oakland / Berkeley':'https://www.visitoakland.com/events/','Albuquerque':'https://www.visitalbuquerque.org/abq365/events/','St. Louis':'https://explorestlouis.com/events/','Kansas City':'https://www.visitkc.com/visitors/events/','Oklahoma City':'https://www.visitokc.com/events/','Tulsa':'https://www.visittulsa.com/events/','Anchorage':'https://www.anchorage.net/events/'
+    'Los Angeles':'https://www.discoverlosangeles.com/events','Denver':'https://www.denver.org/events/','Portland':'https://www.travelportland.com/events/','New York City':'https://www.nyctourism.com/events/','Seattle':'https://visitseattle.org/things-to-do/events/','San Francisco':'https://www.sftravel.com/events','Chicago':'https://www.choosechicago.com/events/','Phoenix / Scottsdale':'https://www.visitphoenix.com/events/','Detroit':'https://visitdetroit.com/events/','Boston':'https://www.meetboston.com/events/','San Diego':'https://www.sandiego.org/explore/events','Sacramento':'https://www.visitsacramento.com/events/','Oakland / Berkeley':'https://www.visitoakland.com/events/','Albuquerque':'https://www.visitalbuquerque.org/abq365/events/','St. Louis':'https://explorestlouis.com/events/','Kansas City':'https://www.visitkc.com/visitors/events/','Oklahoma City':'https://www.visitokc.com/events/','Tulsa':'https://www.visittulsa.com/events/','Anchorage':'https://www.anchorage.net/events/','London':'https://www.visitlondon.com/things-to-do/whats-on/special-events/london-events-calendar'
   };
   var grid=document.querySelector('#wtfNewsletterIssue .wtf-news-grid');
   var masthead=document.querySelector('#wtfNewsletterIssue .wtf-news-masthead');
@@ -19141,6 +19182,17 @@ window.wtfPrepare24Hours=async function(city){
     var weed=market.weed.map(function(name,i){return item(name,'A featured '+city+' dispensary. Open the current listing to confirm today’s menu, hours, eligibility and inventory.',maps(name,city),i+1);}).join('');
     var food=market.food.map(function(name,i){return item(name,'A High & Hungry '+city+' starter pick. Check the current listing for hours, menu and directions before leaving.',maps(name,city),i+1);}).join('');
     var tobaccoQuery=maps('tobacco smoke vape shops',city),calendar=calendars[city]||search('official events',city);
+    if(city==='London'){
+      var alternatives=market.alternative.map(function(name,i){return item(name,'A London CBD/hemp retailer or specialist medical-access service. This is not recreational adult-use cannabis retail; open the current listing and read the legal label before visiting.',maps(name,'London'),i+1);}).join('');
+      var smoke=market.tobacco.map(function(name,i){return item(name,'A London tobacco, vape or lawful shisha destination. Shisha and tobacco service must not be confused with recreational cannabis use.',maps(name,'London'),i+1);}).join('');
+      grid.innerHTML='<section class="wtf-news-section weed full"><h2>LONDON WEED — THE LEGAL POSITION</h2>'+item('No recreational dispensaries','Cannabis remains controlled in the UK. Specialist-prescribed medical cannabis is a separate clinical route, and smoking cannabis-based medicinal products remains prohibited.','https://www.gov.uk/government/publications/circular-0182018-rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans/rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans-accessible-version',0)+'<div class="wtf-news-alert">CBD, hemp retail, medical clinics, tobacco shops and shisha lounges are separate categories. A listing here never changes the law.</div></section>'+ 
+      '<section class="wtf-news-section weed full"><h2>10 LEGAL ALTERNATIVES — CBD, HEMP &amp; MEDICAL ACCESS</h2>'+alternatives+'<div class="wtf-news-alert">Medical-cannabis access requires specialist clinical assessment and a prescription. CBD food products require the appropriate UK authorisation.</div></section>'+ 
+      '<section class="wtf-news-section tobacco full"><h2>10 LONDON SMOKE, TOBACCO &amp; SHISHA DESTINATIONS</h2>'+smoke+'<div class="wtf-news-alert">Confirm age policy, product type, outdoor-service arrangements and current hours directly.</div></section>'+ 
+      '<section class="wtf-news-section food full"><h2>10 HIGH &amp; HUNGRY LONDON STARTERS</h2>'+food+'<div class="wtf-news-alert">Every restaurant in this section is tied only to London. No Las Vegas listings or fallbacks are used.</div></section>'+ 
+      '<section class="wtf-news-section events full"><h2>LONDON — AUGUST 13–20, 2026</h2>'+item('Formula E World Championship — August 15–16','The all-electric season finale runs at ExCeL London this weekend. Confirm sessions, entry and transport before leaving.','https://www.visitlondon.com/things-to-do/whats-on/special-events/london-events-calendar',0)+item('The Weeknd at Wembley — August 14–19','Multiple Wembley Stadium dates fall inside this London issue week. Use the official venue listing for tickets and travel.','https://www.wembleystadium.com/events',0)+item('BBC Proms — current August programme','The Royal Albert Hall summer season continues throughout the issue period. Check the official daily programme.','https://www.bbc.co.uk/proms',0)+item('Greenwich+Docklands Festival — from August 21','Free outdoor art, dance, theatre and installations begin immediately after this issue week.','https://www.visitlondon.com/things-to-do/whats-on/special-events/london-events-calendar',0)+item('Official London events calendar','Use Visit London for additions, cancellations and newly announced events.',calendar,0)+'</section>'+ 
+      '<section class="wtf-news-section community full wtf-before-you-go"><h2>BEFORE YOU GO — LONDON</h2><div class="wtf-news-check-grid"><div class="wtf-news-check-card"><strong>Read the category</strong><span>CBD retail, medical access, tobacco and shisha are legally different.</span></div><div class="wtf-news-check-card"><strong>Confirm directly</strong><span>Hours, prescriptions, eligibility, products and age rules can change.</span></div><div class="wtf-news-check-card"><strong>Check transport</strong><span>Use current TfL and venue information before leaving.</span></div><div class="wtf-news-check-card"><strong>London only</strong><span>This issue contains no Las Vegas business or event content.</span></div></div></section>';
+      return;
+    }
     var weedSection=city==='London'?'<section class="wtf-news-section weed full"><h2>WEED — LONDON AVAILABILITY</h2>'+item('Recreational dispensaries are not available','Cannabis remains controlled in the UK. Specialist-prescribed medical cannabis is a separate route; confirm current official guidance before making decisions.','https://www.gov.uk/government/publications/cannabis-cbd-and-other-cannabinoids-drug-licensing-factsheet/drug-licensing-factsheet-cannabis-cbd-and-other-cannabinoids',0)+'<div class="wtf-news-alert">Use the London Weed button on the main city page to see nearby international locations.</div></section>':'<section class="wtf-news-section weed full"><h2>WEED — '+market.weed.length+' '+esc(city.toUpperCase())+' DISPENSARIES</h2>'+weed+'<div class="wtf-news-alert">This edition only contains '+esc(city)+' dispensaries. Menus, prices, inventory and hours can change; confirm directly before leaving.</div></section>';
     grid.innerHTML=
       weedSection+ 
@@ -19178,6 +19230,7 @@ window.wtfPrepare24Hours=async function(city){
     setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;
   }
   function openWtf2WithCities(){openWtf2();setTimeout(showCityLaunch,90);}
+  function chooseAnotherCity(){nearOnly=false;if(dir){dir.classList.remove('near-only');setOpen(dir,false);}['wtfUnavailableOverlay','wtfTerritoryOverlay','laDispensaryMini','laDispensaryOverlay'].forEach(function(id){var el=q(id);if(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');}});document.body.classList.remove('wtf2-child-open');showCityLaunch();}
   function closeWtf2(){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
   function returnToAgeGate(){stopMusic();closeWtf2();var gate=q('wtfLandingOverlay');if(gate)gate.classList.add('open');document.body.style.overflow='hidden';}
   function musicTone(freq,when,duration,type,volume){
@@ -19209,7 +19262,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function entriesFor(cat,area){
     if(selectedCity!=='Las Vegas'){
-      var starter=cat==='Weed'?wtfStarterEntries(selectedCity,'weed'):cat==='Food'?wtfStarterEntries(selectedCity,'food'):marketAreas().map(function(name){return {name:'Tobacco shops near '+name,area:name,address:name+', '+selectedCity,specialty:'Current '+name+' tobacco, smoke and vape listings',url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('tobacco smoke vape shops '+name+' '+selectedCity)};});
+      var starter=cat==='Weed'?wtfStarterEntries(selectedCity,'weed'):cat==='Food'?wtfStarterEntries(selectedCity,'food'):cat==='Alternative'?wtfStarterEntries(selectedCity,'alternative'):(WTF_CITY_STARTERS[selectedCity]&&WTF_CITY_STARTERS[selectedCity].tobacco?wtfStarterEntries(selectedCity,'tobacco'):marketAreas().map(function(name){return {name:'Tobacco shops near '+name,area:name,address:name+', '+selectedCity,specialty:'Current '+name+' tobacco, smoke and vape listings',url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('tobacco smoke vape shops '+name+' '+selectedCity)};}));
       return area==='All'||area==='Citywide'?starter:starter.filter(function(x){return x.area===area;});
     }
     if(cat==='Food'){
@@ -19255,7 +19308,7 @@ window.wtfPrepare24Hours=async function(city){
     return items.map(function(item,index){var area=item.area&&item.area!=='Citywide'?item.area:areas[index%areas.length],point=zones[area]||zones[areas[0]],ring=Math.floor(index/areas.length)+1,angle=(index*2.399963229728653),lat=Number(item.lat),lng=Number(item.lng);if(!Number.isFinite(lat)||!Number.isFinite(lng)){lat=point.lat+Math.sin(angle)*.006*ring;lng=point.lng+Math.cos(angle)*.007*ring;}return Object.assign({},item,{area:area,lat:lat,lng:lng,city:selectedCity,category:currentCat});});
   }
   function localCategoryEntries(){
-    if(currentCat==='Tobacco')return placeStarterEntries(marketAreas().map(function(area){return {name:'Tobacco shops near '+area,address:area+', '+selectedCity,url:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('tobacco smoke vape shops '+area+' '+selectedCity),specialty:'Current '+area+' tobacco, smoke and vape listings'};}));
+    if(currentCat==='Tobacco')return placeStarterEntries(entriesFor('Tobacco','All'));
     return placeStarterEntries(entriesFor(currentCat,'All'));
   }
   function laNearShell(){var zones=activeNearZones();
@@ -19263,6 +19316,10 @@ window.wtfPrepare24Hours=async function(city){
     return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose a '+laEsc(selectedCity)+' area.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+  function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
+  function closestLiveMarket(origin){var best=null;Object.keys(CITY_NEAR_ZONES).forEach(function(city){if(city==='London'&&currentCat==='Weed')return;var center=marketCenter(city);if(!center)return;var miles=laMiles(origin,center);if(!best||miles<best.miles)best={city:city,miles:miles};});return best;}
+  function territoryNoun(){return currentCat==='Food'?'RESTAURANTS':currentCat==='Tobacco'?'SMOKE SHOPS':'DISPENSARIES';}
+  function showTerritoryWarning(origin){var center=marketCenter(selectedCity);if(!center||laMiles(origin,center)<100)return false;var modal=q('wtfTerritoryOverlay'),button=q('wtfTerritoryEnter'),copy=q('wtfTerritoryCopy');if(!modal||!button)return false;var nearest=closestLiveMarket(origin),noun=territoryNoun();modal.dataset.originLat=origin.lat;modal.dataset.originLng=origin.lng;modal.dataset.nearestCity=nearest?nearest.city:'';button.textContent='ENTER HERE FOR CLOSEST '+noun;if(copy)copy.textContent='Enter your current territory for the closest '+noun.toLowerCase()+', or simply X out to keep searching '+selectedCity+'.';modal.classList.add('open');modal.setAttribute('aria-hidden','false');return true;}
   function laEsc(v){return String(v||'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
   function enrichLA(item){var market=item.city||selectedCity,details=MARKET_DISPENSARY_DETAILS[market]||{},n=String(item.name||'').toLowerCase(),key=Object.keys(details).find(function(k){var short=k.toLowerCase().replace(' downtown los angeles','');return n===k.toLowerCase()||n.indexOf(short)>-1||short.indexOf(n)>-1;});return key?Object.assign({},item,details[key],{name:key,city:market}):item;}
   async function fetchLAOverpass(origin){
@@ -19356,7 +19413,7 @@ window.wtfPrepare24Hours=async function(city){
       var status=q('laNearStatus');
       if(!navigator.geolocation){status.textContent='Location is not supported. Choose a '+selectedCity+' area.';return;}
       status.textContent='Allow location access to find the closest five '+(currentCat==='Food'?'restaurants':currentCat==='Tobacco'?'tobacco shops':'dispensaries')+'.';
-      navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};loadLANearest(window.__wtfSessionOrigin,'Current Location');},function(){status.textContent='Location was not shared. Choose one of the '+selectedCity+' areas above.';},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+      navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};loadLANearest(window.__wtfSessionOrigin,'Current Location');showTerritoryWarning(window.__wtfSessionOrigin);},function(){status.textContent='Location was not shared. Choose one of the '+selectedCity+' areas above.';},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
     }
     block.addEventListener('click',function(e){var button=e.target.closest('[data-la-dispensary]');if(button)openLAMini(window.__laNearestDispensaries&&window.__laNearestDispensaries[Number(button.dataset.laDispensary)]);});
     var miniClose=q('laDispensaryMiniClose');if(miniClose&&!miniClose.dataset.ready){miniClose.dataset.ready='1';miniClose.addEventListener('click',function(){var overlay=q('laDispensaryMini');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');});}
@@ -19388,17 +19445,21 @@ window.wtfPrepare24Hours=async function(city){
     if(lastNearOrigin)updateFullListingDistances(lastNearOrigin);
   }
   function updateLondonOptionDistances(origin){document.querySelectorAll('#wtfUnavailableOverlay a[data-near-lat][data-near-lng]').forEach(function(link){var miles=laMiles(origin,{lat:Number(link.dataset.nearLat),lng:Number(link.dataset.nearLng)}),span=link.querySelector('span');if(span)span.textContent=miles<10?miles.toFixed(2)+' MI':Math.round(miles)+' MI';});}
-  function openLondonUnavailable(){var modal=q('wtfUnavailableOverlay'),list=q('wtfNearestCountryList'),local=q('wtfLondonLegalList');if(!modal)return;if(list)list.classList.remove('open');if(local)local.classList.remove('open');q('wtfNearestCountries').textContent='NEAREST LOCATIONS';q('wtfLondonLegalAlternatives').textContent='LOCAL LEGAL ALTERNATIVES';modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';var fallback={lat:51.5074,lng:-0.1278};updateLondonOptionDistances(window.__wtfSessionOrigin||fallback);if(navigator.geolocation)navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};updateLondonOptionDistances(window.__wtfSessionOrigin);},function(){},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
+  function openLondonUnavailable(){var modal=q('wtfUnavailableOverlay'),list=q('wtfNearestCountryList'),local=q('wtfLondonLegalList'),law=q('wtfLondonLawList');if(!modal)return;if(list)list.classList.remove('open');if(local)local.classList.remove('open');if(law)law.classList.remove('open');q('wtfNearestCountries').textContent='NEAREST LOCATIONS';q('wtfLondonLegalAlternatives').textContent='LOCAL LEGAL ALTERNATIVES';q('wtfLondonLawButton').textContent='READ THE LONDON / UK RULES';modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';var fallback={lat:51.5074,lng:-0.1278};updateLondonOptionDistances(window.__wtfSessionOrigin||fallback);if(navigator.geolocation)navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};updateLondonOptionDistances(window.__wtfSessionOrigin);showTerritoryWarning(window.__wtfSessionOrigin);},function(){},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
   function openDirectory(cat,locatorOnly){if(selectedCity==='London'&&cat==='Weed'){openLondonUnavailable();return;}nearOnly=!!locatorOnly;currentCat=cat;currentArea='All';dir.dataset.category=String(cat).toLowerCase();dir.classList.toggle('near-only',nearOnly);render();setOpen(dir,true);dir.scrollTop=0;}
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
     try{var savedCity=sessionStorage.getItem('wtfSelectedCity');setWtfCityBadge(savedCity&&WTF_CITY_STARTERS[savedCity]||savedCity==='Las Vegas'?savedCity:'Las Vegas');}catch(e){setWtfCityBadge('Las Vegas');}
     document.querySelectorAll('#wtfCityMenu .wtf-city-future').forEach(function(option){option.hidden=true;});
-    var unavailableClose=q('wtfUnavailableClose'),nearestCountries=q('wtfNearestCountries'),legalAlternatives=q('wtfLondonLegalAlternatives');
+    var unavailableClose=q('wtfUnavailableClose'),nearestCountries=q('wtfNearestCountries'),legalAlternatives=q('wtfLondonLegalAlternatives'),alternativeDirectory=q('wtfLondonAlternativeDirectory'),lawButton=q('wtfLondonLawButton'),territoryClose=q('wtfTerritoryClose'),territoryEnter=q('wtfTerritoryEnter');
     if(unavailableClose)unavailableClose.addEventListener('click',function(){var modal=q('wtfUnavailableOverlay');modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';});
     if(nearestCountries)nearestCountries.addEventListener('click',function(){var list=q('wtfNearestCountryList');list.classList.toggle('open');this.textContent=list.classList.contains('open')?'HIDE NEAREST LOCATIONS':'NEAREST LOCATIONS';});
     if(legalAlternatives)legalAlternatives.addEventListener('click',function(){var list=q('wtfLondonLegalList');list.classList.toggle('open');this.textContent=list.classList.contains('open')?'HIDE LOCAL ALTERNATIVES':'LOCAL LEGAL ALTERNATIVES';});
+    if(alternativeDirectory)alternativeDirectory.addEventListener('click',function(){var unavailable=q('wtfUnavailableOverlay');unavailable.classList.remove('open');unavailable.setAttribute('aria-hidden','true');openDirectory('Alternative',false);});
+    if(lawButton)lawButton.addEventListener('click',function(){var list=q('wtfLondonLawList');list.classList.toggle('open');this.textContent=list.classList.contains('open')?'HIDE LONDON / UK RULES':'READ THE LONDON / UK RULES';});
+    if(territoryClose)territoryClose.addEventListener('click',function(){var modal=q('wtfTerritoryOverlay');modal.classList.remove('open');modal.setAttribute('aria-hidden','true');});
+    if(territoryEnter)territoryEnter.addEventListener('click',function(){var modal=q('wtfTerritoryOverlay'),city=modal.dataset.nearestCity,lat=Number(modal.dataset.originLat),lng=Number(modal.dataset.originLng);modal.classList.remove('open');modal.setAttribute('aria-hidden','true');var unavailable=q('wtfUnavailableOverlay');if(unavailable){unavailable.classList.remove('open');unavailable.setAttribute('aria-hidden','true');}if(city){setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}}openDirectory(currentCat,true);if(Number.isFinite(lat)&&Number.isFinite(lng))setTimeout(function(){loadLANearest({lat:lat,lng:lng},'Current Location');},0);});
     document.addEventListener('click',function(e){var button=e.target.closest('[data-direct-directions]');if(!button)return;e.preventDefault();e.stopPropagation();var url=button.dataset.directDirections;if(!url)return;var opened=window.open(url,'_blank','noopener');if(!opened)window.location.href=url;});
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
@@ -19415,7 +19476,8 @@ window.wtfPrepare24Hours=async function(city){
     q('wtfCitySelect').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var visible=[].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option')).filter(function(option){return !option.hidden;});if(!this.dataset.value&&visible.length===1&&!visible[0].classList.contains('wtf-city-future')){this.value=visible[0].dataset.city;this.dataset.value=visible[0].dataset.city;q('wtfCityEnter').disabled=false;q('wtfCityLaunchClose').disabled=false;}if(this.dataset.value){e.preventDefault();enterSelectedCity();}});
     q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option||option.classList.contains('wtf-city-future'))return;var select=q('wtfCitySelect'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');select.dataset.value=option.dataset.city;select.value=option.dataset.city;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;close.disabled=false;go.textContent='Go';select.blur();enterSelectedCity();});
     document.addEventListener('click',function(e){var wrap=e.target.closest('.wtf-city-select-wrap');if(wrap)return;var menu=q('wtfCityMenu'),select=q('wtfCitySelect');if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(select)select.setAttribute('aria-expanded','false');});
-    q('wtfCityChange').addEventListener('click',showCityLaunch);
+    q('wtfCityChange').addEventListener('click',chooseAnotherCity);
+    q('wtf2CityQuickChange').addEventListener('click',chooseAnotherCity);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
     q('wtf2GrooveTrigger').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});
     q('wtf2GrooveClose').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),false);});
