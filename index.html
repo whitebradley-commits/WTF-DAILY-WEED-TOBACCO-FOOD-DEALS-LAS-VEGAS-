@@ -7571,7 +7571,31 @@ button[id*="back"] svg,
       <span><i class="near-legend-dot near-legend-food"></i> Food</span>
     </div>
     <div class="near-results" id="nearMeResults"><div class="near-empty">Your nearby results will appear here.</div></div>
+</div>
+</div>
+
+<div class="la-dispensary-mini-overlay" id="laDispensaryMini" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="laDispensaryMiniName">
+  <div class="la-dispensary-mini-card">
+    <button class="la-dispensary-mini-close" id="laDispensaryMiniClose" type="button" aria-label="Close dispensary preview">×</button>
+    <div class="la-dispensary-kicker">NEAREST DISPENSARY</div>
+    <h3 id="laDispensaryMiniName">Dispensary</h3>
+    <p id="laDispensaryMiniMeta"></p>
+    <div class="la-dispensary-actions" id="laDispensaryMiniActions"></div>
   </div>
+</div>
+
+<div class="la-dispensary-overlay" id="laDispensaryOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="laDispensaryName">
+  <article class="la-dispensary-page">
+    <button class="la-dispensary-close" id="laDispensaryClose" type="button" aria-label="Close dispensary page">×</button>
+    <div class="la-dispensary-hero" id="laDispensaryHero"><div class="la-dispensary-hero-label">LOS ANGELES DISPENSARY</div></div>
+    <div class="la-dispensary-body">
+      <div class="la-dispensary-kicker">WTFDD · WEED</div>
+      <h2 id="laDispensaryName">Dispensary</h2>
+      <p class="la-dispensary-address" id="laDispensaryAddress"></p>
+      <div class="la-dispensary-actions" id="laDispensaryActions"></div>
+      <div class="la-dispensary-info" id="laDispensaryInfo"></div>
+    </div>
+  </article>
 </div>
 
 <main class="board" id="board">
@@ -9732,6 +9756,9 @@ function renderEntryList(entries, catLabel, area){
       : '<div class="entry-claim">Not yet rated \u2014 this business hasn\u2019t claimed its profile. <button class="claim-btn" type="button">Claim &amp; Upgrade Listing \u2192</button></div>';
 
     const siteBtn = siteButtonHTML(d.url);
+    const laFullBtn = catLabel === 'Weed' && /Los Angeles/i.test(d.address || '')
+      ? '<button type="button" class="menu-text-btn la-full-dispensary-btn" data-la-full-name="' + String(d.name || '').replace(/"/g,'&quot;') + '" data-la-full-address="' + String(d.address || '').replace(/"/g,'&quot;') + '" data-la-full-phone="' + String(d.phone || '').replace(/"/g,'&quot;') + '">VIEW DISPENSARY</button>'
+      : '';
 
     const fbBtn = d.facebook
       ? '<a class="icon-btn fb-btn" href="https://facebook.com/' + d.facebook + '" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.5-3h-3V8.3c0-.87.24-1.46 1.5-1.46H16.5V4.14C16.2 4.1 15.2 4 14 4c-2.4 0-4 1.47-4 4.16V10.5H7.5v3H10V21h3.5z"/></svg></a>'
@@ -9753,7 +9780,7 @@ function renderEntryList(entries, catLabel, area){
         addressLine +
         specialtyLine +
         ratingLine +
-        '<div class="entry-site-row">' + callButtonHTML(d.phone, d.name, d.address) + directionsButtonHTML(d.address, d.name) + siteBtn + fbBtn + igBtn + emailButtonHTML(d.email) + picsButtonHTML(d.name) + '</div>' +
+        '<div class="entry-site-row">' + callButtonHTML(d.phone, d.name, d.address) + directionsButtonHTML(d.address, d.name) + siteBtn + laFullBtn + fbBtn + igBtn + emailButtonHTML(d.email) + picsButtonHTML(d.name) + '</div>' +
       '</div>' +
     '</li>';
   }).join('');
@@ -18993,7 +19020,7 @@ window.wtfPrepare24Hours=async function(city){
 .la-near-zones{display:flex;gap:7px;overflow-x:auto;padding:1px 0 10px;scrollbar-width:none;}
 .la-near-zones button{flex:0 0 auto;border:1px solid #3f3f3f;border-radius:999px;background:#111;color:#ddd;padding:8px 11px;font:800 12px 'Archivo Narrow',sans-serif;}
 .la-near-zones button.active{border-color:#69df7d;color:#8bf09b;box-shadow:0 0 9px rgba(79,210,103,.3);}
-.la-near-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 2px;border-bottom:1px solid #202820;text-decoration:none;}
+.la-near-row{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(68px,auto);gap:12px;align-items:center;padding:12px 2px;border:0;border-bottom:1px solid #202820;background:transparent;text-align:left;cursor:pointer;}
 .la-near-row:last-child{border-bottom:0;}
 .la-near-row strong{color:#f4f4f4;font:800 14px/1.2 'Archivo Narrow',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .la-near-distance{color:#ff4949;font:900 13px 'Archivo Narrow',sans-serif;text-shadow:0 0 8px rgba(255,42,42,.65);animation:laDistancePulse 1.8s ease-in-out infinite;}
@@ -19001,6 +19028,30 @@ window.wtfPrepare24Hours=async function(city){
 .la-near-full{display:block;margin:11px auto 0;border:1px solid #4fd267;border-radius:999px;padding:8px 14px;background:transparent;color:#79e48c;font:800 12px 'Archivo Narrow',sans-serif;}
 @keyframes laDistancePulse{0%,100%{opacity:.7}50%{opacity:1;text-shadow:0 0 13px rgba(255,42,42,.95)}}
 @media(prefers-reduced-motion:reduce){.la-near-distance{animation:none}}
+.la-dispensary-overlay{position:fixed;inset:0;z-index:100080;display:none;background:#000;overflow:auto;overscroll-behavior:contain;}
+.la-dispensary-overlay.open{display:block;}
+.la-dispensary-mini-overlay{position:fixed;inset:0;z-index:100075;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);}
+.la-dispensary-mini-overlay.open{display:flex;}
+#phonePopupOverlay{z-index:100120!important;}
+.la-dispensary-mini-card{position:relative;width:min(430px,100%);padding:25px 18px 17px;border:1px solid #4fd267;border-radius:17px;background:radial-gradient(circle at 50% 0,rgba(79,210,103,.2),transparent 43%),#070907;box-shadow:0 0 28px rgba(79,210,103,.35);}
+.la-dispensary-mini-card h3{margin:8px 42px 7px 0;color:#fff;font:900 24px/1.05 'Archivo Black',sans-serif;}.la-dispensary-mini-card p{margin:0 0 16px;color:#bbb;font:700 14px 'Archivo Narrow',sans-serif;}
+.la-dispensary-mini-close{position:absolute;top:10px;right:10px;width:38px;height:38px;border:1px solid #d6a72e;border-radius:50%;background:#050505;color:#ff4545;font:900 22px Arial,sans-serif;}
+.la-dispensary-page{position:relative;width:min(780px,100%);min-height:100dvh;margin:0 auto;background:#070907;color:#fff;box-shadow:0 0 48px rgba(79,210,103,.17);}
+.la-dispensary-close{position:fixed;z-index:3;top:max(14px,env(safe-area-inset-top));right:max(14px,calc((100vw - 750px)/2));width:46px;height:46px;border:2px solid #d6a72e;border-radius:50%;background:#050505;color:#ff4545;font:900 27px/1 Arial,sans-serif;box-shadow:0 0 14px rgba(214,167,46,.38);cursor:pointer;}
+.la-dispensary-hero{min-height:300px;display:flex;align-items:flex-end;padding:22px;background:radial-gradient(circle at 50% 40%,rgba(79,210,103,.25),transparent 42%),linear-gradient(145deg,#102416,#030603);background-size:cover;background-position:center;position:relative;}
+.la-dispensary-hero:after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#070907);}
+.la-dispensary-hero-label{position:relative;z-index:1;color:#80e18f;font:900 12px 'Archivo Narrow',sans-serif;letter-spacing:.16em;}
+.la-dispensary-body{padding:4px 22px 40px;}
+.la-dispensary-kicker{color:#65d676;font:900 11px 'Archivo Narrow',sans-serif;letter-spacing:.15em;}
+.la-dispensary-body h2{margin:8px 0 7px;color:#fff;font:900 clamp(28px,7vw,48px)/1 'Archivo Black',sans-serif;}
+.la-dispensary-address{margin:0 0 18px;color:#bdbdbd;font:600 15px/1.45 'Archivo Narrow',sans-serif;}
+.la-dispensary-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 20px;}
+.la-dispensary-actions a,.la-dispensary-actions button{display:flex;align-items:center;justify-content:center;min-height:46px;border:1px solid #4fd267;border-radius:11px;background:#0c140e;color:#88e895;text-decoration:none;font:900 13px 'Archivo Narrow',sans-serif;letter-spacing:.03em;}
+.la-dispensary-actions .primary{background:#3D8B4C;color:#fff;}
+.la-dispensary-info{border-top:2px solid transparent;border-image:linear-gradient(90deg,transparent,#4fd267,transparent) 1;padding-top:16px;}
+.la-dispensary-info-row{display:grid;grid-template-columns:105px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid #242824;font:600 14px/1.4 'Archivo Narrow',sans-serif;}
+.la-dispensary-info-row b{color:#7ce08a;text-transform:uppercase;letter-spacing:.06em;}.la-dispensary-info-row span{color:#ccc;overflow-wrap:anywhere;}
+@media(max-width:540px){.la-dispensary-hero{min-height:250px}.la-dispensary-body{padding-left:16px;padding-right:16px}.la-dispensary-close{right:14px}.la-dispensary-actions{grid-template-columns:1fr 1fr}.la-near-distance{text-align:right;white-space:nowrap}}
 </style>
 
 <script id="wtf-multi-city-newsletters">
@@ -19119,21 +19170,62 @@ window.wtfPrepare24Hours=async function(city){
     return '<section class="la-near-test" id="laNearTest"><h3>NEAREST DISPENSARIES</h3><p class="la-near-sub" id="laNearStatus">Allow location access or choose an LA neighborhood.</p><div class="la-near-zones">'+Object.keys(LA_NEAR_ZONES).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL LOS ANGELES DISPENSARY LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+  function laEsc(v){return String(v||'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
+  async function fetchLAOverpass(origin){
+    var query='[out:json][timeout:18];(nwr[shop=cannabis](around:24000,'+origin.lat+','+origin.lng+');nwr[healthcare=cannabis](around:24000,'+origin.lat+','+origin.lng+'););out center tags;';
+    var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
+    for(var i=0;i<endpoints.length;i++){
+      try{var response=await fetch(endpoints[i],{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:'data='+encodeURIComponent(query)});if(!response.ok)throw new Error('lookup');var data=await response.json();return (data.elements||[]).map(function(el){var t=el.tags||{},lat=typeof el.lat==='number'?el.lat:el.center&&el.center.lat,lng=typeof el.lon==='number'?el.lon:el.center&&el.center.lon;if(!lat||!lng||!(t.name||t.brand))return null;var address=[t['addr:housenumber'],t['addr:street'],t['addr:city'],t['addr:state'],t['addr:postcode']].filter(Boolean).join(' ');return {name:t.name||t.brand,lat:lat,lng:lng,address:address,phone:t.phone||t['contact:phone']||'',website:t.website||t['contact:website']||'',facebook:t['contact:facebook']||'',instagram:t['contact:instagram']||'',hours:t.opening_hours||'',source:'OpenStreetMap'};}).filter(Boolean);}catch(err){}
+    }
+    throw new Error('Nearby search did not respond');
+  }
+  function renderLANearest(rows,status,items,origin,label){
+    var seen={},nearest=items.filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
+    window.__laNearestDispensaries=nearest;
+    rows.innerHTML=nearest.map(function(x,i){return '<button class="la-near-row" type="button" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+'</strong><span class="la-near-distance">'+x.miles.toFixed(1)+' MI</span></button>';}).join('');
+    status.textContent=nearest.length?'Tap any dispensary for phone, directions, and full information.':'Choose another Los Angeles neighborhood to search again.';
+  }
+  async function fetchLAGoogle(origin){
+    await loadGoogleMapsScript();
+    if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
+    var found=await new Promise(function(resolve,reject){placesServiceInstance.textSearch({query:'cannabis dispensary Los Angeles',location:new google.maps.LatLng(origin.lat,origin.lng),radius:24000},function(results,s){if(s===google.maps.places.PlacesServiceStatus.OK&&results)resolve(results);else reject(new Error('No results'));});});
+    return found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){return {name:p.name,placeId:p.place_id,lat:p.geometry.location.lat(),lng:p.geometry.location.lng(),address:p.formatted_address||'',rating:p.rating||'',ratings:p.user_ratings_total||'',source:'Google Places'};});
+  }
   async function loadLANearest(origin,label){
     var rows=q('laNearRows'),status=q('laNearStatus');if(!rows||!status)return;
     status.textContent='Finding the closest dispensaries to '+label+'…';rows.innerHTML='<div class="la-near-sub">Updating live distances…</div>';
     document.querySelectorAll('[data-la-zone]').forEach(function(b){b.classList.toggle('active',b.dataset.laZone===label);});
     try{
-      await loadGoogleMapsScript();
-      if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
-      var found=await new Promise(function(resolve,reject){placesServiceInstance.textSearch({query:'cannabis dispensary Los Angeles',location:new google.maps.LatLng(origin.lat,origin.lng),radius:20000},function(results,s){if(s===google.maps.places.PlacesServiceStatus.OK&&results)resolve(results);else reject(new Error('No results'));});});
-      var nearest=found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){var loc={lat:p.geometry.location.lat(),lng:p.geometry.location.lng()};return {name:p.name,placeId:p.place_id,loc:loc,miles:laMiles(origin,loc)};}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
-      rows.innerHTML=nearest.map(function(x){var url='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.name)+'&query_place_id='+encodeURIComponent(x.placeId||'');return '<a class="la-near-row" href="'+url+'" target="_blank" rel="noopener"><strong>'+x.name.replace(/[&<>]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[m];})+'</strong><span class="la-near-distance">'+x.miles.toFixed(1)+' MI</span></a>';}).join('')||'<div class="la-near-sub">No nearby dispensaries were returned.</div>';
-      status.textContent='Top five from '+label+'. Distances update each time you choose a location.';
+      var found=await fetchLAOverpass(origin);if(found.length<5){try{found=found.concat(await fetchLAGoogle(origin));}catch(ignore){}}
+      renderLANearest(rows,status,found,origin,label);
     }catch(err){
-      rows.innerHTML=wtfStarterEntries('Los Angeles','weed').map(function(x){return '<a class="la-near-row" href="'+x.url+'" target="_blank" rel="noopener"><strong>'+x.name+'</strong><span class="la-near-distance">OPEN MAP</span></a>';}).join('');
-      status.textContent='Live distance is unavailable right now. Tap a dispensary to open its current map listing.';
+      try{renderLANearest(rows,status,await fetchLAGoogle(origin),origin,label);}catch(ignore){rows.innerHTML='<div class="la-near-sub">Tap a neighborhood above to refresh the nearest five.</div>';status.textContent='We could not refresh this location. Choose Hollywood, West Hollywood, Downtown, or Culver City.';}
     }
+  }
+  async function openLADispensary(item){
+    if(!item)return;var overlay=q('laDispensaryOverlay'),name=q('laDispensaryName'),address=q('laDispensaryAddress'),actions=q('laDispensaryActions'),info=q('laDispensaryInfo'),hero=q('laDispensaryHero');if(!overlay)return;
+    var mapQuery=item.placeId?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name)+'&query_place_id='+encodeURIComponent(item.placeId):'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+(item.address||'Los Angeles'));
+    var directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||'Los Angeles'));
+    function paint(){
+      name.textContent=item.name;address.textContent=item.address||'Los Angeles, California';
+      actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||'Los Angeles')+'">FIND PHONE NUMBER</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a><a href="'+mapQuery+'" target="_blank" rel="noopener">VIEW DISPENSARY</a>'+(item.website?'<a href="'+laEsc(item.website)+'" target="_blank" rel="noopener">WEBSITE</a>':'');
+      info.innerHTML='<div class="la-dispensary-info-row"><b>Phone</b><span>'+(item.phone?laEsc(item.phone):'Tap Find Phone Number above')+'</span></div><div class="la-dispensary-info-row"><b>Hours</b><span>'+laEsc(item.hours||'Confirm current hours directly')+'</span></div><div class="la-dispensary-info-row"><b>Distance</b><span>'+Number(item.miles||0).toFixed(1)+' miles from the selected location</span></div>'+(item.rating?'<div class="la-dispensary-info-row"><b>Rating</b><span>'+laEsc(item.rating)+' from '+laEsc(item.ratings||'current')+' ratings</span></div>':'')+(item.instagram?'<div class="la-dispensary-info-row"><b>Instagram</b><span>'+laEsc(item.instagram)+'</span></div>':'')+(item.facebook?'<div class="la-dispensary-info-row"><b>Facebook</b><span>'+laEsc(item.facebook)+'</span></div>':'')+'<div class="la-dispensary-info-row"><b>Listing</b><span>Contact details, hours, menus, and inventory can change. Confirm directly before leaving.</span></div>';
+      if(item.photo)hero.style.backgroundImage='linear-gradient(transparent 35%,#070907),url("'+item.photo.replace(/"/g,'%22')+'")';
+    }
+    paint();overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';overlay.scrollTop=0;
+    try{
+      await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
+      var place=await new Promise(function(resolve,reject){if(item.placeId){placesServiceInstance.getDetails({placeId:item.placeId,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos']},function(d,s){s===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):reject(new Error('details'));});}else{placesServiceInstance.textSearch({query:item.name+' '+(item.address||'Los Angeles')},function(r,s){if(!(s===google.maps.places.PlacesServiceStatus.OK&&r&&r[0])){reject(new Error('details'));return;}placesServiceInstance.getDetails({placeId:r[0].place_id,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','rating','user_ratings_total','photos']},function(d,ds){ds===google.maps.places.PlacesServiceStatus.OK&&d?resolve(d):resolve(r[0]);});});}});
+      item.address=place.formatted_address||item.address;item.phone=place.formatted_phone_number||item.phone;item.website=place.website||item.website;item.rating=place.rating||item.rating;item.ratings=place.user_ratings_total||item.ratings;item.hours=place.opening_hours&&place.opening_hours.weekday_text?place.opening_hours.weekday_text.join(' · '):item.hours;if(place.photos&&place.photos[0])item.photo=place.photos[0].getUrl({maxWidth:1100});paint();
+    }catch(ignore){}
+  }
+  function openLAMini(item){
+    if(!item)return;window.__laMiniCurrent=item;var overlay=q('laDispensaryMini'),name=q('laDispensaryMiniName'),meta=q('laDispensaryMiniMeta'),actions=q('laDispensaryMiniActions');
+    name.textContent=item.name;meta.textContent=Number(item.miles||0).toFixed(1)+' miles away'+(item.address?' · '+item.address:'');
+    var directions='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||'Los Angeles'));
+    actions.innerHTML=(item.phone?'<a class="primary" href="tel:'+laEsc(item.phone)+'">CALL '+laEsc(item.phone)+'</a>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||'Los Angeles')+'">FIND PHONE</button>')+'<a href="'+directions+'" target="_blank" rel="noopener">DIRECTIONS</a><button type="button" id="laMiniViewFull">VIEW DISPENSARY</button>';
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+    q('laMiniViewFull').addEventListener('click',function(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');openLADispensary(item);});
   }
   function setupLAWeedNear(){
     var block=q('laNearTest');if(!block)return;
@@ -19145,6 +19237,10 @@ window.wtfPrepare24Hours=async function(city){
       status.textContent='Allow location access to find the closest five dispensaries.';
       navigator.geolocation.getCurrentPosition(function(pos){loadLANearest({lat:pos.coords.latitude,lng:pos.coords.longitude},'Current Location');},function(){status.textContent='Location was not shared. Choose Hollywood, West Hollywood, Downtown, or Culver City.';},{enableHighAccuracy:true,timeout:12000,maximumAge:20000});
     }
+    block.addEventListener('click',function(e){var button=e.target.closest('[data-la-dispensary]');if(button)openLAMini(window.__laNearestDispensaries&&window.__laNearestDispensaries[Number(button.dataset.laDispensary)]);});
+    var miniClose=q('laDispensaryMiniClose');if(miniClose&&!miniClose.dataset.ready){miniClose.dataset.ready='1';miniClose.addEventListener('click',function(){var overlay=q('laDispensaryMini');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');});}
+    var close=q('laDispensaryClose');if(close&&!close.dataset.ready){close.dataset.ready='1';close.addEventListener('click',function(){var overlay=q('laDispensaryOverlay');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';});}
+    if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();openLADispensary({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,source:'WTFDD Los Angeles directory'});});}
     requestCurrent();
   }
   function render(){
