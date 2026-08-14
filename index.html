@@ -18516,6 +18516,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 <!-- ===== WTF2 private working preview: isolated from the live WTF experience ===== -->
 <style id="wtf2-private-preview-styles">
   :root{--wtf2-red:#C90201;--wtf2-orange:#F59E0B;--wtf2-weed:#4FAE68;--wtf2-tobacco:#8C603F;--wtf2-food:#F59E0B;}
+  footer{display:none!important;}
   /* 21+ entrance: preserve the approved gold/orange rings; red lettering only. */
   #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{color:var(--wtf2-red)!important;}
   #wtfLandingOverlay .landing-bjs-corner text{fill:var(--wtf2-red)!important;}
@@ -18912,7 +18913,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <div class="wtf2-main-share-wrap"><button class="wtf2-share-page" id="wtf2SharePageMain" type="button" aria-label="Share this page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.7 10.7l6.6-4.2M8.7 13.3l6.6 4.2"></path></svg><span class="share-label">SHARE<br>PAGE</span></button></div>
     <div class="wtf2-contact-strip" aria-label="Legend and contact links">
       <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
-      <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFDD"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
+      <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
       <span class="wtf2-contact-icon" aria-disabled="true" aria-label="Facebook coming soon">f</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="TikTok coming soon">♪</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="Instagram coming soon">◎</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="YouTube coming soon">▶</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="X coming soon">X</span>
       <span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span>
     </div>
@@ -18936,7 +18937,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <div id="wtf2DirList"></div>
     <div class="wtf2-contact-strip" aria-label="Legend and contact links">
       <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
-      <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFDD"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
+      <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
       <span class="wtf2-contact-icon" aria-disabled="true">f</span><span class="wtf2-contact-icon" aria-disabled="true">♪</span><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span>
       <span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span>
     </div>
@@ -18947,7 +18948,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   <button class="wtf2-legend-close" id="wtf2LegendClose" type="button" aria-label="Close legend">×</button>
   <div class="wtf2-legend-page">
     <h1 id="wtf2LegendTitle">LEGEND</h1><div class="wtf2-legend-star">★</div>
-    <p class="wtf2-legend-disclaimer"><strong>WTFDD is an independent listing service developed by BJS Co.</strong> It is not affiliated with, endorsed by, or operated on behalf of any business shown. Listings, hours, prices, phone numbers, promotions and laws may change without notice—always confirm details directly. Cannabis access and smoking rules vary by jurisdiction. Medical information is not medical advice. 21+ where required. Please consume responsibly.</p>
+    <p class="wtf2-legend-disclaimer"><strong>WTFdd.com is an independent listing service developed by BJS Co.</strong> It is not affiliated with, endorsed by, or operated on behalf of any business shown. Listings, hours, prices, phone numbers, promotions and laws may change without notice—always confirm details directly. Cannabis access and smoking rules vary by jurisdiction. Medical information is not medical advice. 21+ where required. Please consume responsibly.</p>
     <div class="wtf2-legend-group"><h2>CATEGORIES</h2>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol">GREEN</span><span class="wtf2-legend-copy"><b>Weed</b><span>Licensed dispensaries, cannabis information, or clearly labeled legal alternatives.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-brown">BROWN</span><span class="wtf2-legend-copy"><b>Tobacco</b><span>Smoke shops, tobacco retailers, hookah or shisha venues.</span></span></div>
@@ -18961,7 +18962,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol">BIZ<br>PAGE</span><span class="wtf2-legend-copy"><b>Business Page</b><span>Opens the full profile with available contact, location and business information.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-brown">ALT</span><span class="wtf2-legend-copy"><b>Legal Alternative</b><span>A locally legal category—not a recreational cannabis dispensary.</span></span></div>
     </div>
-    <div class="wtf2-contact-strip"><button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button><a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFDD"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a><span class="wtf2-contact-icon" aria-disabled="true">f</span><span class="wtf2-contact-icon" aria-disabled="true">♪</span><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span><span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span></div>
+    <div class="wtf2-contact-strip"><button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button><a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a><span class="wtf2-contact-icon" aria-disabled="true">f</span><span class="wtf2-contact-icon" aria-disabled="true">♪</span><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span><span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span></div>
   </div>
 </section>
 
