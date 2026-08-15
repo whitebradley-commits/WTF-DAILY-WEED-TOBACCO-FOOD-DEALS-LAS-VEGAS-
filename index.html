@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-14-san-diego-restored-fresh-20463857 -->
+<!-- WTFDD fresh upload build: 2026-08-14-live-hours-phone-release-unique-96041827 -->
 
 <html lang="en">
 <head>
@@ -9513,6 +9513,40 @@ function openPhoneUnavailablePopup(businessName, location){
   overlay.classList.add('open');
 }
 
+// Resolve a public business phone from the exact Google place whenever one is
+// available.  The cache prevents the nearest row, mini card and Biz Page from
+// performing three separate searches for the same business.
+window.__wtfPhoneCache=window.__wtfPhoneCache||{};
+async function wtfResolvePublicPhone(businessName,location,placeId){
+  var cacheKey=[placeId||'',businessName||'',location||''].join('|').toLowerCase();
+  if(window.__wtfPhoneCache[cacheKey])return window.__wtfPhoneCache[cacheKey];
+  await loadGoogleMapsScript();
+  if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
+  function details(id){return new Promise(function(resolve,reject){
+    placesServiceInstance.getDetails({placeId:id,fields:['place_id','name','formatted_phone_number','international_phone_number','formatted_address','website','url','opening_hours','utc_offset_minutes','business_status']},function(found,status){
+      status===google.maps.places.PlacesServiceStatus.OK&&found?resolve(found):reject(new Error('Phone details unavailable: '+status));
+    });
+  });}
+  function search(query){return new Promise(function(resolve){
+    placesServiceInstance.findPlaceFromQuery({query:query,fields:['place_id','name','formatted_address']},function(found,status){
+      if(status===google.maps.places.PlacesServiceStatus.OK&&found&&found.length){resolve(found);return;}
+      placesServiceInstance.textSearch({query:query},function(rows,rowStatus){resolve(rowStatus===google.maps.places.PlacesServiceStatus.OK&&rows?rows:[]);});
+    });
+  });}
+  var candidates=[];
+  if(placeId)candidates.push(placeId);
+  var queries=[businessName+' '+location,businessName+' '+(window.WTF_SELECTED_CITY||''),businessName].filter(Boolean);
+  for(var qIndex=0;qIndex<queries.length&&!candidates.length;qIndex++){
+    var found=await search(queries[qIndex]);
+    found.slice(0,3).forEach(function(place){if(place&&place.place_id&&candidates.indexOf(place.place_id)<0)candidates.push(place.place_id);});
+  }
+  var lastDetail=null;
+  for(var i=0;i<candidates.length;i++){
+    try{var detail=await details(candidates[i]);lastDetail=detail;var phone=detail.formatted_phone_number||detail.international_phone_number||'';var digits=(phone.match(/\d/g)||[]).join('');if(digits){var answer={phone:phone,digits:digits,detail:detail,placeId:candidates[i]};window.__wtfPhoneCache[cacheKey]=answer;return answer;}}catch(ignore){}
+  }
+  var error=new Error('No public phone number returned');error.detail=lastDetail;throw error;
+}
+
 function setupPhonePopup(){
   var overlay = document.getElementById('phonePopupOverlay');
   if(!overlay) return;
@@ -9561,25 +9595,11 @@ function setupPhonePopup(){
         lookupBtn.disabled=true;
         lookupBtn.setAttribute('title','Finding phone number…');
         try{
-          await loadGoogleMapsScript();
-          if(!placesServiceInstance) placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
-          var first=await new Promise(function(resolve,reject){
-            placesServiceInstance.textSearch({query:businessName+' '+location},function(found,status){
-              if(status===google.maps.places.PlacesServiceStatus.OK&&found&&found[0])resolve(found[0]);
-              else reject(new Error('Business not found'));
-            });
-          });
-          var detail=await new Promise(function(resolve,reject){
-            placesServiceInstance.getDetails({placeId:first.place_id,fields:['name','formatted_phone_number','formatted_address','website','url']},function(found,status){
-              if(status===google.maps.places.PlacesServiceStatus.OK&&found)resolve(found);
-              else reject(new Error('Phone details unavailable'));
-            });
-          });
-          var phone=detail.formatted_phone_number||'';
-          var digits=(phone.match(/\d/g)||[]).join('');
-          if(!digits) throw new Error('No public phone number listed');
+          var result=await wtfResolvePublicPhone(businessName,location,lookupBtn.getAttribute('data-phone-place-id')||'');
+          var detail=result.detail,phone=result.phone,digits=result.digits;
           lookupBtn.setAttribute('data-phone-popup',digits);
           lookupBtn.setAttribute('data-phone-display',phone);
+          lookupBtn.setAttribute('data-phone-place-id',result.placeId||'');
           lookupBtn.removeAttribute('data-phone-lookup');
           lookupBtn.setAttribute('title','Call');
           var row=lookupBtn.closest('.entry-site-row,.thc24-live-actions');
@@ -19300,6 +19320,11 @@ const LA_DISPENSARY_DETAILS = {
 };
 const SAN_DIEGO_DISPENSARY_DETAILS = {
   'Leucadia Smoke & Cigar':{kind:'tobacco',area:'Encinitas / Cardiff',address:'905 Orpheus Ave STE 101, Encinitas, CA 92024',phone:'(760) 334-1802',website:'https://leucadiasmokeandcigar.com/',hours:'Daily 9 AM–9 PM',lat:33.0651,lng:-117.2908,story:'A locally owned Encinitas smoke and cigar shop with a walk-in humidor, premium cigars, vape hardware, hookah products and smoking accessories. The shop serves Leucadia, Encinitas and surrounding North County communities.'},
+  'Beeside Balcony Del Mar':{kind:'food',area:'Del Mar / Solana Beach',address:'1201 Camino Del Mar Suite 200, Del Mar, CA 92014',phone:'(858) 481-9889',website:'https://beesidebalcony.com/'},
+  'Pamplemousse Grille':{kind:'food',area:'Del Mar / Solana Beach',address:'514 Via De La Valle Unit 100, Solana Beach, CA 92075',phone:'(858) 792-9090',website:'https://www.pgrille.com/'},
+  'Poseidon Restaurant Del Mar':{kind:'food',area:'Del Mar / Solana Beach',address:'1670 Coast Blvd, Del Mar, CA 92014',phone:'(858) 755-9345',website:'https://www.poseidonrestaurant.com/'},
+  'Market Restaurant + Bar':{kind:'food',area:'Del Mar / Solana Beach',address:'3702 Via De La Valle, Del Mar, CA 92014',phone:'(858) 523-0007',website:'https://marketdelmar.com/'},
+  'Rare Society Solana Beach':{kind:'food',area:'Del Mar / Solana Beach',address:'330 S Cedros Ave, Solana Beach, CA 92075',phone:'(858) 771-0181',website:'https://raresociety.com/solana-beach'},
   'Hello Cannabis Vista':{address:'1017 Sycamore Ave, Vista, CA 92081',phone:'(760) 214-8457',website:'https://hellocannabisvista.com/',hours:'Daily 6 AM–9:45 PM',lat:33.1599134,lng:-117.2215647,story:'Hello Cannabis is a licensed recreational and medical dispensary in Vista near Highway 78. The store offers in-store pickup, curbside ordering, parking and an on-site ATM.'},
   'Coastal Cannabis Co. Vista':{address:'1084 La Mirada Ct, Vista, CA 92081',phone:'(760) 734-7081',website:'https://coastalcannabisco.com/',hours:'Confirm today’s hours directly',lat:33.1522776,lng:-117.2262563,story:'Coastal Cannabis Co. is a North County dispensary on La Mirada Court in Vista. Call or open the current listing to confirm hours and ordering options.'},
   'March and Ash Vista':{address:'2465 Dogwood Way, Vista, CA 92081',phone:'(760) 624-7336',website:'https://marchandash.com/vista/',hours:'Daily until 9:55 PM; confirm opening time',lat:33.1501598,lng:-117.2202512,story:'March and Ash Vista is a licensed recreational and medical cannabis boutique serving Vista and North County with in-store shopping, pickup and delivery.'},
@@ -19436,6 +19461,7 @@ window.wtfPrepare24Hours=async function(city){
 .la-near-phone{max-width:112px;padding:2px 4px;border:0;background:transparent;color:#fff;font:800 11px/1.1 'Archivo Narrow',sans-serif;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.la-near-phone.is-loading{color:#aaa;text-decoration:none;font-size:9px}
 #wtf2Directory[data-category="weed"] .la-near-row strong{color:#72e386!important;text-shadow:0 0 7px rgba(79,210,103,.22)}#wtf2Directory[data-category="tobacco"] .la-near-row strong{color:#b8794b!important;text-shadow:0 0 7px rgba(154,99,58,.24)}#wtf2Directory[data-category="food"] .la-near-row strong{color:#f5ae22!important;text-shadow:0 0 7px rgba(245,158,11,.22)}#wtf2Directory .la-near-phone{color:#fff!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important}
 .la-near-distance{color:#ff4949;font:900 13px 'Archivo Narrow',sans-serif;text-shadow:0 0 8px rgba(255,42,42,.65);animation:laDistancePulse 1.8s ease-in-out infinite;}
+.la-near-distance small{display:block;margin-top:2px;font:900 8px/1 'Archivo Black',sans-serif;letter-spacing:.055em;text-align:right}.la-near-row.is-closed{opacity:.66}.la-near-row.is-closed strong,.la-near-row.is-closed .la-near-phone,.la-near-row.is-closed .la-near-distance{color:#8a8a8a!important;-webkit-text-fill-color:#8a8a8a!important;text-shadow:none!important;animation:none!important}.la-near-row.is-closed .wtf-vendor-seal{filter:grayscale(1);opacity:.7}.la-near-row.is-closing .la-near-distance{color:#f59e0b!important;text-shadow:0 0 8px rgba(245,158,11,.62)!important}.la-near-row.is-closing .la-near-distance small{color:#f5ae22!important}
 .la-near-line{height:2px;width:76%;margin:10px auto 1px;background:linear-gradient(90deg,transparent,#43c862 18%,#6be981 50%,#43c862 82%,transparent);box-shadow:0 0 9px rgba(79,210,103,.72);}
 .la-near-full{display:block;margin:11px auto 0;border:1px solid #4fd267;border-radius:999px;padding:8px 14px;background:transparent;color:#79e48c;font:800 12px 'Archivo Narrow',sans-serif;}
 @keyframes laDistancePulse{0%,100%{opacity:.7}50%{opacity:1;text-shadow:0 0 13px rgba(255,42,42,.95)}}
@@ -19742,12 +19768,21 @@ window.wtfPrepare24Hours=async function(city){
     }
     if(last.length)return last;throw new Error('Nearby search did not respond');
   }
+  function nearHoursState(item){
+    if(item.openNow===false)return {key:'closed',label:'CLOSED'};
+    var hours=item.openingHours,periods=hours&&hours.periods;if(item.openNow!==true||!periods||!periods.length)return {key:'open',label:''};
+    var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return {key:'open',label:''};
+    var local=new Date(Date.now()+offset*60000),day=local.getUTCDay(),minute=local.getUTCHours()*60+local.getUTCMinutes(),weekNow=day*1440+minute,nextClose=null;
+    periods.forEach(function(period){if(!period||!period.open||!period.close)return;var openDay=Number(period.open.day),closeDay=Number(period.close.day),openTime=String(period.open.time||'0000'),closeTime=String(period.close.time||'0000'),openMin=openDay*1440+Number(openTime.slice(0,2))*60+Number(openTime.slice(2,4)),closeMin=closeDay*1440+Number(closeTime.slice(0,2))*60+Number(closeTime.slice(2,4));if(closeMin<=openMin)closeMin+=10080;var candidate=weekNow;if(candidate<openMin)candidate+=10080;if(candidate>=openMin&&candidate<closeMin&&(nextClose===null||closeMin-candidate<nextClose-candidate))nextClose=closeMin;});
+    if(nextClose===null)return {key:'open',label:''};var remaining=nextClose-(weekNow+(weekNow<nextClose-10080?10080:0));if(remaining<0)remaining+=10080;if(remaining>30)return {key:'open',label:''};var closeMinute=((nextClose%1440)+1440)%1440,h=Math.floor(closeMinute/60),m=closeMinute%60,ampm=h>=12?'PM':'AM',displayHour=h%12||12;return {key:'closing',label:'CLOSING '+displayHour+':'+String(m).padStart(2,'0')+' '+ampm};
+  }
+  function paintNearHours(row,item){if(!row)return;row.classList.remove('is-closed','is-closing');var state=nearHoursState(item),distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(state.key==='closed')row.classList.add('is-closed');if(state.key==='closing')row.classList.add('is-closing');if(status)status.textContent=state.label;}
   function renderLANearest(rows,status,items,origin,label){
     var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
     var storedNames={};localCategoryEntries().forEach(function(item){storedNames[String(item.name||'').toLowerCase()]=true;});var vendorKind=currentCat==='Tobacco'?'tobacco':currentCat==='Food'?'food':'weed';
     window.__laNearestDispensaries=nearest;
     var renderToken=String(Date.now())+Math.random();rows.dataset.phoneRender=renderToken;
-    rows.innerHTML=nearest.map(function(x,i){var seal=storedNames[String(x.name||'').toLowerCase()]?'<span class="wtf-vendor-seal wtf-vendor-seal-'+vendorKind+'" role="button" tabindex="0" data-wtf-vendor-badge="'+vendorKind+'" aria-label="Approved WTF vendor"><b>✓</b></span>':'',phone=x.phone?'<button class="la-near-phone" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'" data-phone-popup="'+laEsc(String(x.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(x.phone)+'">'+laEsc(x.phone)+'</button>':'<button class="la-near-phone is-loading" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'" data-phone-lookup="'+laEsc(x.name)+'" data-phone-location="'+laEsc(x.address||selectedCity)+'">LOADING PHONE</button>';return '<div class="la-near-row" role="button" tabindex="0" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+seal+'</strong>'+phone+'<span class="la-near-distance">'+x.miles.toFixed(1)+' MI</span></div>';}).join('');
+    rows.innerHTML=nearest.map(function(x,i){var seal=storedNames[String(x.name||'').toLowerCase()]?'<span class="wtf-vendor-seal wtf-vendor-seal-'+vendorKind+'" role="button" tabindex="0" data-wtf-vendor-badge="'+vendorKind+'" aria-label="Approved WTF vendor"><b>✓</b></span>':'',placeAttr=x.placeId?' data-phone-place-id="'+laEsc(x.placeId)+'"':'',phone=x.phone?'<button class="la-near-phone" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-popup="'+laEsc(String(x.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(x.phone)+'">'+laEsc(x.phone)+'</button>':'<button class="la-near-phone is-loading" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-lookup="'+laEsc(x.name)+'" data-phone-location="'+laEsc(x.address||selectedCity)+'">LOADING PHONE</button>',hours=nearHoursState(x),rowClass=hours.key==='closed'?' is-closed':hours.key==='closing'?' is-closing':'';return '<div class="la-near-row'+rowClass+'" role="button" tabindex="0" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+seal+'</strong>'+phone+'<span class="la-near-distance">'+x.miles.toFixed(1)+' MI<small>'+laEsc(hours.label)+'</small></span></div>';}).join('');
     hydrateNearestPhones(nearest,rows,renderToken);
     var single=currentCat==='Food'?'restaurant':currentCat==='Tobacco'?'tobacco shop':'dispensary';
     status.textContent=nearest.length?'Tap any '+single+' for phone, directions, and full information.':'Choose another '+selectedCity+' area to search again.';
@@ -19755,13 +19790,10 @@ window.wtfPrepare24Hours=async function(city){
   }
   function hydrateNearestPhones(items,rows,token){
     items.forEach(function(item,index){if(item.phone)return;(async function(){try{
-      await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
-      var placeId=item.placeId;
-      if(!placeId){placeId=await new Promise(function(resolve,reject){placesServiceInstance.textSearch({query:item.name+' '+(item.address||selectedCity)},function(found,status){status===google.maps.places.PlacesServiceStatus.OK&&found&&found[0]?resolve(found[0].place_id):reject(new Error('phone search'));});});}
-      var detail=await new Promise(function(resolve,reject){placesServiceInstance.getDetails({placeId:placeId,fields:['formatted_phone_number','formatted_address']},function(found,status){status===google.maps.places.PlacesServiceStatus.OK&&found?resolve(found):reject(new Error('phone details'));});});
+      var result=await wtfResolvePublicPhone(item.name,item.address||selectedCity,item.placeId||''),detail=result.detail;
       if(rows.dataset.phoneRender!==token)return;var button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(!button)return;
       if(detail.formatted_address&&!item.address)item.address=detail.formatted_address;
-      if(detail.formatted_phone_number){item.phone=detail.formatted_phone_number;button.textContent=item.phone;button.classList.remove('is-loading');button.removeAttribute('data-phone-lookup');button.removeAttribute('data-phone-location');button.dataset.phonePopup=String(item.phone).replace(/\D/g,'');button.dataset.phoneDisplay=item.phone;}else{button.textContent='PHONE';button.classList.remove('is-loading');}
+      item.placeId=result.placeId||item.placeId;item.phone=result.phone;item.openingHours=detail.opening_hours||item.openingHours;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:item.openNow;button.textContent=item.phone;button.classList.remove('is-loading');button.removeAttribute('data-phone-lookup');button.removeAttribute('data-phone-location');button.dataset.phonePlaceId=item.placeId||'';button.dataset.phonePopup=result.digits;button.dataset.phoneDisplay=item.phone;paintNearHours(button.closest('.la-near-row'),item);
     }catch(ignore){if(rows.dataset.phoneRender!==token)return;var button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(button){button.textContent='PHONE';button.classList.remove('is-loading');}}})();});
   }
   function updateFullListingDistances(origin){
@@ -19812,7 +19844,7 @@ window.wtfPrepare24Hours=async function(city){
       name.textContent=item.name;address.textContent=item.address||market;story.textContent=item.story||'A '+market+'-area '+businessType+' serving the selected neighborhood. This WTFDD Biz Page brings the location, contact information, directions, hours, and current web listing together in one place.';
       var heroLabel=hero.querySelector('.la-dispensary-hero-label');if(heroLabel)heroLabel.textContent=market.toUpperCase()+' '+businessType.toUpperCase();
       var pageKicker=q('laDispensaryPageKicker');if(pageKicker)pageKicker.textContent='WTFDD · '+itemCategory.toUpperCase();
-      actions.innerHTML=(item.phone?'<button class="primary" type="button" data-phone-popup="'+laEsc(String(item.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(item.phone)+'">CALL</button>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">CALL</button>')+'<button type="button" data-directions-popup="'+laEsc(item.address||(item.lat&&item.lng?item.lat+','+item.lng:market))+'" data-directions-name="'+laEsc(item.name)+'">DIRECTIONS</button>'+(item.website?'<a href="'+laEsc(item.website)+'" target="_blank" rel="noopener">WEBSITE</a>':'')+'<a href="'+mapQuery+'" target="_blank" rel="noopener">MAP LISTING</a>';
+      var phonePlaceAttr=item.placeId?' data-phone-place-id="'+laEsc(item.placeId)+'"':'';actions.innerHTML=(item.phone?'<button class="primary" type="button"'+phonePlaceAttr+' data-phone-business="'+laEsc(item.name)+'" data-phone-popup="'+laEsc(String(item.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(item.phone)+'">CALL</button>':'<button class="primary" type="button"'+phonePlaceAttr+' data-phone-business="'+laEsc(item.name)+'" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">CALL</button>')+'<button type="button" data-directions-popup="'+laEsc(item.address||(item.lat&&item.lng?item.lat+','+item.lng:market))+'" data-directions-name="'+laEsc(item.name)+'">DIRECTIONS</button>'+(item.website?'<a href="'+laEsc(item.website)+'" target="_blank" rel="noopener">WEBSITE</a>':'')+'<a href="'+mapQuery+'" target="_blank" rel="noopener">MAP LISTING</a>';
       info.innerHTML='<div class="la-dispensary-info-row"><b>Phone</b><span>'+(item.phone?laEsc(item.phone):'Tap Find Phone Number above')+'</span></div><div class="la-dispensary-info-row"><b>Hours</b><span>'+laEsc(item.hours||'Confirm current hours directly')+'</span></div><div class="la-dispensary-info-row"><b>Distance</b><span>'+Number(item.miles||0).toFixed(1)+' miles from the selected location</span></div>'+(item.rating?'<div class="la-dispensary-info-row"><b>Rating</b><span>'+laEsc(item.rating)+' from '+laEsc(item.ratings||'current')+' ratings</span></div>':'')+(item.instagram?'<div class="la-dispensary-info-row"><b>Instagram</b><span>'+laEsc(item.instagram)+'</span></div>':'')+(item.facebook?'<div class="la-dispensary-info-row"><b>Facebook</b><span>'+laEsc(item.facebook)+'</span></div>':'')+'<div class="la-dispensary-info-row"><b>Listing</b><span>Contact details, hours, menus, and inventory can change. Confirm directly before leaving.</span></div>';
       if(item.photo)hero.style.backgroundImage='linear-gradient(transparent 35%,#070907),url("'+item.photo.replace(/"/g,'%22')+'")';
       else if(item.lat&&item.lng)hero.style.backgroundImage='linear-gradient(transparent 35%,#070907),url("https://maps.googleapis.com/maps/api/streetview?size=900x520&location='+item.lat+','+item.lng+'&fov=80&heading=0&pitch=0&key='+GOOGLE_PLACES_API_KEY+'")';
@@ -19828,7 +19860,7 @@ window.wtfPrepare24Hours=async function(city){
     if(!item)return;window.__laMiniCurrent=item;var overlay=q('laDispensaryMini'),name=q('laDispensaryMiniName'),meta=q('laDispensaryMiniMeta'),actions=q('laDispensaryMiniActions');
     name.textContent=item.name;meta.textContent=Number(item.miles||0).toFixed(1)+' miles away'+(item.address?' · '+item.address:'');var itemCategory=item.category||currentCat,miniKicker=q('laDispensaryMiniKicker');if(miniKicker)miniKicker.textContent='NEAREST '+(itemCategory==='Food'?'RESTAURANT':itemCategory==='Tobacco'?'TOBACCO SHOP':'DISPENSARY');
     var market=item.city||selectedCity||'Los Angeles',directions='https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination='+encodeURIComponent(item.lat&&item.lng?item.lat+','+item.lng:item.name+' '+(item.address||market))+'&travelmode=driving';
-    actions.innerHTML=(item.phone?'<button class="primary" type="button" data-phone-popup="'+laEsc(String(item.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(item.phone)+'">CALL</button>':'<button class="primary" type="button" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">CALL</button>')+'<button type="button" data-directions-popup="'+laEsc(item.address||(item.lat&&item.lng?item.lat+','+item.lng:market))+'" data-directions-name="'+laEsc(item.name)+'">DIRECTIONS</button><button type="button" id="laMiniViewFull">BIZ PAGE</button>';
+    var phonePlaceAttr=item.placeId?' data-phone-place-id="'+laEsc(item.placeId)+'"':'';actions.innerHTML=(item.phone?'<button class="primary" type="button"'+phonePlaceAttr+' data-phone-business="'+laEsc(item.name)+'" data-phone-popup="'+laEsc(String(item.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(item.phone)+'">CALL</button>':'<button class="primary" type="button"'+phonePlaceAttr+' data-phone-business="'+laEsc(item.name)+'" data-phone-lookup="'+laEsc(item.name)+'" data-phone-location="'+laEsc(item.address||market)+'">CALL</button>')+'<button type="button" data-directions-popup="'+laEsc(item.address||(item.lat&&item.lng?item.lat+','+item.lng:market))+'" data-directions-name="'+laEsc(item.name)+'">DIRECTIONS</button><button type="button" id="laMiniViewFull">BIZ PAGE</button>';
     overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
     q('laMiniViewFull').addEventListener('click',function(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');openLADispensary(item);});
   }
