@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-sitewide-public-phone-sweep-unique-782451 -->
+<!-- WTFDD fresh upload build: 2026-08-15-open-now-five-large-territories-unique-146829 -->
 
 <html lang="en">
 <head>
@@ -19765,7 +19765,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
-    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas only filter the businesses shown.</p><p class="la-hours-note"><span class="la-hours-star">✦</span><strong>LIVE HOURS:</strong> Closed locations stay in the closest five and appear gray. Always worth double-checking before you go.</p><div id="laNearRows"><div class="la-near-sub">Locating the closest five…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
+    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas only filter the businesses shown.</p><p class="la-hours-note"><span class="la-hours-star">✦</span><strong>OPEN RIGHT NOW:</strong> Only businesses confirmed open are shown. The fifth result may be farther away when nearby businesses are closed.</p><div id="laNearRows"><div class="la-near-sub">Finding the closest five open now…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
@@ -19814,22 +19814,24 @@ window.wtfPrepare24Hours=async function(city){
   }
   function nearHoursState(item){
     if(item.openNow===false)return {key:'closed',label:'CLOSED'};
-    var hours=item.openingHours,periods=hours&&hours.periods;if(!periods||!periods.length)return {key:'open',label:''};if(periods.some(function(p){return p&&p.open&&!p.close;}))return {key:'open',label:''};
-    var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return {key:'open',label:''};
+    var hours=item.openingHours,periods=hours&&hours.periods;if(!periods||!periods.length)return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};if(periods.some(function(p){return p&&p.open&&!p.close;}))return {key:'open',label:''};
+    var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};
     var local=new Date(Date.now()+offset*60000),day=local.getUTCDay(),minute=local.getUTCHours()*60+local.getUTCMinutes(),weekNow=day*1440+minute,nextClose=null;
     periods.forEach(function(period){if(!period||!period.open||!period.close)return;var openDay=Number(period.open.day),closeDay=Number(period.close.day),openTime=String(period.open.time||'0000'),closeTime=String(period.close.time||'0000'),openMin=openDay*1440+Number(openTime.slice(0,2))*60+Number(openTime.slice(2,4)),closeMin=closeDay*1440+Number(closeTime.slice(0,2))*60+Number(closeTime.slice(2,4));if(closeMin<=openMin)closeMin+=10080;var candidate=weekNow;if(candidate<openMin)candidate+=10080;if(candidate>=openMin&&candidate<closeMin&&(nextClose===null||closeMin-candidate<nextClose-candidate))nextClose=closeMin;});
     if(nextClose===null)return {key:'closed',label:'CLOSED'};var remaining=nextClose-(weekNow+(weekNow<nextClose-10080?10080:0));if(remaining<0)remaining+=10080;if(remaining>30)return {key:'open',label:''};var closeMinute=((nextClose%1440)+1440)%1440,h=Math.floor(closeMinute/60),m=closeMinute%60,ampm=h>=12?'PM':'AM',displayHour=h%12||12;return {key:'closing',label:'CLOSING '+displayHour+':'+String(m).padStart(2,'0')+' '+ampm};
   }
   function paintNearHours(row,item){if(!row)return;row.classList.remove('is-closed','is-closing');var state=nearHoursState(item),distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(state.key==='closed')row.classList.add('is-closed');if(state.key==='closing')row.classList.add('is-closing');if(status)status.textContent=state.label;}
   function renderLANearest(rows,status,items,origin,label){
-    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
+    /* Availability is the first rule, distance is the second. Unknown and
+       closed hours never occupy one of the five customer-facing positions. */
+    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var hours=nearHoursState(x),key=String(x.name).toLowerCase();if(hours.key!=='open'&&hours.key!=='closing')return false;if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
     var storedNames={};localCategoryEntries().forEach(function(item){storedNames[String(item.name||'').toLowerCase()]=true;});var vendorKind=currentCat==='Tobacco'?'tobacco':currentCat==='Food'?'food':'weed';
     window.__laNearestDispensaries=nearest;
     var renderToken=String(Date.now())+Math.random();rows.dataset.phoneRender=renderToken;
     rows.innerHTML=nearest.map(function(x,i){var seal=storedNames[String(x.name||'').toLowerCase()]?'<span class="wtf-vendor-seal wtf-vendor-seal-'+vendorKind+'" role="button" tabindex="0" data-wtf-vendor-badge="'+vendorKind+'" aria-label="Approved WTF vendor"><b>✓</b></span>':'',placeAttr=x.placeId?' data-phone-place-id="'+laEsc(x.placeId)+'"':'',phone=x.phone?'<button class="la-near-phone" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-popup="'+laEsc(String(x.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(x.phone)+'">'+laEsc(x.phone)+'</button>':'<button class="la-near-phone is-loading" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-lookup="'+laEsc(x.name)+'" data-phone-location="'+laEsc(x.address||selectedCity)+'">LOADING PHONE</button>',hours=nearHoursState(x),rowClass=hours.key==='closed'?' is-closed':hours.key==='closing'?' is-closing':'';return '<div class="la-near-row'+rowClass+'" role="button" tabindex="0" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+seal+'</strong>'+phone+'<span class="la-near-distance">'+x.miles.toFixed(1)+' MI<small>'+laEsc(hours.label)+'</small></span></div>';}).join('');
     hydrateNearestPhones(nearest,rows,renderToken);
     var single=currentCat==='Food'?'restaurant':currentCat==='Tobacco'?'tobacco shop':'dispensary';
-    status.textContent=nearest.length?'Tap any '+single+' for phone, directions, and full information.':'Choose another '+selectedCity+' area to search again.';
+    status.textContent=nearest.length?'Showing the closest '+nearest.length+' '+single+(nearest.length===1?'':'s')+' verified open right now.':'No '+single+' with verified open hours was found nearby right now.';
     updateFullListingDistances(origin);
   }
   function hydrateNearestPhones(items,rows,token){
@@ -20132,5 +20134,45 @@ window.wtfPrepare24Hours=async function(city){
   observer.observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['class','style','aria-hidden']});
 })();
 </script>
+<style id="wtf-newsletter-final-contrast-pass">
+/* Category color remains on the section identity and story headline. The
+   supporting copy is neutral gray so Weed, Tobacco and Food do not become
+   solid blocks of one color. Kept last in the document intentionally. */
+#wtfNewsletterIssue .wtf-news-section .wtf-news-item > span:not(.wtf-news-deal-line):not(.wtf-news-badge),
+#wtfNewsletterIssue .wtf-news-section .wtf-news-item > p,
+#wtfNewsletterIssue .wtf-news-section .wtf-news-mini > span,
+#wtfNewsletterIssue .wtf-news-section .wtf-news-check-card > span,
+#wtfNewsletterIssue .wtf-news-section .wtf-news-alert,
+#wtfNewsletterIssue .wtf-news-section .wtf-news-week{
+  color:#b8b8b8!important;
+  -webkit-text-fill-color:#b8b8b8!important;
+  text-shadow:none!important;
+}
+#wtfNewsletterIssue .wtf-news-section.weed .wtf-news-item > strong{color:#8ff0a1!important;-webkit-text-fill-color:#8ff0a1!important;}
+#wtfNewsletterIssue .wtf-news-section.tobacco .wtf-news-item > strong,
+#wtfNewsletterIssue .wtf-news-section.vape .wtf-news-item > strong{color:#e5b78e!important;-webkit-text-fill-color:#e5b78e!important;}
+#wtfNewsletterIssue .wtf-news-section.food .wtf-news-item > strong{color:#ffe36b!important;-webkit-text-fill-color:#ffe36b!important;}
+/* Black edge separates the single masthead line from its glow while keeping
+   the existing city/newsletter colors intact. */
+#wtfNewsletterIssue .wtf-news-masthead h1{
+  -webkit-text-stroke:1.15px #000!important;
+  paint-order:stroke fill!important;
+  text-shadow:0 2px 0 #000,0 0 7px rgba(255,255,255,.22),0 0 14px rgba(112,223,131,.18)!important;
+}
+</style>
+<style id="wtf-large-territory-divider-pass">
+/* Territory names are structural dividers, not small captions. Applied to
+   Weed, Tobacco and Food in every market. */
+#wtf2Directory[data-category] #wtf2DirList .directory-area{
+  margin-top:62px!important;
+  margin-bottom:22px!important;
+  font:900 clamp(28px,8.7vw,43px)/.98 'Archivo Black',sans-serif!important;
+  letter-spacing:.025em!important;
+  overflow-wrap:anywhere;
+}
+#wtf2Directory[data-category] #wtf2DirList .directory-area:first-of-type{
+  margin-top:38px!important;
+}
+</style>
 </body>
 </html>
