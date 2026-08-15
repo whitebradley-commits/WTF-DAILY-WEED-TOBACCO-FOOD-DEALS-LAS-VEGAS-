@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-current-places-top-five-grid-190244 -->
+<!-- WTFDD fresh upload build: 2026-08-15-home-city-and-rebuilt-nearest-grid-193336 -->
 
 <html lang="en">
 <head>
@@ -18880,6 +18880,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-option.wtf-city-live{color:#FFC14D;font-size:16px;font-weight:900;box-shadow:inset 0 0 12px rgba(245,158,11,.09);}
   .wtf-city-option.wtf-city-future{color:#6f6f6f;border-bottom-color:#242424;cursor:default;}
   .wtf-city-option.wtf-city-future:hover,.wtf-city-option.wtf-city-future:active{background:#050505;color:#6f6f6f;}
+  .wtf-home-city-choice{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 4px 4px;padding:10px 12px;border:1px solid rgba(79,210,103,.46);border-radius:999px;background:#050905;color:#c9c9c9;font:900 10px/1.15 'Archivo Black',sans-serif;letter-spacing:.035em;text-transform:uppercase;box-shadow:0 0 11px rgba(79,210,103,.12)}.wtf-home-city-choice input{position:absolute;opacity:0;pointer-events:none}.wtf-home-city-switch{position:relative;flex:0 0 auto;width:42px;height:23px;border:1px solid #3e5542;border-radius:999px;background:#111;box-shadow:inset 0 0 7px #000}.wtf-home-city-switch:after{content:'';position:absolute;left:3px;top:3px;width:15px;height:15px;border-radius:50%;background:#676767;transition:.18s ease}.wtf-home-city-choice input:checked+.wtf-home-city-switch{border-color:#69df7d;background:#0b2a12;box-shadow:0 0 10px rgba(79,210,103,.42),inset 0 0 7px #000}.wtf-home-city-choice input:checked+.wtf-home-city-switch:after{left:22px;background:#78df85;box-shadow:0 0 7px rgba(79,210,103,.72)}
   .wtf-city-enter{display:none;width:auto;min-width:72px;margin:14px auto 0;padding:10px 22px;background:#050505;color:#F59E0B;font-size:11px;box-shadow:0 0 0 1px #F59E0B,0 0 9px rgba(245,158,11,.2);}
   .wtf-city-enter:disabled{color:#76561f;box-shadow:0 0 0 1px #76561f;opacity:.72;cursor:default;}
   .wtf-city-launch-note{color:#A97722;}
@@ -18958,6 +18959,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Washington, D.C." role="option" aria-disabled="true">Washington, D.C.</button>
       </div>
     </div>
+    <label class="wtf-home-city-choice" for="wtfHomeCityToggle"><span>Make this my home city</span><input id="wtfHomeCityToggle" type="checkbox"/><i class="wtf-home-city-switch" aria-hidden="true"></i></label>
     <button class="wtf-city-enter" id="wtfCityEnter" type="button" disabled>Go</button>
   </div>
 </div>
@@ -19775,15 +19777,16 @@ window.wtfPrepare24Hours=async function(city){
   function setWtfCityBadge(city){selectedCity=city||'Las Vegas';window.WTF_SELECTED_CITY=selectedCity;var badge=q('wtf2CityBadge');if(badge){badge.textContent=selectedCity;badge.classList.toggle('is-long',selectedCity.length>10);}document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(button){button.hidden=selectedCity!=='Las Vegas'&&button.dataset.area!=='All';});}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
-  function showCityLaunch(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),close=q('wtfCityLaunchClose'),notice=q('wtfCityInlineComing');setOpen(q('wtfCityShell'),false);if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}setOpen(q('wtfCityLaunch'),true);if(close)close.disabled=true;document.body.style.overflow='hidden';}
+  function savedHomeCity(){try{return localStorage.getItem('wtfHomeCity')||'';}catch(e){return '';}}
+  function showCityLaunch(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),close=q('wtfCityLaunchClose'),notice=q('wtfCityInlineComing'),toggle=q('wtfHomeCityToggle');setOpen(q('wtfCityShell'),false);if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(toggle)toggle.checked=!!savedHomeCity();setOpen(q('wtfCityLaunch'),true);if(close)close.disabled=true;document.body.style.overflow='hidden';}
   function enterSelectedCity(){
     var select=q('wtfCitySelect'),city=select?select.dataset.value:'';
     if(!city)return;
-    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}
+    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);var toggle=q('wtfHomeCityToggle');if(toggle&&toggle.checked)localStorage.setItem('wtfHomeCity',city);else localStorage.removeItem('wtfHomeCity');}catch(e){}
     requestFreshSessionLocation();
     setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;
   }
-  function openWtf2WithCities(){openWtf2();setTimeout(showCityLaunch,90);}
+  function openWtf2WithCities(){openWtf2();var home=savedHomeCity();if(home&&typeof CITY_NEAR_ZONES!=='undefined'&&CITY_NEAR_ZONES[home]){setWtfCityBadge(home);try{sessionStorage.setItem('wtfSelectedCity',home);}catch(e){}requestFreshSessionLocation();setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;return;}setTimeout(showCityLaunch,90);}
   function chooseAnotherCity(){nearOnly=false;if(dir){dir.classList.remove('near-only');setOpen(dir,false);}['wtfUnavailableOverlay','wtfTerritoryOverlay','laDispensaryMini','laDispensaryOverlay'].forEach(function(id){var el=q(id);if(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');}});document.body.classList.remove('wtf2-child-open');showCityLaunch();}
   window.wtfOpenCityLanding=function(){openWtf2WithCities();};
   function closeWtf2(){setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);setOpen(overlay,false);document.body.classList.remove('wtf2-child-open');document.body.classList.remove('wtf2-shuttle-active');document.body.classList.remove('wtf2-thc24-active');document.body.style.overflow='';}
@@ -19926,16 +19929,17 @@ window.wtfPrepare24Hours=async function(city){
   }
   function paintNearHours(row,item){if(!row)return;row.classList.remove('is-closed','is-closing');var state=nearHoursState(item),distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(state.key==='closed')row.classList.add('is-closed');if(state.key==='closing')row.classList.add('is-closing');if(status)status.textContent=state.label;}
   function renderLANearest(rows,status,items,origin,label){
-    /* Availability is the first rule, distance is the second. Unknown and
-       closed hours never occupy one of the five customer-facing positions. */
-    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var hours=nearHoursState(x),key=String(x.name).toLowerCase();if(hours.key!=='open'&&hours.key!=='closing')return false;if(seen[key]||!x.lat||!x.lng)return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:x.lat,lng:x.lng});return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
+    /* Rebuilt closest-five rule: confirmed-open results lead. If Google's
+       live-hours layer is unavailable, retain the nearest directory matches
+       instead of wiping out the entire grid. Closed results are never used. */
+    var seen={},all=items.map(enrichLA).filter(validNearCategory).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lng)))return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:Number(x.lat),lng:Number(x.lng)});x.__nearState=nearHoursState(x);return x.__nearState.key!=='closed';}).sort(function(a,b){var ao=a.__nearState.key==='open'||a.__nearState.key==='closing'?0:1,bo=b.__nearState.key==='open'||b.__nearState.key==='closing'?0:1;return ao-bo||a.miles-b.miles;}),confirmed=all.filter(function(x){return x.__nearState.key==='open'||x.__nearState.key==='closing';}),nearest=(confirmed.length>=5?confirmed:confirmed.concat(all.filter(function(x){return x.__nearState.key==='unknown';}))).filter(function(x,index,list){return list.indexOf(x)===index;}).slice(0,5),usingFallback=nearest.some(function(x){return x.__nearState.key==='unknown';});
     var storedNames={};localCategoryEntries().forEach(function(item){storedNames[String(item.name||'').toLowerCase()]=true;});var vendorKind=currentCat==='Tobacco'?'tobacco':currentCat==='Food'?'food':'weed';
     window.__laNearestDispensaries=nearest;
     var renderToken=String(Date.now())+Math.random();rows.dataset.phoneRender=renderToken;
     rows.innerHTML=nearest.map(function(x,i){var seal=storedNames[String(x.name||'').toLowerCase()]?'<span class="wtf-vendor-seal wtf-vendor-seal-'+vendorKind+'" role="button" tabindex="0" data-wtf-vendor-badge="'+vendorKind+'" aria-label="Approved WTF vendor"><b>✓</b></span>':'',placeAttr=x.placeId?' data-phone-place-id="'+laEsc(x.placeId)+'"':'',phone=x.phone?'<button class="la-near-phone" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-popup="'+laEsc(String(x.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(x.phone)+'">'+laEsc(x.phone)+'</button>':'<button class="la-near-phone is-loading" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-lookup="'+laEsc(x.name)+'" data-phone-location="'+laEsc(x.address||selectedCity)+'">LOADING PHONE</button>',hours=nearHoursState(x),rowClass=hours.key==='closed'?' is-closed':hours.key==='closing'?' is-closing':'';return '<div class="la-near-row'+rowClass+'" role="button" tabindex="0" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+seal+'</strong>'+phone+'<span class="la-near-distance">'+x.miles.toFixed(1)+' MI<small>'+laEsc(hours.label)+'</small></span></div>';}).join('');
     hydrateNearestPhones(nearest,rows,renderToken);
     var single=currentCat==='Food'?'restaurant':currentCat==='Tobacco'?'tobacco shop':'dispensary';
-    status.textContent=nearest.length?'Showing the closest '+nearest.length+' '+single+(nearest.length===1?'':'s')+' verified open right now.':'No '+single+' with verified open hours was found nearby right now.';
+    status.textContent=nearest.length?(usingFallback?'Showing the closest '+nearest.length+' listed '+single+(nearest.length===1?'':'s')+'. Live hours are still being checked.':'Showing the closest '+nearest.length+' '+single+(nearest.length===1?'':'s')+' verified open right now.'):'No nearby '+single+' could be loaded right now.';
     updateFullListingDistances(origin);
   }
   function hydrateNearestPhones(items,rows,token){
