@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-live-nearest-five-and-vendor-seal-181742 -->
+<!-- WTFDD fresh upload build: 2026-08-15-neighborhood-nearest-five-fix-183006 -->
 
 <html lang="en">
 <head>
@@ -19590,6 +19590,7 @@ window.wtfPrepare24Hours=async function(city){
 .la-near-sub{margin:5px 0 11px;color:#aaa;font:700 12px/1.35 'Archivo Narrow',sans-serif;}
 .la-near-zones{display:flex;gap:7px;overflow-x:auto;padding:1px 0 10px;scrollbar-width:none;}
 .la-near-basis{margin:0 2px 11px;color:#858585;font:700 11px/1.38 'Archivo Narrow',sans-serif;}.la-near-basis strong{color:#f59e0b;}
+.la-near-tap-note{margin:0 2px 7px;color:#b7b7b7;font:900 9px/1.3 'Archivo Narrow',sans-serif;letter-spacing:.045em;text-transform:uppercase}.la-near-tap-note:before{content:'◆';margin-right:5px;color:#67df7b;font-size:7px;text-shadow:0 0 6px rgba(79,210,103,.75)}
 .la-hours-note{margin:0 2px 12px;padding:7px 9px;border:1px solid rgba(79,210,103,.58);border-radius:8px;background:rgba(8,22,11,.76);color:#a7a7a7;font:700 9.5px/1.35 'Archivo Narrow',sans-serif;letter-spacing:.015em;box-shadow:0 0 11px rgba(79,210,103,.16),inset 0 0 8px rgba(79,210,103,.05)}.la-hours-note strong{color:#67df7b;letter-spacing:.05em}.la-hours-note .la-hours-star{color:#67df7b;margin-right:4px;text-shadow:0 0 7px rgba(79,210,103,.8)}
 .la-near-zones button{flex:0 0 auto;border:1px solid #3f3f3f;border-radius:999px;background:#111;color:#ddd;padding:8px 11px;font:800 12px 'Archivo Narrow',sans-serif;}
 .la-near-zones button.active{border-color:#69df7d;color:#8bf09b;box-shadow:0 0 9px rgba(79,210,103,.3);}
@@ -19860,7 +19861,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
-    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas only filter the businesses shown.</p><div id="laNearRows"><div class="la-near-sub">Finding the nearest five open now…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
+    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas search that neighborhood without changing the mileage origin.</p><p class="la-near-tap-note">TAP ANY NAME FOR PHONE, DIRECTIONS, HOURS, AND MORE INFORMATION.</p><div id="laNearRows"><div class="la-near-sub">Finding the nearest five open now…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
@@ -19972,13 +19973,13 @@ window.wtfPrepare24Hours=async function(city){
     var limit=Math.min(candidates.length,40),verified=[];
     async function verifyCandidate(item){
       try{
-        var detail=await new Promise(function(resolve){placesServiceInstance.getDetails({placeId:item.placeId,fields:['place_id','name','formatted_address','formatted_phone_number','international_phone_number','website','opening_hours','business_status','geometry']},function(d,s){resolve(s===google.maps.places.PlacesServiceStatus.OK&&d?d:null);});});
+        var detail=await new Promise(function(resolve){placesServiceInstance.getDetails({placeId:item.placeId,fields:['place_id','name','formatted_address','formatted_phone_number','international_phone_number','website','opening_hours','utc_offset_minutes','business_status','geometry']},function(d,s){resolve(s===google.maps.places.PlacesServiceStatus.OK&&d?d:null);});});
         /* Some Places configurations reject or omit optional detail fields.
            Keep a Nearby Search result only when that response itself explicitly
            confirms open_now; never promote an unknown candidate. */
         if(!detail)return item.openNow===true?item:null;
         if(detail.business_status==='CLOSED_PERMANENTLY')return null;
-        item.name=detail.name||item.name;item.address=detail.formatted_address||item.address;item.phone=detail.formatted_phone_number||detail.international_phone_number||item.phone||'';item.website=detail.website||item.website||'';item.openingHours=detail.opening_hours||null;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:null;
+        item.name=detail.name||item.name;item.address=detail.formatted_address||item.address;item.phone=detail.formatted_phone_number||detail.international_phone_number||item.phone||'';item.website=detail.website||item.website||'';item.openingHours=detail.opening_hours||item.openingHours||null;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:item.openNow;
         if(detail.geometry&&detail.geometry.location){item.lat=detail.geometry.location.lat();item.lng=detail.geometry.location.lng();}
         return item;
       }catch(ignore){return item.openNow===true?item:null;}
@@ -19991,16 +19992,17 @@ window.wtfPrepare24Hours=async function(city){
     var plural=currentCat==='Food'?'restaurants':currentCat==='Tobacco'?'tobacco shops':'dispensaries';
     status.textContent='Finding the five closest live '+plural+' from your phone’s location…';
     document.querySelectorAll('[data-la-zone]').forEach(function(b){b.classList.toggle('active',b.dataset.laZone===label);});
+    var searchOrigin=label&&label!=='Current Location'&&activeNearZones()[label]?activeNearZones()[label]:origin;
     var immediate=filterNearArea(localCategoryEntries(),label);renderLANearest(rows,status,immediate,origin,label);
     if(currentCat==='Weed'&&MARKET_DISPENSARY_DETAILS[selectedCity]){
       var fixed=MARKET_DISPENSARY_DETAILS[selectedCity],launch=Object.keys(fixed).map(function(name){return Object.assign({name:name,city:selectedCity},fixed[name]);}).filter(validNearCategory);
       renderLANearest(rows,status,filterNearArea(launch.concat(immediate),label),origin,label);
-      var liveGoogle=[];try{liveGoogle=await fetchLAGoogle(origin);liveGoogle.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(launch.concat(liveGoogle,immediate),label),origin,label);}catch(ignore){}
-      try{var expanded=await fetchLAOverpass(origin);expanded.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(launch.concat(liveGoogle,expanded,immediate),label),origin,label);}catch(ignore){}
+      var liveGoogle=[];try{liveGoogle=await fetchLAGoogle(searchOrigin);liveGoogle.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(launch.concat(liveGoogle,immediate),label),origin,label);}catch(ignore){}
+      try{var expanded=await fetchLAOverpass(searchOrigin);expanded.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(launch.concat(liveGoogle,expanded,immediate),label),origin,label);}catch(ignore){}
       return;
     }
-    var googleFound=[];try{googleFound=await fetchLAGoogle(origin);googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound.concat(immediate),label),origin,label);}catch(ignore){}
-    try{var found=await fetchLAOverpass(origin);found.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound.concat(found,immediate),label),origin,label);}catch(err){if(!googleFound.length)renderLANearest(rows,status,immediate,origin,label);}
+    var googleFound=[];try{googleFound=await fetchLAGoogle(searchOrigin);googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound.concat(immediate),label),origin,label);}catch(ignore){}
+    try{var found=await fetchLAOverpass(searchOrigin);found.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound.concat(found,immediate),label),origin,label);}catch(err){if(!googleFound.length)renderLANearest(rows,status,immediate,origin,label);}
   }
   async function openLADispensary(item){
     if(!item)return;item=enrichLA(item);var overlay=q('laDispensaryOverlay'),name=q('laDispensaryName'),address=q('laDispensaryAddress'),story=q('laDispensaryStory'),actions=q('laDispensaryActions'),info=q('laDispensaryInfo'),hero=q('laDispensaryHero');if(!overlay)return;
