@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh copy: 2026-08-15-second-visit-home-city-prompt -->
+<!-- WTFDD fresh copy: 2026-08-15-exact-place-phone-resolution -->
 
 <html lang="en">
 <head>
@@ -9540,6 +9540,22 @@ async function wtfResolveBusinessDetails(businessName,location,placeId){
   try{
     var placesLib=google.maps.importLibrary?await google.maps.importLibrary('places'):null,PlaceClass=placesLib&&placesLib.Place;
     if(PlaceClass&&typeof PlaceClass.searchByText==='function'){
+      /* The geo-targeted nearest search already gives us the canonical Place
+         ID. Resolve that exact record before doing any text search. This is
+         essential for chains and generic names: a new text search can select
+         another branch or an older merged record whose contact fields are
+         blank even though the live location has a public phone number. */
+      if(placeId){
+        try{
+          var exactModern=new PlaceClass({id:placeId});
+          await exactModern.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location']});
+          var exactModernPhone=exactModern.nationalPhoneNumber||exactModern.internationalPhoneNumber||'';
+          if(exactModernPhone){
+            var exactModernLoc=exactModern.location,exactModernDetail={place_id:exactModern.id||placeId,name:exactModern.displayName||businessName,formatted_phone_number:exactModernPhone,international_phone_number:exactModern.internationalPhoneNumber||'',formatted_address:exactModern.formattedAddress||location||'',website:exactModern.websiteURI||'',opening_hours:exactModern.regularOpeningHours||null,business_status:exactModern.businessStatus||'',geometry:exactModernLoc?{location:exactModernLoc}:null};
+            window.__wtfBusinessDetailCache[cacheKey]=exactModernDetail;return exactModernDetail;
+          }
+        }catch(exactModernError){console.warn('WTFDD exact Place phone lookup unavailable; trying exact text match',exactModernError);}
+      }
       var modern=await PlaceClass.searchByText({textQuery:[businessName,location].filter(Boolean).join(' '),fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location'],maxResultCount:5});
       var modernPlaces=modern&&modern.places||[];
       for(var mp=0;mp<modernPlaces.length;mp++){
