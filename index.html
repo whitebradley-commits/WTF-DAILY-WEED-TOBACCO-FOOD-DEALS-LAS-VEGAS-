@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-neighborhood-nearest-five-fix-183006 -->
+<!-- WTFDD fresh upload build: 2026-08-15-current-places-top-five-grid-190244 -->
 
 <html lang="en">
 <head>
@@ -19460,6 +19460,14 @@ function setupHighHungryClosest(city){
   async function lookup(tier,origin){
     await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
     var keyword=tier==='dive'?'cheap local restaurant':tier==='money'?'fine dining restaurant':'popular restaurant';
+    try{
+      var lib=google.maps.importLibrary?await google.maps.importLibrary('places'):null,PlaceClass=lib&&lib.Place;
+      if(PlaceClass&&typeof PlaceClass.searchByText==='function'){
+        var modernResponse=await PlaceClass.searchByText({textQuery:keyword,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','businessStatus','priceLevel'],locationBias:{center:{lat:origin.lat,lng:origin.lng},radius:50000},isOpenNow:true,maxResultCount:20});
+        var modernRows=(modernResponse&&modernResponse.places||[]).map(function(place){var point=place.location,lat=point&&(typeof point.lat==='function'?point.lat():point.lat),lng=point&&(typeof point.lng==='function'?point.lng():point.lng);return {name:place.displayName||'',address:place.formattedAddress||'',phone:place.nationalPhoneNumber||place.internationalPhoneNumber||'',placeId:place.id||'',lat:Number(lat),lng:Number(lng)};}).filter(function(item){return item.name&&Number.isFinite(item.lat)&&Number.isFinite(item.lng);}).sort(function(a,b){return miles(origin,a)-miles(origin,b);}).slice(0,5);
+        if(modernRows.length)return modernRows;
+      }
+    }catch(modernError){console.warn('WTFDD High & Hungry current Places lookup:',modernError);}
     var found=await new Promise(function(resolve){placesServiceInstance.nearbySearch({location:new google.maps.LatLng(origin.lat,origin.lng),rankBy:google.maps.places.RankBy.DISTANCE,type:'restaurant',keyword:keyword,openNow:true},function(rows,status){resolve(status===google.maps.places.PlacesServiceStatus.OK&&rows?rows.map(function(place){place.__wtfOpenNow=true;return place;}):[]);});});
     var candidates=found.filter(function(place){return place.geometry&&place.geometry.location&&place.business_status!=='CLOSED_PERMANENTLY'&&tierMatch(place,tier);}).slice(0,30),verified=[];
     async function check(place){return new Promise(function(resolve){placesServiceInstance.getDetails({placeId:place.place_id,fields:['place_id','name','formatted_address','formatted_phone_number','opening_hours','business_status','geometry','price_level']},function(detail,status){if(status!==google.maps.places.PlacesServiceStatus.OK||!detail){resolve(place.__wtfOpenNow===true?place:null);return;}if(detail.business_status==='CLOSED_PERMANENTLY'){resolve(null);return;}var explicitlyClosed=detail.opening_hours&&detail.opening_hours.open_now===false,open=detail.opening_hours&&detail.opening_hours.open_now===true;if(explicitlyClosed){resolve(null);return;}resolve(open||place.__wtfOpenNow===true?Object.assign(place,{detail:detail}):null);});});}
@@ -19951,6 +19959,31 @@ window.wtfPrepare24Hours=async function(city){
     await loadGoogleMapsScript();
     if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
     var searches=currentCat==='Food'?['restaurant','fast food restaurant','burger restaurant','meal takeaway','food']:currentCat==='Tobacco'?['tobacco shop','smoke shop','vape shop']:['cannabis dispensary','marijuana dispensary','recreational cannabis'];
+    /* Prefer the current Places API. The site previously depended entirely on
+       legacy PlacesService callbacks; when a Google project has Places API
+       (New) enabled but the legacy service is restricted, the lower directory
+       mileage still works while this closest-five box stays empty. */
+    try{
+      var placesLib=google.maps.importLibrary?await google.maps.importLibrary('places'):null;
+      var PlaceClass=placesLib&&placesLib.Place;
+      if(PlaceClass&&typeof PlaceClass.searchByText==='function'){
+        var modernBatches=await Promise.all(searches.map(async function(search){
+          try{
+            var response=await PlaceClass.searchByText({
+              textQuery:search,
+              fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','types','rating','userRatingCount'],
+              locationBias:{center:{lat:origin.lat,lng:origin.lng},radius:50000},
+              isOpenNow:true,
+              maxResultCount:20
+            });
+            return response&&response.places||[];
+          }catch(err){console.warn('WTFDD current Places lookup:',search,err);return [];}
+        }));
+        var modernById={};modernBatches.flat().forEach(function(place){var id=place&&place.id;if(id&&!modernById[id])modernById[id]=place;});
+        var modern=Object.keys(modernById).map(function(id){var p=modernById[id],loc=p.location,lat=loc&&(typeof loc.lat==='function'?loc.lat():loc.lat),lng=loc&&(typeof loc.lng==='function'?loc.lng():loc.lng);return {name:p.displayName||'',placeId:p.id,lat:Number(lat),lng:Number(lng),address:p.formattedAddress||'',phone:p.nationalPhoneNumber||p.internationalPhoneNumber||'',website:p.websiteURI||'',rating:p.rating||'',ratings:p.userRatingCount||'',openNow:true,openingHours:p.regularOpeningHours||null,types:p.types||[],source:'Google Places Live · open now'};}).filter(function(item){return item.name&&Number.isFinite(item.lat)&&Number.isFinite(item.lng);}).filter(validNearCategory).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);});
+        if(modern.length)return modern;
+      }
+    }catch(modernError){console.warn('WTFDD current Places unavailable; using legacy fallback',modernError);}
     var batches=await Promise.all(searches.map(function(search){return new Promise(function(resolve){
       /* Ask Google for open businesses at query time. This makes the Nearby
          response itself a usable source of truth when optional Place Details
