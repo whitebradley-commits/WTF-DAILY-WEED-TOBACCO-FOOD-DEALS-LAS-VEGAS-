@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-home-city-and-rebuilt-nearest-grid-193336 -->
+<!-- WTFDD fresh upload build: 2026-08-15-city-trending-and-current-phone-resolver-202604 -->
 
 <html lang="en">
 <head>
@@ -9534,6 +9534,22 @@ window.__wtfBusinessDetailCache=window.__wtfBusinessDetailCache||{};
 async function wtfResolveBusinessDetails(businessName,location,placeId){
   var cacheKey=[placeId||'',businessName||'',location||''].join('|').toLowerCase();if(window.__wtfBusinessDetailCache[cacheKey])return window.__wtfBusinessDetailCache[cacheKey];
   await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
+  /* Match the successful nearest-five search with Places API (New). Some
+     Google projects allow current Place searches while restricting legacy
+     phone fields, which was leaving Food and Tobacco rows stuck on PHONE. */
+  try{
+    var placesLib=google.maps.importLibrary?await google.maps.importLibrary('places'):null,PlaceClass=placesLib&&placesLib.Place;
+    if(PlaceClass&&typeof PlaceClass.searchByText==='function'){
+      var modern=await PlaceClass.searchByText({textQuery:[businessName,location].filter(Boolean).join(' '),fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location'],maxResultCount:5});
+      var modernPlaces=modern&&modern.places||[];
+      for(var mp=0;mp<modernPlaces.length;mp++){
+        var p=modernPlaces[mp];
+        if(p&&p.fetchFields&&!(p.nationalPhoneNumber||p.internationalPhoneNumber)){try{await p.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location']});}catch(ignore){}}
+        var modernPhone=p&&(p.nationalPhoneNumber||p.internationalPhoneNumber)||'';
+        if(p&&modernPhone){var loc=p.location,modernDetail={place_id:p.id,name:p.displayName||businessName,formatted_phone_number:modernPhone,international_phone_number:p.internationalPhoneNumber||'',formatted_address:p.formattedAddress||location||'',website:p.websiteURI||'',opening_hours:p.regularOpeningHours||null,business_status:p.businessStatus||'',geometry:loc?{location:loc}:null};window.__wtfBusinessDetailCache[cacheKey]=modernDetail;return modernDetail;}
+      }
+    }
+  }catch(modernPhoneError){console.warn('WTFDD current phone lookup unavailable; trying legacy Places',modernPhoneError);}
   function get(id){return new Promise(function(resolve,reject){placesServiceInstance.getDetails({placeId:id,fields:['place_id','name','formatted_phone_number','international_phone_number','formatted_address','website','url','opening_hours','utc_offset_minutes','business_status']},function(found,status){status===google.maps.places.PlacesServiceStatus.OK&&found?resolve(found):reject(new Error('Business details unavailable: '+status));});});}
   if(placeId){try{var exact=await get(placeId);window.__wtfBusinessDetailCache[cacheKey]=exact;return exact;}catch(ignore){}}
   var candidates=await new Promise(function(resolve){var query=businessName+' '+location;placesServiceInstance.findPlaceFromQuery({query:query,fields:['place_id','name','formatted_address']},function(found,status){if(status===google.maps.places.PlacesServiceStatus.OK&&found&&found.length){resolve(found);return;}placesServiceInstance.textSearch({query:query},function(rows,rowStatus){resolve(rowStatus===google.maps.places.PlacesServiceStatus.OK&&rows?rows:[]);});});});
@@ -19018,7 +19034,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <span class="wtf2-pixel wtf2-mini-bus"></span>
     </div>
     <div class="wtf2-popular-head"><h2>Trending Right Now</h2></div>
-    <div class="wtf2-featured">
+    <div class="wtf2-featured" id="wtf2Featured">
       <div class="wtf2-feature-card" data-category="weed"><b>Planet 13</b><small>Weed · The Strip · Free shuttle available</small><em>VIEW WEED</em></div>
       <div class="wtf2-feature-card" data-category="tobacco"><b>Puff Vegas Smoke Shop</b><small>Tobacco · The Strip · Open 24 hours</small><em>VIEW TOBACCO</em></div>
       <div class="wtf2-feature-card" data-category="food"><b>Carson Kitchen</b><small>Food · Downtown · High &amp; Hungry</small><em>VIEW FOOD</em></div>
@@ -19170,7 +19186,18 @@ const WTF_CITY_STARTERS = {
   },
   'San Diego': {
     weed: ['Hello Cannabis Vista','Coastal Cannabis Co. Vista','March and Ash Vista','The Cake House Vista','DrGreenRx Vista','Urbn Leaf Vista','Wellgreens Vista','March and Ash','Mankind Cannabis','Urbn Leaf','Catalyst Cannabis','Wellgreens','The Healing Center San Diego','Goldn Bloom','Buzz Cannabis Mission Valley','Emjay San Diego','Cookies Mission Valley'],
-    tobacco: ['Leucadia Smoke & Cigar'],
+    tobacco: [
+      {name:'Leucadia Smoke & Cigar',area:'Encinitas / Cardiff',address:'905 Orpheus Ave STE 101, Encinitas, CA 92024',phone:'(760) 334-1802'},
+      {name:'Encinitas Smoke Shop',area:'Encinitas / Cardiff',address:'267 N El Camino Real, Encinitas, CA 92024',phone:'(760) 704-8221'},
+      {name:'Outer Limits Smoke Shop',area:'Oceanside',address:'2027 S Coast Hwy, Oceanside, CA 92054',phone:'(760) 439-7668'},
+      {name:'The Local Headz Smoke & Vape Shop',area:'Oceanside',address:'625 S Coast Hwy, Oceanside, CA 92054',phone:'(760) 805-4454'},
+      {name:'The Grateful Head Smoke Shop',area:'Vista',address:'1010 E Vista Way Suite E, Vista, CA 92084',phone:'(760) 295-6307'},
+      {name:'1 Stop Smoke Shop',area:'Downtown',address:'3002 Barnett Ave #2, San Diego, CA 92110',phone:'(619) 578-2362'},
+      {name:'National Smoke Shop',area:'Downtown',address:'2986 National Ave, San Diego, CA 92113',phone:'(619) 255-0509'},
+      {name:'Linda Vista Smoke Shop',area:'Mission Valley',address:'6952 Linda Vista Rd Ste A, San Diego, CA 92111',phone:'(858) 987-1025'},
+      {name:'Aztec Smoke & Vape Shop',area:'El Cajon',address:'San Diego, CA',phone:'(619) 489-6456'},
+      {name:'American Smoke Shop',area:'Carlsbad',address:'Carlsbad, CA'}
+    ],
     food: [
       {name:'Valle',area:'Oceanside',specialty:'MICHELIN ★ · James Beard semifinalist Roberto Alcocer'},
       {name:'Dija Mara',area:'Oceanside',specialty:'MICHELIN Guide · Southeast Asian'},
@@ -19774,7 +19801,14 @@ window.wtfPrepare24Hours=async function(city){
   var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false,musicTrack=0;
   function q(id){return document.getElementById(id);}
   function requestFreshSessionLocation(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};},function(){window.__wtfSessionOrigin=null;},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
-  function setWtfCityBadge(city){selectedCity=city||'Las Vegas';window.WTF_SELECTED_CITY=selectedCity;var badge=q('wtf2CityBadge');if(badge){badge.textContent=selectedCity;badge.classList.toggle('is-long',selectedCity.length>10);}document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(button){button.hidden=selectedCity!=='Las Vegas'&&button.dataset.area!=='All';});}
+  function renderCityTrending(city){
+    var host=q('wtf2Featured');if(!host)return;
+    function picks(kind){var rows=city==='Las Vegas'?(kind==='weed'?entriesFor('Weed','All'):kind==='tobacco'?entriesFor('Tobacco','All'):entriesFor('Food','All')):wtfStarterEntries(city,kind);return rows.filter(function(item){return item&&item.name&&!/^tobacco shops near\b/i.test(item.name);}).slice(0,2);}
+    var groups=[{kind:'weed',label:'WEED',rows:picks('weed')},{kind:'tobacco',label:'TOBACCO',rows:picks('tobacco')},{kind:'food',label:'FOOD',rows:picks('food')}],cards=[];
+    for(var pass=0;pass<2;pass++)groups.forEach(function(group){var item=group.rows[pass];if(!item)return;cards.push('<div class="wtf2-feature-card" data-category="'+group.kind+'"><b>'+laEsc(item.name)+'</b><small>'+group.label.charAt(0)+group.label.slice(1).toLowerCase()+' · '+laEsc(item.area&&item.area!=='Citywide'?item.area:city)+' · '+laEsc(item.specialty||('Featured '+city+' location'))+'</small><em>VIEW '+group.label+'</em></div>');});
+    host.innerHTML=cards.join('');
+  }
+  function setWtfCityBadge(city){selectedCity=city||'Las Vegas';window.WTF_SELECTED_CITY=selectedCity;var badge=q('wtf2CityBadge');if(badge){badge.textContent=selectedCity;badge.classList.toggle('is-long',selectedCity.length>10);}document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(button){button.hidden=selectedCity!=='Las Vegas'&&button.dataset.area!=='All';});renderCityTrending(selectedCity);}
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
   function savedHomeCity(){try{return localStorage.getItem('wtfHomeCity')||'';}catch(e){return '';}}
@@ -19892,6 +19926,7 @@ window.wtfPrepare24Hours=async function(city){
     }
     if(currentCat==='Tobacco'){
       if(declared==='weed'||declared==='food')return false;
+      if(/^tobacco shops near\b/.test(text))return false;
       if(/\b(cannabis|marijuana)\s+dispensary\b/.test(text)&&!/\b(smoke\s*shop|cigar|tobacco|vape|hookah|shisha)\b/.test(text))return false;
     }
     if(currentCat==='Food'&&(declared==='weed'||declared==='tobacco'))return false;
@@ -20159,7 +20194,7 @@ window.wtfPrepare24Hours=async function(city){
     q('wtf2SharePageMain').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
     var bestOfLink=q('bestOfExternalLink');if(bestOfLink)bestOfLink.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.location.assign('https://bestofperiod.com/');});
     document.querySelectorAll('.wtf2-category').forEach(function(b){b.addEventListener('click',function(){openDirectory(b.dataset.cat);});});
-    document.querySelectorAll('.wtf2-feature-card em').forEach(function(e){e.parentElement.addEventListener('click',function(){var t=e.textContent;openDirectory(t.indexOf('TOBACCO')>-1?'Tobacco':t.indexOf('FOOD')>-1?'Food':'Weed');});e.parentElement.style.cursor='pointer';});
+    var featured=q('wtf2Featured');if(featured)featured.addEventListener('click',function(e){var card=e.target.closest('.wtf2-feature-card');if(!card)return;var kind=card.dataset.category;openDirectory(kind==='tobacco'?'Tobacco':kind==='food'?'Food':'Weed');});
     q('wtf2AreaRow').addEventListener('click',function(e){var b=e.target.closest('.wtf2-area');if(!b)return;currentArea=b.dataset.area;document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(x){x.classList.toggle('active',x===b);});render();});
     function openShuttlePage(){document.body.classList.add('wtf2-shuttle-active');openChild('shuttleOverlay');}
     q('wtf2Shuttle').addEventListener('click',openShuttlePage);
