@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-15-open-now-five-large-territories-unique-146829 -->
+<!-- WTFDD fresh upload build: 2026-08-15-high-hungry-closest-by-level-163418 -->
 
 <html lang="en">
 <head>
@@ -6046,6 +6046,19 @@ button[id*="back"] svg,
 }
 </style>
 
+<style id="wtf-high-hungry-city-layout-pass">
+#hhOverlay .hh-city-help{margin:10px 0 14px;color:#b7b7b7;font:700 12px/1.45 'Archivo Narrow',sans-serif;text-align:left;letter-spacing:.02em}
+#hhOverlay .hh-city-area{margin:38px 0 14px;padding:0 0 9px;border-bottom:1px solid rgba(245,158,11,.42);color:#f59e0b;font:900 clamp(23px,7vw,36px)/1 'Archivo Black',sans-serif;letter-spacing:.035em;text-shadow:0 0 10px rgba(245,158,11,.32)}
+#hhOverlay .hh-billboard{margin-top:42px;margin-bottom:14px}
+#hhOverlay .hh-billboard:first-child{margin-top:8px}
+#hhOverlay .hh-list>.directory-list{margin-bottom:34px}
+#hhOverlay .hh-closest{margin:58px 0 34px;padding:24px 14px 18px;border:1px solid rgba(245,158,11,.72);border-radius:20px;background:#050505;box-shadow:0 0 22px rgba(245,158,11,.18)}
+#hhOverlay .hh-closest-title{text-align:center;font-family:'Archivo Black',sans-serif;line-height:.9;text-transform:uppercase}.hh-closest-title span{display:block;color:#f59e0b;font-size:clamp(30px,10vw,48px);text-shadow:0 0 12px rgba(245,158,11,.45)}.hh-closest-title strong{display:block;margin-top:8px;color:#fff;font-size:clamp(22px,7vw,34px)}
+#hhOverlay .hh-closest>p{margin:16px 0 12px;text-align:center;color:#aaa;font:700 12px/1.4 'Archivo Narrow',sans-serif}
+#hhOverlay .hh-closest-picks{display:grid;grid-template-columns:1fr;gap:8px}.hh-closest-picks button{min-height:48px;padding:9px;border:1px solid #795216;border-radius:999px;background:#090909;color:#f59e0b;font:900 12px/1.15 'Archivo Black',sans-serif;letter-spacing:.025em}.hh-closest-picks button.active{border-color:#f59e0b;background:#181005;color:#fff;box-shadow:0 0 13px rgba(245,158,11,.42)}
+#hhOverlay .hh-closest-results{margin-top:16px}.hh-closest-results>span{display:block;padding:12px;color:#aaa;text-align:center;font:700 12px/1.4 'Archivo Narrow',sans-serif}.hh-closest-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 9px;align-items:center;padding:12px 2px;border-top:1px solid rgba(245,158,11,.23)}.hh-closest-row>a:first-child{min-width:0;color:#f59e0b;text-decoration:none}.hh-closest-row b{display:block;font:800 14px/1.2 'Archivo Narrow',sans-serif}.hh-closest-row small{display:block;margin-top:3px;color:#999;font:600 10px/1.25 'Archivo Narrow',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hh-closest-row em{grid-column:2;grid-row:1;color:#f44747;font:900 12px/1 'Archivo Narrow',sans-serif;font-style:normal;text-shadow:0 0 7px rgba(244,71,71,.55)}.hh-closest-call{grid-column:1;color:#fff!important;font:700 11px/1.2 'Archivo Narrow',sans-serif;text-decoration:underline!important}
+@media(min-width:560px){#hhOverlay .hh-closest-picks{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
 </head>
 <body>
 <!-- Replace WTF headings with uploaded transparent WTF logo asset -->
@@ -18884,7 +18897,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
     <div class="wtf-city-inline-coming" id="wtfCityInlineComing" role="status" aria-live="polite" hidden><span class="wtf-city-inline-coming-city" id="wtfCityInlineComingCity"></span><strong>Coming Soon</strong></div>
     <span class="new-wtf-logo wtf-city-launch-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
     <h2 id="wtfCityLaunchTitle">Choose Your City</h2>
-          <p>★ <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is now live in 21 weed, tobacco, and food markets — simple direction, one city at a time.</p>
+          <p>★ <span class="new-wtf-logo wtf-city-inline-logo" role="img" aria-label="WTF"></span> is now live in 22 weed, tobacco, and food markets — simple direction, one city at a time.</p>
     <div class="wtf-city-select-wrap">
       <input class="wtf-city-select" id="wtfCitySelect" type="search" value="" data-value="" placeholder="Enter your city" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Enter your city" aria-haspopup="listbox" aria-expanded="false"/>
       <div class="wtf-city-powered-by" aria-hidden="true">
@@ -18896,7 +18909,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
         <button class="wtf-city-option wtf-city-live" type="button" data-city="Albuquerque" role="option">★ Albuquerque</button>
         <button class="wtf-city-option wtf-city-live" type="button" data-city="Anchorage" role="option">★ Anchorage</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Atlanta" role="option" aria-disabled="true">Atlanta</button>
-        <button class="wtf-city-option wtf-city-future" type="button" data-city="Austin" role="option" aria-disabled="true">Austin</button>
+        <button class="wtf-city-option wtf-city-live" type="button" data-city="Austin" role="option">★ Austin</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Baltimore" role="option" aria-disabled="true">Baltimore</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Boise" role="option" aria-disabled="true">Boise</button>
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Boulder" role="option" aria-disabled="true">Boulder</button>
@@ -19291,6 +19304,44 @@ const WTF_CITY_STARTERS = {
       {name:'Kaelin’s Market',area:'El Cajon',specialty:'Mediterranean market and grill'}
     ]
   },
+  'Austin': {
+    weed: [],
+    tobacco: [
+      {name:'The Cigar Vault East',area:'East Austin'},{name:'Habana House Cigar Lounge',area:'North Austin'},{name:'Bobalu Cigar Company',area:'Downtown'},{name:'Bolivar Cigar Lounge',area:'South Austin'},{name:'The Cigar Room II',area:'North Austin'},{name:'Smokers Abbey Austin',area:'East Austin'},{name:'Planet K South Lamar',area:'South Austin'},{name:'Smoke ATX',area:'Downtown'},{name:'Austin Vape and Smoke',area:'North Austin'},{name:'The Pipe World',area:'South Austin'}
+    ],
+    food: [
+      {name:'Infamous Brewing Company',area:'Lake Travis',hhTier:'local',specialty:'Independent brewery, food and local events'},
+      {name:'Casino El Camino',area:'Downtown',hhTier:'dive',specialty:'Legendary Sixth Street burgers · high ratings, low cost'},
+      {name:'Juan in a Million',area:'East Austin',hhTier:'dive',specialty:'Austin breakfast institution and giant breakfast tacos'},
+      {name:'Home Slice Pizza',area:'South Austin',hhTier:'dive',specialty:'New York-style slices on South Congress'},
+      {name:'Dirty Martin’s Place',area:'Central Austin',hhTier:'dive',specialty:'Old-school burgers since 1926'},
+      {name:'Tamale House East',area:'East Austin',hhTier:'dive',specialty:'Family-run Austin Tex-Mex institution'},
+      {name:'Top Notch Hamburgers',area:'North Austin',hhTier:'dive',specialty:'Charcoal burgers and drive-in history'},
+      {name:'Rosita’s Al Pastor',area:'East Austin',hhTier:'dive',specialty:'Tacos and al pastor from a longtime local favorite'},
+      {name:'JewBoy Burgers',area:'North Austin',hhTier:'dive',specialty:'El Paso-inspired burgers and latkes'},
+      {name:'Dan’s Hamburgers',area:'South Austin',hhTier:'dive',specialty:'Classic Austin burgers and breakfast'},
+      {name:'Franklin Barbecue',area:'East Austin',hhTier:'local',specialty:'World-famous brisket · MICHELIN Bib Gourmand'},
+      {name:'Terry Black’s Barbecue',area:'South Austin',hhTier:'local',specialty:'High-volume Austin barbecue favorite'},
+      {name:'Micklethwait Craft Meats',area:'East Austin',hhTier:'local',specialty:'MICHELIN-recognized barbecue and handmade sausage'},
+      {name:'KG BBQ',area:'East Austin',hhTier:'local',specialty:'Egyptian-Texan barbecue · MICHELIN Bib Gourmand'},
+      {name:'Distant Relatives',area:'South Austin',hhTier:'local',specialty:'African-diaspora barbecue at Meanwhile Brewing'},
+      {name:'Uchi Austin',area:'South Austin',hhTier:'local',specialty:'James Beard Award-winning modern Japanese flagship'},
+      {name:'Nixta Taqueria',area:'East Austin',hhTier:'local',specialty:'James Beard-recognized chef-driven taqueria'},
+      {name:'Birdie’s',area:'East Austin',hhTier:'local',specialty:'Acclaimed neighborhood restaurant and wine bar'},
+      {name:'Canje',area:'East Austin',hhTier:'local',specialty:'James Beard-recognized Caribbean cooking'},
+      {name:'Odd Duck',area:'South Austin',hhTier:'local',specialty:'Seasonal Austin cooking with local ingredients'},
+      {name:'InterStellar BBQ',area:'North Austin',hhTier:'money',specialty:'MICHELIN ★ barbecue'},
+      {name:'LeRoy and Lewis Barbecue',area:'South Austin',hhTier:'money',specialty:'MICHELIN ★ · James Beard semifinalist Evan LeRoy'},
+      {name:'la Barbecue',area:'East Austin',hhTier:'money',specialty:'MICHELIN ★ Central Texas barbecue'},
+      {name:'Jeffrey’s',area:'Central Austin',hhTier:'money',specialty:'MICHELIN ★ · nationally ranked steakhouse'},
+      {name:'Craft Omakase',area:'Central Austin',hhTier:'money',specialty:'MICHELIN ★ intimate omakase'},
+      {name:'Barley Swine',area:'North Austin',hhTier:'money',specialty:'MICHELIN ★ seasonal tasting menu'},
+      {name:'Hestia',area:'Downtown',hhTier:'money',specialty:'MICHELIN ★ live-fire fine dining'},
+      {name:'Olamaie',area:'Central Austin',hhTier:'money',specialty:'MICHELIN ★ modern Southern cooking'},
+      {name:'J-Prime Steakhouse',area:'Downtown',hhTier:'money',specialty:'Prime steaks and luxury service'},
+      {name:'Dean’s Italian Steakhouse',area:'Downtown',hhTier:'money',specialty:'Modern downtown steakhouse'}
+    ]
+  },
   'Sacramento': {
     weed: ['A Therapeutic Alternative','Perfect Union','Connected Cannabis Co.','Mainstage Sacramento','Vibe by California','All About Wellness','Abatin Wellness Center','NUG Sacramento','Cookies Sacramento','1841 El Camino'],
     food: ['Squeeze Inn','Gunther’s Ice Cream','South','Whitey’s Jolly Kone','Tank House BBQ']
@@ -19385,6 +19436,40 @@ function wtfStarterEntries(city,kind){
   });
 }
 
+function renderCityHighHungry(city){
+  var el=document.getElementById('hhList');if(!el)return;
+  var all=city==='Las Vegas'?(HIGH_HUNGRY_LIST||[]).concat((typeof DIVE_SPOTS_LIST!=='undefined'?DIVE_SPOTS_LIST:[]).filter(function(item){return !(HIGH_HUNGRY_LIST||[]).some(function(existing){return existing.name===item.name;});})):wtfStarterEntries(city,'food');
+  var diveWords=/\b(taco|burger|pizza|deli|barbecue|bbq|cafe|breakfast|ice cream|chicken|pho|kebab|oyster|market|drive.?in|hot dog|sandwich|brew(?:ery|ing))\b/i;
+  var moneyWords=/MICHELIN|James Beard|tasting menu|fine dining|omakase|steakhouse|luxury/i;
+  function text(item){return (item.name||'')+' '+(item.specialty||'');}
+  var dives=all.filter(function(item){return item.hhTier==='dive'||item.priceLevel===1||(!item.hhTier&&diveWords.test(text(item))&&!moneyWords.test(text(item)));}).slice(0,10);
+  var money=all.filter(function(item){return item.hhTier==='money'||item.priceLevel===4||(!item.hhTier&&moneyWords.test(text(item)));}).slice(0,10);
+  var used={};dives.concat(money).forEach(function(item){used[item.name]=true;});
+  var local=all.filter(function(item){return item.hhTier==='local'||(!used[item.name]&&item.hhTier!=='dive'&&item.hhTier!=='money');}).slice(0,14);
+  if(dives.length<5){all.forEach(function(item){if(dives.length<8&&!used[item.name]&&local.indexOf(item)<0){dives.push(item);used[item.name]=true;}});}
+  function section(title,tag,items,area){if(!items.length)return '';return '<div class="hh-billboard"><h3>'+title+'</h3><span class="dive-spots-tag">'+tag+'</span></div><p class="hh-city-help">Tap a restaurant for directions and further information ▾</p><ul class="directory-list">'+renderEntryList(items,'Food',area)+'</ul>';}
+  el.innerHTML=section('DIVE SPOTS','HIGH RATINGS · LOW COST',dives,'Dive Spots')+section('SOLID SUGGESTIONS','DEPENDABLE PICKS · WORTH THE STOP',local,'Solid Suggestions')+section('MONEY’S NO OBJECT','BIG NIGHT · FULL EXPERIENCE',money,"Money’s No Object")+'<section class="hh-closest" id="hhClosest"><div class="hh-closest-title"><span>CLOSEST</span><strong>TO YOU!</strong></div><p>Pick your High &amp; Hungry level.</p><div class="hh-closest-picks"><button type="button" data-hh-near-tier="dive">DIVE SPOTS</button><button type="button" data-hh-near-tier="solid">SOLID SUGGESTIONS</button><button type="button" data-hh-near-tier="money">MONEY’S NO OBJECT</button></div><div class="hh-closest-results" id="hhClosestResults"><span>Choose a level to find the five closest open restaurants.</span></div></section>';
+  setupHighHungryClosest(city);
+}
+
+function setupHighHungryClosest(city){
+  var box=document.getElementById('hhClosest'),results=document.getElementById('hhClosestResults');if(!box||!results)return;
+  function esc(v){return String(v||'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
+  function miles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
+  function tierMatch(place,tier){var price=Number(place.price_level);if(tier==='dive')return price===1||price===0;if(tier==='money')return price>=4;return !Number.isFinite(price)||price===2||price===3;}
+  async function lookup(tier,origin){
+    await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
+    var keyword=tier==='dive'?'cheap local restaurant':tier==='money'?'fine dining restaurant':'popular restaurant';
+    var found=await new Promise(function(resolve){placesServiceInstance.nearbySearch({location:new google.maps.LatLng(origin.lat,origin.lng),rankBy:google.maps.places.RankBy.DISTANCE,type:'restaurant',keyword:keyword},function(rows,status){resolve(status===google.maps.places.PlacesServiceStatus.OK&&rows?rows:[]);});});
+    var candidates=found.filter(function(place){return place.geometry&&place.geometry.location&&place.business_status!=='CLOSED_PERMANENTLY'&&tierMatch(place,tier);}).slice(0,30),verified=[];
+    async function check(place){return new Promise(function(resolve){placesServiceInstance.getDetails({placeId:place.place_id,fields:['place_id','name','formatted_address','formatted_phone_number','opening_hours','business_status','geometry','price_level']},function(detail,status){if(status!==google.maps.places.PlacesServiceStatus.OK||!detail||detail.business_status==='CLOSED_PERMANENTLY'){resolve(place.opening_hours&&place.opening_hours.open_now===true?place:null);return;}var open=detail.opening_hours&&detail.opening_hours.open_now===true;resolve(open?Object.assign(place,{detail:detail}):null);});});}
+    for(var start=0;start<candidates.length&&verified.length<5;start+=6){var checked=await Promise.all(candidates.slice(start,start+6).map(check));verified=verified.concat(checked.filter(Boolean));}
+    return verified.slice(0,5).map(function(place){var detail=place.detail||{},point=detail.geometry&&detail.geometry.location||place.geometry.location;return {name:detail.name||place.name,address:detail.formatted_address||place.vicinity||'',phone:detail.formatted_phone_number||'',placeId:detail.place_id||place.place_id,lat:point.lat(),lng:point.lng()};}).sort(function(a,b){return miles(origin,a)-miles(origin,b);});
+  }
+  box.querySelectorAll('[data-hh-near-tier]').forEach(function(button){button.addEventListener('click',function(){var tier=button.dataset.hhNearTier;box.querySelectorAll('[data-hh-near-tier]').forEach(function(b){b.classList.toggle('active',b===button);});results.innerHTML='<span>Allow location access to find the five closest open restaurants…</span>';if(!navigator.geolocation){results.innerHTML='<span>Location access is not supported on this device.</span>';return;}navigator.geolocation.getCurrentPosition(async function(pos){var origin={lat:pos.coords.latitude,lng:pos.coords.longitude};try{var rows=await lookup(tier,origin);if(!rows.length){results.innerHTML='<span>No open restaurants in this level could be verified nearby right now.</span>';return;}results.innerHTML=rows.map(function(item){var distance=miles(origin,item),map='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+item.address)+'&query_place_id='+encodeURIComponent(item.placeId);return '<div class="hh-closest-row"><a href="'+map+'" target="_blank" rel="noopener"><b>'+esc(item.name)+'</b><small>'+esc(item.address)+'</small></a>'+(item.phone?'<a class="hh-closest-call" href="tel:'+esc(item.phone.replace(/[^0-9+]/g,''))+'">'+esc(item.phone)+'</a>':'')+'<em>'+distance.toFixed(1)+' MI</em></div>';}).join('');}catch(err){results.innerHTML='<span>Live restaurant lookup is temporarily unavailable. Please try again.</span>';}
+      },function(){results.innerHTML='<span>Location was not shared. Allow location access and try again.</span>';},{enableHighAccuracy:true,timeout:15000,maximumAge:0});});});
+}
+
 window.wtfPrepare24Hours=async function(city){
   city=city||window.WTF_SELECTED_CITY||'Las Vegas';
   var overlay=document.getElementById('thc24Overlay');
@@ -19413,6 +19498,15 @@ window.wtfPrepare24Hours=async function(city){
     title.textContent='24 Hour THC — London';area.textContent='London availability';
     note.textContent='Recreational cannabis dispensaries are currently not available in London. Prescription medical cannabis is a separate route through specialist care.';
     list.innerHTML='<li style="padding:16px 0;color:#bbb;"><strong style="display:block;color:#78df85;margin-bottom:7px;">NO RECREATIONAL 24-HOUR DISPENSARIES</strong><a href="https://www.gov.uk/government/publications/cannabis-cbd-and-other-cannabinoids-drug-licensing-factsheet/drug-licensing-factsheet-cannabis-cbd-and-other-cannabinoids" target="_blank" rel="noopener">View current UK government guidance</a></li>';
+    return;
+  }
+  if(city==='Austin'){
+    panel.classList.add('thc24-unavailable');
+    title.textContent='24 HOURS IS NOT AVAILABLE IN THIS LOCATION.';
+    title.style.marginTop='26px';
+    note.className='thc24-unavailable-copy';
+    note.innerHTML='Recreational dispensaries are not currently available in Austin.<strong>Texas medical cannabis access is handled separately through the Medical directory.</strong>';
+    area.remove();list.remove();
     return;
   }
   var californiaCities=['Los Angeles','San Diego','San Francisco','Sacramento','Oakland / Berkeley','Oakland-Berkeley'];
@@ -19732,6 +19826,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   var CITY_NEAR_ZONES={
     'Las Vegas':{'Current Location':null,'The Strip':{lat:36.1147,lng:-115.1728},'Downtown':{lat:36.1699,lng:-115.1398},'Summerlin':{lat:36.1817,lng:-115.3328},'Henderson':{lat:36.0395,lng:-114.9817},'North Las Vegas':{lat:36.1989,lng:-115.1175},'Pahrump':{lat:36.2083,lng:-115.9839}},
+    'Austin':{'Current Location':null,'Downtown':{lat:30.2672,lng:-97.7431},'East Austin':{lat:30.2638,lng:-97.7195},'South Austin':{lat:30.2355,lng:-97.7707},'Central Austin':{lat:30.2932,lng:-97.7443},'North Austin':{lat:30.3650,lng:-97.7190},'Lake Travis':{lat:30.4082,lng:-97.9267}},
     'Los Angeles':{'Current Location':null,'Hollywood':{lat:34.0928,lng:-118.3287},'West Hollywood':{lat:34.0900,lng:-118.3617},'Downtown':{lat:34.0407,lng:-118.2468},'Culver City':{lat:34.0211,lng:-118.3965}},
     'Denver':{'Current Location':null,'Downtown':{lat:39.7392,lng:-104.9903},'RiNo':{lat:39.7663,lng:-104.9730},'Capitol Hill':{lat:39.7310,lng:-104.9725},'Lakewood':{lat:39.7047,lng:-105.0814},'Aurora':{lat:39.7294,lng:-104.8319}},
     'Portland':{'Current Location':null,'Downtown':{lat:45.5152,lng:-122.6784},'Pearl District':{lat:45.5300,lng:-122.6819},'Hawthorne':{lat:45.5110,lng:-122.6224},'Alberta':{lat:45.5598,lng:-122.6432},'Beaverton':{lat:45.4871,lng:-122.8037}},
@@ -19765,7 +19860,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
-    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas only filter the businesses shown.</p><p class="la-hours-note"><span class="la-hours-star">✦</span><strong>OPEN RIGHT NOW:</strong> Only businesses confirmed open are shown. The fifth result may be farther away when nearby businesses are closed.</p><div id="laNearRows"><div class="la-near-sub">Finding the closest five open now…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
+    return '<section class="la-near-test" id="laNearTest"><button class="la-near-close" type="button" aria-label="Close Near Me">×</button><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus">Allow location access to calculate live mileage.</p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-basis"><strong>HOW DISTANCE WORKS:</strong> Mileage always starts from your phone’s live location. Named areas only filter the businesses shown.</p><div id="laNearRows"><div class="la-near-sub">Finding the nearest five open now…</div></div><div class="la-near-line"></div><button class="la-near-full" type="button">VIEW THE FULL '+laEsc(selectedCity.toUpperCase())+' '+labels.list+' LIST</button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
@@ -19866,7 +19961,27 @@ window.wtfPrepare24Hours=async function(city){
     var byId={};batches.flat().forEach(function(p){if(p&&p.place_id&&!byId[p.place_id])byId[p.place_id]=p;});
     var found=Object.keys(byId).map(function(id){return byId[id];}).filter(function(p){return p.business_status!=='CLOSED_PERMANENTLY';});
     if(!found.length)throw new Error('No live nearby results');
-    return found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){return {name:p.name,placeId:p.place_id,lat:p.geometry.location.lat(),lng:p.geometry.location.lng(),address:p.vicinity||p.formatted_address||'',rating:p.rating||'',ratings:p.user_ratings_total||'',openNow:p.opening_hours&&typeof p.opening_hours.open_now==='boolean'?p.opening_hours.open_now:null,types:p.types||[],source:'Google Places Live'};}).filter(validNearCategory);
+    var candidates=found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){return {name:p.name,placeId:p.place_id,lat:p.geometry.location.lat(),lng:p.geometry.location.lng(),address:p.vicinity||p.formatted_address||'',rating:p.rating||'',ratings:p.user_ratings_total||'',openNow:p.opening_hours&&typeof p.opening_hours.open_now==='boolean'?p.opening_hours.open_now:null,openingHours:p.opening_hours||null,types:p.types||[],source:'Google Places Live'};}).filter(validNearCategory).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);});
+    /* Nearby Search does not reliably include current hours on every result.
+       Verify the closest candidates with Place Details before anything is
+       eligible for the customer-facing five. This prevents closed or unknown
+       businesses from slipping into the list as if they were open. */
+    var limit=Math.min(candidates.length,40),verified=[];
+    async function verifyCandidate(item){
+      try{
+        var detail=await new Promise(function(resolve){placesServiceInstance.getDetails({placeId:item.placeId,fields:['place_id','name','formatted_address','formatted_phone_number','international_phone_number','website','opening_hours','business_status','geometry']},function(d,s){resolve(s===google.maps.places.PlacesServiceStatus.OK&&d?d:null);});});
+        /* Some Places configurations reject or omit optional detail fields.
+           Keep a Nearby Search result only when that response itself explicitly
+           confirms open_now; never promote an unknown candidate. */
+        if(!detail)return item.openNow===true?item:null;
+        if(detail.business_status==='CLOSED_PERMANENTLY')return null;
+        item.name=detail.name||item.name;item.address=detail.formatted_address||item.address;item.phone=detail.formatted_phone_number||detail.international_phone_number||item.phone||'';item.website=detail.website||item.website||'';item.openingHours=detail.opening_hours||null;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:null;
+        if(detail.geometry&&detail.geometry.location){item.lat=detail.geometry.location.lat();item.lng=detail.geometry.location.lng();}
+        return item;
+      }catch(ignore){return item.openNow===true?item:null;}
+    }
+    for(var start=0;start<limit;start+=8){var batch=candidates.slice(start,Math.min(start+8,limit));var checked=await Promise.all(batch.map(verifyCandidate));verified=verified.concat(checked.filter(Boolean));if(verified.filter(function(item){var state=nearHoursState(item);return state.key==='open'||state.key==='closing';}).length>=5)break;}
+    return verified.filter(validNearCategory);
   }
   async function loadLANearest(origin,label){
     var rows=q('laNearRows'),status=q('laNearStatus');if(!rows||!status)return;
@@ -19955,7 +20070,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   function updateLondonOptionDistances(origin){document.querySelectorAll('#wtfUnavailableOverlay a[data-near-lat][data-near-lng]').forEach(function(link){var miles=laMiles(origin,{lat:Number(link.dataset.nearLat),lng:Number(link.dataset.nearLng)}),span=link.querySelector('span');if(span)span.textContent=miles<10?miles.toFixed(2)+' MI':Math.round(miles)+' MI';});}
   function openLondonUnavailable(){var modal=q('wtfUnavailableOverlay');if(!modal)return;document.querySelectorAll('#wtfUnavailableOverlay .wtf-nearest-country-list').forEach(function(list){list.classList.remove('open');});document.querySelectorAll('#wtfUnavailableOverlay .wtf-unavailable-actions button').forEach(function(button){button.classList.remove('active');});modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';var fallback={lat:51.5074,lng:-0.1278};updateLondonOptionDistances(window.__wtfSessionOrigin||fallback);if(navigator.geolocation)navigator.geolocation.getCurrentPosition(function(pos){window.__wtfSessionOrigin={lat:pos.coords.latitude,lng:pos.coords.longitude};updateLondonOptionDistances(window.__wtfSessionOrigin);showTerritoryWarning(window.__wtfSessionOrigin);},function(){},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
-  function openDirectory(cat,locatorOnly){if(selectedCity==='London'&&cat==='Weed'){openLondonUnavailable();return;}nearOnly=!!locatorOnly;currentCat=cat;currentArea='All';dir.dataset.category=String(cat).toLowerCase();dir.classList.toggle('near-only',nearOnly);render();setOpen(dir,true);dir.scrollTop=0;}
+  function openDirectory(cat,locatorOnly){if(selectedCity==='London'&&cat==='Weed'){openLondonUnavailable();return;}if(selectedCity==='Austin'&&cat==='Weed'){window.alert('Recreational dispensaries are not currently available in this location. Texas medical cannabis access is handled separately through the Medical directory.');return;}nearOnly=!!locatorOnly;currentCat=cat;currentArea='All';dir.dataset.category=String(cat).toLowerCase();dir.classList.toggle('near-only',nearOnly);render();setOpen(dir,true);dir.scrollTop=0;}
   function openChild(id,fn){document.body.classList.add('wtf2-child-open');var el=q(id);if(fn){fn();return;}if(el){el.classList.add('open');el.setAttribute('aria-hidden','false');}}
   function init(){
     overlay=q('wtf2Overlay');dir=q('wtf2Directory');
@@ -20009,7 +20124,7 @@ window.wtfPrepare24Hours=async function(city){
     q('wtf2ArcadeShuttle').addEventListener('click',openShuttlePage);
     q('wtf2Near').addEventListener('click',function(){openDirectory('Weed',true);});
     q('wtf2Thc24').addEventListener('click',function(){document.body.classList.add('wtf2-thc24-active');openChild('thc24Overlay',function(){if(window.wtfPrepare24Hours)window.wtfPrepare24Hours(selectedCity);setOpen(q('thc24Overlay'),true);});});
-    q('wtf2HH').addEventListener('click',function(){openChild('hhOverlay',function(){if(selectedCity==='Las Vegas'){if(typeof renderHighHungry==='function')renderHighHungry();}else{var el=q('hhList'),items=wtfStarterEntries(selectedCity,'food');if(el)el.innerHTML='<div class="hh-billboard"><h3>'+selectedCity.toUpperCase()+'</h3><span class="dive-spots-tag">HIGH &amp; HUNGRY STARTERS</span></div><p style="text-align:left;color:#F59E0B;font-size:0.75rem;margin:8px 0 10px;">Tap a restaurant for directions and further information ▾</p><ul class="directory-list">'+renderEntryList(items,'Food','Citywide')+'</ul>';}setOpen(q('hhOverlay'),true);});});
+    q('wtf2HH').addEventListener('click',function(){openChild('hhOverlay',function(){if(typeof renderCityHighHungry==='function')renderCityHighHungry(selectedCity);setOpen(q('hhOverlay'),true);});});
     q('wtf2Deals').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),true);});
     q('wtf2DealsClose').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);});
     q('wtf2DealsSignup').addEventListener('click',function(){setOpen(q('wtf2DealsModal'),false);openChild('wtfNewsletterOverlay',function(){if(window.openLockedWtfNewsletter)window.openLockedWtfNewsletter();});});
