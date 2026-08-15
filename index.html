@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh upload build: 2026-08-14-the-melt-live-closed-status-unique-841906 -->
+<!-- WTFDD fresh upload build: 2026-08-15-sitewide-public-phone-sweep-unique-782451 -->
 
 <html lang="en">
 <head>
@@ -9547,7 +9547,10 @@ async function wtfResolvePublicPhone(businessName,location,placeId){
   var candidates=[];
   if(placeId)candidates.push(placeId);
   var queries=[businessName+' '+location,businessName+' '+(window.WTF_SELECTED_CITY||''),businessName].filter(Boolean);
-  for(var qIndex=0;qIndex<queries.length&&!candidates.length;qIndex++){
+  // A supplied place ID is normally best, but some old or merged Google
+  // records do not expose a phone. Always collect exact-name/address backup
+  // candidates instead of stopping after that first ID.
+  for(var qIndex=0;qIndex<queries.length;qIndex++){
     var found=await search(queries[qIndex]);
     found.slice(0,3).forEach(function(place){if(place&&place.place_id&&candidates.indexOf(place.place_id)<0)candidates.push(place.place_id);});
   }
@@ -18787,6 +18790,10 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   body.wtf2-thc24-active #thc24Overlay .directory-list li>div:first-child{font-size:1rem;color:#fff!important;}
   body.wtf2-thc24-active #thc24Overlay .directory-list li>div:first-child,body.wtf2-thc24-active #thc24Overlay .directory-list li .entry-detail{color:var(--wtf2-orange)!important;text-shadow:none!important;}
   body.wtf2-thc24-active #thc24Overlay a{color:#78df85!important;font-weight:700;}
+  body.wtf2-thc24-active #thc24Overlay .directory-panel.thc24-unavailable{max-width:390px!important;padding:30px 24px 24px!important;border-radius:22px!important;text-align:center;align-self:center!important;}
+  body.wtf2-thc24-active #thc24Overlay .directory-panel.thc24-unavailable #thc24Title{margin:26px 26px 14px!important;font-size:clamp(1.15rem,5.5vw,1.55rem)!important;line-height:1.16!important;}
+  body.wtf2-thc24-active #thc24Overlay .directory-panel.thc24-unavailable .thc24-unavailable-copy{margin:0 auto!important;max-width:300px;color:#b8b8b8!important;font-size:.9rem!important;line-height:1.55!important;}
+  body.wtf2-thc24-active #thc24Overlay .directory-panel.thc24-unavailable .thc24-unavailable-copy strong{display:block;margin-top:10px;color:#78df85;font-family:'Archivo Black',sans-serif;font-size:.82rem;letter-spacing:.025em;}
   body.wtf2-shuttle-active #shuttleOverlay .directory-panel{background:radial-gradient(circle at 50% 15%,rgba(61,107,154,.13),transparent 40%),#000;}
   body.wtf2-shuttle-active #shuttleOverlay .directory-panel h2,
   body.wtf2-shuttle-active #shuttleOverlay .shuttle-desc .sd-white,
@@ -19384,6 +19391,7 @@ window.wtfPrepare24Hours=async function(city){
   var panel=overlay&&overlay.querySelector('.directory-panel');
   var close=panel&&panel.querySelector('#thc24Back');
   if(!panel||!close)return;
+  panel.classList.remove('thc24-unavailable');
   if(!window.__wtfVegas24Nodes){
     window.__wtfVegas24Nodes=Array.from(panel.children).filter(function(n){return n!==close;}).map(function(n){return n.cloneNode(true);});
   }
@@ -19407,6 +19415,26 @@ window.wtfPrepare24Hours=async function(city){
     list.innerHTML='<li style="padding:16px 0;color:#bbb;"><strong style="display:block;color:#78df85;margin-bottom:7px;">NO RECREATIONAL 24-HOUR DISPENSARIES</strong><a href="https://www.gov.uk/government/publications/cannabis-cbd-and-other-cannabinoids-drug-licensing-factsheet/drug-licensing-factsheet-cannabis-cbd-and-other-cannabinoids" target="_blank" rel="noopener">View current UK government guidance</a></li>';
     return;
   }
+  var californiaCities=['Los Angeles','San Diego','San Francisco','Sacramento','Oakland / Berkeley','Oakland-Berkeley'];
+  if(californiaCities.indexOf(city)!==-1){
+    panel.classList.add('thc24-unavailable');
+    title.textContent='24 HOURS IS NOT AVAILABLE IN THIS LOCATION.';
+    title.style.marginTop='26px';
+    note.className='thc24-unavailable-copy';
+    note.innerHTML='Licensed dispensaries cannot operate 24 hours here.<strong>The average dispensary is open from 8 AM to 10 PM.</strong>';
+    area.remove();list.remove();
+    return;
+  }
+  function isActually24Hours(hours){
+    var periods=hours&&hours.periods;if(!periods||!periods.length)return false;
+    if(periods.length===1&&periods[0].open&&!periods[0].close)return true;
+    var covered={};periods.forEach(function(p){
+      if(!p||!p.open||!p.close)return;
+      var openDay=Number(p.open.day),closeDay=Number(p.close.day),openTime=String(p.open.time||''),closeTime=String(p.close.time||'');
+      if(openTime==='0000'&&closeTime==='0000'&&closeDay===(openDay+1)%7)covered[openDay]=true;
+    });
+    return Object.keys(covered).length===7;
+  }
   function render24(items){
     list.innerHTML=items.map(function(x){
       var query=x.address||x.name+', '+city;
@@ -19424,14 +19452,17 @@ window.wtfPrepare24Hours=async function(city){
       });
     });
     var detailed=await Promise.all(found.map(function(place){return new Promise(function(resolve){
-      placesServiceInstance.getDetails({placeId:place.place_id,fields:['name','formatted_address','formatted_phone_number','website']},function(d,status){
-        resolve(status===google.maps.places.PlacesServiceStatus.OK&&d?{name:d.name,address:d.formatted_address,phone:d.formatted_phone_number,website:d.website}:{name:place.name,address:place.formatted_address});
+      placesServiceInstance.getDetails({placeId:place.place_id,fields:['name','formatted_address','formatted_phone_number','website','opening_hours','business_status']},function(d,status){
+        resolve(status===google.maps.places.PlacesServiceStatus.OK&&d&&d.business_status!=='CLOSED_PERMANENTLY'&&isActually24Hours(d.opening_hours)?{name:d.name,address:d.formatted_address,phone:d.formatted_phone_number,website:d.website}:null);
       });
     });}));
+    detailed=detailed.filter(Boolean);
+    if(!detailed.length)throw new Error('No verified 24-hour dispensaries');
     render24(detailed);
   }catch(err){
-    render24(wtfStarterEntries(city,'weed').map(function(x){return {name:x.name,address:x.address};}));
-    note.textContent='Live 24-hour lookup is temporarily unavailable. These '+city+' dispensaries include phone lookup and directions so you can confirm current overnight hours before leaving.';
+    area.textContent=city+' — No verified 24-hour results';
+    list.innerHTML='<li style="padding:16px 0;color:#aaa;"><strong style="display:block;color:#8BE28B;margin-bottom:7px;">NONE CONFIRMED RIGHT NOW</strong>Use Near Me for the closest dispensaries and their current open or closed status.</li>';
+    note.textContent='WTFDD will never substitute ordinary dispensaries on this page. A business appears here only when its published schedule confirms true 24-hour operation.';
   }
 };
 </script>
@@ -19803,10 +19834,15 @@ window.wtfPrepare24Hours=async function(city){
   }
   function hydrateNearestPhones(items,rows,token){
     items.forEach(function(item,index){(async function(){var button;try{
-      var detail=await wtfResolveBusinessDetails(item.name,item.address||selectedCity,item.placeId||'');
+      // Use the full public-phone resolver here. It checks the supplied Google
+      // place first, then retries exact name + address, name + city and name.
+      // The former lighter details call is why valid numbers could remain as
+      // the word PHONE in the closest-five rows.
+      var resolvedPhone=null,detail=null;
+      try{resolvedPhone=await wtfResolvePublicPhone(item.name,item.address||selectedCity,item.placeId||'');detail=resolvedPhone.detail;}catch(phoneErr){detail=await wtfResolveBusinessDetails(item.name,item.address||selectedCity,item.placeId||'');}
       if(rows.dataset.phoneRender!==token)return;button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(!button)return;
       if(detail.formatted_address&&!item.address)item.address=detail.formatted_address;item.placeId=detail.place_id||item.placeId;item.openingHours=detail.opening_hours||item.openingHours;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:item.openNow;
-      var livePhone=detail.formatted_phone_number||detail.international_phone_number||item.phone||'',digits=(livePhone.match(/\d/g)||[]).join('');if(digits){item.phone=livePhone;button.textContent=livePhone;button.removeAttribute('data-phone-lookup');button.removeAttribute('data-phone-location');button.dataset.phonePopup=digits;button.dataset.phoneDisplay=livePhone;}else button.textContent='PHONE';button.dataset.phonePlaceId=item.placeId||'';button.classList.remove('is-loading');paintNearHours(button.closest('.la-near-row'),item);
+      var livePhone=resolvedPhone&&resolvedPhone.phone||detail.formatted_phone_number||detail.international_phone_number||item.phone||'',digits=(livePhone.match(/\d/g)||[]).join('');if(digits){item.phone=livePhone;button.textContent=livePhone;button.removeAttribute('data-phone-lookup');button.removeAttribute('data-phone-location');button.dataset.phonePopup=digits;button.dataset.phoneDisplay=livePhone;}else{button.textContent='CHECK NUMBER';button.dataset.phoneLookup=item.name;button.dataset.phoneLocation=item.address||selectedCity;}button.dataset.phonePlaceId=item.placeId||'';button.classList.remove('is-loading');paintNearHours(button.closest('.la-near-row'),item);
     }catch(ignore){if(rows.dataset.phoneRender!==token)return;button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(button){if(!item.phone)button.textContent='PHONE';button.classList.remove('is-loading');paintNearHours(button.closest('.la-near-row'),item);}}})();});
   }
   function updateFullListingDistances(origin){
