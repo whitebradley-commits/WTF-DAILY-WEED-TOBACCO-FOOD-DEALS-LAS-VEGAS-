@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- WTFDD fresh copy: 2026-08-15-us-map-california-markets-v2 -->
+<!-- WTFDD fresh copy: 2026-08-15-second-visit-home-city-prompt -->
 
 <html lang="en">
 <head>
@@ -18896,7 +18896,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf-city-option.wtf-city-live{color:#FFC14D;font-size:16px;font-weight:900;box-shadow:inset 0 0 12px rgba(245,158,11,.09);}
   .wtf-city-option.wtf-city-future{color:#6f6f6f;border-bottom-color:#242424;cursor:default;}
   .wtf-city-option.wtf-city-future:hover,.wtf-city-option.wtf-city-future:active{background:#050505;color:#6f6f6f;}
-  .wtf-home-city-choice{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:13px 4px 4px;padding:10px 12px;border:1px solid rgba(79,210,103,.46);border-radius:999px;background:#050905;color:#c9c9c9;font:900 10px/1.15 'Archivo Black',sans-serif;letter-spacing:.035em;text-transform:uppercase;box-shadow:0 0 11px rgba(79,210,103,.12)}.wtf-home-city-choice input{position:absolute;opacity:0;pointer-events:none}.wtf-home-city-switch{position:relative;flex:0 0 auto;width:42px;height:23px;border:1px solid #3e5542;border-radius:999px;background:#111;box-shadow:inset 0 0 7px #000}.wtf-home-city-switch:after{content:'';position:absolute;left:3px;top:3px;width:15px;height:15px;border-radius:50%;background:#676767;transition:.18s ease}.wtf-home-city-choice input:checked+.wtf-home-city-switch{border-color:#69df7d;background:#0b2a12;box-shadow:0 0 10px rgba(79,210,103,.42),inset 0 0 7px #000}.wtf-home-city-choice input:checked+.wtf-home-city-switch:after{left:22px;background:#78df85;box-shadow:0 0 7px rgba(79,210,103,.72)}
+  .wtf-home-prompt{position:fixed;inset:0;z-index:100180;display:none;place-items:center;padding:22px;background:rgba(0,0,0,.82);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.wtf-home-prompt.open{display:grid}.wtf-home-prompt-card{position:relative;box-sizing:border-box;width:min(88vw,350px);padding:48px 27px 30px;border:2px solid #65dc79;border-radius:28px;background:radial-gradient(circle at 50% 0,rgba(101,220,121,.18),transparent 42%),#020402;color:#eee;text-align:center;box-shadow:0 0 30px rgba(101,220,121,.33),0 22px 70px #000}.wtf-home-prompt-close{position:absolute;right:11px;top:11px;width:39px;height:39px;border:2px solid #f5a623;border-radius:50%;background:#000;color:#ff3f47;font:900 21px/1 Arial,sans-serif;cursor:pointer}.wtf-home-prompt-mark{display:grid;place-items:center;width:66px;height:66px;margin:0 auto 16px;border:2px solid #65dc79;border-radius:50%;background:#030703;color:#78df85;font:900 31px/1 Arial,sans-serif;box-shadow:0 0 17px rgba(101,220,121,.34)}.wtf-home-prompt-card h2{margin:0;color:#78df85;font:900 21px/1.08 'Archivo Black',sans-serif}.wtf-home-prompt-card p{margin:13px 0 20px;color:#aaa;font:700 15px/1.42 'Archivo Narrow',sans-serif}.wtf-home-prompt-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wtf-home-prompt-actions button{min-height:47px;border:1px solid #65dc79;border-radius:999px;background:#040704;color:#78df85;font:900 12px/1 'Archivo Black',sans-serif;cursor:pointer}.wtf-home-prompt-actions button:last-child{border-color:#484848;color:#aaa;background:#080808}
   .wtf-city-enter{display:none;width:auto;min-width:72px;margin:14px auto 0;padding:10px 22px;background:#050505;color:#F59E0B;font-size:11px;box-shadow:0 0 0 1px #F59E0B,0 0 9px rgba(245,158,11,.2);}
   .wtf-city-enter:disabled{color:#76561f;box-shadow:0 0 0 1px #76561f;opacity:.72;cursor:default;}
   .wtf-city-launch-note{color:#A97722;}
@@ -18975,10 +18975,19 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
         <button class="wtf-city-option wtf-city-future" type="button" data-city="Washington, D.C." role="option" aria-disabled="true">Washington, D.C.</button>
       </div>
     </div>
-    <label class="wtf-home-city-choice" for="wtfHomeCityToggle"><span>Make this my home city</span><input id="wtfHomeCityToggle" type="checkbox"/><i class="wtf-home-city-switch" aria-hidden="true"></i></label>
     <button class="wtf-city-enter" id="wtfCityEnter" type="button" disabled>Go</button>
   </div>
 </div>
+
+<section class="wtf-home-prompt" id="wtfHomePrompt" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfHomePromptTitle">
+  <div class="wtf-home-prompt-card">
+    <button class="wtf-home-prompt-close" id="wtfHomePromptClose" type="button" aria-label="Keep browsing without setting a home city">×</button>
+    <span class="wtf-home-prompt-mark" aria-hidden="true">⌂</span>
+    <h2 id="wtfHomePromptTitle">MAKE THIS YOUR HOME CITY?</h2>
+    <p id="wtfHomePromptCopy"></p>
+    <div class="wtf-home-prompt-actions"><button id="wtfHomePromptYes" type="button">YES</button><button id="wtfHomePromptNo" type="button">NO</button></div>
+  </div>
+</section>
 
 <section class="wtf-city-shell" id="wtfCityShell" aria-hidden="true">
   <div class="wtf-city-shell-inner">
@@ -19820,13 +19829,18 @@ window.wtfPrepare24Hours=async function(city){
   function setOpen(el,on){if(!el)return;el.classList.toggle('open',on);el.setAttribute('aria-hidden',on?'false':'true');}
   function openWtf2(){setOpen(overlay,true);document.body.style.overflow='hidden';overlay.scrollTop=0;}
   function savedHomeCity(){try{return localStorage.getItem('wtfHomeCity')||'';}catch(e){return '';}}
-  function showCityLaunch(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),close=q('wtfCityLaunchClose'),notice=q('wtfCityInlineComing'),toggle=q('wtfHomeCityToggle');setOpen(q('wtfCityShell'),false);if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(toggle)toggle.checked=!!savedHomeCity();setOpen(q('wtfCityLaunch'),true);if(close)close.disabled=true;document.body.style.overflow='hidden';}
+  function readHomePromptData(key){try{return JSON.parse(localStorage.getItem(key)||'{}')||{};}catch(e){return {};}}
+  function closeHomePrompt(){setOpen(q('wtfHomePrompt'),false);window.__wtfHomePromptCity='';}
+  function showHomePrompt(city){var prompt=q('wtfHomePrompt'),copy=q('wtfHomePromptCopy');if(!prompt||!copy)return;window.__wtfHomePromptCity=city;copy.textContent='You’ve searched '+city+' twice now. Would you like to make '+city+' your home city?';setOpen(prompt,true);}
+  function recordIntentionalCityVisit(city){var visits=readHomePromptData('wtfCityVisitCounts'),asked=readHomePromptData('wtfHomePromptAsked');visits[city]=(Number(visits[city])||0)+1;try{localStorage.setItem('wtfCityVisitCounts',JSON.stringify(visits));}catch(e){}if(visits[city]===2&&savedHomeCity()!==city&&!asked[city]){asked[city]=true;try{localStorage.setItem('wtfHomePromptAsked',JSON.stringify(asked));}catch(e){}setTimeout(function(){showHomePrompt(city)},260);}}
+  function showCityLaunch(){var select=q('wtfCitySelect'),menu=q('wtfCityMenu'),close=q('wtfCityLaunchClose'),notice=q('wtfCityInlineComing');setOpen(q('wtfCityShell'),false);if(notice)notice.hidden=true;if(select){select.value='';select.dataset.value='';select.setAttribute('aria-expanded','false');}if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}setOpen(q('wtfCityLaunch'),true);if(close)close.disabled=true;document.body.style.overflow='hidden';}
   function enterSelectedCity(){
     var select=q('wtfCitySelect'),city=select?select.dataset.value:'';
     if(!city)return;
-    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);var toggle=q('wtfHomeCityToggle');if(toggle&&toggle.checked)localStorage.setItem('wtfHomeCity',city);else localStorage.removeItem('wtfHomeCity');}catch(e){}
+    setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}
     requestFreshSessionLocation();
     setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;
+    recordIntentionalCityVisit(city);
   }
   function openWtf2WithCities(){openWtf2();var home=savedHomeCity();if(home&&typeof CITY_NEAR_ZONES!=='undefined'&&CITY_NEAR_ZONES[home]){setWtfCityBadge(home);try{sessionStorage.setItem('wtfSelectedCity',home);}catch(e){}requestFreshSessionLocation();setOpen(q('wtfCityLaunch'),false);setOpen(q('wtfCityShell'),false);setOpen(dir,false);overlay.scrollTop=0;return;}setTimeout(showCityLaunch,90);}
   function chooseAnotherCity(){nearOnly=false;if(dir){dir.classList.remove('near-only');setOpen(dir,false);}['wtfUnavailableOverlay','wtfTerritoryOverlay','laDispensaryMini','laDispensaryOverlay'].forEach(function(id){var el=q(id);if(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');}});document.body.classList.remove('wtf2-child-open');showCityLaunch();}
@@ -20179,6 +20193,11 @@ window.wtfPrepare24Hours=async function(city){
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
     q('wtfCityEnter').addEventListener('click',enterSelectedCity);
     q('wtfCityLaunchClose').addEventListener('click',function(){if(this.disabled)return;setOpen(q('wtfCityLaunch'),false);overlay.scrollTop=0;});
+    var homePrompt=q('wtfHomePrompt'),homePromptYes=q('wtfHomePromptYes'),homePromptNo=q('wtfHomePromptNo'),homePromptClose=q('wtfHomePromptClose');
+    if(homePromptYes)homePromptYes.addEventListener('click',function(){var city=window.__wtfHomePromptCity;if(city){try{localStorage.setItem('wtfHomeCity',city);}catch(e){}}closeHomePrompt();});
+    if(homePromptNo)homePromptNo.addEventListener('click',closeHomePrompt);
+    if(homePromptClose)homePromptClose.addEventListener('click',closeHomePrompt);
+    if(homePrompt)homePrompt.addEventListener('click',function(e){if(e.target===e.currentTarget)closeHomePrompt();});
     var cityCatalog=[].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option')).map(function(option){return {name:option.dataset.city,tier:option.classList.contains('wtf-city-live')?'live':option.classList.contains('wtf-city-planned')?'planned':'future'};});
     q('wtfCityMenu').innerHTML='';
     function rankCityRecords(records,query){return records.slice().sort(function(a,b){var an=a.name.toLowerCase(),bn=b.name.toLowerCase(),as=an.startsWith(query)?0:1,bs=bn.startsWith(query)?0:1;return as-bs||an.localeCompare(bn);});}
@@ -20190,6 +20209,7 @@ window.wtfPrepare24Hours=async function(city){
     q('wtfCitySelect').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var visible=[].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option')).filter(function(option){return !option.hidden;});if(!this.dataset.value&&visible.length===1&&!visible[0].classList.contains('wtf-city-future')){this.value=visible[0].dataset.city;this.dataset.value=visible[0].dataset.city;q('wtfCityEnter').disabled=false;q('wtfCityLaunchClose').disabled=false;}if(this.dataset.value){e.preventDefault();enterSelectedCity();}});
     q('wtfCityMenu').addEventListener('click',function(e){var option=e.target.closest('.wtf-city-option');if(!option||option.classList.contains('wtf-city-future'))return;var select=q('wtfCitySelect'),go=q('wtfCityEnter'),close=q('wtfCityLaunchClose');select.dataset.value=option.dataset.city;select.value=option.dataset.city;select.setAttribute('aria-expanded','false');this.setAttribute('hidden','');go.disabled=false;close.disabled=false;go.textContent='Go';select.blur();enterSelectedCity();});
     document.addEventListener('click',function(e){var wrap=e.target.closest('.wtf-city-select-wrap');if(wrap)return;var menu=q('wtfCityMenu'),select=q('wtfCitySelect');if(menu){menu.setAttribute('hidden','');menu.scrollTop=0;}if(select)select.setAttribute('aria-expanded','false');});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&homePrompt&&homePrompt.classList.contains('open'))closeHomePrompt();});
     q('wtfCityChange').addEventListener('click',chooseAnotherCity);
     q('wtf2CityQuickChange').addEventListener('click',chooseAnotherCity);
     q('wtf2MusicToggle').addEventListener('click',toggleMusic);
