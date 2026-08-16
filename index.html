@@ -20470,5 +20470,127 @@ window.wtfPrepare24Hours=async function(city){
   margin-top:38px!important;
 }
 </style>
+<style id="wtf-worldwide-finder-styles">
+.wtf-worldwide-finder{position:fixed;inset:0;z-index:100240;display:none;overflow-y:auto;background:rgba(0,0,0,.94);padding:18px 14px 42px;color:#f4f4f4;font-family:'Archivo Narrow',Arial,sans-serif;overscroll-behavior:contain}
+.wtf-worldwide-finder.open{display:block}
+.wtf-worldwide-card{width:min(680px,100%);margin:5vh auto 0;border:2px solid #70df83;border-radius:34px;background:radial-gradient(circle at 50% 0,rgba(41,135,62,.18),transparent 36%),#030704;box-shadow:0 0 24px rgba(112,223,131,.22);padding:24px 18px 28px;position:relative;overflow:hidden}
+.wtf-worldwide-close{position:absolute;right:15px;top:15px;width:54px;height:54px;border:2px solid #f0a000;border-radius:50%;background:#050505;color:#ff303b;font:900 34px/1 Arial;box-shadow:0 0 14px rgba(240,160,0,.42)}
+.wtf-worldwide-kicker{margin:12px 64px 10px 0;color:#ff3c49;font:900 14px/1.1 'Archivo Black',sans-serif;letter-spacing:.2em}
+.wtf-worldwide-title{margin:28px auto 12px;max-width:570px;text-align:center;font:900 clamp(28px,7vw,45px)/1.03 'Archivo Black',sans-serif;letter-spacing:.025em;text-transform:uppercase}
+.wtf-worldwide-city{color:#70df83;text-shadow:0 0 12px rgba(112,223,131,.35)}
+.wtf-worldwide-copy{max-width:550px;margin:0 auto 22px;color:#bcbcbc;text-align:center;font:700 18px/1.4 'Archivo Narrow',Arial,sans-serif}
+.wtf-worldwide-copy strong{color:#fff}
+.wtf-worldwide-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:22px auto;max-width:570px}
+.wtf-worldwide-choice{min-height:92px;border:2px solid currentColor;border-radius:20px;background:#050805;font:900 clamp(15px,4vw,20px)/1.05 'Archivo Black',sans-serif;letter-spacing:.04em;box-shadow:0 8px 18px #000;transition:.16s transform,.16s box-shadow}
+.wtf-worldwide-choice:active{transform:scale(.97)}
+.wtf-worldwide-choice.weed{color:#70df83}.wtf-worldwide-choice.tobacco{color:#b87343}.wtf-worldwide-choice.food{color:#f0a000}
+.wtf-worldwide-tier{grid-template-columns:1fr;margin-top:10px}.wtf-worldwide-tier .wtf-worldwide-choice{min-height:62px;color:#f0a000}
+.wtf-worldwide-back{border:1px solid #777;background:#080808;color:#ddd;border-radius:9px;padding:9px 16px;font:800 13px/1 Arial;letter-spacing:.08em;text-transform:uppercase}
+.wtf-worldwide-status{margin:18px auto 6px;max-width:570px;color:#aaa;text-align:center;font:700 16px/1.35 Arial,sans-serif}
+.wtf-worldwide-results{max-width:590px;margin:18px auto 0}
+.wtf-worldwide-result{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 13px;padding:16px 3px;border-bottom:1px solid rgba(112,223,131,.22)}
+.wtf-worldwide-result-name{color:var(--world-accent,#70df83);font:900 19px/1.15 'Archivo Narrow',Arial,sans-serif;text-decoration:none}
+.wtf-worldwide-result-distance{align-self:center;color:#ff4149;font:900 16px/1 Arial,sans-serif;text-shadow:0 0 8px rgba(255,65,73,.4)}
+.wtf-worldwide-result-meta{grid-column:1/-1;color:#aaa;font:600 13px/1.35 Arial,sans-serif}
+.wtf-worldwide-result-links{grid-column:1/-1;display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+.wtf-worldwide-result-links a{border:1px solid var(--world-accent,#70df83);border-radius:8px;padding:8px 12px;color:#fff;font:800 13px/1 Arial,sans-serif;text-decoration:none;text-transform:uppercase}
+.wtf-worldwide-loading{width:54px;height:54px;margin:24px auto;border:4px solid #202020;border-top-color:var(--world-accent,#70df83);border-radius:50%;animation:wtfWorldSpin .8s linear infinite}
+@keyframes wtfWorldSpin{to{transform:rotate(360deg)}}
+@media(max-width:520px){.wtf-worldwide-card{border-radius:25px;padding:20px 14px 25px}.wtf-worldwide-actions{gap:7px}.wtf-worldwide-choice{min-height:76px}.wtf-worldwide-result-name{font-size:17px}}
+</style>
+<div class="wtf-worldwide-finder" id="wtfWorldwideFinder" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtfWorldwideTitle">
+  <section class="wtf-worldwide-card" id="wtfWorldwideCard">
+    <button class="wtf-worldwide-close" id="wtfWorldwideClose" type="button" aria-label="Close worldwide finder">×</button>
+    <div id="wtfWorldwideContent"></div>
+  </section>
+</div>
+<script id="wtf-worldwide-finder-script">
+(function(){
+  'use strict';
+  var overlay=document.getElementById('wtfWorldwideFinder');
+  var content=document.getElementById('wtfWorldwideContent');
+  var desiredCity='';
+  var cityCenter=null;
+  var mileageOrigin=null;
+  var originLabel='the selected city';
+  var accent='#70df83';
+  var currentCategory='';
+  var searchToken=0;
+  if(!overlay||!content)return;
+
+  function esc(value){return String(value==null?'':value).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
+  function miles(a,b){var r=3958.7613,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;return 2*r*Math.asin(Math.sqrt(x));}
+  function point(location){if(!location)return null;var lat=typeof location.lat==='function'?location.lat():location.lat;var lng=typeof location.lng==='function'?location.lng():location.lng;return isFinite(lat)&&isFinite(lng)?{lat:+lat,lng:+lng}:null;}
+  function mapsSearchUrl(name,address){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent([name,address].filter(Boolean).join(' '));}
+  function directionsUrl(item){return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(item.location.lat+','+item.location.lng)+'&travelmode=driving';}
+  function openOverlay(city){
+    desiredCity=(city||'Your selected city').trim();
+    cityCenter=null;mileageOrigin=null;originLabel='the selected city';currentCategory='';searchToken++;
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');overlay.scrollTop=0;document.body.style.overflow='hidden';
+    renderIntro();
+  }
+  function closeOverlay(){searchToken++;overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  function renderIntro(){
+    content.style.setProperty('--world-accent','#70df83');
+    content.innerHTML='<div class="wtf-worldwide-kicker">WORLDWIDE FINDER</div><h2 class="wtf-worldwide-title" id="wtfWorldwideTitle">YOUR DESIRED CITY IS NOT CURRENTLY FULLY OPERATIONAL.</h2><p class="wtf-worldwide-copy"><span class="wtf-worldwide-city">'+esc(desiredCity)+'</span> is not yet a full WTF market. <strong>However, the closest WTF is available.</strong></p><p class="wtf-worldwide-copy">Choose what you want and we will find the five closest open locations around your destination.</p><div class="wtf-worldwide-actions"><button class="wtf-worldwide-choice weed" data-world-category="weed" type="button">WEED</button><button class="wtf-worldwide-choice tobacco" data-world-category="tobacco" type="button">TOBACCO</button><button class="wtf-worldwide-choice food" data-world-category="food" type="button">FOOD</button></div>';
+  }
+  function renderFoodTiers(){
+    content.style.setProperty('--world-accent','#f0a000');
+    content.innerHTML='<button class="wtf-worldwide-back" data-world-back type="button">Back</button><div class="wtf-worldwide-kicker">FOOD · '+esc(desiredCity)+'</div><h2 class="wtf-worldwide-title" id="wtfWorldwideTitle">PICK YOUR FOOD LEVEL</h2><p class="wtf-worldwide-copy">We will show the five closest open choices in the level you select.</p><div class="wtf-worldwide-actions wtf-worldwide-tier"><button class="wtf-worldwide-choice" data-world-tier="value" type="button">BEST VALUE</button><button class="wtf-worldwide-choice" data-world-tier="solid" type="button">SOLID SUGGESTIONS</button><button class="wtf-worldwide-choice" data-world-tier="money" type="button">MONEY’S NO OBJECT</button></div>';
+  }
+  function getDeviceLocation(){return new Promise(function(resolve){if(!navigator.geolocation)return resolve(null);navigator.geolocation.getCurrentPosition(function(pos){resolve({lat:pos.coords.latitude,lng:pos.coords.longitude});},function(){resolve(null);},{enableHighAccuracy:true,timeout:9000,maximumAge:0});});}
+  function geocodeCity(){return loadGoogleMapsScript().then(function(){return new Promise(function(resolve,reject){new google.maps.Geocoder().geocode({address:desiredCity},function(results,status){if(status==='OK'&&results&&results[0])resolve(point(results[0].geometry.location));else reject(new Error('We could not locate that city.'));});});});}
+  function prepareOrigin(){return Promise.all([geocodeCity(),getDeviceLocation()]).then(function(values){cityCenter=values[0];var device=values[1];if(device&&miles(device,cityCenter)<=75){mileageOrigin=device;originLabel='your live location';}else{mileageOrigin=cityCenter;originLabel='the center of '+desiredCity;}return cityCenter;});}
+  function categoryTerms(category,tier){
+    if(category==='weed')return ['recreational cannabis dispensary','marijuana dispensary','cannabis dispensary'];
+    if(category==='tobacco')return ['tobacco shop','cigar shop','smoke shop','vape shop'];
+    if(tier==='value')return ['cheap eats restaurant','inexpensive restaurant','budget restaurant','fast food restaurant'];
+    if(tier==='money')return ['fine dining restaurant','Michelin restaurant','luxury restaurant'];
+    return ['popular local restaurant','restaurant'];
+  }
+  function validResult(item,category){
+    var blob=((item.name||'')+' '+(item.address||'')+' '+(item.types||[]).join(' ')).toLowerCase();
+    if(category==='weed')return !/(smoke shop|tobacco|cigar|hookah|vape|cbd only)/.test(blob)&&/(cannabis|marijuana|dispensary|store)/.test(blob);
+    if(category==='tobacco')return !/(cannabis dispensary|marijuana dispensary)/.test(blob)&&/(tobacco|smoke|cigar|vape|hookah|store)/.test(blob);
+    return /(restaurant|food|cafe|meal|bar|bakery)/.test(blob);
+  }
+  function modernSearch(term,category){
+    if(!google.maps.importLibrary)return Promise.reject(new Error('modern unavailable'));
+    return google.maps.importLibrary('places').then(function(lib){if(!lib.Place||!lib.Place.searchByText)throw new Error('modern unavailable');return lib.Place.searchByText({textQuery:term+' near '+desiredCity,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','businessStatus','types'],locationBias:{center:cityCenter,radius:50000},isOpenNow:true,maxResultCount:20});}).then(function(response){return (response.places||[]).map(function(p){var loc=point(p.location);return {name:p.displayName||'',address:p.formattedAddress||'',phone:p.internationalPhoneNumber||p.nationalPhoneNumber||'',website:p.websiteURI||'',location:loc,types:p.types||[],open:true};}).filter(function(x){return x.location&&validResult(x,category);});});
+  }
+  function legacySearch(term,category){
+    return new Promise(function(resolve,reject){var host=document.createElement('div');var service=placesServiceInstance||new google.maps.places.PlacesService(host);service.nearbySearch({location:new google.maps.LatLng(cityCenter.lat,cityCenter.lng),rankBy:google.maps.places.RankBy.DISTANCE,keyword:term,openNow:true},function(results,status){if(status!==google.maps.places.PlacesServiceStatus.OK&&status!==google.maps.places.PlacesServiceStatus.ZERO_RESULTS)return reject(new Error(status));var base=(results||[]).slice(0,14);if(!base.length)return resolve([]);Promise.all(base.map(function(p){return new Promise(function(done){service.getDetails({placeId:p.place_id,fields:['name','formatted_address','geometry','formatted_phone_number','international_phone_number','website','opening_hours','business_status','types']},function(d,s){var source=s===google.maps.places.PlacesServiceStatus.OK&&d?d:p;var loc=point(source.geometry&&source.geometry.location);var isOpen=source.opening_hours&&typeof source.opening_hours.isOpen==='function'?source.opening_hours.isOpen():true;done({name:source.name||p.name||'',address:source.formatted_address||p.vicinity||'',phone:source.international_phone_number||source.formatted_phone_number||'',website:source.website||'',location:loc,types:source.types||p.types||[],open:isOpen!==false});});});})).then(function(items){resolve(items.filter(function(x){return x.location&&x.open&&validResult(x,category);}));});});});
+  }
+  function runTerms(category,tier){
+    var terms=categoryTerms(category,tier);
+    return terms.reduce(function(chain,term){return chain.then(function(all){return modernSearch(term,category).catch(function(){return legacySearch(term,category);}).then(function(found){return all.concat(found);}).catch(function(){return all;});});},Promise.resolve([]));
+  }
+  function uniqueSorted(items){var seen={};return items.filter(function(item){var key=(item.name+'|'+item.address).toLowerCase().replace(/[^a-z0-9]/g,'');if(!key||seen[key])return false;seen[key]=1;item.distance=miles(mileageOrigin,item.location);return true;}).sort(function(a,b){return a.distance-b.distance;}).slice(0,5);}
+  function renderResults(items,category,tier){
+    var label=category==='weed'?'DISPENSARIES':category==='tobacco'?'TOBACCO SHOPS':'RESTAURANTS';
+    var tierLabel=tier==='value'?' · BEST VALUE':tier==='money'?' · MONEY’S NO OBJECT':tier==='solid'?' · SOLID SUGGESTIONS':'';
+    var rows=items.length?items.map(function(item){var phone=item.phone?'<a href="tel:'+esc(item.phone.replace(/[^+0-9]/g,''))+'">'+esc(item.phone)+'</a>':'<a href="'+esc(mapsSearchUrl(item.name,item.address))+'" target="_blank" rel="noopener">VIEW NUMBER</a>';return '<article class="wtf-worldwide-result"><a class="wtf-worldwide-result-name" href="'+esc(mapsSearchUrl(item.name,item.address))+'" target="_blank" rel="noopener">'+esc(item.name)+'</a><span class="wtf-worldwide-result-distance">'+item.distance.toFixed(item.distance<10?1:0)+' MI</span><div class="wtf-worldwide-result-meta">'+esc(item.address)+'</div><div class="wtf-worldwide-result-links">'+phone+'<a href="'+esc(directionsUrl(item))+'" target="_blank" rel="noopener">Directions</a></div></article>';}).join(''):'<p class="wtf-worldwide-copy">No confirmed-open '+label.toLowerCase()+' were returned near this destination right now. Try again later or choose another category.</p>';
+    content.innerHTML='<button class="wtf-worldwide-back" data-world-back type="button">Back</button><div class="wtf-worldwide-kicker">CLOSEST WTF · '+esc(desiredCity)+'</div><h2 class="wtf-worldwide-title" id="wtfWorldwideTitle">'+label+tierLabel+'</h2><p class="wtf-worldwide-copy">Closest confirmed-open results. Mileage starts from <strong>'+esc(originLabel)+'</strong>.</p><div class="wtf-worldwide-results">'+rows+'</div>';
+  }
+  function startSearch(category,tier){
+    currentCategory=category;accent=category==='weed'?'#70df83':category==='tobacco'?'#b87343':'#f0a000';content.style.setProperty('--world-accent',accent);var token=++searchToken;
+    content.innerHTML='<button class="wtf-worldwide-back" data-world-back type="button">Back</button><div class="wtf-worldwide-kicker">SEARCHING · '+esc(desiredCity)+'</div><h2 class="wtf-worldwide-title" id="wtfWorldwideTitle">FINDING THE CLOSEST OPEN LOCATIONS</h2><div class="wtf-worldwide-loading"></div><p class="wtf-worldwide-status">Checking the destination and current open businesses…</p>';
+    prepareOrigin().then(function(){return runTerms(category,tier);}).then(function(items){if(token!==searchToken)return;renderResults(uniqueSorted(items),category,tier);}).catch(function(){if(token!==searchToken)return;content.innerHTML='<button class="wtf-worldwide-back" data-world-back type="button">Back</button><h2 class="wtf-worldwide-title" id="wtfWorldwideTitle">WE COULD NOT COMPLETE THIS SEARCH.</h2><p class="wtf-worldwide-copy">Please allow location access, check the city spelling, and try again.</p>';});
+  }
+  content.addEventListener('click',function(e){var category=e.target.closest('[data-world-category]'),tier=e.target.closest('[data-world-tier]');if(category){var value=category.dataset.worldCategory;if(value==='food')renderFoodTiers();else startSearch(value,'');return;}if(tier){startSearch('food',tier.dataset.worldTier);return;}if(e.target.closest('[data-world-back]')){searchToken++;if(currentCategory==='food')renderFoodTiers();else renderIntro();}});
+  document.getElementById('wtfWorldwideClose').addEventListener('click',closeOverlay);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closeOverlay();});
+
+  var cityInput=document.getElementById('wtfCitySelect');
+  var cityGo=document.getElementById('wtfCityEnter');
+  var cityMenu=document.getElementById('wtfCityMenu');
+  function liveCityNamed(value){value=(value||'').trim().toLowerCase();return [].slice.call(document.querySelectorAll('#wtfCityMenu .wtf-city-option:not(.wtf-city-future)')).some(function(option){return (option.dataset.city||option.textContent||'').trim().toLowerCase()===value;});}
+  function armFallback(){setTimeout(function(){if(!cityInput||!cityGo)return;var typed=cityInput.value.trim();if(typed&&!cityInput.dataset.value&&!liveCityNamed(typed)){cityGo.disabled=false;cityGo.style.display='inline-block';cityGo.textContent='Find Closest WTF';}},0);}
+  if(cityInput){cityInput.addEventListener('input',armFallback);cityInput.addEventListener('keydown',function(e){var typed=cityInput.value.trim();if(e.key==='Enter'&&typed&&!cityInput.dataset.value&&!liveCityNamed(typed)){e.preventDefault();e.stopImmediatePropagation();openOverlay(typed);}},true);}
+  if(cityGo)cityGo.addEventListener('click',function(e){var typed=cityInput&&cityInput.value.trim();if(typed&&!cityInput.dataset.value&&!liveCityNamed(typed)){e.preventDefault();e.stopImmediatePropagation();openOverlay(typed);}},true);
+  if(cityMenu)cityMenu.addEventListener('click',function(e){var future=e.target.closest('.wtf-city-option.wtf-city-future');if(!future)return;e.preventDefault();e.stopImmediatePropagation();openOverlay(future.dataset.city||future.textContent||'Your selected city');},true);
+  window.openWtfWorldwideFinder=openOverlay;
+})();
+</script>
 </body>
 </html>
