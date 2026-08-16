@@ -9954,7 +9954,9 @@ function renderEntryList(entries, catLabel, area){
     const vendorKind = String(catLabel || '').toLowerCase() === 'tobacco' ? 'tobacco' : String(catLabel || '').toLowerCase() === 'food' ? 'food' : 'weed';
     const vendorBadge = '<span class="wtf-vendor-seal wtf-vendor-seal-' + vendorKind + '" role="button" tabindex="0" data-wtf-vendor-badge="' + vendorKind + '" aria-label="Approved WTF vendor" title="Approved WTF vendor"><span>WTF</span><b>✓</b></span>';
 
-    const verifiedBadge = '<svg class="verified-circle" width="18" height="18" viewBox="0 0 24 24" aria-label="Verified"><circle cx="12" cy="12" r="11" fill="#2E7DD1"/><path d="M7,12.5 L10.3,15.8 L17,8.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    /* WTF uses its own category-colored vendor seals. The unrelated blue
+       verification check has been retired from directory listings. */
+    const verifiedBadge = '';
 
     /* Every food listing receives a visible 1–4 price level. Older editorial
        records without an explicit value remain in the middle bracket. */
@@ -19131,7 +19133,6 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-gold">GOLD</span><span class="wtf2-legend-copy"><b>Food</b><span>Restaurants and High &amp; Hungry food listings.</span></span></div>
     </div>
     <div class="wtf2-legend-group"><h2>LISTING MARKS</h2>
-      <div class="wtf2-legend-row"><span class="wtf2-legend-symbol">✓</span><span class="wtf2-legend-copy"><b>Blue Check</b><span>A verified or recognized listing.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol"><i class="wtf-vendor-seal wtf-vendor-seal-weed" aria-hidden="true"><b>✓</b></i></span><span class="wtf2-legend-copy"><b>Green WTF Vendor Seal</b><span>An approved Weed vendor within WTFDD. We’re working swiftly to include them all.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-brown"><i class="wtf-vendor-seal wtf-vendor-seal-tobacco" aria-hidden="true"><b>✓</b></i></span><span class="wtf2-legend-copy"><b>Brown WTF Vendor Seal</b><span>An approved Tobacco vendor within WTFDD. We’re working swiftly to include them all.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-gold"><i class="wtf-vendor-seal wtf-vendor-seal-food" aria-hidden="true"><b>✓</b></i></span><span class="wtf2-legend-copy"><b>Gold WTF Vendor Seal</b><span>An approved Food vendor within WTFDD. We’re working swiftly to include them all.</span></span></div>
@@ -20053,7 +20054,24 @@ window.wtfPrepare24Hours=async function(city){
     raw.split(';').forEach(function(rule){rule=rule.trim();if(!rule||/\boff\b/i.test(rule))return;var m=rule.match(/^([A-Za-z,-]+)\s+(.+)$/);if(!m)return;var dayPart=m[1],days=[];dayPart.split(',').forEach(function(chunk){var range=chunk.split('-'),a=dayNames.indexOf(range[0]),b=dayNames.indexOf(range[1]);if(a<0)return;if(b<0){days.push(range[0]);return;}for(var d=a;;d=(d+1)%7){days.push(dayNames[d]);if(d===b)break;}});if(days.indexOf(today)<0)return;matchedDay=true;m[2].split(',').forEach(function(span){var times=span.trim().match(/^(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})$/);if(!times)return;var start=Number(times[1])*60+Number(times[2]),end=Number(times[3])*60+Number(times[4]);if(end<=start){if(minute>=start||minute<end)open=true;}else if(minute>=start&&minute<end)open=true;});});
     return matchedDay?open:null;
   }
+  function californiaCannabisSalesClosedNow(){
+    if(currentCat!=='Weed')return false;
+    var californiaCities=['Los Angeles','San Diego','San Francisco','Sacramento','Oakland / Berkeley','Oakland-Berkeley','Irvine','Santa Barbara'];
+    if(californiaCities.indexOf(selectedCity)===-1)return false;
+    try{
+      var parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',hour12:false}).formatToParts(new Date());
+      var hour=Number((parts.find(function(part){return part.type==='hour';})||{}).value);
+      if(hour===24)hour=0;
+      return hour<6||hour>=22;
+    }catch(ignore){
+      var localHour=new Date().getHours();
+      return localHour<6||localHour>=22;
+    }
+  }
   function nearHoursState(item){
+    /* California permits licensed cannabis retail sales only from 6 AM until
+       10 PM. This legal cutoff wins over missing or stale provider hours. */
+    if(californiaCannabisSalesClosedNow())return {key:'closed',label:'CLOSED'};
     if(item.openNow===false)return {key:'closed',label:'CLOSED'};
     var hours=item.openingHours,periods=hours&&hours.periods;if(!periods||!periods.length)return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};if(periods.some(function(p){return p&&p.open&&!p.close;}))return {key:'open',label:''};
     var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};
@@ -20075,13 +20093,21 @@ window.wtfPrepare24Hours=async function(city){
   }
   function paintNearHours(row,item){if(!row)return;var state=nearHoursState(item);row.classList.remove('is-closing','is-closed');if(state.key==='closing')row.classList.add('is-closing');if(state.key==='closed')row.classList.add('is-closed');var distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(status)status.textContent=state.key==='open'?'OPEN':state.key==='unknown'?'HOURS UNCONFIRMED':state.label;}
   function ensureNightOverlays(){
-    if(!q('wtfClosedTerritoryPop')){var closed=document.createElement('div');closed.id='wtfClosedTerritoryPop';closed.className='wtf-closed-pop';closed.setAttribute('aria-hidden','true');closed.innerHTML='<div class="wtf-night-card" role="dialog" aria-modal="true" aria-labelledby="wtfClosedTerritoryTitle"><button class="wtf-night-x" type="button" aria-label="Close">×</button><h2 id="wtfClosedTerritoryTitle">EVERYTHING IN YOUR TERRITORY IS CLOSED.</h2><p>Check out the option below.</p><button class="wtf-night-options" type="button">SHOW ME</button></div>';document.body.appendChild(closed);closed.querySelector('.wtf-night-x').addEventListener('click',function(){setOpen(closed,false)});closed.querySelector('.wtf-night-options').addEventListener('click',function(){setOpen(closed,false);var fly=document.querySelector('.wtf-fly-row');if(fly)fly.scrollIntoView({behavior:'smooth',block:'center'});});}
-    if(!q('wtfFlightZipPop')){var flight=document.createElement('div');flight.id='wtfFlightZipPop';flight.className='wtf-flight-pop';flight.setAttribute('aria-hidden','true');flight.innerHTML='<form class="wtf-night-card" id="wtfFlightZipForm"><button class="wtf-night-x" type="button" aria-label="Close">×</button><h2>FLY TO VEGAS</h2><p>Planet 13 is waiting. Let’s find your flight.</p><label for="wtfFlightZip">WHAT’S YOUR ZIP CODE?</label><input id="wtfFlightZip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" placeholder="ZIP CODE" required><button class="wtf-night-go" type="submit">FIND FLIGHTS</button></form>';document.body.appendChild(flight);flight.querySelector('.wtf-night-x').addEventListener('click',function(){setOpen(flight,false)});flight.querySelector('form').addEventListener('submit',function(e){e.preventDefault();var zip=flight.querySelector('input').value.trim();if(!zip)return;setOpen(flight,false);if(typeof window.wtfOpenAirlineFlights==='function'){window.wtfOpenAirlineFlights({zip:zip,destination:'Las Vegas',airport:'LAS',business:'Planet 13'});return;}var url='https://www.google.com/travel/flights?q='+encodeURIComponent('Flights from '+zip+' to Las Vegas');openInPopup(url);});}
+    if(!q('wtfClosedTerritoryPop')){var closed=document.createElement('div');closed.id='wtfClosedTerritoryPop';closed.className='wtf-closed-pop';closed.setAttribute('aria-hidden','true');var californiaCopy=californiaCannabisSalesClosedNow();closed.innerHTML='<div class="wtf-night-card" role="dialog" aria-modal="true" aria-labelledby="wtfClosedTerritoryTitle"><button class="wtf-night-x" type="button" aria-label="Close">×</button><h2 id="wtfClosedTerritoryTitle">'+(californiaCopy?'CALIFORNIA DISPENSARIES ARE CLOSED.':'EVERYTHING IN YOUR TERRITORY IS CLOSED.')+'</h2><p>'+(californiaCopy?'California licensed cannabis retailers may sell only between 6:00 AM and 10:00 PM. Check out the 24-hour option below.':'Check out the option below.')+'</p><button class="wtf-night-options" type="button">SHOW ME</button></div>';document.body.appendChild(closed);closed.querySelector('.wtf-night-x').addEventListener('click',function(){setOpen(closed,false)});closed.querySelector('.wtf-night-options').addEventListener('click',function(){setOpen(closed,false);var fly=document.querySelector('.wtf-fly-row');if(fly)fly.scrollIntoView({behavior:'smooth',block:'center'});});}
+    if(!q('wtfFlightZipPop')){var flight=document.createElement('div');flight.id='wtfFlightZipPop';flight.className='wtf-flight-pop';flight.setAttribute('aria-hidden','true');flight.innerHTML='<form class="wtf-night-card" id="wtfFlightZipForm"><button class="wtf-night-x" type="button" aria-label="Close">×</button><h2>FLY TO VEGAS</h2><p>Five 24-hour dispensary options are waiting. Let’s find your flight.</p><label for="wtfFlightZip">WHAT’S YOUR ZIP CODE?</label><input id="wtfFlightZip" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="10" placeholder="ZIP CODE" required><button class="wtf-night-go" type="submit">ENTER FLIGHT PORTAL</button></form>';document.body.appendChild(flight);flight.querySelector('.wtf-night-x').addEventListener('click',function(){setOpen(flight,false)});flight.querySelector('form').addEventListener('submit',function(e){e.preventDefault();var zip=flight.querySelector('input').value.trim();if(!zip)return;setOpen(flight,false);if(typeof window.wtfOpenAirlineFlights==='function'){window.wtfOpenAirlineFlights({zip:zip,destination:'Las Vegas',airport:'LAS',business:'24-hour dispensaries'});return;}var url='https://www.google.com/travel/flights?q='+encodeURIComponent('Flights from '+zip+' to Las Vegas');openInPopup(url);});}
   }
   function openVegasFlightZip(){ensureNightOverlays();var pop=q('wtfFlightZipPop');setOpen(pop,true);setTimeout(function(){var input=q('wtfFlightZip');if(input){input.value='';input.focus();}},80);}
   function maybeOfferPlanet13(rows,status,items,origin){
-    if(currentCat!=='Weed'||!rows||!items.length)return;var states=items.map(nearHoursState);if(states.some(function(state){return state.key!=='closed';}))return;if(rows.querySelector('.wtf-fly-row'))return;
-    var planet={lat:36.1311,lng:-115.1741},miles=laMiles(origin,planet);var row=document.createElement('div');row.className='la-near-row wtf-fly-row';row.innerHTML='<strong>Planet 13 · Las Vegas</strong><button class="wtf-fly-btn" type="button">FLY TO VEGAS</button><span class="la-near-distance">'+miles.toFixed(1)+' MI<small>OPEN 24 HOURS</small></span><span class="wtf-fly-note">2548 W Desert Inn Rd · Confirm current hours before traveling.</span>';rows.appendChild(row);row.querySelector('.wtf-fly-btn').addEventListener('click',openVegasFlightZip);status.textContent='Everything in your territory is closed. Check out the option below.';ensureNightOverlays();try{if(sessionStorage.getItem('wtfClosedTerritoryShown')!=='1'){sessionStorage.setItem('wtfClosedTerritoryShown','1');setOpen(q('wtfClosedTerritoryPop'),true);}}catch(e){setOpen(q('wtfClosedTerritoryPop'),true);}
+    if(currentCat!=='Weed'||!rows)return;var states=items.map(nearHoursState);if(states.some(function(state){return state.key!=='closed';}))return;if(rows.querySelector('.wtf-fly-row'))return;
+    var vegas24=[
+      {name:'Planet 13',address:'2548 W Desert Inn Rd, Las Vegas, NV 89109',lat:36.1311,lng:-115.1741},
+      {name:'Thrive · Las Vegas Strip',address:'2975 S Sammy Davis Jr Dr, Las Vegas, NV 89109',lat:36.1379,lng:-115.1828},
+      {name:'Thrive · West Sahara',address:'3500 W Sahara Ave, Las Vegas, NV 89102',lat:36.1447,lng:-115.1875},
+      {name:'NuLeaf Las Vegas',address:'430 E Twain Ave, Las Vegas, NV 89169',lat:36.1207,lng:-115.1535},
+      {name:'The Grove',address:'4647 University Center Dr, Las Vegas, NV 89119',lat:36.1049,lng:-115.1513}
+    ].map(function(option){option.miles=laMiles(origin,option);return option;}).sort(function(a,b){return a.miles-b.miles;});
+    vegas24.forEach(function(option){var row=document.createElement('div');row.className='la-near-row wtf-fly-row';row.innerHTML='<strong>'+laEsc(option.name)+' · Las Vegas</strong><button class="wtf-fly-btn" type="button">FLY TO VEGAS</button><span class="la-near-distance">'+option.miles.toFixed(1)+' MI<small>OPEN 24 HOURS</small></span><span class="wtf-fly-note">'+laEsc(option.address)+' · Confirm current hours before traveling.</span>';rows.appendChild(row);row.querySelector('.wtf-fly-btn').addEventListener('click',openVegasFlightZip);});
+    status.textContent='California dispensaries are closed. Here are the five closest listed 24-hour options.';ensureNightOverlays();try{if(sessionStorage.getItem('wtfClosedTerritoryShown')!=='1'){sessionStorage.setItem('wtfClosedTerritoryShown','1');setOpen(q('wtfClosedTerritoryPop'),true);}}catch(e){setOpen(q('wtfClosedTerritoryPop'),true);}
   }
   function renderLANearest(rows,status,items,origin,label,allowPendingHours){
     var nearBlock=q('laNearTest');if(nearBlock)nearBlock.classList.remove('is-loading');
