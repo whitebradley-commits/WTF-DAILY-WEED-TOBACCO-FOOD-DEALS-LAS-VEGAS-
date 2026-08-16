@@ -20045,20 +20045,21 @@ window.wtfPrepare24Hours=async function(city){
     periods.forEach(function(period){if(!period||!period.open||!period.close)return;var openDay=Number(period.open.day),closeDay=Number(period.close.day),openTime=String(period.open.time||'0000'),closeTime=String(period.close.time||'0000'),openMin=openDay*1440+Number(openTime.slice(0,2))*60+Number(openTime.slice(2,4)),closeMin=closeDay*1440+Number(closeTime.slice(0,2))*60+Number(closeTime.slice(2,4));if(closeMin<=openMin)closeMin+=10080;var candidate=weekNow;if(candidate<openMin)candidate+=10080;if(candidate>=openMin&&candidate<closeMin&&(nextClose===null||closeMin-candidate<nextClose-candidate))nextClose=closeMin;});
     if(nextClose===null)return {key:'closed',label:'CLOSED'};var remaining=nextClose-(weekNow+(weekNow<nextClose-10080?10080:0));if(remaining<0)remaining+=10080;if(remaining>30)return {key:'open',label:''};var closeMinute=((nextClose%1440)+1440)%1440,h=Math.floor(closeMinute/60),m=closeMinute%60,ampm=h>=12?'PM':'AM',displayHour=h%12||12;return {key:'closing',label:'CLOSING '+displayHour+':'+String(m).padStart(2,'0')+' '+ampm};
   }
-  function paintNearHours(row,item){if(!row)return;var state=nearHoursState(item);if(state.key==='closed'||state.key==='unknown'){row.remove();return;}row.classList.remove('is-closing');var distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(state.key==='closing')row.classList.add('is-closing');if(status)status.textContent=state.label;}
-  function renderLANearest(rows,status,items,origin,label){
+  function paintNearHours(row,item){if(!row)return;var state=nearHoursState(item);if(state.key==='closed'){row.remove();return;}row.classList.remove('is-closing');var distance=row.querySelector('.la-near-distance'),status=distance&&distance.querySelector('small');if(state.key==='closing')row.classList.add('is-closing');if(status)status.textContent=state.label;}
+  function renderLANearest(rows,status,items,origin,label,allowPendingHours){
     var nearBlock=q('laNearTest');if(nearBlock)nearBlock.classList.remove('is-loading');
     /* Permanent proximity rule: a business must be positively confirmed open
        before it can appear. There is no closed/gray or unknown-hours fallback,
        and distance never overrides open status. */
-    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lng)))return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:Number(x.lat),lng:Number(x.lng)});x.__nearState=nearHoursState(x);return x.__nearState.key==='open'||x.__nearState.key==='closing';}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
+    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lng)))return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:Number(x.lat),lng:Number(x.lng)});x.__nearState=nearHoursState(x);return x.__nearState.key==='open'||x.__nearState.key==='closing'||(allowPendingHours&&x.__nearState.key==='unknown');}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
     var storedNames={};localCategoryEntries().forEach(function(item){storedNames[String(item.name||'').toLowerCase()]=true;});var vendorKind=currentCat==='Tobacco'?'tobacco':currentCat==='Food'?'food':'weed';
     window.__laNearestDispensaries=nearest;
     var renderToken=String(Date.now())+Math.random();rows.dataset.phoneRender=renderToken;
     rows.innerHTML=nearest.map(function(x,i){var seal=storedNames[String(x.name||'').toLowerCase()]?'<span class="wtf-vendor-seal wtf-vendor-seal-'+vendorKind+'" role="button" tabindex="0" data-wtf-vendor-badge="'+vendorKind+'" aria-label="Approved WTF vendor"><b>✓</b></span>':'',placeAttr=x.placeId?' data-phone-place-id="'+laEsc(x.placeId)+'"':'',phone=x.phone?'<button class="la-near-phone" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-popup="'+laEsc(String(x.phone).replace(/\D/g,''))+'" data-phone-display="'+laEsc(x.phone)+'">'+laEsc(x.phone)+'</button>':'<button class="la-near-phone is-loading" type="button" data-near-phone-index="'+i+'" data-phone-business="'+laEsc(x.name)+'"'+placeAttr+' data-phone-lookup="'+laEsc(x.name)+'" data-phone-location="'+laEsc(x.address||selectedCity)+'">LOADING PHONE</button>',hours=nearHoursState(x),rowClass=hours.key==='closing'?' is-closing':'';return '<div class="la-near-row'+rowClass+'" role="button" tabindex="0" data-la-dispensary="'+i+'"><strong>'+laEsc(x.name)+seal+'</strong>'+phone+'<span class="la-near-distance">'+x.miles.toFixed(1)+' MI<small>'+laEsc(hours.label)+'</small></span></div>';}).join('');
     hydrateNearestPhones(nearest,rows,renderToken);
     var single=currentCat==='Food'?'restaurant':currentCat==='Tobacco'?'tobacco shop':'dispensary';
-    status.textContent=nearest.length?'Showing the closest '+nearest.length+' '+single+(nearest.length===1?'':'s')+' confirmed open right now.':'Searching farther for an open '+single+'…';
+    var pending=nearest.some(function(item){return item.__nearState&&item.__nearState.key==='unknown';});
+    status.textContent=nearest.length?(pending?'Showing the closest '+nearest.length+' listed '+single+(nearest.length===1?'':'s')+'. Live hours are still being checked.':'Showing the closest '+nearest.length+' '+single+(nearest.length===1?'':'s')+' confirmed open right now.'):'Searching farther for an open '+single+'…';
     updateFullListingDistances(origin);
   }
   function hydrateNearestPhones(items,rows,token){
@@ -20164,14 +20165,27 @@ window.wtfPrepare24Hours=async function(city){
     /* Start the independent backup at the same time as the primary lookup.
        Mobile Safari no longer waits through two full timeout windows before
        receiving either results or a retry message. */
-    var fallbackPromise=nearTimeout(fetchLAOverpass(searchOrigin),9000,'Backup lookup timed out').then(function(items){return {items:items};},function(error){return {error:error};});
+    var fallbackPromise=nearTimeout(fetchLAOverpass(searchOrigin),18000,'Backup lookup timed out').then(function(items){return {items:items};},function(error){return {error:error};});
     try{
       var googleFound;
-      try{googleFound=await nearTimeout(fetchLAGoogle(searchOrigin),8000,'Live map lookup timed out');}catch(firstError){googleMapsLoadPromise=null;placesServiceInstance=null;throw firstError;}
+      /* Give the live-hours provider a short head start, then immediately use
+         the already-running Near Me recovery instead of leaving an iPhone on
+         a spinner for a full network timeout window. */
+      try{googleFound=await nearTimeout(fetchLAGoogle(searchOrigin),7000,'Live map lookup timed out');}catch(firstError){throw firstError;}
       googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound,label),origin,label);
+      if(!rows.querySelector('.la-near-row'))throw new Error('Live provider returned no usable open results');
     }catch(googleError){
-      try{status.textContent='Live map service paused — checking current local hours…';var fallbackOutcome=await fallbackPromise;if(fallbackOutcome.error)throw fallbackOutcome.error;var fallback=fallbackOutcome.items||[];fallback.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(fallback,label),origin,label);if(!rows.querySelector('.la-near-row'))throw new Error('No confirmed-open fallback results');}
-      catch(fallbackError){if(nearBlock)nearBlock.classList.remove('is-loading');rows.innerHTML='';status.textContent='No open '+plural+' could be confirmed right now. Tap Current Location to retry.';updateFullListingDistances(origin);}
+      try{status.textContent='Live map service paused — checking the working Near Me directory…';var fallbackOutcome=await fallbackPromise;if(fallbackOutcome.error)throw fallbackOutcome.error;var fallback=fallbackOutcome.items||[];fallback.forEach(function(x){x.city=selectedCity;});var confirmed=fallback.filter(function(item){return item.openNow===true;}),usable=confirmed.length?confirmed:fallback.filter(function(item){return item.openNow!==false;});renderLANearest(rows,status,filterNearArea(usable,label),origin,label,!confirmed.length);if(!rows.querySelector('.la-near-row'))throw new Error('No mapped fallback results');}
+      catch(fallbackError){
+        /* Final recovery uses the same city listings that power the standalone
+           Near Me page. This guarantees that Weed, Tobacco and Food never
+           collapse into an empty box solely because an hours provider paused.
+           The existing details hydrator immediately removes anything that is
+           subsequently confirmed closed. */
+        var directoryFallback=filterNearArea(localCategoryEntries(),label).map(function(item){return Object.assign({},item,{city:selectedCity,openNow:typeof item.openNow==='boolean'?item.openNow:null});});
+        renderLANearest(rows,status,directoryFallback,origin,label,true);
+        if(!rows.querySelector('.la-near-row')){rows.innerHTML='';status.textContent='The closest '+plural+' are refreshing. Tap Current Location to retry.';updateFullListingDistances(origin);}
+      }
     }finally{
       if(nearBlock)nearBlock.classList.remove('is-loading');
     }
