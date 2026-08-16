@@ -19508,7 +19508,7 @@ const SAN_DIEGO_DISPENSARY_DETAILS = {
   'Hello Cannabis Vista':{address:'1017 Sycamore Ave, Vista, CA 92081',phone:'(760) 214-8457',website:'https://hellocannabisvista.com/',hours:'Daily 6 AM–9:45 PM',lat:33.1599134,lng:-117.2215647,story:'Hello Cannabis is a licensed recreational and medical dispensary in Vista near Highway 78. The store offers in-store pickup, curbside ordering, parking and an on-site ATM.'},
   'Coastal Cannabis Co. Vista':{address:'1084 La Mirada Ct, Vista, CA 92081',phone:'(760) 734-7081',website:'https://coastalcannabisco.com/',hours:'Confirm today’s hours directly',lat:33.1522776,lng:-117.2262563,story:'Coastal Cannabis Co. is a North County dispensary on La Mirada Court in Vista. Call or open the current listing to confirm hours and ordering options.'},
   'March and Ash Vista':{address:'2465 Dogwood Way, Vista, CA 92081',phone:'(760) 624-7336',website:'https://marchandash.com/vista/',hours:'Daily until 9:55 PM; confirm opening time',lat:33.1501598,lng:-117.2202512,story:'March and Ash Vista is a licensed recreational and medical cannabis boutique serving Vista and North County with in-store shopping, pickup and delivery.'},
-  'The Cake House Vista':{address:'1275 S Santa Fe Ave #101, Vista, CA 92083',phone:'(760) 295-0755',website:'https://cakehousecannabis.com/location/vista/',hours:'Daily 6 AM–10 PM',lat:33.1873,lng:-117.2250,story:'The Cake House Vista is a licensed medical and recreational cannabis storefront on South Santa Fe Avenue with walk-in shopping and an on-site ATM.'},
+  'The Cake House Vista':{address:'1275 S Santa Fe Ave #101, Vista, CA 92083',phone:'(760) 295-0755',website:'https://cakehousecannabis.com/location/vista/',hours:'Daily 7 AM–10 PM',lat:33.1873,lng:-117.2250,story:'The Cake House Vista is a licensed medical and recreational cannabis storefront on South Santa Fe Avenue with walk-in shopping and an on-site ATM.'},
   'DrGreenRx Vista':{address:'1406 S Santa Fe Ave, Vista, CA 92084',phone:'(760) 536-3363',website:'https://www.drgreenrx.net/',hours:'Daily 9 AM–10 PM',lat:33.1852242,lng:-117.2231010,story:'DrGreenRx is a licensed recreational and medical dispensary that has served Vista since 2016, offering express pickup and a broad cannabis menu.'},
   'Urbn Leaf Vista':{address:'909 W Vista Way, Vista, CA 92083',phone:'(760) 330-5078',website:'https://urbnleaf.com/',hours:'Confirm current hours directly',lat:33.1945316,lng:-117.2624689,story:'Urbn Leaf Vista is a North County cannabis retailer on West Vista Way offering licensed adult-use and medical products.'},
   'Wellgreens Vista':{address:'954 S Santa Fe Ave, Vista, CA 92084',phone:'(760) 659-6264',website:'https://www.wellgreens.store/',hours:'Confirm current hours directly',lat:33.1940111,lng:-117.2321836,story:'Wellgreens Vista is a licensed cannabis storefront on South Santa Fe Avenue serving Vista and surrounding North County communities.'},
@@ -19744,6 +19744,33 @@ window.wtfPrepare24Hours=async function(city){
 /* Closest-five control: larger universal control, category branding and an
    immediate loading state so mobile visitors always receive tap feedback. */
 .la-near-launch{width:194px!important;min-height:72px!important;padding:10px 16px 11px!important}.la-near-launch-copy{margin-bottom:7px!important;font-size:14px!important;letter-spacing:.075em!important}.la-near-category-word{position:relative;display:inline-block;color:var(--launch-accent);font:inherit;text-shadow:0 0 10px var(--launch-glow)}.la-near-launch-word{font-size:20px!important}.la-near-category-word .la-near-leaf{left:-12px;right:auto;top:-9px;transform:rotate(-18deg) scale(.9);transform-origin:80% 85%}.la-near-category-word .la-tobacco-leaf,.la-near-category-word .la-food-banana{left:auto;right:-19px}#wtf2Directory[data-category="weed"] .la-near-launch{--launch-accent:#67df7b;--launch-glow:rgba(79,210,103,.62);border:2px solid #F59E0B!important;background:#050805!important;box-shadow:0 8px 17px rgba(0,0,0,.68),0 0 14px rgba(245,158,11,.48),inset 0 0 9px rgba(79,210,103,.08)!important}#wtf2Directory[data-category="weed"] .la-near-launch-copy{font-size:23px!important;line-height:.94!important;letter-spacing:.045em!important;color:#67df7b!important}#wtf2Directory[data-category="weed"] .la-near-launch-word{font-size:11px!important;letter-spacing:.15em!important;color:#67df7b!important}#wtf2Directory[data-category="weed"] .la-near-test h3{color:#F59E0B!important}
+/* Prominent circular launch control for the closest cannabis search. */
+#wtf2Directory[data-category="weed"] .la-near-launch{
+  width:154px!important;
+  min-width:154px!important;
+  height:154px!important;
+  min-height:154px!important;
+  aspect-ratio:1!important;
+  padding:16px!important;
+  border:3px solid #F59E0B!important;
+  border-radius:50%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  background:radial-gradient(circle at 50% 36%,rgba(101,220,121,.22),rgba(7,19,10,.96) 60%,#020302 100%)!important;
+  box-shadow:0 0 0 2px rgba(101,220,121,.22),0 0 20px rgba(245,158,11,.62),0 0 34px rgba(79,210,103,.42),inset 0 0 20px rgba(101,220,121,.14)!important;
+  animation:wtfCloseWeedPulse 1.3s cubic-bezier(.42,0,.28,1) infinite!important;
+}
+#wtf2Directory[data-category="weed"] .la-near-launch-copy{margin:0!important;font-size:26px!important;line-height:.9!important;letter-spacing:.035em!important}
+#wtf2Directory[data-category="weed"] .la-near-launch-word{font-size:12px!important;letter-spacing:.2em!important}
+#wtf2Directory[data-category="weed"] .la-near-category-word .la-near-leaf{left:-15px!important;top:-11px!important;transform:rotate(-18deg) scale(1.08)!important}
+#wtf2Directory[data-category="weed"] .la-near-launch:active{animation:none!important;transform:scale(.96)!important}
+@keyframes wtfCloseWeedPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 2px rgba(101,220,121,.2),0 0 17px rgba(245,158,11,.56),0 0 29px rgba(79,210,103,.36),inset 0 0 17px rgba(101,220,121,.1)}
+  50%{transform:scale(1.085);box-shadow:0 0 0 4px rgba(101,220,121,.34),0 0 29px rgba(245,158,11,.9),0 0 52px rgba(79,210,103,.66),inset 0 0 26px rgba(101,220,121,.22)}
+}
 .la-near-loading{--load-accent:#67df7b;--load-glow:rgba(79,210,103,.7);display:none;min-height:132px;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--load-accent);font:900 11px/1 'Archivo Black',sans-serif;letter-spacing:.14em;text-align:center}.la-near-test.is-loading .la-near-loading{display:flex}.la-near-test.is-loading>:not(.la-near-loading):not(.la-near-close){visibility:hidden;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden}.la-near-spinner{width:52px;height:52px;border:3px solid rgba(255,255,255,.09);border-top-color:var(--load-accent);border-right-color:var(--load-accent);border-radius:50%;box-shadow:0 0 18px var(--load-glow),inset 0 0 12px rgba(255,255,255,.03);animation:wtfNearSpin .8s linear infinite}.la-near-test[data-near-category="tobacco"] .la-near-loading{--load-accent:#b87343;--load-glow:rgba(184,115,67,.74)}.la-near-test[data-near-category="food"] .la-near-loading{--load-accent:#f0a000;--load-glow:rgba(240,160,0,.78)}@keyframes wtfNearSpin{to{transform:rotate(360deg)}}
 /* Category-specific directory palettes. Weed owns green; tobacco uses brown
    names with gold controls; food uses the WTF yellow-orange throughout. */
@@ -20015,7 +20042,7 @@ window.wtfPrepare24Hours=async function(city){
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
     var collapsible=!nearOnly,launchCategory=currentCat.toLowerCase(),launchWord=currentCat.toUpperCase(),launchIcon=currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';
-    var launchButton='<span class="la-near-launch-copy">'+(currentCat==='Weed'?'FAST ':'CLOSEST ')+'<span class="la-near-category-word">'+launchWord+launchIcon+'</span></span><span class="la-near-launch-word">TAP HERE</span>';
+    var launchButton='<span class="la-near-launch-copy">'+(currentCat==='Weed'?'CLOSE ':'CLOSEST ')+'<span class="la-near-category-word">'+launchWord+launchIcon+'</span></span><span class="la-near-launch-word">TAP HERE</span>';
     var foodTiers=currentCat==='Food'?'<div class="la-food-tier-chooser"><h3>PICK YOUR FOOD LEVEL</h3><p>Choose a level, then we will show its closest five open restaurants.</p><div class="la-food-tier-options"><button type="button" data-food-near-tier="value">BEST VALUE</button><button type="button" data-food-near-tier="solid">SOLID SUGGESTIONS</button><button type="button" data-food-near-tier="money">MONEY’S NO OBJECT</button></div></div>':'';
     return (collapsible?'<button class="la-near-launch" data-launch-category="'+launchCategory+'" type="button" aria-label="Open nearest '+labels.plural.toLowerCase()+'" aria-expanded="false" aria-controls="laNearTest">'+launchButton+'</button>':'')+'<section class="la-near-test'+(collapsible?' is-collapsed':'')+'" data-near-category="'+launchCategory+'" id="laNearTest">'+foodTiers+'<button class="la-near-close" type="button" aria-label="Collapse closest locations">×</button><div class="la-near-loading" role="status" aria-live="polite"><span class="la-near-spinner" aria-hidden="true"></span><span>LOADING CLOSEST FIVE</span></div><h3>NEAREST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus" hidden></p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-tap-note">TAP ANY NAME FOR PHONE, DIRECTIONS, HOURS, AND MORE INFORMATION.</p><div id="laNearRows"><div class="la-near-sub">Finding the nearest five open now…</div></div><div class="la-near-line"></div><button class="la-weed-scroll-cue" type="button" aria-label="Scroll to more '+labels.plural.toLowerCase()+'">SCROLL<span>↓</span></button></section>';
   }
@@ -20053,6 +20080,10 @@ window.wtfPrepare24Hours=async function(city){
     var filtered=items.filter(function(item){return nearAreaForItem(item)===label;});
     return filtered.length?filtered:items;
   }
+  function mergeLiveAndLocalNearby(liveItems,label){
+    var merged=[],byName={};function key(item){return String(item&&item.name||'').toLowerCase().replace(/[^a-z0-9]/g,'');}function add(item){var nameKey=key(item);if(!nameKey)return;var existing=byName[nameKey];if(!existing){Object.keys(byName).some(function(knownKey){if(knownKey.indexOf(nameKey)>-1||nameKey.indexOf(knownKey)>-1){existing=byName[knownKey];return true;}return false;});}if(existing){Object.assign(existing,item);byName[nameKey]=existing;return;}var copy=Object.assign({},item);byName[nameKey]=copy;merged.push(copy);}
+    filterNearArea(localCategoryEntries().map(function(item){return Object.assign({},item,{city:selectedCity,source:'WTFDD verified local directory'});}),label).forEach(add);(liveItems||[]).forEach(add);return merged;
+  }
   async function fetchLAOverpass(origin){
     var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.nchc.org.tw/api/interpreter'];
     var radii=[40000,80000,160000],last=[];
@@ -20085,16 +20116,31 @@ window.wtfPrepare24Hours=async function(city){
       return localHour<6||localHour>=22;
     }
   }
+  function listedHoursOpenNow(item){
+    var raw=String(item&&item.hours||'').replace(/[–—]/g,'-'),match=raw.match(/(?:daily\s*)?(\d{1,2})(?::(\d{2}))?\s*(AM|PM)\s*-\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/i);if(!match)return null;
+    function minute(hour,minute,meridiem){hour=Number(hour)%12+(String(meridiem).toUpperCase()==='PM'?12:0);return hour*60+Number(minute||0);}
+    var start=minute(match[1],match[2],match[3]),end=minute(match[4],match[5],match[6]),timeZone=['Los Angeles','San Diego','San Francisco','Sacramento','Oakland / Berkeley','Irvine','Santa Barbara'].indexOf(selectedCity)>-1?'America/Los_Angeles':null,now=new Date(),parts;
+    try{parts=timeZone?new Intl.DateTimeFormat('en-US',{timeZone:timeZone,hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(now):new Intl.DateTimeFormat('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(now);}catch(ignore){parts=[];}
+    var hour=Number((parts.find(function(part){return part.type==='hour';})||{}).value),minutes=Number((parts.find(function(part){return part.type==='minute';})||{}).value);if(!Number.isFinite(hour)||!Number.isFinite(minutes))return null;if(hour===24)hour=0;var current=hour*60+minutes;return end<=start?current>=start||current<end:current>=start&&current<end;
+  }
   function nearHoursState(item){
     /* California permits licensed cannabis retail sales only from 6 AM until
        10 PM. This legal cutoff wins over missing or stale provider hours. */
     if(californiaCannabisSalesClosedNow())return {key:'closed',label:'CLOSED'};
-    if(item.openNow===false)return {key:'closed',label:'CLOSED'};
-    var hours=item.openingHours,periods=hours&&hours.periods;if(!periods||!periods.length)return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};if(periods.some(function(p){return p&&p.open&&!p.close;}))return {key:'open',label:''};
-    var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return item.openNow===true?{key:'open',label:''}:{key:'unknown',label:''};
+    var hours=item.currentOpeningHours||item.openingHours,curatedOpen=!hours?listedHoursOpenNow(item):null;
+    /* A current Google hours result can close a listing. An incomplete backup
+       source cannot override a maintained local schedule that says it is open. */
+    if(item.openNow===false&&curatedOpen!==true)return {key:'closed',label:'CLOSED'};
+    var providerOpen=curatedOpen!==null?curatedOpen:hours&&typeof hours.isOpen==='function'?hours.isOpen():hours&&typeof hours.openNow==='boolean'?hours.openNow:item.openNow;
+    /* The Places search was explicitly restricted to businesses Google marked
+       open now. Do not downgrade a confirmed-open result to “unconfirmed”
+       merely because its time-zone field is omitted from that response. */
+    var periods=hours&&hours.periods;if(!periods||!periods.length)return providerOpen===true?{key:'open',label:''}:providerOpen===false?{key:'closed',label:'CLOSED'}:{key:'unknown',label:''};
+    if(periods.some(function(p){return p&&p.open&&!p.close;}))return {key:'open',label:''};
+    var offset=Number(item.utcOffsetMinutes);if(!Number.isFinite(offset))return providerOpen===true?{key:'open',label:''}:{key:'unknown',label:''};
     var local=new Date(Date.now()+offset*60000),day=local.getUTCDay(),minute=local.getUTCHours()*60+local.getUTCMinutes(),weekNow=day*1440+minute,nextClose=null;
     periods.forEach(function(period){if(!period||!period.open||!period.close)return;var openDay=Number(period.open.day),closeDay=Number(period.close.day),openTime=String(period.open.time||String(Number(period.open.hour)||0).padStart(2,'0')+String(Number(period.open.minute)||0).padStart(2,'0')),closeTime=String(period.close.time||String(Number(period.close.hour)||0).padStart(2,'0')+String(Number(period.close.minute)||0).padStart(2,'0')),openMin=openDay*1440+Number(openTime.slice(0,2))*60+Number(openTime.slice(2,4)),closeMin=closeDay*1440+Number(closeTime.slice(0,2))*60+Number(closeTime.slice(2,4));if(closeMin<=openMin)closeMin+=10080;var candidate=weekNow;if(candidate<openMin)candidate+=10080;if(candidate>=openMin&&candidate<closeMin&&(nextClose===null||closeMin-candidate<nextClose-candidate))nextClose=closeMin;});
-    if(nextClose===null)return {key:'closed',label:'CLOSED'};var remaining=nextClose-(weekNow+(weekNow<nextClose-10080?10080:0));if(remaining<0)remaining+=10080;if(remaining>30)return {key:'open',label:''};var closeMinute=((nextClose%1440)+1440)%1440,h=Math.floor(closeMinute/60),m=closeMinute%60,ampm=h>=12?'PM':'AM',displayHour=h%12||12;return {key:'closing',label:'CLOSING '+displayHour+':'+String(m).padStart(2,'0')+' '+ampm};
+    if(nextClose===null)return providerOpen===true?{key:'open',label:''}:{key:'closed',label:'CLOSED'};var remaining=nextClose-(weekNow+(weekNow<nextClose-10080?10080:0));if(remaining<0)remaining+=10080;if(remaining>30)return {key:'open',label:''};var closeMinute=((nextClose%1440)+1440)%1440,h=Math.floor(closeMinute/60),m=closeMinute%60,ampm=h>=12?'PM':'AM',displayHour=h%12||12;return {key:'closing',label:'CLOSING '+displayHour+':'+String(m).padStart(2,'0')+' '+ampm};
   }
   function normalizeFoodPrice(value){
     if(typeof value==='number'&&Number.isFinite(value))return Math.max(1,Math.min(4,Math.round(value)||1));
@@ -20131,7 +20177,7 @@ window.wtfPrepare24Hours=async function(city){
     /* Permanent proximity rule: a business must be positively confirmed open
        before it can appear. There is no closed/gray or unknown-hours fallback,
        and distance never overrides open status. */
-    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(matchesActiveFoodTier).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lng)))return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:Number(x.lat),lng:Number(x.lng)});x.__nearState=nearHoursState(x);return true;}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
+    var seen={},nearest=items.map(enrichLA).filter(validNearCategory).filter(matchesActiveFoodTier).filter(function(x){var key=String(x.name).toLowerCase();if(seen[key]||!Number.isFinite(Number(x.lat))||!Number.isFinite(Number(x.lng)))return false;seen[key]=1;x.category=currentCat;x.miles=laMiles(origin,{lat:Number(x.lat),lng:Number(x.lng)});x.__nearState=nearHoursState(x);return x.__nearState.key!=='closed';}).sort(function(a,b){return a.miles-b.miles;}).slice(0,5);
     var storedNames={};localCategoryEntries().forEach(function(item){storedNames[String(item.name||'').toLowerCase()]=true;});var vendorKind=currentCat==='Tobacco'?'tobacco':currentCat==='Food'?'food':'weed';
     window.__laNearestDispensaries=nearest;
     var renderToken=String(Date.now())+Math.random();rows.dataset.phoneRender=renderToken;
@@ -20164,7 +20210,7 @@ window.wtfPrepare24Hours=async function(city){
     await loadGoogleMapsScript();
     if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
     var foodSearches=activeFoodNearTier==='value'?['inexpensive restaurant','cheap eats','fast food restaurant','meal takeaway']:activeFoodNearTier==='money'?['fine dining restaurant','upscale restaurant','Michelin restaurant','luxury restaurant']:['popular local restaurant','restaurant','neighborhood restaurant'];
-    var searches=currentCat==='Food'?foodSearches:currentCat==='Tobacco'?['tobacco shop','smoke shop','vape shop']:['cannabis dispensary','marijuana dispensary','recreational cannabis'];
+    var searches=currentCat==='Food'?foodSearches:currentCat==='Tobacco'?['tobacco shop','smoke shop','vape shop']:['cannabis dispensary','marijuana dispensary','recreational cannabis'],googleQuotaReached=false;
     /* Prefer the current Places API. The site previously depended entirely on
        legacy PlacesService callbacks; when a Google project has Places API
        (New) enabled but the legacy service is restricted, the lower directory
@@ -20173,19 +20219,17 @@ window.wtfPrepare24Hours=async function(city){
       var placesLib=google.maps.importLibrary?await google.maps.importLibrary('places'):null;
       var PlaceClass=placesLib&&placesLib.Place;
       if(PlaceClass&&typeof PlaceClass.searchByText==='function'){
-        var modernBatches=[],searchRadii=[50000,100000,200000];
-        for(var radiusIndex=0;radiusIndex<searchRadii.length;radiusIndex++){
-          var radiusBatches=await Promise.all(searches.map(async function(search){
-            try{
-              var response=await PlaceClass.searchByText({textQuery:search,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','types','rating','userRatingCount','priceLevel'],locationBias:{center:{lat:origin.lat,lng:origin.lng},radius:searchRadii[radiusIndex]},isOpenNow:true,maxResultCount:20});
-              return response&&response.places||[];
-            }catch(err){console.warn('WTFDD current Places lookup:',search,err);return [];}
-          }));
-          modernBatches=modernBatches.concat(radiusBatches);
-          var radiusIds={};modernBatches.flat().forEach(function(place){if(place&&place.id&&matchesActiveFoodTier({priceLevel:place.priceLevel}))radiusIds[place.id]=1;});if(Object.keys(radiusIds).length>=5)break;
-        }
+        /* Text Search otherwise ranks categorical results by relevance, which
+           can omit a closer shop. Anchor each request to the phone's GPS point
+           and request distance ranking before we calculate and render mileage. */
+        var modernBatches=await Promise.all(searches.map(async function(search){
+          try{
+            var response=await PlaceClass.searchByText({textQuery:search,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','utcOffsetMinutes','businessStatus','types','rating','userRatingCount','priceLevel'],locationBias:{lat:origin.lat,lng:origin.lng},rankPreference:'DISTANCE',isOpenNow:true,maxResultCount:20});
+            return response&&response.places||[];
+          }catch(err){if(/RESOURCE_EXHAUSTED|quota/i.test(String(err&&err.message||err)))googleQuotaReached=true;console.warn('WTFDD current Places lookup:',search,err);return [];}
+        }));
         var modernById={};modernBatches.flat().forEach(function(place){var id=place&&place.id;if(id&&!modernById[id])modernById[id]=place;});
-        var modern=Object.keys(modernById).map(function(id){var p=modernById[id],loc=p.location,lat=loc&&(typeof loc.lat==='function'?loc.lat():loc.lat),lng=loc&&(typeof loc.lng==='function'?loc.lng():loc.lng);return {name:p.displayName||'',placeId:p.id,lat:Number(lat),lng:Number(lng),address:p.formattedAddress||'',phone:p.nationalPhoneNumber||p.internationalPhoneNumber||'',website:p.websiteURI||'',rating:p.rating||'',ratings:p.userRatingCount||'',priceLevel:normalizeFoodPrice(p.priceLevel),openNow:true,openingHours:p.regularOpeningHours||null,types:p.types||[],source:'Google Places Live · open now'};}).filter(function(item){return item.name&&Number.isFinite(item.lat)&&Number.isFinite(item.lng);}).filter(validNearCategory).filter(matchesActiveFoodTier).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);});
+        var modern=Object.keys(modernById).map(function(id){var p=modernById[id],loc=p.location,lat=loc&&(typeof loc.lat==='function'?loc.lat():loc.lat),lng=loc&&(typeof loc.lng==='function'?loc.lng():loc.lng),currentHours=p.currentOpeningHours||null,name=p.displayName&&p.displayName.text||p.displayName||'';return {name:name,placeId:p.id,lat:Number(lat),lng:Number(lng),address:p.formattedAddress||'',phone:p.nationalPhoneNumber||p.internationalPhoneNumber||'',website:p.websiteURI||'',rating:p.rating||'',ratings:p.userRatingCount||'',priceLevel:normalizeFoodPrice(p.priceLevel),openNow:currentHours&&typeof currentHours.isOpen==='function'?currentHours.isOpen():currentHours&&typeof currentHours.openNow==='boolean'?currentHours.openNow:true,currentOpeningHours:currentHours,openingHours:p.regularOpeningHours||null,utcOffsetMinutes:p.utcOffsetMinutes,types:p.types||[],source:'Google Places Live · open now'};}).filter(function(item){return item.name&&Number.isFinite(item.lat)&&Number.isFinite(item.lng);}).filter(validNearCategory).filter(matchesActiveFoodTier).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);});
         if(modern.length)return modern;
       }
     }catch(modernError){console.warn('WTFDD current Places unavailable; using legacy fallback',modernError);}
@@ -20209,7 +20253,7 @@ window.wtfPrepare24Hours=async function(city){
       textBatches.flat().forEach(function(p){if(p&&p.place_id&&!byId[p.place_id])byId[p.place_id]=p;});
       found=Object.keys(byId).map(function(id){return byId[id];}).filter(function(p){return p.business_status!=='CLOSED_PERMANENTLY';});
     }
-    if(!found.length)throw new Error('No live nearby results');
+    if(!found.length)throw new Error(googleQuotaReached?'Google Places daily quota reached':'No live nearby results');
     var candidates=found.filter(function(p){return p.geometry&&p.geometry.location;}).map(function(p){return {name:p.name,placeId:p.place_id,lat:p.geometry.location.lat(),lng:p.geometry.location.lng(),address:p.vicinity||p.formatted_address||'',rating:p.rating||'',ratings:p.user_ratings_total||'',priceLevel:normalizeFoodPrice(p.price_level),openNow:p.opening_hours&&typeof p.opening_hours.open_now==='boolean'?p.opening_hours.open_now:true,openingHours:p.opening_hours||null,types:p.types||[],source:'Google Places Live · open now'};}).filter(validNearCategory).filter(matchesActiveFoodTier).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);});
     /* Nearby Search does not reliably include current hours on every result.
        Verify the closest candidates with Place Details before anything is
@@ -20253,10 +20297,10 @@ window.wtfPrepare24Hours=async function(city){
          the already-running Near Me recovery instead of leaving an iPhone on
          a spinner for a full network timeout window. */
       try{googleFound=await nearTimeout(fetchLAGoogle(searchOrigin),7000,'Live map lookup timed out');}catch(firstError){throw firstError;}
-      googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,filterNearArea(googleFound,label),origin,label);
+      googleFound.forEach(function(x){x.city=selectedCity;});renderLANearest(rows,status,mergeLiveAndLocalNearby(googleFound,label),origin,label);
       if(!rows.querySelector('.la-near-row'))throw new Error('Live provider returned no usable open results');
     }catch(googleError){
-      try{status.textContent='Live map service paused — checking the working Near Me directory…';var fallbackOutcome=await fallbackPromise;if(fallbackOutcome.error)throw fallbackOutcome.error;var fallback=fallbackOutcome.items||[];fallback.forEach(function(x){x.city=selectedCity;});var confirmed=fallback.filter(function(item){return item.openNow===true;}),usable=confirmed.length?confirmed:fallback.filter(function(item){return item.openNow!==false;});renderLANearest(rows,status,filterNearArea(usable,label),origin,label,!confirmed.length);if(!rows.querySelector('.la-near-row'))throw new Error('No mapped fallback results');}
+      try{var quotaReached=/quota|resource_exhausted/i.test(String(googleError&&googleError.message||googleError));status.textContent=quotaReached?'Google live search is at its daily limit — using the WTFDD nearby directory.':'Live map service paused — checking the working Near Me directory…';var fallbackOutcome=await fallbackPromise;if(fallbackOutcome.error)throw fallbackOutcome.error;var fallback=fallbackOutcome.items||[];fallback.forEach(function(x){x.city=selectedCity;});var fallbackCandidates=mergeLiveAndLocalNearby(fallback,label),confirmed=fallbackCandidates.filter(function(item){return item.openNow===true||listedHoursOpenNow(item)===true;}),usable=confirmed.length?confirmed:fallbackCandidates.filter(function(item){return item.openNow!==false;});renderLANearest(rows,status,usable,origin,label,!confirmed.length);if(!rows.querySelector('.la-near-row'))throw new Error('No mapped fallback results');}
       catch(fallbackError){
         /* Final recovery uses the same city listings that power the standalone
            Near Me page. This guarantees that Weed, Tobacco and Food never
@@ -20322,7 +20366,7 @@ window.wtfPrepare24Hours=async function(city){
     var close=q('laDispensaryClose');if(close&&!close.dataset.ready){close.dataset.ready='1';close.addEventListener('click',function(){var overlay=q('laDispensaryOverlay');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';});}
     if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();var market=selectedCity,details=MARKET_DISPENSARY_DETAILS[market]&&MARKET_DISPENSARY_DETAILS[market][button.dataset.laFullName]||{},lat=Number(button.dataset.laFullLat),lng=Number(button.dataset.laFullLng),miles=Number(button.dataset.laFullMiles);openLADispensary(Object.assign({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,city:market,category:button.dataset.laFullCategory||currentCat,lat:Number.isFinite(lat)?lat:null,lng:Number.isFinite(lng)?lng:null,miles:Number.isFinite(miles)?miles:0,source:'WTFDD '+market+' directory'},details));});}
     function launchIcon(){return currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';}
-    function paintLaunch(open){var word=currentCat.toUpperCase(),lead=currentCat==='Weed'?'FAST ':(open?'CLOSE ':'CLOSEST ');nearLaunch.innerHTML='<span class="la-near-launch-copy">'+lead+'<span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close nearest ':'Open nearest ')+word.toLowerCase()+' locations');}
+    function paintLaunch(open){var word=currentCat.toUpperCase(),lead=currentCat==='Weed'?'CLOSE ':(open?'CLOSE ':'CLOSEST ');nearLaunch.innerHTML='<span class="la-near-launch-copy">'+lead+'<span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close nearest ':'Open nearest ')+word.toLowerCase()+' locations');}
     block.querySelectorAll('[data-food-near-tier]').forEach(function(button){button.addEventListener('click',function(){activeFoodNearTier=button.dataset.foodNearTier;block.classList.remove('food-awaiting-choice');block.querySelectorAll('[data-food-near-tier]').forEach(function(other){other.classList.toggle('active',other===button);});requestCurrent('Current Location');setTimeout(function(){block.scrollIntoView({behavior:'smooth',block:'start'});},30);});});
     if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(opening){if(currentCat==='Food'){activeFoodNearTier='';block.classList.remove('is-loading');block.classList.add('food-awaiting-choice');}else requestCurrent('Current Location');block.scrollIntoView({behavior:'smooth',block:'start'});}else{block.classList.remove('is-loading','food-awaiting-choice');nearLaunch.scrollIntoView({behavior:'smooth',block:'center'});}});}
     else if(currentCat==='Food'){activeFoodNearTier='';block.classList.add('food-awaiting-choice');}
