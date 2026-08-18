@@ -6104,13 +6104,14 @@ button[id*="back"] svg,
 <button aria-label="Close" class="ty-close" id="vvClose">✕</button>
 <div class="ty-content">
 <span aria-label="WTF logo" class="new-wtf-logo ty-wtf" role="img"></span>
-<p class="vv-heading">VENDOR INFORMATION</p>
+<p class="vv-heading">WORK WITH WTF</p>
 <form id="vendorVerifyForm">
-<input aria-label="Email address" class="newsletter-input" id="vendorVerifyEmail" placeholder="youremail@email.com" required="" type="email"/>
-<button class="btn btn-primary" type="submit">Submit</button>
+<input aria-label="Your email address" class="newsletter-input" id="vendorVerifyEmail" placeholder="email@address.com" required="" type="email"/>
+<button class="btn btn-primary" type="submit">EMAIL WTF</button>
 </form>
-<p class="vv-desc">To obtain a <svg aria-label="Verified" class="verified-circle" height="16" style="vertical-align:middle;" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" fill="#2E7DD1" r="11"></circle><path d="M7,12.5 L10.3,15.8 L17,8.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4"></path></svg> submit your email and <span aria-label="WTF logo" class="new-wtf-logo wtf-inline-logo" role="img"></span> will be in touch.</p>
-<p id="vvNote" style="margin-top:8px;font-size:11px;color:var(--text-dim);"></p>
+<p class="vv-desc vendor-work-copy">If you’re interested in working more with WTF, send us your email.</p>
+<a class="vendor-email-direct" href="mailto:info@bestofperiod.com?subject=Work%20with%20WTF">OR EMAIL US DIRECTLY</a>
+<p id="vvNote" aria-live="polite" style="margin-top:12px;font-size:12px;color:var(--text-dim);"></p>
 </div>
 </div>
 <div class="thank-you-overlay" id="companyHubOverlay">
@@ -7911,7 +7912,7 @@ button[id*="back"] svg,
   <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
   <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"></path><path d="m3 6 9 7 9-7"></path></svg></a>
   <span class="wtf2-contact-icon" aria-disabled="true" aria-label="Facebook coming soon">f</span><button class="wtf2-contact-icon wtf2-contact-music" type="button" aria-label="Choose your music">♫</button><span class="wtf2-contact-icon" aria-disabled="true" aria-label="Instagram coming soon">◎</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="YouTube coming soon">▶</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="X coming soon">X</span>
-  <span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span>
+  <button class="wtf2-contact-edge wtf2-vendor-open" type="button" aria-label="Work with WTF">VENDOR</button>
 </div>
 </div>
 </div>
@@ -8690,17 +8691,20 @@ function setupVendorVerify(){
       }
     }
     try{
-      await fetch('https://formspree.io/f/xpqgbnje', {
+      var response=await fetch('https://formspree.io/f/xpqgbnje', {
         method: 'POST',
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ form: 'Vendor Verification Request', email: email })
+        body: JSON.stringify({ form: 'Work with WTF', email: email })
       });
+      if(!response.ok)throw new Error('Email service did not accept the request');
+      note.textContent = "Thank you. WTF will be with you shortly.";
+      note.style.color = 'var(--green)';
+      form.reset();
     }catch(err){
-      showDebugError('Vendor verify Formspree submit (non-fatal): ' + err.message);
+      showDebugError('Vendor contact submit: ' + err.message);
+      note.textContent = 'Please email us directly at info@bestofperiod.com.';
+      note.style.color = '#f5a623';
     }
-    note.textContent = "Thanks! We'll be in touch to verify your listing.";
-    note.style.color = 'var(--green)';
-    form.reset();
   });
 }
 
@@ -19112,7 +19116,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
       <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
       <span class="wtf2-contact-icon" aria-disabled="true" aria-label="Facebook coming soon">f</span><button class="wtf2-contact-icon wtf2-contact-music" type="button" aria-label="Choose your music">♫</button><span class="wtf2-contact-icon" aria-disabled="true" aria-label="Instagram coming soon">◎</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="YouTube coming soon">▶</span><span class="wtf2-contact-icon" aria-disabled="true" aria-label="X coming soon">X</span>
-      <span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span>
+      <button class="wtf2-contact-edge wtf2-vendor-open" type="button" aria-label="Work with WTF">VENDOR</button>
     </div>
     <button class="wtf-us-map-orb" id="wtfUsMapOrb" type="button" aria-haspopup="dialog" aria-controls="wtfUsMapOverlay" aria-label="Open United States cannabis access map"><svg viewBox="0 0 60 40" aria-hidden="true"><path d="M4 9l8-5 9 3 8-3 8 5 11-1 8 8-5 6-8 1-6 10-12 2-4-8-10-2-3-8z"/></svg>U.S.<br>MAP</button>
     <button class="wtf-local-laws-orb" id="wtfLocalLawsOrb" type="button" aria-haspopup="dialog" aria-controls="wtfLocalLawsOverlay">LOCAL<br>LAWS</button>
@@ -19138,7 +19142,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
       <a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a>
       <span class="wtf2-contact-icon" aria-disabled="true">f</span><button class="wtf2-contact-icon wtf2-contact-music" type="button" aria-label="Choose your music">♫</button><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span>
-      <span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span>
+      <button class="wtf2-contact-edge wtf2-vendor-open" type="button" aria-label="Work with WTF">VENDOR</button>
     </div>
   </div>
 </section>
@@ -19164,7 +19168,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-brown">ALT</span><span class="wtf2-legend-copy"><b>Legal Alternative</b><span>A locally legal category—not a recreational cannabis dispensary.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol">U.S.<br>MAP</span><span class="wtf2-legend-copy"><b>U.S. Cannabis Access Map</b><span>Green is adult-use retail, purple is medical-only access, and charcoal means no comprehensive legal dispensary program.</span></span></div>
     </div>
-    <div class="wtf2-contact-strip"><button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button><a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a><span class="wtf2-contact-icon" aria-disabled="true">f</span><span class="wtf2-contact-icon" aria-disabled="true">♪</span><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span><span class="wtf2-contact-edge" aria-disabled="true">VENDOR</span></div>
+    <div class="wtf2-contact-strip"><button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button><a class="wtf2-contact-icon is-live" href="mailto:info@bestofperiod.com" aria-label="Email WTFdd.com"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg></a><span class="wtf2-contact-icon" aria-disabled="true">f</span><span class="wtf2-contact-icon" aria-disabled="true">♪</span><span class="wtf2-contact-icon" aria-disabled="true">◎</span><span class="wtf2-contact-icon" aria-disabled="true">▶</span><span class="wtf2-contact-icon" aria-disabled="true">X</span><button class="wtf2-contact-edge wtf2-vendor-open" type="button" aria-label="Work with WTF">VENDOR</button></div>
   </div>
 </section>
 
@@ -20991,5 +20995,91 @@ window.wtfPrepare24Hours=async function(city){
 @media(max-width:380px){.wtf-near-orbs{gap:8px}.wtf-near-orbs button{width:84px;height:84px;font-size:9px}.wtf-near-picker-card{padding-left:12px;padding-right:12px}}
 
 </style>
+<style id="wtf-work-and-24hour-routes">
+  .wtf2-vendor-open{cursor:pointer!important}.vendor-work-copy{max-width:310px;margin:8px auto 13px!important;color:#cfcfcf!important;font-size:14px!important;line-height:1.42!important}.vendor-email-direct{display:inline-block;margin:2px auto 0;color:#7be78d;font:900 10px/1 'Archivo Black',sans-serif;letter-spacing:.08em;text-decoration:none;text-underline-offset:4px}.vendor-email-direct:hover,.vendor-email-direct:focus{color:#b8ffc3}
+  .wtf24-route-action{display:grid;justify-items:center;gap:7px;max-width:360px;margin:24px auto 4px;padding:16px 12px 12px;border-top:1px solid rgba(101,220,121,.46);text-align:center}.wtf24-route-kicker{color:#a0a0a0;font:800 9px/1.35 'Archivo Narrow',sans-serif;letter-spacing:.11em;text-transform:uppercase}.wtf24-route-button{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;width:min(100%,292px);min-height:50px;padding:9px 14px;border:1px solid #6ce984;border-radius:999px;background:#07140a;color:#8df59c;font:900 11px/1.15 'Archivo Black',sans-serif;letter-spacing:.045em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 10px rgba(101,220,121,.46),inset 0 0 12px rgba(101,220,121,.09);animation:wtf24RoutePulse 1.7s ease-in-out infinite}.wtf24-route-button small{color:#fff;font-size:9px;letter-spacing:.08em}.wtf24-route-leaf{font:400 17px/1 Arial,sans-serif;filter:drop-shadow(0 0 5px #61e77b)}@keyframes wtf24RoutePulse{0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(101,220,121,.46),inset 0 0 12px rgba(101,220,121,.09)}50%{transform:scale(1.035);box-shadow:0 0 25px rgba(101,220,121,.82),inset 0 0 17px rgba(101,220,121,.18)}}
+  .wtf24-route-overlay{position:fixed;inset:0;z-index:100410;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.93);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}.wtf24-route-overlay.open{display:flex}.wtf24-route-card{position:relative;box-sizing:border-box;width:min(100%,440px);padding:48px 20px 24px;border:2px solid #71e587;border-radius:25px;background:radial-gradient(circle at 50% 0,rgba(101,220,121,.2),transparent 39%),#030503;color:#fff;text-align:center;box-shadow:0 0 34px rgba(101,220,121,.3)}.wtf24-route-close{position:absolute;right:13px;top:13px;width:40px;height:40px;border:2px solid #f5a623;border-radius:50%;background:#050505;color:#ff4d57;font:900 23px/1 Arial,sans-serif;cursor:pointer}.wtf24-route-orb{display:grid;place-items:center;width:88px;height:88px;margin:0 auto 12px;border:2px solid #71e587;border-radius:50%;background:#061108;color:#8df59c;font:400 41px/1 Arial,sans-serif;box-shadow:0 0 22px rgba(101,220,121,.56);animation:wtf24RoutePulse 1.7s ease-in-out infinite}.wtf24-route-card h2{margin:0;color:#fff;font:900 clamp(24px,7vw,36px)/1 'Archivo Black',sans-serif;letter-spacing:.025em}.wtf24-route-card p{margin:11px auto 18px;max-width:350px;color:#bbb;font:700 14px/1.45 'Archivo Narrow',sans-serif}.wtf24-route-actions{display:grid;gap:9px}.wtf24-route-actions button,.wtf24-route-actions a{display:flex;align-items:center;justify-content:center;min-height:49px;padding:10px;border:1px solid #6ce984;border-radius:999px;background:#08160a;color:#8df59c;font:900 10px/1.2 'Archivo Black',sans-serif;letter-spacing:.055em;text-decoration:none;cursor:pointer}.wtf24-route-actions .wtf24-flight-button{border-color:#f5a623;background:#181005;color:#f6bc3c;box-shadow:0 0 15px rgba(245,166,35,.32);animation:wtf24FlightPulse 1.35s ease-in-out infinite}@keyframes wtf24FlightPulse{50%{transform:scale(1.035);box-shadow:0 0 25px rgba(245,166,35,.72)}}.wtf24-route-footnote{display:block;margin-top:13px;color:#777;font:700 10px/1.35 'Archivo Narrow',sans-serif}@media(prefers-reduced-motion:reduce){.wtf24-route-button,.wtf24-route-orb,.wtf24-flight-button{animation:none!important}}
+</style>
+<script id="wtf-work-and-24hour-routes-script">
+(function(){
+  function openVendorContact(){
+    var overlay=document.getElementById('vendorVerifyOverlay');
+    if(!overlay)return;
+    overlay.classList.add('open');
+    window.setTimeout(function(){var input=document.getElementById('vendorVerifyEmail');if(input)input.focus();},80);
+  }
+  document.addEventListener('click',function(event){
+    if(event.target.closest('.wtf2-vendor-open')){event.preventDefault();openVendorContact();}
+  });
+  document.addEventListener('keydown',function(event){
+    var trigger=event.target.closest&&event.target.closest('.wtf2-vendor-open');
+    if(trigger&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openVendorContact();}
+  });
+
+  var vegas24=[
+    {name:'Planet 13',address:'2548 W Desert Inn Rd, Las Vegas, NV 89109'},
+    {name:'Thrive · Las Vegas Strip',address:'2975 S Sammy Davis Jr Dr, Las Vegas, NV 89109'},
+    {name:'Thrive · West Sahara',address:'3500 W Sahara Ave, Las Vegas, NV 89102'},
+    {name:'NuLeaf Las Vegas',address:'430 E Twain Ave, Las Vegas, NV 89169'},
+    {name:'The Grove',address:'4647 University Center Dr, Las Vegas, NV 89119'}
+  ];
+  function routeFor(city){
+    if(city==='London')return {destination:'Amsterdam',airport:'AMS',mode:'amsterdam',copy:'Amsterdam is the nearest international route from London. Amsterdam coffeeshops are not 24-hour venues, but they offer a late-night option; always confirm current hours before traveling.'};
+    return {destination:'Las Vegas',airport:'LAS',mode:'vegas',copy:'Las Vegas is WTF’s 24-hour dispensary route. Check the current store hours before you travel.'};
+  }
+  function flightUrl(origin,destination){
+    return 'https://www.google.com/travel/flights?q='+encodeURIComponent('Flights from '+origin+' to '+destination)+'&hl=en';
+  }
+  function openFlightSearch(origin,destination){
+    var url=flightUrl(origin,destination),opened=window.open(url,'_blank','noopener');
+    if(!opened)window.location.assign(url);
+  }
+  function ensureRouteOverlay(){
+    var overlay=document.getElementById('wtf24RouteOverlay');
+    if(overlay)return overlay;
+    overlay=document.createElement('div');overlay.id='wtf24RouteOverlay';overlay.className='wtf24-route-overlay';overlay.setAttribute('aria-hidden','true');
+    overlay.innerHTML='<section class="wtf24-route-card" role="dialog" aria-modal="true" aria-labelledby="wtf24RouteTitle"><button class="wtf24-route-close" type="button" aria-label="Close">×</button><div class="wtf24-route-orb" aria-hidden="true">🌿</div><h2 id="wtf24RouteTitle"></h2><p id="wtf24RouteCopy"></p><div class="wtf24-route-actions" id="wtf24RouteOptions"></div><span class="wtf24-route-footnote" id="wtf24RouteNote"></span></section>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('.wtf24-route-close').addEventListener('click',function(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');});
+    overlay.addEventListener('click',function(event){if(event.target===overlay){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');}});
+    return overlay;
+  }
+  function showClosest24Route(origin){
+    var route=routeFor(origin),overlay=ensureRouteOverlay(),title=overlay.querySelector('#wtf24RouteTitle'),copy=overlay.querySelector('#wtf24RouteCopy'),options=overlay.querySelector('#wtf24RouteOptions'),note=overlay.querySelector('#wtf24RouteNote');
+    if(origin==='London'){
+      title.textContent='PICK YOUR NIGHT ROUTE';
+      copy.textContent='Amsterdam is the nearby European route for late-night coffeeshops. Vegas is the all-night dispensary route. Pick your move.';
+      options.innerHTML='<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('late night coffeeshops Amsterdam')+'" target="_blank" rel="noopener">AMSTERDAM AFTER DARK · SEE OPTIONS</a><button class="wtf24-flight-button" type="button" data-flight-destination="Amsterdam">BOOK FLIGHTS TO AMSTERDAM</button><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('24 hour cannabis dispensaries Las Vegas')+'" target="_blank" rel="noopener">VEGAS 24-HOUR DISPENSARIES</a><button class="wtf24-flight-button" type="button" data-flight-destination="Las Vegas">BOOK FLIGHTS TO VEGAS</button>';
+      note.textContent='Amsterdam coffee shops are not 24-hour venues. Vegas is the dedicated 24-hour dispensary route.';
+    }else{
+      title.textContent='VEGAS NEVER SLEEPS';
+      copy.textContent=route.copy;
+      options.innerHTML='<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('24 hour cannabis dispensaries Las Vegas')+'" target="_blank" rel="noopener">SEE VEGAS 24-HOUR DISPENSARIES</a><button class="wtf24-flight-button" type="button" data-flight-destination="Las Vegas">BOOK FLIGHTS · BOOK FLIGHTS · BOOK FLIGHTS</button>';
+      note.textContent='Flight search opens with '+origin+' to Las Vegas prefilled.';
+    }
+    options.querySelectorAll('[data-flight-destination]').forEach(function(button){button.addEventListener('click',function(){openFlightSearch(origin,button.dataset.flightDestination);});});
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');
+  }
+  function addClosest24Action(city){
+    var panel=document.querySelector('#thc24Overlay .directory-panel');
+    if(!panel||panel.querySelector('.wtf24-route-action'))return;
+    var title=panel.querySelector('#thc24Title'),no24=panel.classList.contains('thc24-unavailable')||city==='London'||(title&&/NOT AVAILABLE/i.test(title.textContent||''));
+    if(!no24)return;
+    var route=routeFor(city),action=document.createElement('section');action.className='wtf24-route-action';
+    action.innerHTML='<span class="wtf24-route-kicker">Need a farther-night option?</span><button class="wtf24-route-button" type="button" aria-label="Find the closest late-night cannabis options"><span>CLOSEST 24-HOUR</span><small>24 HR</small><span class="wtf24-route-leaf" aria-hidden="true">🌿</span></button>';
+    action.querySelector('button').addEventListener('click',function(){showClosest24Route(city);});
+    panel.appendChild(action);
+  }
+  var prepare24=window.wtfPrepare24Hours;
+  if(typeof prepare24==='function'){
+    window.wtfPrepare24Hours=async function(city){
+      city=city||window.WTF_SELECTED_CITY||'Las Vegas';
+      await prepare24(city);
+      addClosest24Action(city);
+    };
+  }
+  window.wtfShowClosest24Route=showClosest24Route;
+})();
+</script>
 </body>
 </html>
