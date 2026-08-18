@@ -19136,7 +19136,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
       <button class="wtf2-area" data-area="Henderson" type="button">Henderson</button>
       <button class="wtf2-area" data-area="Summerlin" type="button">Summerlin</button>
     </div>
-    <p style="margin:0 0 13px;color:#777;font-size:12px;">Tap a name for address, directions, website, and further information.</p>
+    <p class="wtf2-directory-list-instruction" id="wtf2DirInstruction" style="margin:0 0 13px;color:#777;font-size:12px;">Tap a name for address, directions, website, and further information.</p>
     <div id="wtf2DirList"></div>
     <div class="wtf2-contact-strip" aria-label="Legend and contact links">
       <button class="wtf2-contact-edge wtf2-legend-open" type="button">LEGEND</button>
@@ -20388,10 +20388,10 @@ window.wtfPrepare24Hours=async function(city){
   function setupLAWeedNear(){
     var block=q('laNearTest'),zones=activeNearZones();if(!block)return;
     var nearLaunch=block.previousElementSibling&&block.previousElementSibling.classList.contains('la-near-launch')?block.previousElementSibling:null;
-    function scrollToStoredLocations(){var next=block.nextElementSibling;if(next)next.scrollIntoView({behavior:'smooth',block:'start'});}
+    function scrollToStoredLocations(){if(dir)dir.classList.remove('wtf2-closest-focus');var next=block.nextElementSibling;if(next)setTimeout(function(){next.scrollIntoView({behavior:'smooth',block:'start'});},20);}
     var fullListButton=block.querySelector('.la-near-full');if(fullListButton)fullListButton.addEventListener('click',scrollToStoredLocations);
     var scrollCue=block.querySelector('.la-weed-scroll-cue');if(scrollCue)scrollCue.addEventListener('click',scrollToStoredLocations);
-    var locatorClose=block.querySelector('.la-near-close');if(locatorClose)locatorClose.addEventListener('click',function(){block.classList.remove('is-loading','food-awaiting-choice');if(nearLaunch){block.classList.add('is-collapsed');paintLaunch(false);nearLaunch.scrollIntoView({behavior:'smooth',block:'center'});}else{nearOnly=false;dir.classList.remove('near-only');setOpen(dir,false);}});
+    var locatorClose=block.querySelector('.la-near-close');if(locatorClose)locatorClose.addEventListener('click',function(){block.classList.remove('is-loading','food-awaiting-choice');if(dir)dir.classList.remove('wtf2-closest-focus');if(nearLaunch){block.classList.add('is-collapsed');paintLaunch(false);nearLaunch.scrollIntoView({behavior:'smooth',block:'center'});}else{nearOnly=false;dir.classList.remove('near-only');setOpen(dir,false);}});
     block.querySelectorAll('[data-la-zone]').forEach(function(b){b.addEventListener('click',function(){var name=b.dataset.laZone;activeNearArea=name;if(window.__wtfSessionOrigin)loadLANearest(window.__wtfSessionOrigin,name);else requestCurrent(name);});});
     function requestCurrent(requestedArea){
       var status=q('laNearStatus');
@@ -20407,7 +20407,7 @@ window.wtfPrepare24Hours=async function(city){
     function launchIcon(){return currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';}
     function paintLaunch(open){var word=currentCat.toUpperCase(),lead='CLOSE ';nearLaunch.innerHTML='<span class="la-near-launch-copy">'+lead+'<span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close nearest ':'Open nearest ')+word.toLowerCase()+' locations');}
     block.querySelectorAll('[data-food-near-tier]').forEach(function(button){button.addEventListener('click',function(){activeFoodNearTier=button.dataset.foodNearTier;block.classList.remove('food-awaiting-choice');block.querySelectorAll('[data-food-near-tier]').forEach(function(other){other.classList.toggle('active',other===button);});if(dir)dir.scrollTop=0;requestCurrent('Current Location');});});
-    if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(dir)dir.scrollTop=0;if(opening){activeFoodNearTier='';requestCurrent('Current Location');}else{block.classList.remove('is-loading','food-awaiting-choice');}});}
+    if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(dir){dir.classList.toggle('wtf2-closest-focus',opening);dir.scrollTop=0;}if(opening){activeFoodNearTier='';requestCurrent('Current Location');}else{block.classList.remove('is-loading','food-awaiting-choice');}});}
     else{activeFoodNearTier='';requestCurrent('Current Location');}
   }
   function render(){
@@ -21102,6 +21102,28 @@ window.wtfPrepare24Hours=async function(city){
     directory.scrollTop=0;
     requestAnimationFrame(function(){directory.scrollTop=0;});
   });
+})();
+</script>
+<style id="wtf-orb-first-closest-card-style">
+  /* Closest mode starts with the category orb, then the full five-result card. */
+  #wtf2Directory.wtf2-closest-focus .wtf2-dir-top,
+  #wtf2Directory.wtf2-closest-focus #wtf2AreaRow,
+  #wtf2Directory.wtf2-closest-focus #wtf2DirInstruction,
+  #wtf2Directory.wtf2-closest-focus #wtf2DirList > :not(.la-near-launch):not(.la-near-test){display:none!important;}
+  #wtf2Directory.wtf2-closest-focus .wtf2-directory-inner{padding-top:max(18px,env(safe-area-inset-top))!important;}
+  #wtf2Directory.wtf2-closest-focus .la-near-launch{margin:0 auto 24px!important;}
+  #wtf2Directory.wtf2-closest-focus .la-near-test{margin:0 0 18px!important;}
+  #wtf2DirInstruction{color:#8d8d8d!important;font:700 12px/1.35 'Archivo Narrow',sans-serif!important;letter-spacing:.015em;}
+</style>
+<script id="wtf-directory-instruction-placement">
+(function(){
+  function placeInstruction(){
+    var instruction=document.getElementById('wtf2DirInstruction'),firstHeading=document.querySelector('#wtf2DirList .directory-area');
+    if(instruction&&firstHeading&&instruction.previousElementSibling!==firstHeading)firstHeading.insertAdjacentElement('afterend',instruction);
+  }
+  var list=document.getElementById('wtf2DirList');
+  if(list)new MutationObserver(placeInstruction).observe(list,{childList:true,subtree:true});
+  document.addEventListener('click',function(event){if(event.target.closest&&event.target.closest('.wtf2-category,.wtf2-area'))setTimeout(placeInstruction,0);});
 })();
 </script>
 </body>
