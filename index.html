@@ -19057,7 +19057,6 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 </section>
 
 <section id="wtf2Overlay" aria-hidden="true">
-  <button class="wtf2-music-toggle is-muted" id="wtf2MusicToggle" type="button" aria-pressed="false" aria-label="Turn music on"><span class="note">♫</span><span class="music-label">MUSIC ON</span></button>
   <button class="wtf2-groove-trigger" id="wtf2GrooveTrigger" type="button" aria-haspopup="dialog" aria-controls="wtf2MusicPicker"><span class="arrow">➜</span><span class="note">♫</span><span>PICK YOUR<br>GROOVE</span></button>
   <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · VEGAS QUEST + NIGHT SHUTTLE</button><button class="wtf2-track" data-track="1" type="button">1 · VEGAS QUEST</button><button class="wtf2-track" data-track="2" type="button">2 · PIXEL PICNIC</button><button class="wtf2-track" data-track="3" type="button">3 · NIGHT SHUTTLE</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
   <div class="wtf2-shell">
@@ -20472,7 +20471,7 @@ window.wtfPrepare24Hours=async function(city){
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&homePrompt&&homePrompt.classList.contains('open'))closeHomePrompt();});
     q('wtfCityChange').addEventListener('click',chooseAnotherCity);
     q('wtf2CityQuickChange').addEventListener('click',chooseAnotherCity);
-    q('wtf2MusicToggle').addEventListener('click',toggleMusic);
+    var musicToggle=q('wtf2MusicToggle');if(musicToggle)musicToggle.addEventListener('click',toggleMusic);
     q('wtf2GrooveTrigger').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});
     document.querySelectorAll('.wtf2-contact-music').forEach(function(button){button.addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),true);});});
     q('wtf2GrooveClose').addEventListener('click',function(){setOpen(q('wtf2MusicPicker'),false);});
