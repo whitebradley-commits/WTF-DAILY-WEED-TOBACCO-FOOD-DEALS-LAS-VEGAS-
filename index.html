@@ -7091,7 +7091,7 @@ button[id*="back"] svg,
 <div id="directionsPopupName" style="font-family:'Archivo Black',sans-serif;font-size:1rem;color:#F2F2F2;margin:6px 0 8px;"></div>
 <div id="directionsPopupAddress" style="font-family:'Archivo Narrow',sans-serif;font-size:0.86rem;color:#F59E0B;line-height:1.5;margin:0 0 14px;"></div>
 <iframe id="directionsPopupMap" loading="lazy" src="" style="width:100%;height:230px;border:1px solid #333;border-radius:12px;background:#111;display:block;" title="Map"></iframe>
-<a href="#" id="directionsPopupOpen" target="_blank" rel="noopener" style="display:block;margin-top:16px;padding:13px 18px;border-radius:999px;background:#3D8B4C;color:#fff;text-decoration:none;font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.9rem;">OPEN IN MAPS</a>
+<button type="button" id="directionsPopupOpen" style="display:block;width:100%;margin-top:16px;padding:13px 18px;border:0;border-radius:999px;background:#3D8B4C;color:#fff;font-family:'Archivo Narrow',sans-serif;font-weight:700;letter-spacing:0.06em;font-size:0.9rem;cursor:pointer;">DIRECTIONS IN MAP ABOVE</button>
 <button id="directionsPopupCopy" style="margin-top:12px;background:none;border:1px solid #444;border-radius:999px;padding:9px 16px;color:#bbb;font-family:'Archivo Narrow',sans-serif;font-size:0.78rem;cursor:pointer;width:100%;" type="button">COPY ADDRESS</button>
 </div>
 </div>
@@ -8890,9 +8890,7 @@ function renderStars(rating){
 function directionsButtonHTML(address, name){
   if(!address) return '<span class="directions-btn directions-btn-pending" title="Directions coming soon">\ud83d\udccd</span>';
   const esc = function(v){ return String(v || '').replace(/"/g, '&quot;'); };
-  const destination = encodeURIComponent((name ? name + ' ' : '') + address);
-  const url = 'https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=' + destination + '&travelmode=driving';
-  return '<button type="button" class="directions-btn" data-direct-directions="' + esc(url) + '" title="Directions">\ud83d\udccd</button>';
+  return '<button type="button" class="directions-btn" data-directions-popup="' + esc(address) + '" data-directions-name="' + esc(name || '') + '" title="Directions">\ud83d\udccd</button>';
 }
 
 // Email button removed per request — returns nothing so the icon row stays
@@ -9441,7 +9439,10 @@ function openDirectionsPopup(address, name){
     if(origin&&typeof GOOGLE_PLACES_API_KEY!=='undefined'&&GOOGLE_PLACES_API_KEY)mapEl.src='https://www.google.com/maps/embed/v1/directions?key='+encodeURIComponent(GOOGLE_PLACES_API_KEY)+'&origin='+encodeURIComponent(origin.lat+','+origin.lng)+'&destination='+q+'&mode=driving';
     else mapEl.src = 'https://www.google.com/maps?q=' + q + '&output=embed';
   }
-  if(openEl) openEl.setAttribute('href', 'https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=' + q + '&travelmode=driving');
+  if(openEl){
+    openEl.textContent='DIRECTIONS IN MAP ABOVE';
+    openEl.onclick=function(){if(mapEl)mapEl.scrollIntoView({behavior:'smooth',block:'center'});};
+  }
 
   overlay.dataset.address = address;
   overlay.classList.add('open');
@@ -9514,10 +9515,13 @@ function openPhonePopup(digits, display, businessName){
   }
   if(numEl){
     numEl.textContent = display || digits;
-    numEl.setAttribute('href', 'tel:' + digits);
+    numEl.removeAttribute('href');
   }
-  if(callEl){callEl.textContent='CALL NOW';callEl.setAttribute('href','tel:'+digits);callEl.removeAttribute('target');}
   var copyEl=document.getElementById('phonePopupCopy');
+  if(callEl){
+    callEl.textContent='COPY NUMBER';callEl.removeAttribute('href');callEl.removeAttribute('target');
+    callEl.onclick=function(){if(copyEl)copyEl.click();};
+  }
   if(copyEl)copyEl.style.display='';
   overlay.dataset.digits = digits;
   overlay.classList.add('open');
@@ -9529,7 +9533,7 @@ function openPhoneUnavailablePopup(businessName, location){
   var numEl=document.getElementById('phonePopupNumber'),callEl=document.getElementById('phonePopupCall'),nameEl=document.getElementById('phonePopupName'),copyEl=document.getElementById('phonePopupCopy');
   if(nameEl){nameEl.textContent=businessName||'BUSINESS';nameEl.style.display='';}
   if(numEl){numEl.textContent='NUMBER NOT RETURNED — CHECK CURRENT LISTING';numEl.removeAttribute('href');}
-  if(callEl){callEl.textContent='CHECK CURRENT NUMBER';callEl.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((businessName||'business')+' '+(location||''));callEl.target='_blank';}
+  if(callEl){callEl.textContent='NUMBER UNAVAILABLE';callEl.removeAttribute('href');callEl.removeAttribute('target');callEl.onclick=null;}
   if(copyEl)copyEl.style.display='none';
   overlay.dataset.digits='';
   overlay.classList.add('open');
@@ -9695,8 +9699,8 @@ function setupPhonePopup(){
       if(digits.length === 11 && digits.charAt(0) === '1') formatted = '+1 (' + digits.slice(1,4) + ') ' + digits.slice(4,7) + '-' + digits.slice(7);
       else if(digits.length === 10) formatted = '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6);
       var display = btn.getAttribute('data-phone-display') || (visibleDigits.length >= 7 ? visible : formatted);
-      var card = btn.closest('.listing-card,li,.entry-site-row,.lvsteam-contact-row');
-      var nameNode = card ? card.querySelector('.listing-name,.bo-extended-name,.card-name,.hh-name') : null;
+      var card = btn.closest('.listing-card,li,.entry-site-row,.lvsteam-contact-row,.wtf-worldwide-result,.hh-closest-row,.wtf-shuttle-route-new');
+      var nameNode = card ? card.querySelector('.listing-name,.bo-extended-name,.card-name,.hh-name,.wtf-worldwide-result-name,b,strong') : null;
       if(!nameNode && card && card.tagName === 'LI') nameNode = card.querySelector('div:first-child');
       openPhonePopup(digits, display, btn.getAttribute('data-phone-business') || (nameNode ? String(nameNode.textContent || '').trim() : ''));
     }, true);
@@ -19929,7 +19933,34 @@ window.wtfPrepare24Hours=async function(city){
 })();
 </script>
 
+
 <script id="wtf2-private-preview-script">
+// Contain every Google Maps navigation link inside the reusable directions popup.
+// The only route detail that loads is the embedded map itself; no page navigation
+// or new tab is triggered by a navigation control anywhere on WTFdd.
+(function(){
+  if(document.documentElement.dataset.wtfContainedMapsDelegated)return;
+  document.documentElement.dataset.wtfContainedMapsDelegated='1';
+  function mapDestination(href){
+    try{
+      var parsed=new URL(href,window.location.href),host=String(parsed.hostname||'').toLowerCase();
+      if(host.indexOf('google.')<0 || parsed.pathname.indexOf('/maps')<0)return '';
+      return parsed.searchParams.get('destination')||parsed.searchParams.get('query')||parsed.searchParams.get('q')||'';
+    }catch(ignore){return '';}
+  }
+  document.addEventListener('click',function(e){
+    var link=e.target&&e.target.closest?e.target.closest('a[href]'):null;
+    if(!link || link.closest('#directionsPopupOverlay,#phonePopupOverlay'))return;
+    var destination=mapDestination(link.getAttribute('href')||'');
+    if(!destination)return;
+    e.preventDefault();e.stopPropagation();
+    var row=link.closest('.listing-card,.hh-closest-row,.wtf-worldwide-result,.wtf-shuttle-route-new,.la-dispensary-actions,.la-dispensary-mini-actions');
+    var label=link.getAttribute('data-directions-name')||link.getAttribute('data-phone-business')||'';
+    if(!label&&row){var heading=row.querySelector('.listing-name,.wtf-worldwide-result-name,b,strong,.hh-name');if(heading)label=String(heading.textContent||'').trim();}
+    if(window.openDirectionsPopup)window.openDirectionsPopup(destination,label||'DIRECTIONS');
+  },true);
+})();
+
 (function(){
   var overlay,dir,currentCat='Weed',currentArea='All',selectedCity='Las Vegas',nearOnly=false,lastNearOrigin=null,activeNearArea='Current Location',activeFoodNearTier='';
   var musicCtx=null,musicMaster=null,musicTimer=null,musicStep=0,musicOn=false,musicTrack=0;
@@ -20417,7 +20448,7 @@ window.wtfPrepare24Hours=async function(city){
     if(detailClose)detailClose.addEventListener('click',closeUnavailableDetail);
     if(territoryClose)territoryClose.addEventListener('click',function(){var modal=q('wtfTerritoryOverlay');modal.classList.remove('open');modal.setAttribute('aria-hidden','true');});
     if(territoryEnter)territoryEnter.addEventListener('click',function(){var modal=q('wtfTerritoryOverlay'),city=modal.dataset.nearestCity,lat=Number(modal.dataset.originLat),lng=Number(modal.dataset.originLng);modal.classList.remove('open');modal.setAttribute('aria-hidden','true');var unavailable=q('wtfUnavailableOverlay');if(unavailable){unavailable.classList.remove('open');unavailable.setAttribute('aria-hidden','true');}if(city){setWtfCityBadge(city);try{sessionStorage.setItem('wtfSelectedCity',city);}catch(e){}}openDirectory(currentCat,true);if(Number.isFinite(lat)&&Number.isFinite(lng))setTimeout(function(){loadLANearest({lat:lat,lng:lng},'Current Location');},0);});
-    document.addEventListener('click',function(e){var button=e.target.closest('[data-direct-directions]');if(!button)return;e.preventDefault();e.stopPropagation();var url=button.dataset.directDirections;if(!url)return;var opened=window.open(url,'_blank','noopener');if(!opened)window.location.href=url;});
+    document.addEventListener('click',function(e){var button=e.target.closest('[data-direct-directions]');if(!button)return;e.preventDefault();e.stopPropagation();var url=button.dataset.directDirections||'',destination='';try{var parsed=new URL(url,window.location.href);destination=parsed.searchParams.get('destination')||parsed.searchParams.get('query')||parsed.searchParams.get('q')||'';}catch(ignore){}if(destination&&window.openDirectionsPopup)window.openDirectionsPopup(destination,button.dataset.directionsName||'DIRECTIONS');});
     q('wtf2SecretLink').addEventListener('click',function(){startMusic();openWtf2WithCities();});q('wtf2Exit').addEventListener('click',returnToAgeGate);q('wtf2DirBack').addEventListener('click',function(){setOpen(dir,false);});
     var ageEnter=q('wtfLandingEnterBtn');if(ageEnter)ageEnter.addEventListener('click',function(){startMusic();setTimeout(openWtf2WithCities,40);});
     q('wtfCityEnter').addEventListener('click',enterSelectedCity);
@@ -20592,7 +20623,7 @@ window.wtfPrepare24Hours=async function(city){
     var record=MEDICAL_DIRECTORY_FALLBACK[task.query],row=[].slice.call(columns.querySelectorAll('[data-med-state="'+task.si+'"]')).find(function(candidate){return candidate.dataset.medQuery===task.query;});
     if(!record||!row)return false;
     var name=row.querySelector('.wtf-med-name'),phone=row.querySelector('.wtf-med-phone'),distance=row.querySelector('.wtf-med-distance'),digits=String(record.phone||'').replace(/\D/g,'');
-    name.textContent=record.name;phone.textContent=record.phone;phone.onclick=function(){window.location.href='tel:'+digits;};
+    name.textContent=record.name;phone.textContent=record.phone;phone.onclick=function(){if(window.openPhonePopup)window.openPhonePopup(digits,record.phone,record.name);};
     if(origin&&Number.isFinite(Number(record.lat))&&Number.isFinite(Number(record.lng)))distance.textContent=miles(origin,{lat:Number(record.lat),lng:Number(record.lng)}).toFixed(1)+' MI';
     return true;
   }
