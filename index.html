@@ -9565,21 +9565,21 @@ async function wtfResolveBusinessDetails(businessName,location,placeId){
       if(placeId){
         try{
           var exactModern=new PlaceClass({id:placeId});
-          await exactModern.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location']});
+          await exactModern.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','businessStatus','location']});
           var exactModernPhone=exactModern.nationalPhoneNumber||exactModern.internationalPhoneNumber||'';
-          if(exactModernPhone){
-            var exactModernLoc=exactModern.location,exactModernDetail={place_id:exactModern.id||placeId,name:exactModern.displayName||businessName,formatted_phone_number:exactModernPhone,international_phone_number:exactModern.internationalPhoneNumber||'',formatted_address:exactModern.formattedAddress||location||'',website:exactModern.websiteURI||'',opening_hours:exactModern.regularOpeningHours||null,business_status:exactModern.businessStatus||'',geometry:exactModernLoc?{location:exactModernLoc}:null};
+          if(exactModernPhone||exactModern.currentOpeningHours||exactModern.regularOpeningHours){
+            var exactModernLoc=exactModern.location,exactModernDetail={place_id:exactModern.id||placeId,name:exactModern.displayName||businessName,formatted_phone_number:exactModernPhone,international_phone_number:exactModern.internationalPhoneNumber||'',formatted_address:exactModern.formattedAddress||location||'',website:exactModern.websiteURI||'',opening_hours:exactModern.currentOpeningHours||exactModern.regularOpeningHours||null,business_status:exactModern.businessStatus||'',geometry:exactModernLoc?{location:exactModernLoc}:null};
             window.__wtfBusinessDetailCache[cacheKey]=exactModernDetail;return exactModernDetail;
           }
         }catch(exactModernError){console.warn('WTFDD exact Place phone lookup unavailable; trying exact text match',exactModernError);}
       }
-      var modern=await PlaceClass.searchByText({textQuery:[businessName,location].filter(Boolean).join(' '),fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location'],maxResultCount:5});
+      var modern=await PlaceClass.searchByText({textQuery:[businessName,location].filter(Boolean).join(' '),fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','businessStatus','location'],maxResultCount:5});
       var modernPlaces=modern&&modern.places||[];
       for(var mp=0;mp<modernPlaces.length;mp++){
         var p=modernPlaces[mp];
-        if(p&&p.fetchFields&&!(p.nationalPhoneNumber||p.internationalPhoneNumber)){try{await p.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','businessStatus','location']});}catch(ignore){}}
+        if(p&&p.fetchFields&&!(p.nationalPhoneNumber||p.internationalPhoneNumber||p.currentOpeningHours||p.regularOpeningHours)){try{await p.fetchFields({fields:['id','displayName','formattedAddress','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','businessStatus','location']});}catch(ignore){}}
         var modernPhone=p&&(p.nationalPhoneNumber||p.internationalPhoneNumber)||'';
-        if(p&&modernPhone){var loc=p.location,modernDetail={place_id:p.id,name:p.displayName||businessName,formatted_phone_number:modernPhone,international_phone_number:p.internationalPhoneNumber||'',formatted_address:p.formattedAddress||location||'',website:p.websiteURI||'',opening_hours:p.regularOpeningHours||null,business_status:p.businessStatus||'',geometry:loc?{location:loc}:null};window.__wtfBusinessDetailCache[cacheKey]=modernDetail;return modernDetail;}
+        if(p&&(modernPhone||p.currentOpeningHours||p.regularOpeningHours)){var loc=p.location,modernDetail={place_id:p.id,name:p.displayName||businessName,formatted_phone_number:modernPhone,international_phone_number:p.internationalPhoneNumber||'',formatted_address:p.formattedAddress||location||'',website:p.websiteURI||'',opening_hours:p.currentOpeningHours||p.regularOpeningHours||null,business_status:p.businessStatus||'',geometry:loc?{location:loc}:null};window.__wtfBusinessDetailCache[cacheKey]=modernDetail;return modernDetail;}
       }
     }
   }catch(modernPhoneError){console.warn('WTFDD current phone lookup unavailable; trying legacy Places',modernPhoneError);}
@@ -20170,7 +20170,7 @@ window.wtfPrepare24Hours=async function(city){
     /* A current Google hours result can close a listing. An incomplete backup
        source cannot override a maintained local schedule that says it is open. */
     if(item.openNow===false&&curatedOpen!==true)return {key:'closed',label:'CLOSED'};
-    var providerOpen=curatedOpen!==null?curatedOpen:hours&&typeof hours.isOpen==='function'?hours.isOpen():hours&&typeof hours.openNow==='boolean'?hours.openNow:item.openNow;
+    var providerOpen=curatedOpen!==null?curatedOpen:hours&&typeof hours.isOpen==='function'?hours.isOpen():hours&&typeof hours.openNow==='boolean'?hours.openNow:hours&&typeof hours.open_now==='boolean'?hours.open_now:item.openNow;
     /* The Places search was explicitly restricted to businesses Google marked
        open now. Do not downgrade a confirmed-open result to “unconfirmed”
        merely because its time-zone field is omitted from that response. */
@@ -20237,7 +20237,7 @@ window.wtfPrepare24Hours=async function(city){
       var resolvedPhone=null,detail=null;
       try{resolvedPhone=await wtfResolvePublicPhone(item.name,item.address||selectedCity,item.placeId||'');detail=resolvedPhone.detail;}catch(phoneErr){detail=await wtfResolveBusinessDetails(item.name,item.address||selectedCity,item.placeId||'');}
       if(rows.dataset.phoneRender!==token)return;button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(!button)return;
-      if(detail.formatted_address&&!item.address)item.address=detail.formatted_address;item.placeId=detail.place_id||item.placeId;item.openingHours=detail.opening_hours||item.openingHours;item.utcOffsetMinutes=detail.utc_offset_minutes;item.openNow=detail.opening_hours&&typeof detail.opening_hours.open_now==='boolean'?detail.opening_hours.open_now:item.openNow;
+      if(detail.formatted_address&&!item.address)item.address=detail.formatted_address;item.placeId=detail.place_id||item.placeId;var liveHours=detail.current_opening_hours||detail.currentOpeningHours||detail.opening_hours||item.openingHours;item.currentOpeningHours=liveHours||item.currentOpeningHours;item.openingHours=liveHours||item.openingHours;item.utcOffsetMinutes=detail.utc_offset_minutes||detail.utcOffsetMinutes||item.utcOffsetMinutes;var liveOpen=liveHours&&typeof liveHours.isOpen==='function'?liveHours.isOpen():liveHours&&typeof liveHours.openNow==='boolean'?liveHours.openNow:liveHours&&typeof liveHours.open_now==='boolean'?liveHours.open_now:null;item.openNow=typeof liveOpen==='boolean'?liveOpen:item.openNow;
       var livePhone=resolvedPhone&&resolvedPhone.phone||detail.formatted_phone_number||detail.international_phone_number||item.phone||'',digits=(livePhone.match(/\d/g)||[]).join('');if(digits){item.phone=livePhone;button.textContent=livePhone;button.removeAttribute('data-phone-lookup');button.removeAttribute('data-phone-location');button.dataset.phonePopup=digits;button.dataset.phoneDisplay=livePhone;}else{button.textContent='CHECK NUMBER';button.dataset.phoneLookup=item.name;button.dataset.phoneLocation=item.address||selectedCity;}button.dataset.phonePlaceId=item.placeId||'';button.classList.remove('is-loading');paintNearHours(button.closest('.la-near-row'),item);finish();
     }catch(ignore){if(rows.dataset.phoneRender!==token)return;button=rows.querySelector('[data-near-phone-index="'+index+'"]');if(button){if(!item.phone){button.textContent='CHECK NUMBER';button.dataset.phoneLookup=item.name;button.dataset.phoneLocation=item.address||selectedCity;}button.classList.remove('is-loading');paintNearHours(button.closest('.la-near-row'),item);}finish();}})();});
   }
@@ -20406,8 +20406,8 @@ window.wtfPrepare24Hours=async function(city){
     if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();var market=selectedCity,details=MARKET_DISPENSARY_DETAILS[market]&&MARKET_DISPENSARY_DETAILS[market][button.dataset.laFullName]||{},lat=Number(button.dataset.laFullLat),lng=Number(button.dataset.laFullLng),miles=Number(button.dataset.laFullMiles);openLADispensary(Object.assign({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,city:market,category:button.dataset.laFullCategory||currentCat,lat:Number.isFinite(lat)?lat:null,lng:Number.isFinite(lng)?lng:null,miles:Number.isFinite(miles)?miles:0,source:'WTFDD '+market+' directory'},details));});}
     function launchIcon(){return currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';}
     function paintLaunch(open){var word=currentCat.toUpperCase(),lead='CLOSE ';nearLaunch.innerHTML='<span class="la-near-launch-copy">'+lead+'<span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close nearest ':'Open nearest ')+word.toLowerCase()+' locations');}
-    block.querySelectorAll('[data-food-near-tier]').forEach(function(button){button.addEventListener('click',function(){activeFoodNearTier=button.dataset.foodNearTier;block.classList.remove('food-awaiting-choice');block.querySelectorAll('[data-food-near-tier]').forEach(function(other){other.classList.toggle('active',other===button);});requestCurrent('Current Location');setTimeout(function(){block.scrollIntoView({behavior:'smooth',block:'start'});},30);});});
-    if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(opening){activeFoodNearTier='';requestCurrent('Current Location');block.scrollIntoView({behavior:'smooth',block:'start'});}else{block.classList.remove('is-loading','food-awaiting-choice');nearLaunch.scrollIntoView({behavior:'smooth',block:'center'});}});}
+    block.querySelectorAll('[data-food-near-tier]').forEach(function(button){button.addEventListener('click',function(){activeFoodNearTier=button.dataset.foodNearTier;block.classList.remove('food-awaiting-choice');block.querySelectorAll('[data-food-near-tier]').forEach(function(other){other.classList.toggle('active',other===button);});if(dir)dir.scrollTop=0;requestCurrent('Current Location');});});
+    if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(dir)dir.scrollTop=0;if(opening){activeFoodNearTier='';requestCurrent('Current Location');}else{block.classList.remove('is-loading','food-awaiting-choice');}});}
     else{activeFoodNearTier='';requestCurrent('Current Location');}
   }
   function render(){
@@ -21079,6 +21079,29 @@ window.wtfPrepare24Hours=async function(city){
     };
   }
   window.wtfShowClosest24Route=showClosest24Route;
+})();
+</script>
+<style id="wtf-nearest-panel-consistency-fix">
+  /* One consistent nearest-results card for Weed, Tobacco, and Food. */
+  #wtf2Directory[data-category] .la-near-launch{margin:22px auto 30px!important;}
+  #wtf2Directory[data-category] .la-near-test{margin:30px 0 30px!important;padding:22px 16px 17px!important;border:1.5px solid var(--wtf2-directory-accent,#78df85)!important;border-radius:17px!important;background:#050805!important;box-shadow:0 0 24px color-mix(in srgb,var(--wtf2-directory-accent,#78df85) 16%,transparent)!important;}
+  #wtf2Directory[data-category="weed"] .la-near-test{border-color:#78df85!important;box-shadow:0 0 24px rgba(79,210,103,.18)!important;}
+  #wtf2Directory[data-category] .la-near-test h3{margin:0 0 18px!important;color:var(--wtf2-directory-accent,#78df85)!important;font:900 clamp(28px,8.7vw,43px)/.98 'Archivo Black',sans-serif!important;letter-spacing:.025em!important;text-align:left!important;}
+  #wtf2Directory[data-category] .la-near-zones{margin:0 0 15px!important;padding:2px 0 3px!important;gap:9px!important;}
+  #wtf2Directory[data-category] .la-near-tap-note{margin:2px 0 14px!important;}
+  #wtf2Directory[data-category] .la-near-loading{min-height:44px;}
+  #wtf2Directory[data-category] .la-near-test.is-collapsed{display:none!important;}
+</style>
+<script id="wtf-nearest-panel-top-lock">
+(function(){
+  document.addEventListener('click',function(event){
+    var launch=event.target.closest&&event.target.closest('.la-near-launch,[data-food-near-tier]');
+    if(!launch)return;
+    var directory=document.getElementById('wtf2Directory');
+    if(!directory)return;
+    directory.scrollTop=0;
+    requestAnimationFrame(function(){directory.scrollTop=0;});
+  });
 })();
 </script>
 </body>
