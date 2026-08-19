@@ -1857,3 +1857,84 @@ try{
 })();
 </script>
 </body></html>
+<!-- FN Team GO button and self-contained music repair. -->
+<style id="fnt-go-cream-button-style">
+  #teamTypeGo{
+    appearance:none!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 clamp(110px,27vw,154px)!important;
+    min-width:110px!important;
+    min-height:92px!important;
+    margin:0 8px 0 12px!important;
+    padding:12px 14px!important;
+    border:4px solid #090909!important;
+    border-radius:18px!important;
+    background:#fff2d6!important;
+    color:#090909!important;
+    box-shadow:8px 8px 0 #090909,0 12px 22px rgba(0,0,0,.18)!important;
+    font:900 clamp(18px,5vw,25px)/1 'Arial Black',Arial,sans-serif!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+    cursor:pointer!important;
+    transform:translateY(0)!important;
+    transition:transform .14s ease,box-shadow .14s ease,background .14s ease!important;
+  }
+  #teamTypeGo:hover,#teamTypeGo:focus-visible{background:#fffaf0!important;outline:none!important;transform:translate(-2px,-2px)!important;box-shadow:10px 10px 0 #090909,0 15px 26px rgba(0,0,0,.2)!important;}
+  #teamTypeGo:active{transform:translate(5px,5px)!important;box-shadow:3px 3px 0 #090909,0 6px 12px rgba(0,0,0,.16)!important;}
+  @media(max-width:480px){#teamTypeGo{flex-basis:104px!important;min-width:104px!important;min-height:86px!important;margin-left:10px!important;font-size:20px!important;}}
+</style>
+<script id="fnt-self-contained-music-repair">
+(function(){
+  function install(){
+    var originalOrb=document.getElementById('fnMusicOrb');
+    var originalPanel=document.getElementById('fnMusicPanel');
+    var originalAudio=document.getElementById('fnMusicAudio');
+    if(!originalOrb||!originalPanel||originalOrb.dataset.selfContainedMusic==='true')return false;
+    if(originalAudio){originalAudio.pause();originalAudio.removeAttribute('src');originalAudio.load();}
+
+    var orb=originalOrb.cloneNode(true), panel=originalPanel.cloneNode(false);
+    originalOrb.replaceWith(orb); originalPanel.replaceWith(panel);
+    orb.dataset.selfContainedMusic='true';
+    orb.setAttribute('aria-label','Play or choose FN Team music');
+    panel.id='fnMusicPanel'; panel.hidden=true;
+    panel.setAttribute('aria-label','FN Team music controls');
+    panel.innerHTML='<button type="button" class="fn-music-close" aria-label="Close music controls">×</button><span>CHOOSE YOUR MUSIC</span><div class="fn-music-options"><button type="button" data-fn-music-track="night">ONE</button><button type="button" data-fn-music-track="pulse">TWO</button><button type="button" data-fn-music-track="rep">THREE</button><button type="button" data-fn-music-track="off">OFF</button></div>';
+
+    var context=null, master=null, timer=null, current='off', step=0;
+    var patterns={
+      night:{notes:[220,261.63,329.63,392],tempo:530,wave:'sine',gain:.075},
+      pulse:{notes:[146.83,220,293.66,440],tempo:330,wave:'triangle',gain:.06},
+      rep:{notes:[110,164.81,220,164.81],tempo:250,wave:'square',gain:.035}
+    };
+    function ensureContext(){
+      if(!context){context=new (window.AudioContext||window.webkitAudioContext)();master=context.createGain();master.gain.value=.28;master.connect(context.destination);}
+      return context.resume();
+    }
+    function stop(){if(timer){window.clearInterval(timer);timer=null;}current='off';step=0;orb.classList.remove('is-playing');orb.dataset.playback='off';}
+    function tone(freq,seconds,kind,volume){
+      if(!context||!master)return;
+      var now=context.currentTime,osc=context.createOscillator(),gain=context.createGain();
+      osc.type=kind;osc.frequency.setValueAtTime(freq,now);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(volume,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+seconds);osc.connect(gain).connect(master);osc.start(now);osc.stop(now+seconds+.04);
+    }
+    function playStep(){
+      var p=patterns[current];if(!p)return;var n=p.notes[step%p.notes.length];tone(n,.30,p.wave,p.gain);if(current==='night')tone(n/2,.42,'sine',p.gain*.4);if(current==='rep'&&step%2===0)tone(n*2,.11,'square',p.gain*.3);step++;
+    }
+    function select(track){
+      if(track==='off'){stop();return;}
+      ensureContext().then(function(){stop();current=track;playStep();timer=window.setInterval(playStep,patterns[track].tempo);orb.classList.add('is-playing');orb.dataset.playback='playing';});
+      panel.querySelectorAll('[data-fn-music-track]').forEach(function(button){var active=button.dataset.fnMusicTrack===track;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+    }
+    function openPanel(){panel.hidden=false;requestAnimationFrame(function(){panel.classList.add('open');});orb.setAttribute('aria-expanded','true');}
+    function closePanel(){panel.classList.remove('open');orb.setAttribute('aria-expanded','false');window.setTimeout(function(){panel.hidden=true;},160);}
+    orb.addEventListener('click',function(event){event.preventDefault();if(current==='off')select('night');openPanel();});
+    panel.querySelector('.fn-music-close').addEventListener('click',closePanel);
+    panel.querySelectorAll('[data-fn-music-track]').forEach(function(button){button.addEventListener('click',function(event){event.preventDefault();select(button.dataset.fnMusicTrack);if(button.dataset.fnMusicTrack!=='off')closePanel();});});
+    panel.addEventListener('click',function(event){event.stopPropagation();});
+    window.FN_TEAM_MUSIC={setTrack:select,openPanel:openPanel,closePanel:closePanel,usingBuiltInLoop:true};
+  }
+  function waitForControls(tries){if(install())return;if(tries<30)window.setTimeout(function(){waitForControls(tries+1);},100);}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){waitForControls(0);});else waitForControls(0);
+}());
+</script>
