@@ -5131,25 +5131,6 @@
   color:#3D8B4C !important;
 }
 
-
-  /* Private-page link: only the apple in the primary WTF logo is clickable. */
-  .wtf-landing-logo.new-wtf-logo{position:relative;}
-  .wtf-apple-private-link{
-    position:absolute;
-    left:60.5%;
-    top:14%;
-    width:22.5%;
-    height:33%;
-    z-index:1;
-    display:block;
-    border-radius:48%;
-    cursor:pointer;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .wtf-apple-private-link:focus-visible{
-    outline:3px solid #fff;
-    outline-offset:2px;
-  }
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -6089,9 +6070,7 @@ button[id*="back"] svg,
 <div aria-hidden="true" class="arcade-runner arcade-runner-two"><span class="arcade-smoke"></span><span class="arcade-chomper bow"></span><span class="arcade-snack">🍌</span></div>
 <div class="ty-content" style="max-width:400px;display:flex;flex-direction:column;min-height:100vh;justify-content:center;padding-bottom:28px;">
 
-<span aria-label="WTF logo" class="new-wtf-logo wtf-landing-logo">
-<a aria-label="Open private page" class="wtf-apple-private-link" href="private-page.html" title="Open private page"></a>
-</span>
+<span aria-label="WTF logo" class="new-wtf-logo wtf-landing-logo" role="img"></span>
 
 <div style="display:flex;justify-content:center;">
 <button class="tbotr-enter-circle" id="wtfLandingEnterBtn" style="width:auto;height:auto;border-radius:999px;padding:0.85rem 1.8rem;font-size:0.85rem;" type="button">I AM 21+<br/>ENTER</button>
