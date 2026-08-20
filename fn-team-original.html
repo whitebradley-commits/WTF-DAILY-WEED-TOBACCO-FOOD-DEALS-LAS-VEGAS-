@@ -1857,6 +1857,20 @@ try{
   });
 })();
 </script>
+<style id="fnt-shipping-offer-exit-fix">
+#offer .offer{position:relative!important;overflow:visible!important}
+#offer .offer-close{display:grid!important;place-items:center!important;position:fixed!important;right:18px!important;top:max(18px,env(safe-area-inset-top))!important;z-index:2147483647!important;width:58px!important;height:58px!important;margin:0!important;padding:0 0 3px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:50%!important;background:#050505!important;color:#ff1744!important;font:1000 36px/1 Arial,sans-serif!important;text-shadow:0 0 8px rgba(255,23,68,.75)!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;-webkit-tap-highlight-color:transparent!important}
+#offer .offer-close:after{content:'CLOSE';position:absolute;top:64px;left:50%;transform:translateX(-50%);padding:3px 6px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap;box-shadow:0 2px 7px rgba(0,0,0,.5)}
+</style>
+<script id="fnt-shipping-offer-exit-fix-script">
+(function(){
+  function visible(){var o=document.getElementById('offer');return o&&getComputedStyle(o).display!=='none'}
+  function closeOffer(){var o=document.getElementById('offer');try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true');document.body.classList.remove('fnt-lock-scroll')}var saving=document.getElementById('saving');if(saving)saving.hidden=true;try{sync()}catch(e){}return false}
+  window.closeOfferForConstruction=closeOffer;
+  function bind(){var o=document.getElementById('offer');if(!o)return;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');var x=o.querySelector('.offer-close');if(x)x.onclick=function(e){e.preventDefault();e.stopPropagation();closeOffer()};o.addEventListener('pointerdown',function(e){if(e.target===o)closeOffer()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&visible())closeOffer()});document.addEventListener('click',function(e){if(!visible())return;var back=e.target.closest('#fntCoreBack,[aria-label="Go back"]');if(back){e.preventDefault();e.stopImmediatePropagation();closeOffer()}},true)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
+})();
+</script>
 <style id="fnt-final-visible-gallery-fix">
 #fnIdeasProofLightbox .fn-selected-ideas{position:relative;width:min(840px,96vw);max-height:92vh;overflow:auto;padding:42px 13px 18px;background:#f4eadb}
 #fnIdeasProofLightbox .fn-selected-number{position:absolute;left:6px;top:6px;z-index:4;display:grid;place-items:center;min-width:30px;height:30px;padding:0 5px;border:2px solid #ff4f73;border-radius:18px;background:#050505;color:#fff;box-shadow:0 0 0 2px #f4eadb,0 0 12px rgba(255,79,115,.85);font:900 13px/1 Arial,sans-serif}
