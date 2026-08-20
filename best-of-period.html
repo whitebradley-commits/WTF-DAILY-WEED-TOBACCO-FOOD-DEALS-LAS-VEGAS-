@@ -44769,19 +44769,23 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 </script>
 <!-- v277: restore the San Diego coastline selector to the city tile hub -->
 <style id="bop-sd-city-hub-coast-v277">
-#bopSdCityHubCoast{position:relative;width:min(720px,calc(100vw - 24px));min-height:500px;margin:14px auto 20px;padding:22px 18px 24px;box-sizing:border-box;overflow:hidden;border:1.5px solid #F59E0B;border-radius:22px;background:#030303;box-shadow:0 0 16px rgba(245,158,11,.22);color:#fff}
-#bopSdCityHubCoast:before{content:'';position:absolute;left:17px;top:91px;bottom:20px;width:118px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 430'%3E%3Cpath d='M18 8 C92 42 30 86 80 124 C112 149 48 187 91 224 C117 247 61 289 99 324 C116 342 83 383 110 420' fill='none' stroke='%23F59E0B' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M27 20 C59 38 37 60 62 77 M67 112 C87 126 62 146 81 160 M77 210 C99 229 71 246 91 263 M88 309 C106 326 90 344 104 359' fill='none' stroke='%23F59E0B' stroke-width='1.5' opacity='.52'/%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 0 7px rgba(245,158,11,.8));pointer-events:none}
+#bopSdCityHubCoast{position:relative;width:min(720px,calc(100vw - 24px));min-height:500px;margin:14px auto 20px;padding:17px 12px 22px;box-sizing:border-box;overflow:hidden;border:0;background:#030303;color:#fff}
+#bopSdCityHubCoast:before{content:'';position:absolute;left:28%;top:88px;bottom:20px;width:34%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 430'%3E%3Cpath d='M18 7 C120 42 35 89 99 130 C133 153 53 194 111 231 C139 252 70 293 123 332 C144 350 105 389 143 420' fill='none' stroke='%23F59E0B' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M28 20 C78 42 43 63 79 83 M82 116 C112 132 78 151 105 168 M94 214 C126 232 91 251 117 269 M109 310 C137 329 115 347 137 365' fill='none' stroke='%23F59E0B' stroke-width='1.5' opacity='.5'/%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 0 7px rgba(245,158,11,.8));pointer-events:none}
 #bopSdCityHubCoast>*{position:relative;z-index:1}
 #bopSdCityHubCoast h2{margin:0;color:#fff;font:900 clamp(24px,6vw,38px)/1 Georgia,serif;text-align:center;text-shadow:0 0 8px rgba(255,255,255,.24)}
 #bopSdCityHubCoast .bop-sd-hub-sub{margin:6px 0 12px;color:#d8b466;font:800 10px/1.25 'Archivo Narrow',Arial,sans-serif;letter-spacing:.13em;text-align:center;text-transform:uppercase}
-.bop-sd-hub-coastline{position:relative;width:calc(100% - 105px);margin:18px 0 0 105px}
-.bop-sd-hub-areas{display:grid;gap:7px;padding:0}
-.bop-sd-hub-area{min-height:34px;padding:7px 12px;border:1px solid rgba(245,158,11,.82);border-radius:999px;background:rgba(3,3,3,.76);color:#F59E0B;font:900 10px/1 'Archivo Narrow',Arial,sans-serif;letter-spacing:.06em;text-align:left;text-transform:uppercase;white-space:nowrap;backdrop-filter:blur(3px)}
+.bop-sd-hub-coastline{position:relative;width:100%;margin-top:18px;padding-top:2px}
+.bop-sd-ocean-label{position:absolute;left:4%;top:172px;color:#F59E0B;font:900 10px/1 'Archivo Narrow',Arial,sans-serif;letter-spacing:.28em;transform:rotate(-90deg);text-transform:uppercase;text-shadow:0 0 7px rgba(245,158,11,.8)}
+.bop-sd-coastal-label{position:absolute;left:31%;top:154px;color:#F59E0B;font:900 9px/1 'Archivo Narrow',Arial,sans-serif;letter-spacing:.2em;transform:rotate(-72deg);text-transform:uppercase}
+.bop-sd-hub-areas{display:grid;gap:13px;width:55%;margin-left:45%;padding:3px 0}
+.bop-sd-hub-area{position:relative;min-height:42px;padding:7px 2px;border:0;background:transparent;color:#F59E0B;font:900 11px/1 'Archivo Narrow',Arial,sans-serif;letter-spacing:.08em;text-align:left;text-transform:uppercase;white-space:normal;text-shadow:0 0 6px rgba(245,158,11,.45)}
+.bop-sd-hub-area:before{content:'';position:absolute;right:100%;top:50%;width:clamp(34px,12vw,82px);height:1px;background:#F59E0B;box-shadow:0 0 5px rgba(245,158,11,.8);transform:rotate(var(--bop-sd-tick,0deg));transform-origin:right center}
+.bop-sd-hub-area:nth-child(1){--bop-sd-tick:-8deg}.bop-sd-hub-area:nth-child(2){--bop-sd-tick:-3deg}.bop-sd-hub-area:nth-child(3){--bop-sd-tick:4deg}.bop-sd-hub-area:nth-child(4){--bop-sd-tick:-5deg}.bop-sd-hub-area:nth-child(5){--bop-sd-tick:5deg}.bop-sd-hub-area:nth-child(6){--bop-sd-tick:-3deg}.bop-sd-hub-area:nth-child(7){--bop-sd-tick:4deg}
 .bop-sd-hub-area[aria-pressed="true"]{border-color:#ef3340;background:#26070d;color:#fff;box-shadow:0 0 11px rgba(239,51,64,.45)}
 .bop-sd-hub-results{display:none!important}
 .bop-sd-hub-place{display:grid;grid-template-columns:25px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;min-height:42px;padding:7px 9px;border:1px solid rgba(245,158,11,.32);border-radius:11px;background:#090909;color:#fff;text-align:left;text-decoration:none}
 .bop-sd-hub-place b{display:grid;place-items:center;width:23px;height:23px;border:1px solid #F59E0B;border-radius:50%;color:#F59E0B;font:900 9px/1 Arial,sans-serif}.bop-sd-hub-place strong{font:900 12px/1.1 'Archivo Narrow',Arial,sans-serif}.bop-sd-hub-place small{color:#ef3340;font:900 8px/1 Arial,sans-serif;letter-spacing:.08em}
-@media(max-width:430px){#bopSdCityHubCoast{min-height:500px;padding:20px 12px 22px}#bopSdCityHubCoast:before{left:8px;width:92px}.bop-sd-hub-coastline{width:calc(100% - 78px);margin-left:78px}.bop-sd-hub-area{font-size:9px;padding-inline:10px}.bop-sd-hub-place strong{font-size:11px}}
+@media(max-width:430px){#bopSdCityHubCoast{min-height:500px;padding:17px 9px 22px}#bopSdCityHubCoast:before{left:23%;width:40%}.bop-sd-hub-areas{width:58%;margin-left:42%}.bop-sd-hub-area{font-size:9px}.bop-sd-ocean-label{left:0}.bop-sd-coastal-label{left:25%}.bop-sd-hub-place strong{font-size:11px}}
 </style>
 <script id="bop-sd-city-hub-coast-v277-script">
 (function(){
@@ -44793,10 +44797,10 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  function mount(){
   var best=document.getElementById('bestOfOverlay');if(!best||!best.classList.contains('open')||String(window.boCityContext||'').toLowerCase()!=='sandiego'||String(window.boCurrentCat||'otheroptions').toLowerCase()!=='otheroptions'){var old=document.getElementById('bopSdCityHubCoast');if(old)old.remove();return}
   if(document.getElementById('bopSdCityHubCoast'))return;
-  var anchor=best.querySelector('.bo-picker-grid,.bo-alpha-groups,#boList');if(!anchor)return;
+  var anchor=best.querySelector('.bo-picker-grid');if(!anchor)return;
   if(selected()){anchor.hidden=false;anchor.style.removeProperty('display');return}
   var names=['Oceanside','Carlsbad','Encinitas / Cardiff','Del Mar / Solana Beach','La Jolla','PB / Pacific Beach','Downtown San Diego'];
-  var panel=document.createElement('section');panel.id='bopSdCityHubCoast';panel.innerHTML='<h2>SAN DIEGO COAST</h2><p class="bop-sd-hub-sub">Choose a coastal area, then choose a category</p><div class="bop-sd-hub-coastline"><div class="bop-sd-hub-areas">'+names.map(function(n){return'<button type="button" class="bop-sd-hub-area" data-area="'+esc(n)+'" aria-pressed="false">'+esc(n)+'</button>'}).join('')+'</div></div>';
+  var panel=document.createElement('section');panel.id='bopSdCityHubCoast';panel.innerHTML='<h2>SAN DIEGO COAST</h2><p class="bop-sd-hub-sub">Choose a coastal area</p><div class="bop-sd-hub-coastline"><span class="bop-sd-ocean-label">Ocean</span><span class="bop-sd-coastal-label">Coastal</span><div class="bop-sd-hub-areas">'+names.map(function(n){return'<button type="button" class="bop-sd-hub-area" data-area="'+esc(n)+'" aria-pressed="false">'+esc(n)+'</button>'}).join('')+'</div></div>';
   anchor.hidden=true;anchor.parentNode.insertBefore(panel,anchor);panel.querySelectorAll('.bop-sd-hub-area').forEach(function(b){b.addEventListener('click',function(){renderArea(panel,b.dataset.area,anchor)})});
  }
  function install(){if(typeof window.boRenderCategory!=='function'||window.boRenderCategory.__bopSdHubCoast)return;var original=window.boRenderCategory;function wrapped(){var r=original.apply(this,arguments);setTimeout(mount,80);setTimeout(mount,260);return r}wrapped.__bopSdHubCoast=true;window.boRenderCategory=wrapped}
