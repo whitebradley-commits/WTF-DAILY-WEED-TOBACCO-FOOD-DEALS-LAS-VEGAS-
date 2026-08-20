@@ -646,10 +646,49 @@ try{
 <script id="fn-team-finished-photography-layer">
 (() => {
   const ASSET = 'https://3000-itnriqdae85h3eg3805os-352df2ac.us2.manus.computer';
+  const makeDarkTune = theme => {
+    const rate = 16000, seconds = 24, length = rate * seconds;
+    const roots = theme === 'noir' ? [45,41,48,43] : [40,43,47,38];
+    const melody = theme === 'noir'
+      ? [69,null,72,74,72,null,67,69,65,null,69,72,67,null,65,64]
+      : [64,null,null,67,71,null,69,null,62,null,64,67,59,null,62,null];
+    const bpm = theme === 'noir' ? 92 : 74, beat = 60 / bpm;
+    const data = new Int16Array(length);
+    const hz = midi => 440 * Math.pow(2, (midi - 69) / 12);
+    for (let i = 0; i < length; i++) {
+      const t = i / rate, root = roots[Math.floor(t / (beat * 4)) % roots.length];
+      let sample = 0;
+      [0,3,7].forEach((interval, voice) => {
+        const f = hz(root + 12 + interval);
+        sample += Math.sin(2 * Math.PI * f * t + voice * .7) * .105;
+        sample += Math.sin(2 * Math.PI * f * .501 * t) * .035;
+      });
+      const bassPhase = (t % beat) / beat;
+      sample += Math.sin(2 * Math.PI * hz(root - 12) * t) * .24 * Math.exp(-bassPhase * 3.1);
+      const eighth = beat / 2, step = Math.floor(t / eighth) % melody.length;
+      const note = melody[step], leadPhase = (t % eighth) / eighth;
+      if (note) {
+        const f = hz(note);
+        sample += (Math.sin(2 * Math.PI * f * t) + .35 * Math.sin(2 * Math.PI * f * 2 * t))
+          * .13 * Math.sin(Math.PI * Math.min(1, leadPhase * 5)) * Math.exp(-leadPhase * 1.25);
+      }
+      const shimmer = Math.sin(2 * Math.PI * hz(root + 24) * t) * .025 * (1 + Math.sin(2 * Math.PI * .11 * t));
+      sample = Math.tanh((sample + shimmer) * 1.22) * .78;
+      data[i] = Math.max(-32767, Math.min(32767, sample * 32767));
+    }
+    const buffer = new ArrayBuffer(44 + data.byteLength), view = new DataView(buffer);
+    const text = (offset, value) => [...value].forEach((c, n) => view.setUint8(offset + n, c.charCodeAt(0)));
+    text(0,'RIFF'); view.setUint32(4,36 + data.byteLength,true); text(8,'WAVE'); text(12,'fmt ');
+    view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
+    view.setUint32(24,rate,true); view.setUint32(28,rate * 2,true); view.setUint16(32,2,true); view.setUint16(34,16,true);
+    text(36,'data'); view.setUint32(40,data.byteLength,true);
+    new Int16Array(buffer,44).set(data);
+    return URL.createObjectURL(new Blob([buffer], { type:'audio/wav' }));
+  };
   const MUSIC_TRACKS = {
-    night: { label:'ONE', src:ASSET + '/manus-storage/fnt_music_night_city_9ff992d5.mp3' },
-    pulse: { label:'TWO', src:ASSET + '/manus-storage/fnt_music_clean_pulse_4520fe47.mp3' },
-    rep: { label:'THREE', src:ASSET + '/manus-storage/fnt_music_rep_hard_751037db.mp3' }
+    night: { label:'MIDNIGHT CITY', src:ASSET + '/manus-storage/fnt_music_night_city_9ff992d5.mp3' },
+    pulse: { label:'NEON NOIR', synth:'noir' },
+    rep: { label:'AFTER HOURS', synth:'after' }
   };
   // F’N TEAM lock: approved Yankees ALO Crew Pink standard back. Do not substitute during control changes.
   const LOCKED_CREW_PINK_STANDARD_BACK = ASSET + '/manus-storage/fnt-alo-yankees-crew-pink-male-nyc-back_fc1c3454.png';
@@ -753,20 +792,21 @@ try{
     event?.stopImmediatePropagation?.();
     return window.FN_OPEN_ORDERING_HELP?.(event) || false;
   };
-  const installIfNotShownLink = host => {
-    if (!host) return null;
-    let link = host.querySelector(':scope > .fn-temp-help');
-    if (!link) {
-      link = document.createElement('button');
-      link.type = 'button';
-      link.className = 'fn-temp-help';
-      link.textContent = 'IF NOT SHOWN';
-      link.setAttribute('aria-label', 'Open ordering help for an option not shown');
-      host.append(link);
-    }
-    link.onclick = openOrderingHelp;
-    return link;
-  };
+const installIfNotShownLink = host => {
+  if (!host) return null;
+  let link = host.querySelector(':scope > .fn-temp-help');
+  if (!link) {
+    link = document.createElement('button');
+    link.type = 'button';
+    link.className = 'fn-temp-help';
+    host.append(link);
+  }
+  link.textContent = 'I\u2019M CONFUSED';
+  link.setAttribute('aria-label', 'Open the I\u2019m Confused help panel');
+  link.dataset.fnHelpTrigger = 'true';
+  link.onclick = openOrderingHelp;
+  return link;
+};
   const showBasicTemporaryPreview = card => {
     const photo = card.querySelector('.photo.studio-photo');
     if (!photo) return;
@@ -1217,7 +1257,7 @@ try{
     panel.id = 'fnMusicPanel';
     panel.hidden = true;
     panel.setAttribute('aria-label', 'Music controls');
-    panel.innerHTML = '<button type="button" class="fn-music-close" aria-label="Close music controls">×</button><span>CHOOSE YOUR MUSIC</span><div class="fn-music-options"><button type="button" data-fn-music-track="night">ONE</button><button type="button" data-fn-music-track="pulse">TWO</button><button type="button" data-fn-music-track="rep">THREE</button><button type="button" data-fn-music-track="off">OFF</button></div>';
+    panel.innerHTML = '<button type="button" class="fn-music-close" aria-label="Close music controls">×</button><span>CHOOSE YOUR MUSIC</span><div class="fn-music-options"><button type="button" data-fn-music-track="night">MIDNIGHT CITY</button><button type="button" data-fn-music-track="pulse">NEON NOIR</button><button type="button" data-fn-music-track="rep">AFTER HOURS</button><button type="button" data-fn-music-track="off">OFF</button></div>';
     document.body.append(orb, panel);
     const DEFAULT_TRACK = 'off';
     let visitorPickedTrack = false;
@@ -1225,9 +1265,10 @@ try{
     const setTrack = (track, { shouldPlay = true, remember = true } = {}) => {
       const current = MUSIC_TRACKS[track];
       if (current) {
-        if (audio.src !== new URL(current.src, window.location.href).href) {
+        const source = current.src || (current.generatedSrc ||= makeDarkTune(current.synth));
+        if (audio.src !== new URL(source, window.location.href).href) {
           audio.pause();
-          audio.src = current.src;
+          audio.src = source;
           audio.load();
         }
         if (shouldPlay) {
@@ -1902,4 +1943,21 @@ try{
   document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.fn-help-examples,[data-fn-examples-trigger="true"]');if(!t)return;e.preventDefault();e.stopImmediatePropagation();document.getElementById('fntHelpModal')?.classList.remove('open');openFinal()},true);
 })();
 </script>
+<style id="fnt-confused-link-readability-fix">
+  .fn-temp-help,
+  button.fn-temp-help[data-fn-help-trigger="true"] {
+    color: #fff !important;
+    background: #111 !important;
+    border: 1px solid #fff !important;
+    border-radius: 999px !important;
+    padding: 8px 12px !important;
+    font: 900 10px/1 Arial, sans-serif !important;
+    letter-spacing: .1em !important;
+    text-decoration: none !important;
+    box-shadow: 3px 3px 0 #6b44c9 !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+</style>
 </body></html>
