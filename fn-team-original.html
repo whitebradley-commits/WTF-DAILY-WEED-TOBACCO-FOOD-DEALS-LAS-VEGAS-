@@ -1856,6 +1856,60 @@ try{
   });
 })();
 </script>
+<style id="fnt-core-repair-style">
+html{scroll-behavior:smooth}body.fnt-lock-scroll{overflow:hidden}
+#fntCoreBack{position:fixed;z-index:2147483638;top:max(14px,env(safe-area-inset-top));left:14px;width:52px;height:52px;border:3px solid #d5ae55;border-radius:50%;background:#050505;color:#c60c30;box-shadow:0 0 0 3px #050505,0 5px 16px #0007;font:1000 31px/1 Arial,sans-serif;display:none;place-items:center}
+#fntCoreBack.is-visible{display:grid}
+#fnMusicOrb,#fntNativeMusicDock,#fntCompactMusicOrb,#fntCompactMusicModal,#fntMusicChoicePopup,#fntTinyMusicPopup{display:none!important}
+#fntCoreMusicOrb{position:fixed;z-index:2147483637;left:20px;top:57vh;width:72px;height:72px;border:4px solid #111;border-radius:50%;background:#7346df;color:#fff;box-shadow:5px 6px 0 #111,0 0 17px #7346df88;font:1000 10px/1.05 Arial,sans-serif;letter-spacing:.1em}
+#fntCoreMusicOrb.is-playing{background:#f3c95a;color:#111;animation:fntCorePulse 1.2s ease-in-out infinite}
+@keyframes fntCorePulse{50%{transform:scale(1.06);box-shadow:5px 6px 0 #111,0 0 28px #f3c95acc}}
+#fntCoreMusicModal{position:fixed;z-index:2147483640;inset:0;display:none;place-items:center;padding:18px;background:#0009;backdrop-filter:blur(3px)}#fntCoreMusicModal.open{display:grid}
+#fntCoreMusicCard{position:relative;width:min(310px,92vw);padding:25px 19px 18px;border:3px solid #111;background:#fff4df;color:#111;box-shadow:9px 9px 0 #111;text-align:center}#fntCoreMusicCard h2{margin:0 0 5px;font:1000 24px/1 Arial}#fntCoreMusicCard p{margin:0 0 15px;font:900 9px/1.3 Arial;letter-spacing:.12em}
+.fntCoreTrack{display:block;width:100%;margin:8px 0;padding:13px;border:2px solid #111;background:#fff;color:#111;box-shadow:3px 3px 0 #111;font:1000 13px/1 Arial;letter-spacing:.08em}.fntCoreTrack.active{background:#7346df;color:#fff}.fntCoreTrack.off{background:#111;color:#fff4df}
+#fntCoreMusicClose{position:absolute;right:7px;top:5px;border:0;background:none;font:1000 27px/1 Arial}
+@media(max-width:700px){#fntCoreBack{width:47px;height:47px;font-size:28px}#fntCoreMusicOrb{left:14px;width:66px;height:66px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}#fntCoreMusicOrb.is-playing{animation:none}}
+</style>
+<button id="fntCoreBack" type="button" aria-label="Go back">×</button>
+<button id="fntCoreMusicOrb" type="button" aria-label="Music options" aria-pressed="false">MUSIC</button>
+<div id="fntCoreMusicModal" aria-hidden="true"><section id="fntCoreMusicCard" role="dialog" aria-modal="true" aria-label="Music options"><button id="fntCoreMusicClose" type="button" aria-label="Close music options">×</button><h2>MUSIC</h2><p>CHOOSE A SOUND</p><button class="fntCoreTrack" data-track="one" type="button">ONE · NIGHT RUN</button><button class="fntCoreTrack" data-track="two" type="button">TWO · STREET RHYTHM</button><button class="fntCoreTrack" data-track="three" type="button">THREE · FAST LANE</button><button class="fntCoreTrack off" data-track="off" type="button">OFF</button></section></div>
+<script id="fnt-core-repair-script">
+(function(){
+  'use strict';
+  var picker=document.getElementById('picker'),loading=document.getElementById('loading'),shop=document.getElementById('shop');
+  var back=document.getElementById('fntCoreBack'),musicOrb=document.getElementById('fntCoreMusicOrb'),musicModal=document.getElementById('fntCoreMusicModal');
+  var renderingHistory=false,lastRoute='',modalIds=['offer','modal','cartModal','fntBrandInfoOverlay','fntLawOverlay','fntGalleryLightbox','fntMonthlyExample','fntHelpModal'];
+  function route(){return shop&&getComputedStyle(shop).display!=='none'?'shop':'picker'}
+  function closeOverlays(){var closed=false;modalIds.forEach(function(id){var el=document.getElementById(id);if(!el)return;var visible=el.classList.contains('open')||el.classList.contains('is-open')||getComputedStyle(el).display==='grid';if(!visible)return;closed=true;el.classList.remove('open','is-open');el.setAttribute('aria-hidden','true');if(id==='offer'||id==='modal'||id==='cartModal')el.style.display='none'});if(musicModal.classList.contains('open')){closeMusic();closed=true}return closed}
+  function updateBack(){back.classList.toggle('is-visible',route()==='shop'||modalIds.some(function(id){var e=document.getElementById(id);return e&&(e.classList.contains('open')||e.classList.contains('is-open')||getComputedStyle(e).display==='grid')})||musicModal.classList.contains('open'))}
+  function recordRoute(replace){if(renderingHistory)return;var next=route(),teamName=window.getFntShareTeam?window.getFntShareTeam():'';if(next===lastRoute&&!replace)return;lastRoute=next;var state={fnt:true,route:next,team:teamName||''};try{history[replace?'replaceState':'pushState'](state,'',location.href)}catch(e){}updateBack()}
+  function showPickerFromHistory(){closeOverlays();if(shop)shop.style.display='none';if(loading)loading.style.display='none';if(picker)picker.style.display='block';window.scrollTo({top:0,behavior:'auto'});lastRoute='picker';updateBack()}
+  function showShopFromHistory(state){closeOverlays();var name=state&&state.team;if(name&&typeof window.startWithTeam==='function'){window.startWithTeam(name)}else if(typeof window.showShop==='function'){window.showShop()}requestAnimationFrame(function(){window.scrollTo({top:0,behavior:'auto'});lastRoute='shop';updateBack()})}
+  var observer=new MutationObserver(function(){var next=route();if(next!==lastRoute){recordRoute(false);if(next==='shop')requestAnimationFrame(function(){window.scrollTo({top:0,behavior:'auto'})})}updateBack()});
+  [picker,loading,shop].forEach(function(el){if(el)observer.observe(el,{attributes:true,attributeFilter:['style','class']})});
+  history.replaceState({fnt:true,route:route(),team:window.getFntShareTeam?window.getFntShareTeam():''},'',location.href);lastRoute=route();
+  window.addEventListener('popstate',function(e){renderingHistory=true;var state=e.state||{route:'picker'};if(state.route==='shop')showShopFromHistory(state);else showPickerFromHistory();setTimeout(function(){renderingHistory=false},80)});
+  back.addEventListener('click',function(){if(closeOverlays()){updateBack();return}if(route()==='shop'){history.back()}else showPickerFromHistory()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(closeOverlays())updateBack()}});
+  document.addEventListener('click',function(e){var premium=e.target.closest&&e.target.closest('.premium-callout,[data-fn-premium-trigger]');if(premium){e.preventDefault();if(route()==='picker'&&typeof window.jumpToReserveOrPicker==='function')window.jumpToReserveOrPicker();requestAnimationFrame(function(){var reserve=document.getElementById('reserve');if(reserve)reserve.scrollIntoView({behavior:'smooth',block:'start'})})}setTimeout(updateBack,0)},true);
+  var oldRestart=window.restart;if(typeof oldRestart==='function')window.restart=function(){oldRestart();window.scrollTo({top:0,behavior:'smooth'});recordRoute(false)};
+
+  var ctx=null,master=null,timer=null,active='off',step=0,hasStarted=false;
+  function tone(freq,when,duration,volume,type){var o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,when);g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(volume,when+.012);g.gain.exponentialRampToValueAtTime(.0001,when+duration);o.connect(g).connect(master);o.start(when);o.stop(when+duration+.04)}
+  function phrase(){if(!ctx||active==='off')return;var scales={one:[164.81,196,220,246.94],two:[174.61,220,261.63,293.66],three:[196,246.94,293.66,329.63]},notes=scales[active]||scales.three,now=ctx.currentTime;for(var i=0;i<8;i++){var at=now+i*.22,f=notes[(step+i)%notes.length];tone(f,at,.16,active==='three'?.075:.06,'triangle');if(i%2===0)tone(f/2,at,.19,.025,'sine')}step=(step+1)%notes.length;timer=setTimeout(phrase,1740)}
+  function paintMusic(){musicOrb.classList.toggle('is-playing',active!=='off');musicOrb.setAttribute('aria-pressed',String(active!=='off'));musicOrb.textContent=active==='off'?'MUSIC':'MUSIC ON';document.querySelectorAll('.fntCoreTrack').forEach(function(b){b.classList.toggle('active',b.dataset.track===active)})}
+  function stopMusic(){if(timer){clearTimeout(timer);timer=null}if(ctx){try{ctx.close()}catch(e){}ctx=null;master=null}active='off';paintMusic()}
+  function startMusic(track){stopMusic();active=track;hasStarted=true;try{ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.34;master.connect(ctx.destination);Promise.resolve(ctx.resume()).then(phrase).catch(stopMusic)}catch(e){stopMusic()}paintMusic()}
+  function openMusic(){musicModal.classList.add('open');musicModal.setAttribute('aria-hidden','false');document.body.classList.add('fnt-lock-scroll');updateBack()}
+  function closeMusic(){musicModal.classList.remove('open');musicModal.setAttribute('aria-hidden','true');document.body.classList.remove('fnt-lock-scroll');updateBack()}
+  musicOrb.addEventListener('click',openMusic);document.getElementById('fntCoreMusicClose').addEventListener('click',closeMusic);musicModal.addEventListener('click',function(e){if(e.target===musicModal)closeMusic()});
+  musicModal.querySelectorAll('[data-track]').forEach(function(btn){btn.addEventListener('click',function(){var t=this.dataset.track;if(t==='off')stopMusic();else startMusic(t);closeMusic()})});
+  function firstGesture(e){if(hasStarted||e.target.closest('#fntCoreMusicModal,#fntCoreMusicOrb'))return;hasStarted=true;startMusic('three');document.removeEventListener('pointerdown',firstGesture,true);document.removeEventListener('touchstart',firstGesture,true)}
+  document.addEventListener('pointerdown',firstGesture,true);document.addEventListener('touchstart',firstGesture,true);
+  window.addEventListener('pagehide',function(){if(timer)clearTimeout(timer)});updateBack();
+})();
+</script>
 </body></html>
 <!-- FN Team GO button and self-contained music repair. -->
 <style id="fnt-go-cream-button-style">
