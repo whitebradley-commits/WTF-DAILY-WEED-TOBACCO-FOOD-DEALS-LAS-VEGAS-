@@ -1220,7 +1220,7 @@ const installIfNotShownLink = host => {
     const helpCard = helpModal.querySelector('.fnt-help-card, section');
     if (helpCard && helpCard.dataset.fnHelpCopy !== 'ideas-v3') {
       helpCard.dataset.fnHelpCopy = 'ideas-v3';
-      helpCard.innerHTML = '<button class="fnt-help-close" type="button" aria-label="Close">×</button><h2>ARE YOU F’N CONFUSED?</h2><p>With hundreds of teams and so many colors and combinations, not every possibility can be shown on screen. Reference an example number or leave detailed notes about exactly what you want, and we’ll figure it out. <strong>No modifications to any James Perse or ALO numbered item. Period.</strong></p><p class="fn-flagship-copy">For the best rendition, check out our flagship <button type="button" class="fn-yankees-hotlink">NEW YORK YANKEES</button>.</p><button type="button" class="fn-help-examples">EXAMPLES</button><a class="fnt-help-phone" href="tel:+14244346322">424.434.6322<small>CALL US ANYTIME · AVAILABLE 24/7/365</small></a>';
+      helpCard.innerHTML = '<button class="fnt-help-close" type="button" aria-label="Close">×</button><h2>ARE YOU F’N CONFUSED?</h2><p>With hundreds of teams and so many colors and combinations, not every possibility can be shown on screen. Reference an example number or leave detailed notes about exactly what you want, and we’ll get it done. <strong>No modifications to any James Perse or ALO numbered item. Period.</strong></p><p class="fn-flagship-copy">For the best rendition, check out our flagship <button type="button" class="fn-yankees-hotlink">NEW YORK YANKEES</button>.</p><button type="button" class="fn-help-examples">EXAMPLES</button><a class="fnt-help-phone" href="tel:+14244346322">424.434.6322<small>CALL US ANYTIME · AVAILABLE 24/7/365</small></a>';
     }
     if (helpButton.dataset.fnHelpBound === 'true') return;
     helpButton.dataset.fnHelpBound = 'true';
@@ -2174,19 +2174,7 @@ const installIfNotShownLink = host => {
     const cards = Array.from(row.children).filter(node => node.classList?.contains('fnt-experience-card'));
     cards.slice(6).forEach(card => card.remove());
   };
-  const lockYankeesPhotos = () => {
-    const currentTeam = typeof chosen !== 'undefined' ? String(chosen).trim().toLowerCase() : '';
-    if (currentTeam !== 'new york yankees') return;
-    const basic = Array.from(document.querySelectorAll('#products .product-card'));
-    const premium = Array.from(document.querySelectorAll('#reserve .reserve-card'));
-    basic.forEach((card, i) => {
-      spriteStyle(card.querySelector('.photo,.studio-photo'), i === 0 ? 8 : 7);
-      const color = card.querySelector('.color-name');
-      if (color) color.textContent = 'BLACK / DISTRESSED GRAY';
-    });
-    premium.forEach((card, i) => spriteStyle(card.querySelector('.photo,.studio-photo'), i % 2 ? 8 : 7));
-  };
-  const install = () => { lockGoButton(); lockPackaging(); lockYankeesPhotos(); };
+  const install = () => { lockGoButton(); lockPackaging(); };
   const priorRules = window.FN_TEAM_APPLY_PRODUCT_RULES;
   if (typeof priorRules === 'function') {
     window.FN_TEAM_APPLY_PRODUCT_RULES = function(...args) {
@@ -2197,11 +2185,6 @@ const installIfNotShownLink = host => {
       return result;
     };
   }
-  document.addEventListener('click', event => {
-    const currentTeam = typeof chosen !== 'undefined' ? String(chosen).trim().toLowerCase() : '';
-    if (currentTeam !== 'new york yankees') return;
-    if (event.target.closest?.('#products button,#reserve button')) setTimeout(lockYankeesPhotos,40);
-  }, true);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',install);
   else install();
   window.addEventListener('load',install,{once:true});
@@ -2265,7 +2248,7 @@ const installIfNotShownLink = host => {
   #fntHelpModal .fnt-help-card p { color:#fff !important;font-size:11px !important;line-height:1.36 !important;text-align:center !important; }
   #fntHelpModal .fnt-help-card strong { color:#d5ae55 !important; }
   #fntHelpModal .fn-flagship-copy { margin:10px 0 0 !important; }
-  #fntHelpModal .fnt-help-close { right:47px !important;top:31px !important;width:38px !important;height:38px !important;border:2px solid #d5ae55 !important;background:#050505 !important;color:#fff !important;box-shadow:3px 3px 0 #000,0 0 11px rgba(213,174,85,.5) !important; }
+  #fntHelpModal .fnt-help-close { right:64px !important;top:49px !important;width:40px !important;height:40px !important;z-index:10 !important;border:2px solid #d5ae55 !important;background:#050505 !important;color:#fff !important;box-shadow:3px 3px 0 #000,0 0 11px rgba(213,174,85,.5) !important; }
   #fntHelpModal .fn-help-examples,
   #fntHelpModal .fn-yankees-hotlink,
   #fntHelpModal .fnt-help-phone {
@@ -2279,7 +2262,7 @@ const installIfNotShownLink = host => {
   #fntHelpModal .fnt-help-phone small { color:#fff !important;font-size:7px !important; }
   @media(max-width:430px){
     #fntHelpModal .fnt-help-card { width:92vw !important;min-height:92vw !important;padding:52px 37px 36px !important; }
-    #fntHelpModal .fnt-help-close { right:38px !important;top:27px !important; }
+    #fntHelpModal .fnt-help-close { right:53px !important;top:44px !important; }
     #fntHelpModal .fnt-help-card h2 { font-size:20px !important; }
     #fntHelpModal .fnt-help-card p { font-size:10px !important; }
   }
