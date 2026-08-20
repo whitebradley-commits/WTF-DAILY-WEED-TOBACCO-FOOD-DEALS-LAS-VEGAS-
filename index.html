@@ -7903,7 +7903,7 @@ button[id*="back"] svg,
 </div>
 <div class="hh-sub-spacer" aria-hidden="true"></div>
 <div class="hh-best-wrap">
-<a aria-label="Visit Best Of Period" class="hh-best-link" href="best-of-period.html" id="bestOfExternalLink"><span class="hub-best-mini-badge"><span class="ring-outer"></span><span class="ring-inner"></span><span class="hub-best-mini-label">Best Of</span><span class="hub-best-mini-city is-active" id="hhBestMiniCity">Vegas</span><span class="hub-best-mini-period">Period<span class="period-mark">©</span></span></span></a>
+<a aria-label="Visit Best Of Period" class="hh-best-link" href="best-of-period.html?landing=orbits" id="bestOfExternalLink"><span class="hub-best-mini-badge"><span class="ring-outer"></span><span class="ring-inner"></span><span class="hub-best-mini-label">Best Of</span><span class="hub-best-mini-city is-active" id="hhBestMiniCity">Vegas</span><span class="hub-best-mini-period">Period<span class="period-mark">©</span></span></span></a>
 </div>
 <div class="hh-list" id="hhList">
 <!-- populated by JS -->
@@ -20485,7 +20485,7 @@ window.wtfPrepare24Hours=async function(city){
     document.querySelectorAll('.wtf2-track').forEach(function(b){b.addEventListener('click',function(){selectMusic(b.dataset.track);});});
     q('wtf2SharePage').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
     q('wtf2SharePageMain').addEventListener('click',function(e){shareWtf2(e.currentTarget);});
-    var bestOfLink=q('bestOfExternalLink');if(bestOfLink)bestOfLink.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.location.assign('best-of-period.html');});
+    var bestOfLink=q('bestOfExternalLink');if(bestOfLink)bestOfLink.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.location.assign('best-of-period.html?landing=orbits');});
     document.querySelectorAll('.wtf2-category').forEach(function(b){b.addEventListener('click',function(){openDirectory(b.dataset.cat);});});
     var featured=q('wtf2Featured');if(featured)featured.addEventListener('click',function(e){var card=e.target.closest('.wtf2-feature-card');if(!card)return;var kind=card.dataset.category;openDirectory(kind==='tobacco'?'Tobacco':kind==='food'?'Food':'Weed');});
     q('wtf2AreaRow').addEventListener('click',function(e){var b=e.target.closest('.wtf2-area');if(!b)return;currentArea=b.dataset.area;document.querySelectorAll('#wtf2AreaRow .wtf2-area').forEach(function(x){x.classList.toggle('active',x===b);});render();});
@@ -21182,3 +21182,5 @@ window.wtfPrepare24Hours=async function(city){
 </script>
 
 <!-- WTFdd root homepage delivery marker: native-FN-music package -->
+
+<!-- High & Hungry now targets Best of Period five-orb landing -->
