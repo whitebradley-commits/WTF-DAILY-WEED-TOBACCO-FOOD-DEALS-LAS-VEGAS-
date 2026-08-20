@@ -2882,6 +2882,8 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
   opacity:1!important;pointer-events:auto!important;touch-action:manipulation!important;
 }
 #fntShippingGateV2 .offer{pointer-events:auto!important}
+body.fnt-shipping-accepted #offer,
+body.fnt-shipping-accepted #fntShippingGateV2{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 #fntShippingGateV2 button{display:none!important}
 #fntShippingGateV2 #fntGuaranteedLockButton{
   position:relative!important;z-index:2147483647!important;display:flex!important;
@@ -2901,6 +2903,8 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
 (function(){
   function applyCreditAndEnter(event){
     if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}
+    window.__FNT_SHIPPING_ACCEPTED=true;
+    document.body.classList.add('fnt-shipping-accepted');
     try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(e){}
     try{free=true}catch(e){}
     var saving=document.getElementById('saving');if(saving)saving.hidden=false;
@@ -2918,8 +2922,16 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
     document.documentElement.style.overflow='';
     var gate=document.getElementById('fntShippingGateV2');if(gate)gate.remove();
     var old=document.getElementById('offer');if(old)old.remove();
+    [0,80,250,700,1500].forEach(function(delay){setTimeout(function(){
+      document.body.classList.add('fnt-shipping-accepted');
+      document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
+      document.querySelectorAll('#offer,#fntShippingGateV2').forEach(function(node){node.remove()});
+      document.documentElement.style.overflowY='auto';document.body.style.overflowY='auto';
+      if(typeof window.FNT_ENSURE_CONTROLS==='function')window.FNT_ENSURE_CONTROLS();
+    },delay)});
     return false;
   }
+  window.FNT_LOCK_IN_SHIPPING=applyCreditAndEnter;
   function install(){
     var old=document.getElementById('offer');
     var gate=old?old.cloneNode(true):document.createElement('div');
@@ -2935,16 +2947,27 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
     var button=document.createElement('button');
     button.id='fntGuaranteedLockButton';button.type='button';
     button.setAttribute('aria-label','Lock in free priority shipping and enter the site');
+    button.setAttribute('onclick','return window.FNT_LOCK_IN_SHIPPING(event)');
+    button.setAttribute('onpointerdown','return window.FNT_LOCK_IN_SHIPPING(event)');
+    button.setAttribute('ontouchstart','return window.FNT_LOCK_IN_SHIPPING(event)');
     button.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 11.5 16 6l11 5.5v11L16 28 5 22.5z"></path><path d="m5 11.5 11 5.6 11-5.6M16 17.1V28M11 8.5l11 5.5"></path></svg><span>LOCK IT IN</span>';
     var details=card.querySelector('small');if(details)details.before(button);else card.append(button);
     button.onpointerdown=applyCreditAndEnter;
+    button.ontouchstart=applyCreditAndEnter;
     button.ontouchend=applyCreditAndEnter;
     button.onclick=applyCreditAndEnter;
+    function gateTap(event){
+      var target=event.target;
+      if(target===button||(target.closest&&target.closest('#fntGuaranteedLockButton')))applyCreditAndEnter(event);
+    }
+    gate.addEventListener('pointerdown',gateTap,{capture:true,passive:false});
+    gate.addEventListener('touchstart',gateTap,{capture:true,passive:false});
+    gate.addEventListener('touchend',gateTap,{capture:true,passive:false});
+    gate.addEventListener('click',gateTap,true);
     document.body.append(gate);
     document.body.classList.add('fnt-lock-scroll');
     try{localStorage.removeItem('fnt-free-shipping-v1')}catch(e){}
     try{free=false}catch(e){}
-    window.FNT_LOCK_IN_SHIPPING=applyCreditAndEnter;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
@@ -2974,6 +2997,10 @@ body.fnt-on-home #fntCoreBack{display:none!important}
   function onHome(){var picker=document.getElementById('picker');return !!picker&&getComputedStyle(picker).display!=='none'}
   function markRoute(){
     document.body.classList.toggle('fnt-on-home',onHome());
+    if(window.__FNT_SHIPPING_ACCEPTED){
+      document.body.classList.add('fnt-shipping-accepted');
+      document.querySelectorAll('#offer,#fntShippingGateV2').forEach(function(node){node.remove()});
+    }
     if(!document.getElementById('fntShippingGateV2')){
       document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
       document.documentElement.style.overflowY='auto';document.body.style.overflowY='auto';
@@ -2997,6 +3024,7 @@ body.fnt-on-home #fntCoreBack{display:none!important}
     document.querySelectorAll('#fnMusicOrb,#fntCoreMusicOrb,#fntCompactMusicOrb,#fntNativeMusicDock,#fntCompactMusicModal,#fntMusicChoicePopup,#fntTinyMusicPopup').forEach(function(el){el.remove()});
   }
   function install(){
+    if(document.getElementById('fntOneMusicOrb')){removeLegacyMusic();markRoute();return}
     removeLegacyMusic();
     var oldBack=document.getElementById('fntCoreBack');if(oldBack)oldBack.setAttribute('aria-hidden','true');
     var go=document.getElementById('teamTypeGo');
@@ -3023,6 +3051,7 @@ body.fnt-on-home #fntCoreBack{display:none!important}
     markRoute();setInterval(markRoute,400);
     setTimeout(removeLegacyMusic,350);setTimeout(removeLegacyMusic,900);setTimeout(removeLegacyMusic,1700);
   }
+  window.FNT_ENSURE_CONTROLS=install;
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(install,50)},{once:true});else setTimeout(install,50);
 })();
 </script>
