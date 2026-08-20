@@ -2703,24 +2703,42 @@ html body.fnt-shipping-accepted #offer{display:none!important;visibility:hidden!
     }
   }
   function accept(e){
-    if(e){e.preventDefault();e.stopPropagation()}
-    if(accepted)return false;
+    if(e){e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation()}
     accepted=true;
     try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(err){}
     try{free=true}catch(err){}
-    document.body.classList.add('fnt-shipping-accepted');
-    document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
-    document.body.style.overflow='';
-    document.documentElement.style.overflow='';
-    var o=gate();
-    if(o){
-      o.setAttribute('aria-hidden','true');
-      o.style.setProperty('display','none','important');
-      o.style.setProperty('pointer-events','none','important');
+    function finishEntry(){
+      try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(err){}
+      try{free=true}catch(err){}
+      document.body.classList.add('fnt-shipping-accepted');
+      document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
+      document.body.style.overflow='';
+      document.body.style.pointerEvents='';
+      document.documentElement.style.overflow='';
+      var o=gate();
+      if(o){
+        o.setAttribute('aria-hidden','true');
+        o.style.setProperty('display','none','important');
+        o.style.setProperty('visibility','hidden','important');
+        o.style.setProperty('opacity','0','important');
+        o.style.setProperty('pointer-events','none','important');
+      }
+      var saving=document.getElementById('saving');
+      if(saving)saving.hidden=false;
+      try{sync()}catch(err){}
+      var cartButton=document.getElementById('cart')||document.querySelector('header .cart');
+      var count=0;
+      try{count=cartItems.length}catch(err){}
+      if(cartButton){
+        cartButton.hidden=false;
+        cartButton.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING';
+        cartButton.setAttribute('aria-label','Cart. Free priority shipping credit of 33 dollars and 50 cents applied.');
+      }
     }
-    var saving=document.getElementById('saving');
-    if(saving)saving.hidden=false;
-    try{sync()}catch(err){}
+    finishEntry();
+    setTimeout(finishEntry,0);
+    setTimeout(finishEntry,120);
+    setTimeout(finishEntry,600);
     return false;
   }
   function start(){
@@ -2731,6 +2749,10 @@ html body.fnt-shipping-accepted #offer{display:none!important;visibility:hidden!
     document.addEventListener('touchend',function(e){
       if(e.target.closest&&e.target.closest('#offer .claim-btn'))accept(e);
     },{capture:true,passive:false});
+    document.addEventListener('pointerup',function(e){
+      if(e.target.closest&&e.target.closest('#offer .claim-btn'))accept(e);
+    },true);
+    window.fntLockInAndEnter=accept;
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
   window.addEventListener('load',function(){if(!accepted)showGate()},{once:true});
