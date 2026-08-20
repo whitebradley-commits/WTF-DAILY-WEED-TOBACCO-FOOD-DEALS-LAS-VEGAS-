@@ -1874,35 +1874,6 @@ try{
 <style id="fnt-final-offer-kill-switch">
 html body #offer{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 </style>
-<script id="fnt-final-open-site-fix">
-(function(){return;
-  function openSite(){
-    try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(e){}
-    try{free=true}catch(e){}
-    var offer=document.getElementById('offer');
-    if(offer)offer.remove();
-    if(document.body){
-      document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');
-      document.body.style.overflow='';
-      document.body.style.pointerEvents='';
-    }
-    document.documentElement.style.overflow='';
-    var saving=document.getElementById('saving');
-    if(saving)saving.hidden=false;
-    try{sync()}catch(e){}
-    var cart=document.getElementById('cart');
-    var count=0;
-    try{count=cartItems.length}catch(e){}
-    if(cart){
-      cart.hidden=false;
-      cart.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING';
-    }
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',openSite,{once:true});else openSite();
-  window.addEventListener('load',openSite,{once:true});
-  setTimeout(openSite,400);
-})();
-</script>
 <style id="fnt-shipping-offer-final-behavior-style">
 body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-label="Go back"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #offer{pointer-events:auto!important;touch-action:manipulation!important}#offer .offer{pointer-events:auto!important;overflow:visible!important}
@@ -1911,22 +1882,6 @@ body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-lab
 #offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
 @media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
 </style>
-<script id="fnt-shipping-offer-final-behavior-script">
-(function(){
-var REOFFER_DELAY=240000,reofferTimer=0,declinedOnce=false;
-function offer(){return document.getElementById('offer')}function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
-function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
-function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
-function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
-function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
-function decline(){try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}}
-function accept(){clearTimeout(reofferTimer);try{free=true}catch(e){}localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart()}
-window.closeOfferForConstruction=decline;window.claim=accept;
-function actionFromEvent(e){var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;if(!target)return;e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();if(target.classList.contains('offer-close'))decline();else accept()}
-function bind(){var o=offer();if(!o)return;var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}o.addEventListener('pointerup',actionFromEvent,true);o.addEventListener('click',actionFromEvent,true);o.addEventListener('click',function(e){if(e.target===o)decline()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0)}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
-})();
-</script>
 <style id="fnt-shipping-offer-final-behavior-style">
 /* Only the offer's own close control is shown while this promotion is open. */
 body.fnt-shipping-offer-open #fntCoreBack,
@@ -1946,61 +1901,11 @@ body.fnt-shipping-offer-open > [aria-label="Go back"]{display:none!important;vis
 #offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
 @media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
 </style>
-<script id="fnt-shipping-offer-final-behavior-script">
-(function(){
-  var REOFFER_DELAY=240000, reofferTimer=0, declinedOnce=false;
-  function offer(){return document.getElementById('offer')}
-  function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
-  function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
-  function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
-  function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
-  function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
-  function decline(){
-    try{free=false}catch(e){}
-    localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();
-    if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}
-  }
-  function accept(){
-    clearTimeout(reofferTimer);try{free=true}catch(e){}
-    localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart();
-  }
-  window.closeOfferForConstruction=decline;
-  window.claim=accept;
-  function actionFromEvent(e){
-    var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;
-    if(!target)return;
-    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-    if(target.classList.contains('offer-close'))decline();else accept();
-  }
-  function bind(){
-    var o=offer();if(!o)return;
-    var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');
-    if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}
-    if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}
-    o.addEventListener('pointerup',actionFromEvent,true);
-    o.addEventListener('click',actionFromEvent,true);
-    o.addEventListener('click',function(e){if(e.target===o)decline()});
-    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});
-    setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
-  window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
-})();
-</script>
 <style id="fnt-shipping-offer-exit-fix">
 #offer .offer{position:relative!important;overflow:visible!important}
 #offer .offer-close{display:grid!important;place-items:center!important;position:fixed!important;right:18px!important;top:max(18px,env(safe-area-inset-top))!important;z-index:2147483647!important;width:58px!important;height:58px!important;margin:0!important;padding:0 0 3px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:50%!important;background:#050505!important;color:#ff1744!important;font:1000 36px/1 Arial,sans-serif!important;text-shadow:0 0 8px rgba(255,23,68,.75)!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;-webkit-tap-highlight-color:transparent!important}
 #offer .offer-close:after{content:'CLOSE';position:absolute;top:64px;left:50%;transform:translateX(-50%);padding:3px 6px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap;box-shadow:0 2px 7px rgba(0,0,0,.5)}
 </style>
-<script id="fnt-shipping-offer-exit-fix-script">
-(function(){
-  function visible(){var o=document.getElementById('offer');return o&&getComputedStyle(o).display!=='none'}
-  function closeOffer(){var o=document.getElementById('offer');try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true');document.body.classList.remove('fnt-lock-scroll')}var saving=document.getElementById('saving');if(saving)saving.hidden=true;try{sync()}catch(e){}return false}
-  window.closeOfferForConstruction=closeOffer;
-  function bind(){var o=document.getElementById('offer');if(!o)return;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');var x=o.querySelector('.offer-close');if(x)x.onclick=function(e){e.preventDefault();e.stopPropagation();closeOffer()};o.addEventListener('pointerdown',function(e){if(e.target===o)closeOffer()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&visible())closeOffer()});document.addEventListener('click',function(e){if(!visible())return;var back=e.target.closest('#fntCoreBack,[aria-label="Go back"]');if(back){e.preventDefault();e.stopImmediatePropagation();closeOffer()}},true)}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
-})();
-</script>
 <style id="fnt-final-visible-gallery-fix">
 #fnIdeasProofLightbox .fn-selected-ideas{position:relative;width:min(840px,96vw);max-height:92vh;overflow:auto;padding:42px 13px 18px;background:#f4eadb}
 #fnIdeasProofLightbox .fn-selected-number{position:absolute;left:6px;top:6px;z-index:4;display:grid;place-items:center;min-width:30px;height:30px;padding:0 5px;border:2px solid #ff4f73;border-radius:18px;background:#050505;color:#fff;box-shadow:0 0 0 2px #f4eadb,0 0 12px rgba(255,79,115,.85);font:900 13px/1 Arial,sans-serif}
@@ -2012,22 +1917,6 @@ body.fnt-shipping-offer-open > [aria-label="Go back"]{display:none!important;vis
 #fntExperienceGallery .fnt-experience-card img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
 @media(max-width:520px){#fnIdeasProofLightbox .fn-selected-ideas{padding:39px 7px 12px}#fnIdeasProofLightbox .fn-selected-number{left:4px;top:4px;min-width:25px;height:25px;font-size:11px}#fntExperienceGallery .fnt-experience-row{grid-template-columns:repeat(4,minmax(72px,1fr))!important}}
 </style>
-<script id="fnt-final-help-and-music-fix">
-(function(){
-  function installHelp(){
-    var p=document.querySelector('#fntHelpModal .fnt-help-card p');
-    if(p)p.innerHTML='Reference an example number, or give us as much detailed information as you want—your team, colors, placement, style, or anything else. Describe it however you want and we’ll figure it out. We will do whatever it takes to make you exactly what you want. <strong>It’s so important!</strong>';
-  }
-  var ctx=null,nodes=[],timer=null,playing=false,preset='three';
-  var chords={one:[[110,164.81,220],[98,146.83,196],[82.41,123.47,164.81]],two:[[130.81,196,261.63],[116.54,174.61,233.08],[98,146.83,196]],three:[[73.42,110,146.83],[65.41,98,130.81],[82.41,123.47,164.81]]};
-  function stop(){if(timer){clearInterval(timer);timer=null}nodes.forEach(function(n){try{n.stop()}catch(e){}try{n.disconnect()}catch(e){}});nodes=[];playing=false;paint()}
-  function start(name){stop();preset=name||'three';try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();ctx.resume();var master=ctx.createGain();master.gain.value=.055;master.connect(ctx.destination);nodes.push(master);var step=0;function voice(){var set=chords[preset]||chords.three,f=set[step++%set.length];nodes.filter(function(n){return n!==master}).forEach(function(n){try{n.stop()}catch(e){}});nodes=[master];f.forEach(function(hz,i){var o=ctx.createOscillator(),g=ctx.createGain(),l=ctx.createBiquadFilter();o.type=i===0?'sine':'triangle';o.frequency.value=hz;l.type='lowpass';l.frequency.value=650;g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(i===0?.34:.14,ctx.currentTime+1.2);g.gain.linearRampToValueAtTime(.025,ctx.currentTime+6.8);o.connect(l);l.connect(g);g.connect(master);o.start();o.stop(ctx.currentTime+7.2);nodes.push(o,g,l)});playing=true;paint()}voice();timer=setInterval(voice,6800)}catch(e){playing=false;paint()}}
-  function paint(){var b=document.getElementById('fntCoreMusicOrb');if(b){b.textContent=playing?'MUSIC ON':'MUSIC';b.classList.toggle('is-playing',playing)}}
-  function installMusic(){var orb=document.getElementById('fntCoreMusicOrb');if(!orb)return;document.addEventListener('pointerdown',function first(e){if(!playing&&!e.target.closest('#fntCoreMusicModal'))start('three');document.removeEventListener('pointerdown',first,true)},true);document.querySelectorAll('#fntCoreMusicModal [data-track]').forEach(function(b){b.addEventListener('click',function(e){var t=this.dataset.track;e.stopImmediatePropagation();if(t==='off')stop();else start(t)},true)});paint()}
-  function install(){installHelp();installMusic()}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();setTimeout(installHelp,800);
-})();
-</script>
 <style id="fnt-final-20-gallery-style">
 #fnIdeasProofLightbox .fn-final-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
 #fnIdeasProofLightbox .fn-final-tile{position:relative;aspect-ratio:1;overflow:hidden;border:2px solid #111;background:#111 no-repeat;padding:0;box-shadow:2px 2px 0 #6b44c9;cursor:pointer}
@@ -2125,27 +2014,6 @@ html{scroll-behavior:smooth}body.fnt-lock-scroll{overflow:hidden}
 <script id="fnt-real-label-script">(function(){var LOGO='data:image/jpeg;base64,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';function apply(){var cards=Array.from(document.querySelectorAll('.fnt-experience-card'));var card=cards.find(function(c){return /INSIDE LABEL/i.test(c.textContent||'')});if(card){var img=card.querySelector('img');if(img){img.src=LOGO;img.alt='F’N TEAM REP HARD inside label by BJS Co.'}card.classList.add('fnt-real-label-card')}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true})})();</script>
 
 
-<script id="fnt-go-routing-repair">
-(function(){
-  function install(){
-    var button=document.getElementById('teamTypeGo');if(!button||button.dataset.fnRoutingRepair==='true')return;
-    button.dataset.fnRoutingRepair='true';
-    button.addEventListener('click',function(event){
-      event.preventDefault();event.stopImmediatePropagation();
-      var typed=(document.getElementById('teamType')?.value||'').trim();
-      var selected=(document.getElementById('team')?.value||'').trim();
-      var sport=document.getElementById('sport');
-      var name=typed||selected;
-      if(name&&typeof window.startWithTeam==='function'){window.startWithTeam(name);return}
-      if(name&&typeof startWithTeam==='function'){startWithTeam(name);return}
-      if(!sport?.value){alert('Choose a sport or type any team first.');sport?.focus();return}
-      alert('Choose your team or type the team name, then press GO.');
-      document.getElementById('team')?.focus();
-    },true);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
-})();
-</script>
 <style id="fnt-shipping-offer-final-behavior-style">
 body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-label="Go back"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #offer{pointer-events:auto!important;touch-action:manipulation!important}#offer .offer{pointer-events:auto!important;overflow:visible!important}
@@ -2154,22 +2022,6 @@ body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-lab
 #offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
 @media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
 </style>
-<script id="fnt-shipping-offer-final-behavior-script">
-(function(){
-var REOFFER_DELAY=240000,reofferTimer=0,declinedOnce=false;
-function offer(){return document.getElementById('offer')}function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
-function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
-function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
-function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
-function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
-function decline(){try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}}
-function accept(){clearTimeout(reofferTimer);try{free=true}catch(e){}localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart()}
-window.closeOfferForConstruction=decline;window.claim=accept;
-function actionFromEvent(e){var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;if(!target)return;e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();if(target.classList.contains('offer-close'))decline();else accept()}
-function bind(){var o=offer();if(!o)return;var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}o.addEventListener('pointerup',actionFromEvent,true);o.addEventListener('click',actionFromEvent,true);o.addEventListener('click',function(e){if(e.target===o)decline()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0)}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
-})();
-</script>
 </body></html>
 <!-- FN Team GO button and self-contained music repair. -->
 <style id="fnt-go-cream-button-style">
@@ -2199,59 +2051,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #teamTypeGo:active{transform:translate(5px,5px)!important;box-shadow:3px 3px 0 #090909,0 6px 12px rgba(0,0,0,.16)!important;}
   @media(max-width:480px){#teamTypeGo{flex-basis:104px!important;min-width:104px!important;min-height:86px!important;margin-left:10px!important;font-size:20px!important;}}
 </style>
-<script id="fnt-self-contained-music-repair">
-(function(){
-  function install(){
-    var originalOrb=document.getElementById('fnMusicOrb');
-    var originalPanel=document.getElementById('fnMusicPanel');
-    var originalAudio=document.getElementById('fnMusicAudio');
-    if(!originalOrb||!originalPanel||originalOrb.dataset.selfContainedMusic==='true')return false;
-    if(originalAudio){originalAudio.pause();originalAudio.removeAttribute('src');originalAudio.load();}
-
-    var orb=originalOrb.cloneNode(true), panel=originalPanel.cloneNode(false);
-    originalOrb.replaceWith(orb); originalPanel.replaceWith(panel);
-    orb.dataset.selfContainedMusic='true';
-    orb.setAttribute('aria-label','Play or choose FN Team music');
-    panel.id='fnMusicPanel'; panel.hidden=true;
-    panel.setAttribute('aria-label','FN Team music controls');
-    panel.innerHTML='<button type="button" class="fn-music-close" aria-label="Close music controls">×</button><span>CHOOSE YOUR MUSIC</span><div class="fn-music-options"><button type="button" data-fn-music-track="night">ONE</button><button type="button" data-fn-music-track="pulse">TWO</button><button type="button" data-fn-music-track="rep">THREE</button><button type="button" data-fn-music-track="off">OFF</button></div>';
-
-    var context=null, master=null, timer=null, current='off', step=0;
-    var patterns={
-      night:{notes:[220,261.63,329.63,392],tempo:530,wave:'sine',gain:.075},
-      pulse:{notes:[146.83,220,293.66,440],tempo:330,wave:'triangle',gain:.06},
-      rep:{notes:[110,164.81,220,164.81],tempo:250,wave:'square',gain:.035}
-    };
-    function ensureContext(){
-      if(!context){context=new (window.AudioContext||window.webkitAudioContext)();master=context.createGain();master.gain.value=.28;master.connect(context.destination);}
-      return context.resume();
-    }
-    function stop(){if(timer){window.clearInterval(timer);timer=null;}current='off';step=0;orb.classList.remove('is-playing');orb.dataset.playback='off';}
-    function tone(freq,seconds,kind,volume){
-      if(!context||!master)return;
-      var now=context.currentTime,osc=context.createOscillator(),gain=context.createGain();
-      osc.type=kind;osc.frequency.setValueAtTime(freq,now);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(volume,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+seconds);osc.connect(gain).connect(master);osc.start(now);osc.stop(now+seconds+.04);
-    }
-    function playStep(){
-      var p=patterns[current];if(!p)return;var n=p.notes[step%p.notes.length];tone(n,.30,p.wave,p.gain);if(current==='night')tone(n/2,.42,'sine',p.gain*.4);if(current==='rep'&&step%2===0)tone(n*2,.11,'square',p.gain*.3);step++;
-    }
-    function select(track){
-      if(track==='off'){stop();return;}
-      ensureContext().then(function(){stop();current=track;playStep();timer=window.setInterval(playStep,patterns[track].tempo);orb.classList.add('is-playing');orb.dataset.playback='playing';});
-      panel.querySelectorAll('[data-fn-music-track]').forEach(function(button){var active=button.dataset.fnMusicTrack===track;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
-    }
-    function openPanel(){panel.hidden=false;requestAnimationFrame(function(){panel.classList.add('open');});orb.setAttribute('aria-expanded','true');}
-    function closePanel(){panel.classList.remove('open');orb.setAttribute('aria-expanded','false');window.setTimeout(function(){panel.hidden=true;},160);}
-    orb.addEventListener('click',function(event){event.preventDefault();if(current==='off')select('night');openPanel();});
-    panel.querySelector('.fn-music-close').addEventListener('click',closePanel);
-    panel.querySelectorAll('[data-fn-music-track]').forEach(function(button){button.addEventListener('click',function(event){event.preventDefault();select(button.dataset.fnMusicTrack);if(button.dataset.fnMusicTrack!=='off')closePanel();});});
-    panel.addEventListener('click',function(event){event.stopPropagation();});
-    window.FN_TEAM_MUSIC={setTrack:select,openPanel:openPanel,closePanel:closePanel,usingBuiltInLoop:true};
-  }
-  function waitForControls(tries){if(install())return;if(tries<30)window.setTimeout(function(){waitForControls(tries+1);},100);}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){waitForControls(0);});else waitForControls(0);
-}());
-</script>
 
 <!-- FN Team persistent reference-image fallback and tap-safe music player. -->
 <style id="fnt-reference-music-repair-style">
@@ -2259,35 +2058,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #fnIdeasProofLightbox .fn-idea-tile::after{content:'F\2019N TEAM';position:absolute;right:5px;bottom:5px;padding:3px 4px;background:rgba(0,0,0,.68);color:#f4cf2f;font:900 7px/1 Arial,sans-serif;letter-spacing:.08em}
   #fnMusicOrb.fnt-music-live{animation:fntMusicLive 1s ease-in-out infinite!important;border-color:#f4cf2f!important;box-shadow:0 0 0 3px #111,0 0 19px rgba(244,207,47,.95)!important}
 </style>
-<script id="fnt-reference-music-repair-script">
-(function(){
-  function svgFallback(index){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560"><rect width="420" height="560" fill="#151515"/><rect x="18" y="18" width="384" height="524" rx="12" fill="#24154a" stroke="#6b44c9" stroke-width="8"/><path d="M82 196h256l-34 208H116z" fill="#111" stroke="#f4cf2f" stroke-width="7"/><path d="M139 184c0-64 142-64 142 0" fill="none" stroke="#f4cf2f" stroke-width="12"/><text x="210" y="312" text-anchor="middle" fill="#f4cf2f" font-family="Arial Black,Arial" font-size="44">F’N</text><text x="210" y="354" text-anchor="middle" fill="#fff" font-family="Arial Black,Arial" font-size="27">TEAM</text><text x="210" y="447" text-anchor="middle" fill="#f4cf2f" font-family="Arial" font-weight="700" font-size="19">REFERENCE '+String(index).padStart(2,'0')+'</text></svg>');}
-  function usablePhotos(){return Array.from(document.querySelectorAll('img[src]')).map(function(img){return img.currentSrc||img.src;}).filter(function(src){return src&&/^data:image|^https?:/i.test(src)&&!/fnt_idea_/i.test(src)&&!/^data:image\/svg\+xml/i.test(src);});}
-  function repairReferenceTiles(){
-    var photos=usablePhotos();
-    document.querySelectorAll('#fnIdeasProofLightbox .fn-idea-tile img').forEach(function(img,index){
-      if(img.dataset.fntReferenceRepaired==='true')return;
-      var fallback=photos[index%Math.max(photos.length,1)]||svgFallback(index+1);
-      img.dataset.fntReferenceRepaired='true';img.classList.add('fnt-photo-fallback');
-      img.onerror=function(){img.onerror=null;img.src=svgFallback(index+1);};
-      /* The old manuscript storage host is retired, so use an available on-page photo immediately. */
-      if(/fnt_idea_|manus-storage/i.test(img.src))img.src=fallback;
-    });
-  }
-  var ctx=null,master=null,timer=null,playing=false,step=0,suppressUntil=0;
-  function oscillator(freq,duration,type,gain){if(!ctx||!master)return;var now=ctx.currentTime,osc=ctx.createOscillator(),amp=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,now);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(gain,now+.025);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp).connect(master);osc.start(now);osc.stop(now+duration+.04);}
-  function tick(){var notes=[220,261.63,329.63,392];var f=notes[step%notes.length];oscillator(f,.28,'triangle',.055);if(step%2===0)oscillator(f/2,.36,'sine',.024);step++;}
-  function stop(){if(timer){clearInterval(timer);timer=null;}playing=false;var orb=document.getElementById('fnMusicOrb');if(orb){orb.classList.remove('fnt-music-live');orb.textContent='MUSIC';orb.setAttribute('aria-pressed','false');}}
-  function start(){var orb=document.getElementById('fnMusicOrb');try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.3;master.connect(ctx.destination);}ctx.resume().then(function(){stop();playing=true;step=0;tick();timer=setInterval(tick,440);if(orb){orb.classList.add('fnt-music-live');orb.textContent='MUSIC ON';orb.setAttribute('aria-pressed','true');}}).catch(stop);}catch(e){stop();}}
-  function toggle(event){if(event){event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();}suppressUntil=Date.now()+900;if(playing)stop();else start();}
-  function wireMusic(){var orb=document.getElementById('fnMusicOrb');if(!orb||orb.dataset.fntMusicRepair==='true')return;orb.dataset.fntMusicRepair='true';orb.setAttribute('aria-pressed','false');['pointerdown','touchstart','mousedown','click'].forEach(function(type){orb.addEventListener(type,function(event){if(type==='click'&&Date.now()<suppressUntil){event.preventDefault();event.stopImmediatePropagation();return;}toggle(event);},true);});}
-  function apply(){repairReferenceTiles();wireMusic();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
-  new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
-  window.setInterval(repairReferenceTiles,300);
-  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
-}());
-</script>
 
 <!-- Isolated FN Team Music control: no external source or legacy listener required. -->
 <style id="fnt-direct-music-style">
@@ -2296,77 +2066,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #fnMusicOrb.fnt-direct-music-on::after{content:'ON';display:block;font-size:8px;letter-spacing:.12em;margin-top:1px}
   @keyframes fntDirectPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 </style>
-<script id="fnt-direct-music-script">
-(function(){
-  var ctx=null,master=null,timer=null,playing=false,beat=0;
-  function setState(on){
-    playing=!!on;window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};
-    var orb=document.getElementById('fnMusicOrb');if(!orb)return;
-    orb.classList.toggle('fnt-direct-music-on',playing);orb.setAttribute('aria-pressed',String(playing));orb.textContent=playing?'MUSIC':'MUSIC';orb.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');
-  }
-  function note(freq,length,volume,type){if(!ctx||!master)return;var now=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'triangle';o.frequency.setValueAtTime(freq,now);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(volume,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+length);o.connect(g).connect(master);o.start(now);o.stop(now+length+.03);}
-  function pulse(){var root=[196,220,246.94,293.66][beat%4];note(root,.22,.09,'triangle');if(beat%2===0)note(root/2,.32,.035,'sine');if(beat%4===2)note(root*1.5,.12,.025,'square');beat++;window.__FN_BUILTIN_MUSIC_STATE={playing:true,engine:'embedded-web-audio',beat:beat};}
-  function stop(){if(timer){clearInterval(timer);timer=null;}setState(false);}
-  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}var ready=ctx.resume?ctx.resume():Promise.resolve();Promise.resolve(ready).then(function(){if(timer)clearInterval(timer);beat=0;pulse();timer=setInterval(pulse,420);setState(true);}).catch(stop);}catch(error){stop();}}
-  function toggle(event){if(event){event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();}if(playing)stop();else start();}
-  function replaceOrb(){
-    var old=document.getElementById('fnMusicOrb');if(!old||old.dataset.fntDirectMusic==='true')return;
-    var clean=old.cloneNode(true);clean.dataset.fntDirectMusic='true';clean.setAttribute('type','button');clean.setAttribute('aria-pressed','false');clean.textContent='MUSIC';
-    ['pointerdown','touchstart','click'].forEach(function(name){clean.addEventListener(name,toggle,true);});
-    old.replaceWith(clean);setState(false);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',replaceOrb);else replaceOrb();
-  new MutationObserver(replaceOrb).observe(document.documentElement,{childList:true,subtree:true});
-  window.setInterval(replaceOrb,300);
-  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
-}());
-</script>
 
 <!-- Single-tap FN Team Music controller: suppresses duplicate click after pointerdown. -->
-<script id="fnt-single-tap-music-script">
-(function(){
-  var ctx=null,master=null,timer=null,playing=false,beat=0,ignoreClickUntil=0;
-  function orb(){return document.getElementById('fnMusicOrb');}
-  function state(on){playing=!!on;window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};var el=orb();if(el){el.classList.toggle('fnt-direct-music-on',playing);el.setAttribute('aria-pressed',String(playing));el.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');}}
-  function tone(f,d,v,t){if(!ctx||!master)return;var n=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type=t||'triangle';o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(v,n+.014);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g).connect(master);o.start(n);o.stop(n+d+.04);}
-  function pulse(){var f=[196,220,246.94,293.66][beat%4];tone(f,.22,.09,'triangle');if(beat%2===0)tone(f/2,.32,.035,'sine');beat++;window.__FN_BUILTIN_MUSIC_STATE={playing:true,engine:'embedded-web-audio',beat:beat};}
-  function stop(){if(timer){clearInterval(timer);timer=null;}state(false);}
-  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}Promise.resolve(ctx.resume?ctx.resume():null).then(function(){if(timer)clearInterval(timer);beat=0;pulse();timer=setInterval(pulse,420);state(true);}).catch(stop);}catch(e){stop();}}
-  function toggle(){if(playing)stop();else start();}
-  function replace(){var old=orb();if(!old||old.dataset.fntSingleTap==='true')return;var clean=old.cloneNode(true);clean.dataset.fntSingleTap='true';clean.textContent='MUSIC';clean.setAttribute('type','button');clean.setAttribute('aria-pressed','false');
-    clean.addEventListener('pointerdown',function(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();ignoreClickUntil=Date.now()+900;toggle();},true);
-    clean.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();if(Date.now()<ignoreClickUntil)return;toggle();},true);
-    old.replaceWith(clean);state(false);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',replace);else replace();
-  new MutationObserver(replace).observe(document.documentElement,{childList:true,subtree:true});window.setInterval(replace,300);
-  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
-}());
-</script>
 
 <!-- Window-capture Music controller: claims mobile taps before legacy FN Team handlers. -->
-<script id="fnt-window-capture-music-script">
-(function(){
-  var ctx=null,master=null,timer=null,playing=false,beat=0,lastPointer=0;
-  function getOrb(){return document.getElementById('fnMusicOrb');}
-  function publish(){var o=getOrb();window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};if(o){o.classList.toggle('fnt-direct-music-on',playing);o.setAttribute('aria-pressed',String(playing));o.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');}}
-  function tone(f,d,v,type){if(!ctx||!master)return;var now=ctx.currentTime,osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=type||'triangle';osc.frequency.setValueAtTime(f,now);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(v,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+d);osc.connect(gain).connect(master);osc.start(now);osc.stop(now+d+.04);}
-  function pulse(){var root=[196,220,246.94,293.66][beat%4];tone(root,.22,.09,'triangle');if(beat%2===0)tone(root/2,.32,.035,'sine');beat++;publish();}
-  function stop(){if(timer){clearInterval(timer);timer=null;}playing=false;publish();}
-  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}Promise.resolve(ctx.resume?ctx.resume():null).then(function(){if(timer)clearInterval(timer);beat=0;playing=true;pulse();timer=setInterval(pulse,420);publish();}).catch(stop);}catch(error){stop();}}
-  function toggle(){if(playing)stop();else start();}
-  function isMusicTarget(event){var t=event.target;return !!(t&&t.closest&&t.closest('#fnMusicOrb'));}
-  function interceptPointer(event){if(!isMusicTarget(event))return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();lastPointer=Date.now();toggle();}
-  function interceptClick(event){if(!isMusicTarget(event))return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();if(Date.now()-lastPointer>850)toggle();}
-  function mark(){var o=getOrb();if(o){o.dataset.fntWindowMusic='true';o.setAttribute('type','button');publish();}}
-  window.addEventListener('pointerdown',interceptPointer,true);
-  window.addEventListener('touchstart',interceptPointer,true);
-  window.addEventListener('click',interceptClick,true);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mark);else mark();
-  new MutationObserver(mark).observe(document.documentElement,{childList:true,subtree:true});window.setInterval(mark,300);
-  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
-}());
-</script>
 
 <!-- FN Team native embedded music player: immune to legacy Music-orb events. -->
 <style id="fnt-native-music-panel-style">
@@ -2379,27 +2082,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #fntNativeMusicPanel small{display:block;margin-bottom:8px}
   #fntNativeMusicPanel audio{width:100%;height:38px;display:block}
 </style>
-<script id="fnt-native-music-panel-script">
-(function(){
-  function mount(){
-    if(document.getElementById('fntNativeMusicDock'))return;
-    var legacy=document.getElementById('fnMusicOrb');if(legacy)legacy.style.display='none';
-    var dock=document.createElement('div');dock.id='fntNativeMusicDock';
-    dock.innerHTML='<button id="fntNativeMusicLaunch" type="button" aria-expanded="true" aria-controls="fntNativeMusicPanel">MUSIC<br>PLAY</button><div id="fntNativeMusicPanel"><small>F’N TEAM AUDIO — PRESS PLAY</small><audio id="fntNativeAudio" controls preload="metadata" playsinline webkit-playsinline><source type="audio/mpeg" src=""></audio></div>';
-    document.body.appendChild(dock);
-    var launch=document.getElementById('fntNativeMusicLaunch'),panel=document.getElementById('fntNativeMusicPanel'),audio=document.getElementById('fntNativeAudio');
-    var recentPointer=0;
-    function launchMusic(e){if(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();}recentPointer=Date.now();panel.hidden=false;launch.setAttribute('aria-expanded','true');if(audio.paused){var p=audio.play();if(p&&p.catch)p.catch(function(){launch.innerHTML='MUSIC<br>PLAY';});launch.innerHTML='MUSIC<br>ON';}else{audio.pause();launch.innerHTML='MUSIC<br>PAUSED';}}
-    function isLaunch(e){return e.target===launch||(e.target&&e.target.closest&&e.target.closest('#fntNativeMusicLaunch'));}
-    window.addEventListener('pointerdown',function(e){if(isLaunch(e))launchMusic(e);},true);
-    window.addEventListener('touchstart',function(e){if(isLaunch(e))launchMusic(e);},true);
-    window.addEventListener('click',function(e){if(!isLaunch(e))return;e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();if(Date.now()-recentPointer>700)launchMusic();},true);
-    audio.addEventListener('play',function(){launch.innerHTML='MUSIC<br>ON';launch.setAttribute('aria-expanded','true');panel.hidden=false;});
-    audio.addEventListener('pause',function(){if(audio.currentTime>0&&!audio.ended)launch.innerHTML='MUSIC<br>PAUSED';});
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
-}());
-</script>
 
 <!-- Compact F'N Team music popup: keep the orb, hide the native panel. -->
 <style id="fnt-compact-music-popup-style">
@@ -2411,12 +2093,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   .fnt-music-sheet{position:relative!important;width:min(88vw,310px)!important;padding:22px 18px 18px!important;border:3px solid #111!important;background:#fff4df!important;color:#111!important;box-shadow:8px 9px 0 #111!important;text-align:center!important}
   .fnt-music-sheet h3{margin:0 0 6px!important;font:1000 16px/1 Arial,sans-serif!important;letter-spacing:.11em!important}.fnt-music-sheet p{margin:0 0 15px!important;font:800 9px/1.3 Arial,sans-serif!important;letter-spacing:.12em!important}.fnt-music-close{position:absolute!important;right:9px!important;top:7px!important;border:0!important;background:transparent!important;color:#111!important;font:1000 26px/1 Arial!important}.fnt-music-options{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important}.fnt-music-option{min-height:54px!important;border:3px solid #111!important;background:#7346df!important;color:#fff!important;font:1000 11px/1 Arial,sans-serif!important;letter-spacing:.06em!important;box-shadow:3px 3px 0 #111!important}.fnt-music-option.off{background:#111!important}.fnt-music-option.is-active{background:#f3c95a!important;color:#111!important}
 </style>
-<script id="fnt-compact-music-popup-script">
-(function(){
-  function build(){if(document.getElementById('fntCompactMusicOrb'))return;var audio=document.getElementById('fntNativeAudio');if(!audio)return;var orb=document.createElement('button');orb.id='fntCompactMusicOrb';orb.type='button';orb.textContent='MUSIC';orb.setAttribute('aria-label','Open music options');var modal=document.createElement('div');modal.id='fntCompactMusicModal';modal.innerHTML='<section class="fnt-music-sheet" role="dialog" aria-modal="true" aria-label="F N Team music"><button class="fnt-music-close" type="button" aria-label="Close music options">×</button><h3>MUSIC</h3><p>CHOOSE A SOUND</p><div class="fnt-music-options"><button type="button" class="fnt-music-option" data-rate="0.88">ONE</button><button type="button" class="fnt-music-option" data-rate="1">TWO</button><button type="button" class="fnt-music-option" data-rate="1.12">THREE</button><button type="button" class="fnt-music-option off" data-off="true">OFF</button></div></section>';document.body.append(orb,modal);function open(e){return}function close(){modal.classList.remove('is-open')}window.addEventListener('pointerdown',function(e){if(e.target===orb||e.target.closest&&e.target.closest('#fntCompactMusicOrb'))open(e)},true);window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.fnt-music-close')){e.preventDefault();close();return}var option=e.target.closest&&e.target.closest('.fnt-music-option');if(!option)return;if(option.dataset.off==='true'){audio.pause();audio.currentTime=0;modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.remove('is-active')});return}audio.playbackRate=Number(option.dataset.rate)||1;audio.play().then(function(){modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.toggle('is-active',b===option)})}).catch(function(){});},true);modal.addEventListener('pointerdown',function(e){if(e.target===modal)close()});}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
-})();
-</script>
 
 <style id="fnt-three-track-music-style">
 #fntCompactMusicOrb{position:fixed!important;left:18px!important;right:auto!important;bottom:18px!important;width:58px!important;height:58px!important;min-width:58px!important;border-radius:50%!important;padding:0!important;font-size:10px!important;line-height:1.05!important;letter-spacing:.1em!important;z-index:100050!important;box-shadow:4px 5px 0 #16110b,0 0 16px rgba(119,65,255,.42)!important}
@@ -2460,46 +2136,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 @media(max-width:600px){.typewrap{gap:10px!important}#teamType{flex-basis:55%!important;width:55%!important;height:74px!important;padding:0 12px!important;font-size:15px!important}#teamTypeGo{flex-basis:45%!important;min-width:122px!important;height:74px!important;border-width:3px!important;border-radius:17px!important;box-shadow:5px 5px 0 #111,0 0 15px rgba(101,55,214,.48)!important;font-size:clamp(39px,11vw,50px)!important}}
 </style>
 <div id="fntTinyMusicPopup" aria-hidden="true"><section id="fntTinyMusicCard" role="dialog" aria-label="F N Team music options"><button id="fntTinyMusicClose" type="button" aria-label="Close music options">×</button><h2>MUSIC</h2><p>THREE DIFFERENT DARK SOUNDS</p><button class="fntTinyChoice" data-sound="one" type="button">ONE · NIGHT RUN</button><button class="fntTinyChoice" data-sound="two" type="button">TWO · AFTER HOURS</button><button class="fntTinyChoice" data-sound="three" type="button">THREE · NEON NOIR</button><button class="fntTinyChoice" id="fntTinyOff" data-sound="off" type="button">OFF</button></section></div>
-<script id="fnt-lightweight-music-controller">
-(function(){
-  const popup=document.getElementById('fntTinyMusicPopup');
-  const orb=document.getElementById('fntCompactMusicOrb');
-  const confused=document.getElementById('fntConfusedOrb');
-  /* The source page transforms its primary content layer, which makes normal fixed positioning relative
-     to that layer. Measure the actual control positions and preserve an exact shared bottom edge. */
-  if(orb&&orb.parentElement!==document.body)document.body.appendChild(orb);
-  let musicShift=0;
-  function alignMusicWithConfused(){
-    return;
-    if(!orb||!confused)return;
-    orb.style.setProperty('transform','translateY('+musicShift+'px)','important');
-    const delta=confused.getBoundingClientRect().bottom-orb.getBoundingClientRect().bottom;
-    if(Math.abs(delta)>.25){musicShift+=delta;orb.style.setProperty('transform','translateY('+musicShift+'px)','important');}
-  }
-  requestAnimationFrame(function(){alignMusicWithConfused();requestAnimationFrame(alignMusicWithConfused);});
-  window.addEventListener('resize',alignMusicWithConfused,{passive:true});
-  window.addEventListener('scroll',alignMusicWithConfused,{passive:true,capture:true});
-  let ctx=null, master=null, timer=null, active='off';
-  function stop(){if(timer){clearTimeout(timer);timer=null}if(ctx){ctx.close();ctx=null;master=null}active='off';document.querySelectorAll('.fntTinyChoice').forEach(b=>b.classList.remove('is-active'))}
-  function beep(freq,at,dur,type,vol){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,at);g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(vol,at+.012);g.gain.exponentialRampToValueAtTime(.0001,at+dur);o.connect(g).connect(master);o.start(at);o.stop(at+dur+.03)}
-  function kick(at,vol){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(130,at);o.frequency.exponentialRampToValueAtTime(45,at+.12);g.gain.setValueAtTime(vol,at);g.gain.exponentialRampToValueAtTime(.0001,at+.15);o.connect(g).connect(master);o.start(at);o.stop(at+.16)}
-  function pad(freq,at,dur,vol,type){const o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(freq,at);f.type='lowpass';f.frequency.setValueAtTime(520,at);g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(vol,at+.7);g.gain.linearRampToValueAtTime(.0001,at+dur);o.connect(f).connect(g).connect(master);o.start(at);o.stop(at+dur+.05)}
-  function loop(){
-    if(!ctx)return;const now=ctx.currentTime+.05;
-    if(active==='one'){[220,0,293.7,0,329.6,0,293.7,0].forEach((f,i)=>{const t=now+i*.28;kick(t,.18);if(f)beep(f,t,.22,'sine',.09)})}
-    if(active==='two'){const chords=[[82.41,123.47,164.81],[73.42,110,146.83],[65.41,98,130.81]],chord=chords[Math.floor(now/3.8)%chords.length];chord.forEach((f,i)=>pad(f,now,3.7,i?0.075:0.12,i===2?'triangle':'sine'));beep(chord[1]*2,now+1.9,1.35,'sine',.022)}
-    if(active==='three'){const melody=[293.66,349.23,440,523.25,440,392,349.23,329.63,261.63,329.63,392,493.88];melody.forEach((f,i)=>{const t=now+i*.31;beep(f,t,.27,i%3===0?'triangle':'sine',.075);if(i===0||i===6)beep(f/4,t,1.25,'sine',.07)});[0,3,6,9].forEach(i=>beep(880,now+i*.31,.035,'square',.012))}
-    timer=setTimeout(loop,active==='one'?2240:active==='two'?3800:3720);
-  }
-  function start(choice){stop();active=choice;ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);ctx.resume();loop();document.querySelectorAll('.fntTinyChoice').forEach(b=>b.classList.toggle('is-active',b.dataset.sound===choice));}
-  function open(){popup.classList.add('is-open');popup.setAttribute('aria-hidden','false')}
-  function close(){popup.classList.remove('is-open');popup.setAttribute('aria-hidden','true')}
-  window.addEventListener('pointerdown',function(e){const hit=e.target.closest('#fntCompactMusicOrb');if(!hit)return;e.preventDefault();e.stopImmediatePropagation();open()},true);
-  document.getElementById('fntTinyMusicClose').onclick=close;
-  popup.addEventListener('pointerdown',e=>{if(e.target===popup)close()});
-  popup.querySelectorAll('[data-sound]').forEach(btn=>btn.onclick=function(){const s=this.dataset.sound;if(s==='off'){stop();close();return}start(s);close()});
-})();
-</script>
 <style id="fnt-final-control-lock-style">
 #fntCompactMusicOrb{
   display:grid!important;place-items:center!important;position:fixed!important;
@@ -2531,48 +2167,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   #teamTypeGo{flex-basis:82px!important;width:82px!important;min-width:82px!important;height:82px!important;min-height:82px!important;font-size:19px!important}
 }
 </style>
-<script id="fnt-final-control-lock-script">
-(function(){
-  function lockControls(){
-    var go=document.getElementById('teamTypeGo');
-    if(go){
-      go.innerHTML='<span class="fnt-go-word">LET’S<br>GO</span>';
-      go.setAttribute('aria-label','Let’s go');
-    }
-    var music=document.getElementById('fntCompactMusicOrb');
-    if(music){
-      music.style.setProperty('display','grid','important');
-      music.style.setProperty('transform','none','important');
-      music.setAttribute('aria-label','Open the three music choices');
-    }
-  }
-  function openPremium(e){
-    return;
-    var target=e.target&&e.target.closest?e.target.closest('.premium-callout,[data-fn-premium-trigger="true"]'):null;
-    if(!target)return;
-    var offer=document.getElementById('offer');
-    if(offer&&getComputedStyle(offer).display!=='none')return;
-    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-    if(typeof window.FN_OPEN_PREMIUM_CHOOSER==='function')window.FN_OPEN_PREMIUM_CHOOSER();
-  }
-  window.addEventListener('pointerup',openPremium,true);
-  window.addEventListener('click',openPremium,true);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){lockControls();setTimeout(lockControls,350);setTimeout(lockControls,900)},{once:true});else{lockControls();setTimeout(lockControls,350)}
-})();
-</script>
-<script id="fnt-last-word-repair">
-(function(){return;
-  var ctx=null,master=null,voices=[],clock=null,playing=false,current='three';
-  var harmony={one:[[110,164.81,220],[98,146.83,196],[82.41,123.47,164.81]],two:[[130.81,196,261.63],[116.54,174.61,233.08],[98,146.83,196]],three:[[73.42,110,146.83],[65.41,98,130.81],[82.41,123.47,164.81]]};
-  function buttons(){return document.querySelectorAll('#fntCompactMusicModal .fnt-music-option,#fntCoreMusicModal [data-track]')}
-  function paint(){var b=document.getElementById('fntCompactMusicOrb')||document.getElementById('fntCoreMusicOrb');if(b)b.textContent=playing?'MUSIC ON':'MUSIC';buttons().forEach(function(x){var key=x.dataset.track||(['ONE','TWO','THREE'].indexOf(x.textContent.trim())>-1?x.textContent.trim().toLowerCase():'off');x.classList.toggle('is-active',playing&&key===current)})}
-  function silence(){if(clock){clearInterval(clock);clock=null}voices.forEach(function(n){try{n.stop()}catch(e){}try{n.disconnect()}catch(e){}});voices=[];playing=false;paint()}
-  function start(name){silence();current=name||'three';try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();ctx.resume();master=ctx.createGain();master.gain.value=.055;master.connect(ctx.destination);var step=0;function swell(){voices.filter(function(n){return n!==master}).forEach(function(n){try{n.stop()}catch(e){}});voices=[master];var chord=(harmony[current]||harmony.three)[step++%3];chord.forEach(function(hz,i){var o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type=i?'triangle':'sine';o.frequency.value=hz;f.type='lowpass';f.frequency.value=620;g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(i ? .13 : .30,ctx.currentTime+1.1);g.gain.linearRampToValueAtTime(.015,ctx.currentTime+6.5);o.connect(f);f.connect(g);g.connect(master);o.start();o.stop(ctx.currentTime+6.8);voices.push(o,f,g)});playing=true;paint()}swell();clock=setInterval(swell,6400)}catch(e){playing=false;paint()}}
-  function help(){var p=document.querySelector('#fntHelpModal .fnt-help-card p');if(p)p.innerHTML='Reference an example number, or give us as much detailed information as you want—your team, colors, placement, style, or anything else. Describe it however you want and we’ll figure it out. We will do whatever it takes to make you exactly what you want. <strong>It’s so important!</strong>'}
-  function bind(){help();document.addEventListener('pointerdown',function first(e){if(!playing&&!e.target.closest('.fnt-music-sheet,#fntCoreMusicModal'))start('three');document.removeEventListener('pointerdown',first,true)},true);document.addEventListener('click',function(e){var b=e.target.closest('#fntCompactMusicModal .fnt-music-option,#fntCoreMusicModal [data-track]');if(!b)return;var label=b.dataset.track||b.textContent.trim().toLowerCase();if(b.dataset.off==='true'||label==='off')silence();else start(label)},true);document.addEventListener('click',function(e){if(e.target.closest('#fntConfusedOrb'))setTimeout(help,0)},true);new MutationObserver(help).observe(document.getElementById('fntHelpModal')||document.body,{childList:true,subtree:true});paint()}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(bind,700)});else setTimeout(bind,700);
-})();
-</script>
 <style id="fnt-six-photo-and-lets-go-final-style">
 #fntExperienceGallery{overflow:visible!important;padding:16px!important}
 #fntExperienceGallery .fnt-experience-row{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;min-width:0!important;overflow:visible!important;padding:0!important}
@@ -2618,35 +2212,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #offer .fnt-only-lock-button svg{width:26px;height:26px;fill:none;stroke:#d6ad45;stroke-width:2}
 @keyframes fntOnlyLockPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px #f4ead7,0 0 13px rgba(214,173,69,.65)}50%{transform:scale(1.035);box-shadow:0 0 0 2px #f4ead7,0 0 29px rgba(214,173,69,1)}}
 </style>
-<script id="fnt-lock-it-in-only-final-script">
-(function(){
-  var lockedUntil=0;
-  function offer(){return document.getElementById('offer')}
-  function updateCredit(){
-    localStorage.setItem('fnt-free-shipping-v1','claimed');try{free=true}catch(e){}
-    var saving=document.getElementById('saving');if(saving)saving.hidden=false;
-    try{sync()}catch(e){}
-    var cart=document.getElementById('cart'),count=0;try{count=cartItems.length}catch(e){}
-    if(cart){cart.hidden=false;cart.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING'}
-  }
-  function enter(event){
-    var now=Date.now();if(now<lockedUntil)return;lockedUntil=now+800;
-    if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}
-    updateCredit();var o=offer();if(o){o.style.setProperty('display','none','important');o.style.setProperty('pointer-events','none','important');o.setAttribute('aria-hidden','true')}
-    document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');document.documentElement.style.overflow='';document.body.style.overflow='';
-  }
-  function install(){
-    var o=offer(),card=o&&o.querySelector('.offer');if(!o||!card)return;
-    card.querySelectorAll('.offer-close,#fntOfferCloseHit,#fntOfferClaimHit,.claim-btn,.fnt-only-lock-button').forEach(function(x){x.remove()});
-    var button=document.createElement('button');button.type='button';button.className='fnt-only-lock-button';button.setAttribute('aria-label','Lock in free priority shipping and enter the site');button.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 11.5 16 6l11 5.5v11L16 28 5 22.5z"></path><path d="m5 11.5 11 5.6 11-5.6M16 17.1V28M11 8.5l11 5.5"></path></svg><span>LOCK IT IN</span>';
-    card.querySelector('small')?.before(button);['pointerdown','touchstart','click'].forEach(function(type){button.addEventListener(type,enter,{capture:true,passive:false})});
-    window.FNT_LOCK_IN_SHIPPING=enter;
-    if(localStorage.getItem('fnt-free-shipping-v1')==='claimed'){updateCredit();enter()}else{o.style.setProperty('display','grid','important');o.style.setProperty('pointer-events','auto','important');o.setAttribute('aria-hidden','false');document.body.classList.add('fnt-shipping-offer-open')}
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
-  window.addEventListener('load',function(){setTimeout(install,250)},{once:true});
-})();
-</script>
 <style id="fnt-offer-iphone-tap-replacement-style">
 #offer .offer-close{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 #fntOfferCloseHit{position:absolute;right:-5px;top:20px;z-index:2147483647;width:66px;height:66px;padding:0 0 4px;border:3px solid #d6ad45;outline:3px solid #050505;border-radius:50%;background:#050505;color:#ff1744;font:1000 39px/1 Arial,sans-serif;display:grid;place-items:center;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 22px rgba(214,173,69,.65);touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto}
@@ -2654,39 +2219,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #fntOfferClaimHit{position:absolute;z-index:2147483646;margin:0;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.001);color:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto;cursor:pointer}
 #offer.fnt-offer-processing{pointer-events:none!important}
 </style>
-<script id="fnt-offer-iphone-tap-replacement-script">
-(function(){
-  var busyUntil=0,reofferTimer=0;
-  function getOffer(){return document.getElementById('offer')}
-  function claimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
-  function releasePage(){document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');document.documentElement.style.overflow='';document.body.style.overflow=''}
-  function hideOffer(){var o=getOffer();if(o){o.classList.remove('fnt-offer-processing');o.style.setProperty('display','none','important');o.style.setProperty('pointer-events','none','important');o.setAttribute('aria-hidden','true')}releasePage()}
-  function showOffer(){var o=getOffer();if(!o||claimed())return;o.style.setProperty('display','grid','important');o.style.setProperty('pointer-events','auto','important');o.setAttribute('aria-hidden','false');document.body.classList.add('fnt-shipping-offer-open')}
-  function updateCart(hasCredit){
-    var saving=document.getElementById('saving');if(saving)saving.hidden=!hasCredit;
-    try{free=hasCredit}catch(e){}
-    try{sync()}catch(e){}
-    var cart=document.getElementById('cart');if(cart){var count=0;try{count=cartItems.length}catch(e){}cart.hidden=false;cart.innerHTML='CART ('+count+')'+(hasCredit?' · <del>−$33.50</del> FREE PRIORITY SHIPPING':'')}
-  }
-  function once(action,event){var now=Date.now();if(now<busyUntil)return;busyUntil=now+650;if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}action()}
-  function decline(){localStorage.removeItem('fnt-free-shipping-v1');updateCart(false);hideOffer();clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!claimed()&&!document.hidden)showOffer()},240000)}
-  function accept(){clearTimeout(reofferTimer);localStorage.setItem('fnt-free-shipping-v1','claimed');updateCart(true);hideOffer()}
-  function bindAction(button,action){['pointerup','touchend','click'].forEach(function(type){button.addEventListener(type,function(e){once(action,e)},{capture:true,passive:false})})}
-  function positionClaimHit(){var offer=getOffer(),visual=offer&&offer.querySelector('.offer'),claim=offer&&offer.querySelector('.claim-btn'),hit=document.getElementById('fntOfferClaimHit');if(!visual||!claim||!hit)return;hit.style.left=claim.offsetLeft+'px';hit.style.top=claim.offsetTop+'px';hit.style.width=claim.offsetWidth+'px';hit.style.height=claim.offsetHeight+'px'}
-  function install(){
-    var offer=getOffer(),visual=offer&&offer.querySelector('.offer');if(!offer||!visual)return;
-    offer.querySelectorAll('#fntOfferCloseHit,#fntOfferClaimHit').forEach(function(x){x.remove()});
-    var close=document.createElement('button');close.id='fntOfferCloseHit';close.type='button';close.textContent='×';close.setAttribute('aria-label','Close shipping offer without credit');
-    var claim=document.createElement('button');claim.id='fntOfferClaimHit';claim.type='button';claim.textContent='Unlock free priority shipping';claim.setAttribute('aria-label','Unlock free priority shipping and apply thirty-three dollars and fifty cents credit');
-    visual.append(close,claim);bindAction(close,decline);bindAction(claim,accept);positionClaimHit();
-    window.addEventListener('resize',positionClaimHit,{passive:true});
-    window.FNT_DECLINE_SHIPPING=decline;window.FNT_ACCEPT_SHIPPING=accept;
-    setTimeout(function(){if(claimed()){updateCart(true);hideOffer()}else showOffer();positionClaimHit()},100)
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
-  window.addEventListener('load',function(){setTimeout(function(){if(claimed()){updateCart(true);hideOffer()}else{showOffer();positionClaimHit()}},180)},{once:true});
-})();
-</script>
 <style id="fnt-complete-every-team-catalog-style">
 .fnt-brand-catalog-intro{grid-column:1/-1;width:100%;margin:28px 0 8px;padding:25px 22px;border:3px solid #080808;background:#f4ead7;box-shadow:7px 7px 0 #6b44c9;text-align:center}
 .fnt-brand-catalog-intro p{margin:0 0 8px;color:#6b44c9;font:1000 11px/1 Arial,sans-serif;letter-spacing:.18em}.fnt-brand-catalog-intro h2{margin:0;font:1000 clamp(27px,5vw,49px)/.92 Impact,'Arial Black',sans-serif;letter-spacing:-.035em}.fnt-brand-catalog-intro span{display:block;margin-top:12px;font:800 11px/1.45 Arial,sans-serif;letter-spacing:.08em}
@@ -2697,42 +2229,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 .fnt-help-card .fnt-anything-note{display:block;margin:13px 0 0;padding:11px;border:2px solid #6b44c9;background:#080808;color:#fff;font:1000 9px/1.45 Arial,sans-serif;letter-spacing:.08em;text-align:center}
 @media(max-width:600px){.fnt-brand-catalog-intro{padding:20px 13px}.fnt-brand-catalog-intro h2{font-size:31px}.fnt-brand-catalog-intro span{font-size:9px}.fnt-love-hard-mark{width:64%;padding:10px 5px}}
 </style>
-<script id="fnt-complete-every-team-catalog-script">
-(function(){
-  var HELP='If you don’t see exactly what you want, reference any example number or tell us your team, colors, product, wording, and front or back placement. Be as specific—or as loose—as you want. Order the closest starting option and give us your direction. We will do whatever it takes to make exactly what you want. It’s so important!';
-  function selectedTeam(){try{return chosen||document.getElementById('team')?.value||document.getElementById('teamType')?.value||'YOUR TEAM'}catch(e){return document.getElementById('team')?.value||'YOUR TEAM'}}
-  function completeHelp(){var card=document.querySelector('#fntHelpModal .fnt-help-card');if(!card)return;var p=card.querySelector('p');if(p)p.textContent=HELP;var note=card.querySelector('.fnt-anything-note');if(!note){note=document.createElement('strong');note.className='fnt-anything-note';card.append(note)}note.textContent='ANY SPORT · ANY TEAM · ANY COLOR · ANY PLACEMENT · WE’LL FIGURE IT OUT.'}
-  function lockAloToBlack(){document.querySelectorAll('#reserve .reserve-card').forEach(function(card){if(!/ALO/i.test(card.textContent||''))return;var black=card.querySelector('[data-fn-alo-color="black"],.fn-alo-blackout');if(black&&!black.classList.contains('fnt-black-now')){try{black.click()}catch(e){}black.classList.add('fnt-black-now');black.setAttribute('aria-label','Black available now')}card.querySelectorAll('[data-fn-alo-color]').forEach(function(b){if(b===black)return;b.classList.add('fnt-coming-soon');b.disabled=true;b.setAttribute('aria-disabled','true');b.title=(b.getAttribute('aria-label')||'Color')+' · Coming Soon'});var colors=card.querySelector('.fn-alo-colors');if(colors&&!colors.querySelector('.fnt-coming-soon-note')){var n=document.createElement('span');n.className='fnt-coming-soon-note';n.textContent='BLACK AVAILABLE NOW · PINK + WHITE COMING SOON';colors.append(n)}})}
-  function addCount(){var products=document.getElementById('products');if(!products)return;var old=products.querySelector('.fnt-catalog-count');if(old)old.remove();var count=products.querySelectorAll('.product-card').length;var banner=document.createElement('div');banner.className='fnt-catalog-count';banner.textContent=count+' STYLES × 6 COLORS × MALE + FEMALE MODELS · HUNDREDS OF STARTING COMBINATIONS FOR '+selectedTeam().toUpperCase();var intro=products.querySelector('.fnt-brand-catalog-intro');if(intro)intro.after(banner);else products.prepend(banner)}
-  function finish(){completeHelp();lockAloToBlack();addCount();document.querySelectorAll('#products .product-card').forEach(function(card,i){card.dataset.fnCompleteCatalog='true';var h=card.querySelector('.meta h3');if(h)h.innerHTML=String(i+1).padStart(2,'0')+' &nbsp; '+h.textContent.replace(/^\s*\d+\s*/,'')})}
-  var prior=window.showShop;if(typeof prior==='function'){window.showShop=function(){var result=prior.apply(this,arguments);requestAnimationFrame(function(){requestAnimationFrame(finish)});setTimeout(finish,700);return result}}
-  function start(){completeHelp();finish();var help=document.getElementById('fntHelpModal');if(help)new MutationObserver(completeHelp).observe(help,{childList:true,subtree:true});document.addEventListener('click',function(e){if(e.target.closest('#fntConfusedOrb'))setTimeout(completeHelp,0)},true)}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-})();
-</script>
-<script id="fnt-absolute-final-entry-unlock">
-(function(){return;
-  function permanentlyOpenSite(){
-    try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(e){}
-    try{free=true}catch(e){}
-    var gate=document.getElementById('offer');
-    if(gate)gate.remove();
-    if(document.body){
-      document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');
-      document.body.style.overflow='';
-      document.body.style.pointerEvents='';
-    }
-    document.documentElement.style.overflow='';
-    var saving=document.getElementById('saving');
-    if(saving)saving.hidden=false;
-    try{sync()}catch(e){}
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',permanentlyOpenSite,{once:true});else permanentlyOpenSite();
-  window.addEventListener('load',permanentlyOpenSite,{once:true});
-  setTimeout(permanentlyOpenSite,0);
-  setTimeout(permanentlyOpenSite,500);
-})();
-</script>
 <style id="fnt-lock-it-in-only-entry-style">
 html body #offer{display:grid!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483646!important}
 html body.fnt-shipping-accepted #offer{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
@@ -2740,86 +2236,6 @@ html body.fnt-shipping-accepted #offer{display:none!important;visibility:hidden!
 #offer .offer{position:relative!important;pointer-events:auto!important;z-index:2147483647!important}
 #offer .claim-btn{position:relative!important;z-index:2147483647!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
 </style>
-<script id="fnt-lock-it-in-only-entry-script">
-(function(){
-  var accepted=false;
-  function gate(){return document.getElementById('offer')}
-  function showGate(){
-    if(accepted)return;
-    try{localStorage.removeItem('fnt-free-shipping-v1')}catch(e){}
-    try{free=false}catch(e){}
-    document.body.classList.remove('fnt-shipping-accepted');
-    document.body.classList.add('fnt-lock-scroll');
-    var o=gate();
-    if(o){
-      o.setAttribute('aria-hidden','false');
-      o.style.setProperty('display','grid','important');
-      o.style.setProperty('pointer-events','auto','important');
-      o.querySelectorAll('.offer-close,[aria-label*="close" i],[aria-label*="dismiss" i]').forEach(function(x){x.remove()});
-      var b=o.querySelector('.claim-btn');
-      if(b){
-        b.type='button';
-        b.setAttribute('aria-label','Lock in free priority shipping and enter site');
-        b.onclick=accept;
-      }
-    }
-  }
-  function accept(e){
-    if(e){e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation()}
-    accepted=true;
-    try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(err){}
-    try{free=true}catch(err){}
-    function finishEntry(){
-      try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(err){}
-      try{free=true}catch(err){}
-      document.body.classList.add('fnt-shipping-accepted');
-      document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
-      document.body.style.overflow='';
-      document.body.style.pointerEvents='';
-      document.documentElement.style.overflow='';
-      var o=gate();
-      if(o){
-        o.setAttribute('aria-hidden','true');
-        o.style.setProperty('display','none','important');
-        o.style.setProperty('visibility','hidden','important');
-        o.style.setProperty('opacity','0','important');
-        o.style.setProperty('pointer-events','none','important');
-      }
-      var saving=document.getElementById('saving');
-      if(saving)saving.hidden=false;
-      try{sync()}catch(err){}
-      var cartButton=document.getElementById('cart')||document.querySelector('header .cart');
-      var count=0;
-      try{count=cartItems.length}catch(err){}
-      if(cartButton){
-        cartButton.hidden=false;
-        cartButton.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING';
-        cartButton.setAttribute('aria-label','Cart. Free priority shipping credit of 33 dollars and 50 cents applied.');
-      }
-    }
-    finishEntry();
-    setTimeout(finishEntry,0);
-    setTimeout(finishEntry,120);
-    setTimeout(finishEntry,600);
-    return false;
-  }
-  function start(){
-    showGate();
-    document.addEventListener('click',function(e){
-      if(e.target.closest&&e.target.closest('#offer .claim-btn'))accept(e);
-    },true);
-    document.addEventListener('touchend',function(e){
-      if(e.target.closest&&e.target.closest('#offer .claim-btn'))accept(e);
-    },{capture:true,passive:false});
-    document.addEventListener('pointerup',function(e){
-      if(e.target.closest&&e.target.closest('#offer .claim-btn'))accept(e);
-    },true);
-    window.fntLockInAndEnter=accept;
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-  window.addEventListener('load',function(){if(!accepted)showGate()},{once:true});
-})();
-</script>
 <style id="fnt-absolute-final-visible-controls">
 html body #fntCompactMusicOrb{
   display:grid!important;place-items:center!important;position:fixed!important;
@@ -2846,32 +2262,6 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
   html body #teamTypeGo{flex-basis:80px!important;width:80px!important;min-width:80px!important;height:80px!important;min-height:80px!important;font-size:19px!important}
 }
 </style>
-<script id="fnt-absolute-final-visible-controls-script">
-(function(){
-  function restore(){
-    var go=document.getElementById('teamTypeGo');
-    if(go){go.innerHTML='<span class="fnt-go-word">LET’S<br>GO</span>';go.setAttribute('aria-label','Let’s go')}
-    var music=document.getElementById('fntCompactMusicOrb');
-    if(music){
-      music.style.setProperty('display','grid','important');
-      music.style.setProperty('transform','none','important');
-      music.setAttribute('aria-label','Open music choices');
-    }
-  }
-  function premium(e){
-    return;
-    var hit=e.target&&e.target.closest?e.target.closest('.premium-callout,[data-fn-premium-trigger="true"]'):null;
-    if(!hit)return;
-    var shipping=document.getElementById('offer');
-    if(shipping&&getComputedStyle(shipping).display!=='none')return;
-    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-    if(typeof window.FN_OPEN_PREMIUM_CHOOSER==='function')window.FN_OPEN_PREMIUM_CHOOSER();
-  }
-  window.addEventListener('pointerdown',premium,true);
-  window.addEventListener('click',premium,true);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){restore();setTimeout(restore,400);setTimeout(restore,1200)},{once:true});else{restore();setTimeout(restore,400)}
-})();
-</script>
 <style id="fnt-standalone-shipping-gate-style">
 #offer{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #fntShippingGateV2{
