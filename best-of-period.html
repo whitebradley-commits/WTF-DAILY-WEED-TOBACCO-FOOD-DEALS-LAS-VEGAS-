@@ -43446,7 +43446,16 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 #bopStableCityResult strong{display:block!important;font-size:18px!important;line-height:1.1!important;letter-spacing:.02em!important}
 #bopStableCityResult span{display:block!important;margin-top:6px!important;color:#e8e1d4!important;font-size:13px!important;font-weight:700!important;letter-spacing:.02em!important}
 #bopStableCityResult .bopStableOpen{color:#f2b13b!important}
-#bopCleanOrbDock{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483000!important}
+/* One clean five-orb dock: remove opacity pulse races and retain only a gentle ocean-wave motion. */
+#bopCleanOrbDock{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483000!important;isolation:isolate!important}
+#bopCleanOrbDock>.bop-static-landing-button{opacity:1!important;visibility:visible!important;backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;will-change:transform!important;transition:none!important;animation:bopStableOceanWave 2.7s ease-in-out infinite!important}
+#bopCleanOrbDock>.bop-static-landing-button:nth-child(1){animation-delay:-1.82s!important}
+#bopCleanOrbDock>.bop-static-landing-button:nth-child(2){animation-delay:-1.28s!important}
+#bopCleanOrbDock>.bop-static-landing-button:nth-child(3){animation-delay:-.74s!important}
+#bopCleanOrbDock>.bop-static-landing-button:nth-child(4){animation-delay:-.20s!important}
+#bopCleanOrbDock>.bop-static-landing-button:nth-child(5){animation-delay:.34s!important}
+#bopCleanOrbDock>.bop-static-landing-button *{animation:none!important;transition:none!important}
+@keyframes bopStableOceanWave{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
 #bopStaticLandingDock,#bopPersistentMapDock,#bopLegacyOrbDock{display:none!important}
 @media (max-width:600px){
   #bopStableMobileLockup{width:94vw!important;height:clamp(56px,16vw,76px)!important}
