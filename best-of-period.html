@@ -7876,6 +7876,171 @@
 html.bop-route-booting body{visibility:hidden!important;opacity:0!important}
 html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacity .12s ease}
 </style>
+<!-- v275: one search layer, full city names, and complete Santa Barbara friend picks -->
+<style id="bop-search-city-santa-v275-final">
+  /* Search bars: one icon, one input string and one Powered by lockup. */
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput){
+    box-sizing:border-box!important;
+    width:min(720px,calc(100vw - 28px))!important;
+    max-width:calc(100vw - 28px)!important;
+    margin-left:auto!important;margin-right:auto!important;
+    left:auto!important;right:auto!important;transform:none!important;
+    overflow:hidden!important;background:#030303!important;
+    border:1.5px solid #F59E0B!important;border-radius:999px!important;
+    animation:bopSearchRingPulseV275 4.6s ease-in-out infinite!important;
+  }
+  @keyframes bopSearchRingPulseV275{
+    0%,100%{border-color:rgba(245,158,11,.82);box-shadow:0 0 5px rgba(245,158,11,.25),inset 0 0 4px rgba(245,158,11,.03)}
+    50%{border-color:#F59E0B;box-shadow:0 0 13px rgba(245,158,11,.56),inset 0 0 7px rgba(245,158,11,.07)}
+  }
+  #bopStableLandingSearchInput,#bestOfOverlay #boSearchInput{
+    box-sizing:border-box!important;background:transparent!important;background-image:none!important;
+    border:0!important;box-shadow:none!important;text-indent:0!important;
+    color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;caret-color:#F59E0B!important;
+    text-shadow:0 0 4px rgba(245,158,11,.42)!important;
+  }
+  #bopStableLandingSearchInput::placeholder,#bestOfOverlay #boSearchInput::placeholder{
+    color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;opacity:.94!important;
+    text-shadow:0 0 4px rgba(245,158,11,.42)!important;
+  }
+  #bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay .bop-landing-search-prompt,
+  #bopLandingSearchPrompt,.bop-universal-search-icon,.bop-universal-search-prompt,
+  #bestOfOverlay .bop-universal-search-icon,#bestOfOverlay .bop-universal-search-prompt{
+    display:none!important;visibility:hidden!important;opacity:0!important;
+  }
+  #bopLandingOverlay .bop-one-search-icon,#bestOfOverlay .bop-one-search-icon{
+    display:block!important;visibility:visible!important;opacity:1!important;
+    filter:drop-shadow(0 0 3px rgba(245,158,11,.45))!important;
+  }
+  #bopLandingOverlay .bo-search-powered-by,#bestOfOverlay .bo-search-powered-by{
+    color:#F59E0B!important;text-shadow:0 0 4px rgba(245,158,11,.44)!important;
+    filter:drop-shadow(0 0 2px rgba(245,158,11,.30))!important;
+  }
+  @media(max-width:430px){
+    #bopStableLandingSearchInput{padding-left:51px!important;padding-right:128px!important;font-size:14.5px!important}
+    #bopStableLandingSearchInput::placeholder{font-size:14.5px!important}
+    #bestOfOverlay #boSearchInput{padding-left:50px!important;padding-right:122px!important;font-size:13.25px!important}
+    #bestOfOverlay #boSearchInput::placeholder{font-size:13.25px!important}
+  }
+
+  /* The full selected city owns the left side; Period© owns the right side. */
+  #bopStableMobileLockup{overflow:hidden!important;width:min(96vw,650px)!important}
+  #bopStableMobileCity{
+    left:0!important;right:calc(46% + 6px)!important;width:auto!important;max-width:none!important;
+    overflow:visible!important;text-align:right!important;white-space:nowrap!important;
+    transform:scaleX(var(--bop-full-city-fit,1))!important;transform-origin:right center!important;
+    z-index:2!important;
+  }
+  #bopStableMobileLockup::after{left:54%!important}
+  #bopStableMobilePeriod{left:54%!important;right:auto!important;z-index:5!important}
+  @media(max-width:430px){
+    #bopStableMobileCity,#bopStableMobilePeriod{font-size:clamp(40px,13.4vw,58px)!important}
+  }
+</style>
+<script id="bop-search-city-santa-v275-final-script">
+(function(){
+  var GOLD='#F59E0B';
+  var cityNames={bestof:'Las Vegas',lasvegas:'Las Vegas',sandiego:'San Diego',santabarbara:'Santa Barbara',sanfrancisco:'San Francisco',siliconvalley:'Silicon Valley',losangeles:'Los Angeles',newyork:'New York City',manhattan:'Manhattan',brooklyn:'Brooklyn',queens:'Queens',bronx:'The Bronx',hamptons:'The Hamptons',neworleans:'New Orleans',washingtondc:'Washington, D.C.',austin:'Austin',miami:'Miami',london:'London',paris:'Paris',chicago:'Chicago'};
+  function cleanSearch(){
+    var pairs=[[document.getElementById('bopStableLandingSearchInput'),'Search any city...','Search any city'],[document.getElementById('boSearchInput'),'Search any restaurant...','Search any restaurant']];
+    pairs.forEach(function(pair){
+      var input=pair[0];if(!input)return;
+      if(/^search (any|all) (city|restaurants?)(\.{0,5})$/i.test(String(input.value||'').trim()))input.value='';
+      input.placeholder=pair[1];input.setAttribute('aria-label',pair[2]);
+      input.style.setProperty('color',GOLD,'important');input.style.setProperty('-webkit-text-fill-color',GOLD,'important');
+      var wrap=input.closest('.bo-search-wrap');if(!wrap)return;
+      wrap.querySelectorAll('.bop-landing-search-icon,.bop-landing-search-prompt,.bop-universal-search-icon,.bop-universal-search-prompt').forEach(function(n){n.remove()});
+      var icons=wrap.querySelectorAll('.bop-one-search-icon');for(var i=1;i<icons.length;i++)icons[i].remove();
+      if(!icons.length){var icon=document.createElement('span');icon.className='bop-one-search-icon';icon.setAttribute('aria-hidden','true');wrap.insertBefore(icon,input)}
+    });
+  }
+  function fullCity(){
+    var city=document.getElementById('bopStableMobileCity');if(!city)return;
+    var key=String(window.boCityContext||'').toLowerCase();
+    var full=cityNames[key];
+    if(full && document.getElementById('bestOfOverlay')&&document.getElementById('bestOfOverlay').classList.contains('open'))city.textContent=full;
+    var text=String(city.textContent||'').trim(),n=text.length;
+    var scale=n>=16?.50:n>=14?.56:n>=12?.62:n>=10?.70:n>=8?.82:1;
+    city.style.setProperty('--bop-full-city-fit',String(scale));
+  }
+  function santa(){
+    if(!window.boCategoryData)return;
+    var picks=[
+      {name:'Stonehouse at San Ysidro Ranch',aliases:['Stonehouse','Stonehouse Restaurant'],rating:'4.7/5',reviews:425,genre:'fine',url:'https://www.stonehouserestaurant.com/',address:'900 San Ysidro Ln, Montecito, CA 93108',why:'The historic San Ysidro Ranch dining room, recognized by the MICHELIN Guide and named Santa Barbara’s #1 restaurant by OpenTable.'},
+      {name:"Yoichi's",aliases:[],rating:'4.8/5 Google · 4.9/5 Tripadvisor',reviews:201,genre:'japanese',url:'https://www.yoichis.com/',address:'230 E Victoria St, Santa Barbara, CA 93101',why:'An intimate traditional Japanese kaiseki experience built around a multi-course tasting menu.'},
+      {name:'Wine Cask',aliases:['Intermezzo by Wine Cask'],rating:'4.7/5 OpenTable · 4.4/5 Tripadvisor',reviews:2245,genre:'winefocus',url:'https://www.winecask.com/',address:'813 Anacapa St, Santa Barbara, CA 93101',why:'A polished Santa Barbara wine-country dining room with a deep cellar and California cooking.'},
+      {name:'The Lark',aliases:[],rating:'4.7/5 OpenTable',reviews:2586,genre:'american',url:'https://www.thelarksb.com/',address:'131 Anacapa St, Santa Barbara, CA 93101',why:'The lively Funk Zone anchor for seasonal, shareable New American cooking.'},
+      {name:'Rare Society',aliases:['Rare Society Santa Barbara'],rating:'4.6/5 OpenTable',reviews:176,genre:'steakhighend',url:'https://raresociety.com/santa-barbara',address:'214 State St, Santa Barbara, CA 93101',why:'A dramatic wood-fired steakhouse with in-house dry aging and a clubby dining room.'}
+    ];
+    function isSanta(r){return r&&r.city==='santabarbara'}
+    function same(r,p){var n=String(r&&r.name||'').toLowerCase();return [p.name].concat(p.aliases).some(function(x){return n===x.toLowerCase()})}
+    function find(p){var hit=null;Object.keys(boCategoryData).some(function(cat){var a=boCategoryData[cat];if(!Array.isArray(a))return false;hit=a.find(function(r){return isSanta(r)&&same(r,p)})||null;return !!hit});return hit}
+    function add(cat,r){var a=boCategoryData[cat]=boCategoryData[cat]||[];var old=a.find(function(x){return isSanta(x)&&String(x.name).toLowerCase()===String(r.name).toLowerCase()});if(old)Object.assign(old,r);else a.push(Object.assign({},r))}
+    var chosen=[];
+    picks.forEach(function(p){
+      var r=find(p)||{name:p.name,city:'santabarbara',rank:1,price:4,hue:'341,54%,28%',hours:[],phone:'',directionsUrl:''};
+      Object.assign(r,p,{name:p.name,city:'santabarbara',bjsPick:true,bjsPickLabel:'BJS Pick',ratingSource:'Current public review-platform score',qualifiedPhoto:!!r.image,photoPolicy:'interior-only-no-people-no-food'});
+      add(p.genre,r);add('santabarbara',r);chosen.push(Object.assign({},r));
+      Object.keys(boCategoryData).forEach(function(cat){var a=boCategoryData[cat];if(Array.isArray(a))a.forEach(function(x){if(isSanta(x)&&same(x,p))Object.assign(x,r)})});
+    });
+    var bcat=(window.BO_CITY_CONFIG&&BO_CITY_CONFIG.santabarbara&&BO_CITY_CONFIG.santabarbara.bjsPicksCat)||'bjspickssantabarbara';
+    boCategoryData[bcat]=chosen;
+    window.BOP_SANTA_BARBARA_FRIEND_PICKS={count:chosen.length,names:chosen.map(function(r){return r.name}),allBjsPicks:true,ratingsAttached:true,photoPolicy:'real restaurant interiors only'};
+  }
+  window.BOP_SYNC_SANTA_FRIEND_PICKS=santa;
+  window.BOP_SYNC_CLEAN_SEARCH_AND_CITY=function(){cleanSearch();fullCity()};
+  function sync(){cleanSearch();fullCity();santa()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync,{once:true});else sync();
+  new MutationObserver(function(){requestAnimationFrame(function(){cleanSearch();fullCity()})}).observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
+  setTimeout(sync,250);setTimeout(sync,1200);
+})();
+</script>
+<!-- v278: live inventory audit (deduplicated restaurant and unrated totals) -->
+<script id="bop-live-data-audit-v278-script">
+(function(){
+ function clean(v){return String(v==null?'':v).trim()}
+ function key(v){return clean(v).toLowerCase().replace(/&amp;/g,'&').replace(/[^a-z0-9]+/g,' ').trim()}
+ function restaurantName(row){return clean(row&&(row.name||row.restaurant||row.title||row.place||row.venue))}
+ function cityName(row,fallback){return clean(row&&(row.city||row.market||row.locationCity||row.area))||clean(fallback)}
+ function rated(row){
+  if(!row||typeof row!=='object')return false;
+  var values=[row.rating,row.score,row.aggregateRating,row.googleRating,row.openTableRating,row.tripadvisorRating,row.yelpRating];
+  return values.some(function(v){if(typeof v==='number')return isFinite(v)&&v>0;var s=clean(v);return s!==''&&!/^(?:n\/?a|nr|not rated|no rating|unrated|tbd|—|-)$/i.test(s)&&/\d/.test(s)})
+ }
+ function collect(){
+  var seen=new Map(),byCity={},source;
+  try{source=(typeof boCategoryData!=='undefined'&&boCategoryData)||window.boCategoryData||{}}catch(_){source=window.boCategoryData||{}}
+  function visit(value,trail){
+   if(!value)return;
+   if(Array.isArray(value)){value.forEach(function(item){visit(item,trail)});return}
+   if(typeof value!=='object')return;
+   var name=restaurantName(value);
+   if(name){
+    var fallback=trail.length>1?trail[0]:'';
+    var city=cityName(value,fallback),id=key(city)+'|'+key(name),hasRating=rated(value);
+    if(!seen.has(id))seen.set(id,{city:city||'Unassigned',name:name,rated:hasRating});
+    else if(hasRating)seen.get(id).rated=true;
+    return;
+   }
+   Object.keys(value).forEach(function(k){visit(value[k],trail.concat(k))});
+  }
+  visit(source,[]);
+  try{
+   if(Array.isArray(window.bopRestaurantExpansionRecords))window.bopRestaurantExpansionRecords.forEach(function(row){
+    var name=restaurantName(row);if(!name)return;var city=cityName(row,''),id=key(city)+'|'+key(name),hasRating=rated(row);
+    if(!seen.has(id))seen.set(id,{city:city||'Unassigned',name:name,rated:hasRating});else if(hasRating)seen.get(id).rated=true;
+   })
+  }catch(_){}
+  seen.forEach(function(r){var c=r.city||'Unassigned';if(!byCity[c])byCity[c]={restaurants:0,unrated:0};byCity[c].restaurants++;if(!r.rated)byCity[c].unrated++});
+  var rows=Array.from(seen.values()),result={restaurants:rows.length,unrated:rows.filter(function(r){return!r.rated}).length,byCity:byCity,generatedAt:new Date().toISOString()};
+  window.BOP_DATA_AUDIT=result;document.documentElement.dataset.bopRestaurants=String(result.restaurants);document.documentElement.dataset.bopUnrated=String(result.unrated);return result;
+ }
+ window.BOP_REFRESH_DATA_AUDIT=collect;
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',collect,{once:true});else collect();
+ setTimeout(collect,600);setTimeout(collect,1800);setTimeout(collect,3600);
+})();
+</script>
 <script id="bop-route-boot-gate-script">
 (function(){
   document.documentElement.classList.add('bop-route-booting');
@@ -42694,6 +42859,17 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
   document.addEventListener('click',function(event){
     var back=event.target&&event.target.closest&&event.target.closest('#boBackBtn');
     if(!back)return;
+    var category='';
+    try{category=String(typeof boCurrentCat!=='undefined'&&boCurrentCat||'').toLowerCase();}catch(ignore){}
+    /* A category page returns to that city's tile hub. The tile hub alone
+       returns to the main landing page. */
+    if(category && category!=='otheroptions'){
+      event.preventDefault();event.stopImmediatePropagation();
+      try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',boCityContext);}catch(ignore){}
+      try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions');}catch(ignore){}
+      window.scrollTo(0,0);
+      return;
+    }
     event.preventDefault();event.stopImmediatePropagation();safeReturn();
   },true);
 })();
@@ -44552,3 +44728,238 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   #bopFrontBjsCoLogo .bop-bjsco-main{font-size:17px!important;line-height:.92!important}
   #bopFrontBjsCoLogo .bop-bjsco-sub{font-size:10px!important;line-height:1!important}
 </style>
+<!-- v276-final: last-in-source lock for the corrected search and city geometry -->
+<style id="bop-search-city-v276-last-lock">
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),#bestOfOverlay .bo-search-wrap:has(#boSearchInput){box-sizing:border-box!important;width:min(720px,calc(100vw - 28px))!important;max-width:calc(100vw - 28px)!important;margin-left:auto!important;margin-right:auto!important;left:auto!important;right:auto!important;transform:none!important;overflow:hidden!important;background:#030303!important;border:1.5px solid #F59E0B!important;border-radius:999px!important;animation:bopSearchRingPulseV276 4.6s ease-in-out infinite!important}
+@keyframes bopSearchRingPulseV276{0%,100%{border-color:rgba(245,158,11,.82);box-shadow:0 0 5px rgba(245,158,11,.25),inset 0 0 4px rgba(245,158,11,.03)}50%{border-color:#F59E0B;box-shadow:0 0 13px rgba(245,158,11,.56),inset 0 0 7px rgba(245,158,11,.07)}}
+#bopStableLandingSearchInput,#bestOfOverlay #boSearchInput{box-sizing:border-box!important;background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;text-indent:0!important;color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;caret-color:#F59E0B!important;text-shadow:0 0 4px rgba(245,158,11,.42)!important}
+#bopStableLandingSearchInput::placeholder,#bestOfOverlay #boSearchInput::placeholder{color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;opacity:.94!important;text-shadow:0 0 4px rgba(245,158,11,.42)!important}
+#bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay .bop-landing-search-prompt,#bopLandingSearchPrompt,.bop-universal-search-icon,.bop-universal-search-prompt{display:none!important;visibility:hidden!important;opacity:0!important}
+#bopLandingOverlay .bop-one-search-icon,#bestOfOverlay .bop-one-search-icon{display:block!important;visibility:visible!important;opacity:1!important;filter:drop-shadow(0 0 3px rgba(245,158,11,.45))!important}
+#bopLandingOverlay .bo-search-powered-by,#bestOfOverlay .bo-search-powered-by{color:#F59E0B!important;text-shadow:0 0 4px rgba(245,158,11,.44)!important;filter:drop-shadow(0 0 2px rgba(245,158,11,.30))!important}
+#bopStableMobileLockup{overflow:hidden!important;width:min(96vw,650px)!important}
+#bopStableMobileCity{left:0!important;right:calc(46% + 6px)!important;width:auto!important;max-width:none!important;overflow:visible!important;text-align:right!important;white-space:nowrap!important;transform:scaleX(var(--bop-full-city-fit,1))!important;transform-origin:right center!important;z-index:2!important}
+#bopStableMobileLockup::after{left:54%!important}#bopStableMobilePeriod{left:54%!important;right:auto!important;z-index:5!important}
+@media(max-width:430px){#bopStableLandingSearchInput{padding-left:51px!important;padding-right:128px!important;font-size:14.5px!important}#bopStableLandingSearchInput::placeholder{font-size:14.5px!important}#bestOfOverlay #boSearchInput{padding-left:50px!important;padding-right:122px!important;font-size:13.25px!important}#bestOfOverlay #boSearchInput::placeholder{font-size:13.25px!important}#bopStableMobileCity,#bopStableMobilePeriod{font-size:clamp(40px,13.4vw,58px)!important}}
+@media(prefers-reduced-motion:reduce){#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),#bestOfOverlay .bo-search-wrap:has(#boSearchInput){animation:none!important}}
+</style>
+<script id="bop-search-city-santa-v276-last-lock-script">
+(function(){function run(){if(window.BOP_SYNC_CLEAN_SEARCH_AND_CITY)window.BOP_SYNC_CLEAN_SEARCH_AND_CITY();if(window.BOP_SYNC_SANTA_FRIEND_PICKS)window.BOP_SYNC_SANTA_FRIEND_PICKS()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();setTimeout(run,500);setTimeout(run,1600);setTimeout(run,2800)})();
+</script>
+<!-- v277: restore the San Diego coastline selector to the city tile hub -->
+<style id="bop-sd-city-hub-coast-v277">
+#bopSdCityHubCoast{width:min(720px,calc(100vw - 24px));margin:14px auto 20px;padding:14px 12px 16px;box-sizing:border-box;border:1.5px solid #F59E0B;border-radius:22px;background:linear-gradient(100deg,#07111a 0,#030303 38%,#030303 100%);box-shadow:0 0 16px rgba(245,158,11,.22);color:#fff}
+#bopSdCityHubCoast h2{margin:0;color:#fff;font:900 clamp(24px,6vw,38px)/1 Georgia,serif;text-align:center;text-shadow:0 0 8px rgba(255,255,255,.24)}
+#bopSdCityHubCoast .bop-sd-hub-sub{margin:6px 0 12px;color:#d8b466;font:800 10px/1.25 'Archivo Narrow',Arial,sans-serif;letter-spacing:.13em;text-align:center;text-transform:uppercase}
+.bop-sd-hub-coastline{position:relative;padding-left:21px}
+.bop-sd-hub-coastline:before{content:'';position:absolute;left:7px;top:3px;bottom:3px;width:3px;border-radius:4px;background:#F59E0B;box-shadow:0 0 9px #F59E0B}
+.bop-sd-hub-areas{display:flex;gap:7px;overflow-x:auto;padding:3px 2px 9px;scrollbar-width:thin;scrollbar-color:#F59E0B #111}
+.bop-sd-hub-area{flex:0 0 auto;min-height:39px;padding:7px 12px;border:1.5px solid #F59E0B;border-radius:999px;background:#070707;color:#F59E0B;font:900 10px/1 'Archivo Narrow',Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.bop-sd-hub-area[aria-pressed="true"]{border-color:#ef3340;background:#26070d;color:#fff;box-shadow:0 0 11px rgba(239,51,64,.45)}
+.bop-sd-hub-results{display:grid;gap:6px;margin-top:4px}
+.bop-sd-hub-place{display:grid;grid-template-columns:25px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;min-height:42px;padding:7px 9px;border:1px solid rgba(245,158,11,.32);border-radius:11px;background:#090909;color:#fff;text-align:left;text-decoration:none}
+.bop-sd-hub-place b{display:grid;place-items:center;width:23px;height:23px;border:1px solid #F59E0B;border-radius:50%;color:#F59E0B;font:900 9px/1 Arial,sans-serif}.bop-sd-hub-place strong{font:900 12px/1.1 'Archivo Narrow',Arial,sans-serif}.bop-sd-hub-place small{color:#ef3340;font:900 8px/1 Arial,sans-serif;letter-spacing:.08em}
+@media(max-width:430px){#bopSdCityHubCoast{padding-inline:9px}.bop-sd-hub-area{font-size:9px;padding-inline:10px}.bop-sd-hub-place strong{font-size:11px}}
+</style>
+<script id="bop-sd-city-hub-coast-v277-script">
+(function(){
+ function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+ function data(){return window.BO_SD_TERRITORIES||{}}
+ function renderArea(panel,name){var rows=data()[name]||[];panel.querySelectorAll('.bop-sd-hub-area').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.area===name))});var out=panel.querySelector('.bop-sd-hub-results');out.innerHTML=rows.slice(0,10).map(function(r,i){var url=r[5]||('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r[0]+' '+r[1]));return'<a class="bop-sd-hub-place" href="'+esc(url)+'" target="_blank" rel="noopener"><b>'+String(i+1).padStart(2,'0')+'</b><strong>'+esc(r[0])+'</strong><small>VIEW</small></a>'}).join('')||'<div class="bop-sd-hub-place"><b>•</b><strong>Restaurants being organized for this coast area.</strong><small>SOON</small></div>'}
+ function mount(){
+  var best=document.getElementById('bestOfOverlay');if(!best||!best.classList.contains('open')||String(window.boCityContext||'').toLowerCase()!=='sandiego'||String(window.boCurrentCat||'otheroptions').toLowerCase()!=='otheroptions'){var old=document.getElementById('bopSdCityHubCoast');if(old)old.remove();return}
+  if(document.getElementById('bopSdCityHubCoast'))return;
+  var anchor=best.querySelector('.bo-picker-grid,.bo-alpha-groups,#boList');if(!anchor)return;
+  var names=['Oceanside','Carlsbad','Encinitas / Cardiff','Del Mar / Solana Beach','La Jolla','PB / Pacific Beach','Downtown San Diego'];
+  var panel=document.createElement('section');panel.id='bopSdCityHubCoast';panel.innerHTML='<h2>SAN DIEGO COAST</h2><p class="bop-sd-hub-sub">Choose a coastal area before choosing a category</p><div class="bop-sd-hub-coastline"><div class="bop-sd-hub-areas">'+names.map(function(n){return'<button type="button" class="bop-sd-hub-area" data-area="'+esc(n)+'" aria-pressed="false">'+esc(n)+'</button>'}).join('')+'</div><div class="bop-sd-hub-results"></div></div>';
+  anchor.parentNode.insertBefore(panel,anchor);panel.querySelectorAll('.bop-sd-hub-area').forEach(function(b){b.addEventListener('click',function(){renderArea(panel,b.dataset.area)})});renderArea(panel,'Del Mar / Solana Beach');
+ }
+ function install(){if(typeof window.boRenderCategory!=='function'||window.boRenderCategory.__bopSdHubCoast)return;var original=window.boRenderCategory;function wrapped(){var r=original.apply(this,arguments);setTimeout(mount,80);setTimeout(mount,260);return r}wrapped.__bopSdHubCoast=true;window.boRenderCategory=wrapped}
+ document.addEventListener('click',function(){setTimeout(mount,90)},true);install();setTimeout(install,500);setTimeout(install,1500);setTimeout(mount,700);
+})();
+</script>
+<!-- v279: active final Back hierarchy; category -> city tile hub -> landing -->
+<script id="bop-active-back-hierarchy-v279-script">
+(function(){
+ function category(){try{return String((typeof boCurrentCat!=='undefined'&&boCurrentCat)||'').toLowerCase()}catch(_){return''}}
+ function city(){try{return (typeof boCityContext!=='undefined'&&boCityContext)||''}catch(_){return''}}
+ function landing(){
+  if(typeof window.bopSafeReturnToLanding==='function'){window.bopSafeReturnToLanding();return}
+  var best=document.getElementById('bestOfOverlay'),home=document.getElementById('bopLandingOverlay');
+  if(best){best.classList.remove('open');best.setAttribute('aria-hidden','true')}
+  if(home){home.classList.add('open');home.setAttribute('aria-hidden','false')}
+  window.scrollTo(0,0);
+ }
+ document.addEventListener('click',function(event){
+  var button=event.target&&event.target.closest&&event.target.closest('#boBackBtn');if(!button)return;
+  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+  var cat=category();
+  if(cat&&cat!=='otheroptions'){
+   var c=city();
+   try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',c)}catch(_){}
+   try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+   window.scrollTo(0,0);return;
+  }
+  landing();
+ },true);
+})();
+</script>
+<!-- v280: first verified unrated-priority batch + strict priority-photo audit -->
+<script id="bop-priority-ratings-photos-v280-script">
+(function(){
+ var RATINGS={
+  'Aquavit':{rating:'4.3/5 Tripadvisor',score:4.3,reviews:589,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d425570-Reviews-Aquavit_Restaurant-New_York_City_New_York.html'},
+  'Atera':{rating:'4.6/5 Tripadvisor',score:4.6,reviews:219,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d3599839-Reviews-Atera-New_York_City_New_York.html'},
+  'Atomix':{rating:'4.6/5 Tripadvisor',score:4.6,reviews:30,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d15676762-Reviews-Atomix-New_York_City_New_York.html'},
+  'Daniel':{rating:'4.7/5 Tripadvisor',score:4.7,reviews:3445,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d457808-Reviews-Daniel-New_York_City_New_York.html'},
+  'Eleven Madison Park':{rating:'4.4/5 Tripadvisor',score:4.4,reviews:2782,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d479020-Reviews-Eleven_Madison_Park-New_York_City_New_York.html'},
+  'Gabriel Kreuther':{rating:'4.6/5 Tripadvisor',score:4.6,reviews:808,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d8483826-Reviews-Gabriel_Kreuther-New_York_City_New_York.html'},
+  'Gramercy Tavern':{rating:'4.6/5 Tripadvisor',score:4.6,reviews:3868,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d424094-Reviews-Gramercy_Tavern-New_York_City_New_York.html'},
+  'Jean-Georges':{rating:'4.4/5 Tripadvisor',score:4.4,reviews:null,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d1657868-Reviews-Jean_Georges-New_York_City_New_York.html'},
+  'Jungsik':{rating:'4.7/5 Tripadvisor',score:4.7,reviews:306,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d2345886-Reviews-Jungsik-New_York_City_New_York.html'},
+  'Le Bernardin':{rating:'4.6/5 Tripadvisor',score:4.6,reviews:3701,url:'https://www.tripadvisor.com/Restaurant_Review-g60763-d424434-Reviews-Le_Bernardin-New_York_City_New_York.html'}
+ };
+ function apply(row){
+  if(!row||typeof row!=='object'||String(row.city||'').toLowerCase()!=='newyork')return;
+  var hit=RATINGS[row.name];if(!hit)return;
+  row.rating=hit.rating;row.score=hit.score;if(hit.reviews!=null)row.reviews=hit.reviews;
+  row.ratingSource='Tripadvisor';row.ratingSourceUrl=hit.url;row.ratingChecked='2026-08-19';
+ }
+ function walk(value){if(Array.isArray(value)){value.forEach(function(v){if(v&&typeof v==='object'&&v.name)apply(v);else walk(v)});return}if(value&&typeof value==='object')Object.keys(value).forEach(function(k){walk(value[k])})}
+ function qualifiedImage(row){
+  var image=String(row&&(row.image||row.imageUrl||row.photo||row.photoUrl||row.img)||'');
+  if(!image)return false;
+  if(row.qualifiedPhoto===false)return false;
+  return row.qualifiedPhoto===true||/^(?:data:image\/(?:jpeg|jpg|png|webp);base64,|https?:\/\/)/i.test(image);
+ }
+ function audit(){
+  var source;try{source=(typeof boCategoryData!=='undefined'&&boCategoryData)||window.boCategoryData||{}}catch(_){source=window.boCategoryData||{}}
+  walk(source);
+  try{if(typeof bopRestaurantExpansionRecords!=='undefined')bopRestaurantExpansionRecords.forEach(apply)}catch(_){}
+  var missing=[],seen={};
+  function scan(value,category){
+   if(Array.isArray(value)){value.forEach(function(row){if(!row||typeof row!=='object'||!row.name)return;var priority=/michelin|jamesbeard|bestofperiod|bjspick/i.test(category||'')||row.bjsPick===true||row.bestOfPeriod===true||row.michelin===true||row.jamesBeard===true;if(!priority)return;var id=String(row.city||'')+'|'+row.name;if(!qualifiedImage(row)&&!seen[id]){seen[id]=1;missing.push({city:row.city||'',name:row.name,category:category||'',reason:'qualified interior photo missing'})}});return}
+   if(value&&typeof value==='object')Object.keys(value).forEach(function(k){scan(value[k],k)})
+  }
+  scan(source,'');
+  window.BOP_PRIORITY_PHOTO_AUDIT={missing:missing,totalMissing:missing.length,policy:'Priority cards require a verified restaurant-interior image. No people or food except dish-specific categories.',generatedAt:new Date().toISOString()};
+  if(typeof window.BOP_REFRESH_DATA_AUDIT==='function')window.BOP_REFRESH_DATA_AUDIT();
+ }
+ window.BOP_PRIORITY_RATING_BATCH_1=RATINGS;window.BOP_REFRESH_PRIORITY_AUDIT=audit;
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',audit,{once:true});else audit();setTimeout(audit,700);setTimeout(audit,1900);setTimeout(audit,3600);
+})();
+</script>
+<!-- v281: rotate only the globe artwork inside the fifth landing orb -->
+<style id="bop-main-globe-rotation-v281">
+@keyframes bopMainGlobeRotateV281{to{transform:rotate(360deg)}}
+#bopLandingOverlay.open #bopCleanOrbDock [data-clean-orb="world"] .bop-orb-glyph{
+  animation:bopMainGlobeRotateV281 9s linear infinite!important;
+  transform-origin:50% 50%!important;
+  transform-box:view-box!important;
+  will-change:transform!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #bopLandingOverlay.open #bopCleanOrbDock [data-clean-orb="world"] .bop-orb-glyph{animation-duration:24s!important}
+}
+</style>
+<!-- v282: every LIVE city row routes directly to its city tile hub -->
+<style id="bop-live-city-row-routing-v282">
+#ocWorldOverlay .bop-city-button[data-live="true"]{cursor:pointer!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:rgba(47,164,255,.18)!important}
+#ocWorldOverlay .bop-city-button[data-live="true"]:active{transform:scale(.985)!important;background:#07111b!important}
+</style>
+<script id="bop-live-city-row-routing-v282-script">
+(function(){
+ function norm(v){return String(v||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'')}
+ function resolve(button){
+  var name=(button.querySelector('span')||button).textContent.trim(),cities=Array.isArray(window.OC_CITIES)?window.OC_CITIES:[];
+  return cities.find(function(c){return c&&c.t==='live'&&(norm(c.n)===norm(name)||norm(c.dest)===norm(name))})||null;
+ }
+ function close(id){var n=document.getElementById(id);if(n){n.classList.remove('open','is-open','active','tg-open');n.setAttribute('aria-hidden','true')}}
+ function open(city){
+  if(!city||!city.dest)return;
+  close('ocWorldOverlay');close('otherCitiesOverlay');close('ocCityCard');close('boNearMapPage');close('bopWorldwideLanding');close('boWorldwidePage');
+  var landing=document.getElementById('bopLandingOverlay');if(landing){landing.classList.remove('open');landing.setAttribute('aria-hidden','true')}
+  var best=document.getElementById('bestOfOverlay');if(best){best.classList.add('open');best.setAttribute('aria-hidden','false');best.style.removeProperty('display');best.style.removeProperty('visibility');best.style.removeProperty('pointer-events')}
+  document.body.classList.remove('oc-world-active','bo-near-map-active','bop-ui-near','bo-closest-five-active');document.body.classList.add('bop-ui-bestof');
+  try{boCityContext=city.dest}catch(_){}window.boCityContext=city.dest;
+  try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',city.dest)}catch(_){}
+  try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+  try{history.replaceState(null,'',location.pathname+'?page=otheroptions&city='+encodeURIComponent(city.dest))}catch(_){}
+  window.scrollTo(0,0);
+ }
+ window.addEventListener('click',function(event){
+  var button=event.target&&event.target.closest&&event.target.closest('#ocWorldOverlay .bop-city-button[data-live="true"]');if(!button)return;
+  var city=resolve(button);if(!city)return;
+  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();open(city);
+ },true);
+ window.BOP_OPEN_LIVE_DIRECTORY_CITY=open;
+})();
+</script>
+<!-- v283: one clean search layer; only the outside ring pulses -->
+<style id="bop-clean-search-final-v283">
+@keyframes bopCleanSearchRingV283{
+ 0%,100%{border-color:rgba(245,158,11,.82);box-shadow:0 0 4px rgba(245,158,11,.20)}
+ 50%{border-color:#F59E0B;box-shadow:0 0 9px rgba(245,158,11,.40)}
+}
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+#bestOfOverlay .bo-search-wrap:has(#boSearchInput){
+ position:relative!important;box-sizing:border-box!important;
+ width:min(720px,calc(100vw - 28px))!important;max-width:calc(100vw - 28px)!important;
+ min-height:62px!important;height:62px!important;margin-left:auto!important;margin-right:auto!important;
+ overflow:hidden!important;background:#030303!important;border:1.5px solid #F59E0B!important;border-radius:999px!important;
+ animation:bopCleanSearchRingV283 5.2s ease-in-out infinite!important;
+}
+#bopStableLandingSearchInput,#bestOfOverlay #boSearchInput{
+ display:block!important;box-sizing:border-box!important;width:100%!important;height:60px!important;min-height:60px!important;
+ margin:0!important;padding:0 158px 0 54px!important;border:0!important;border-radius:999px!important;
+ background:transparent!important;background-image:none!important;box-shadow:none!important;outline:0!important;
+ color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;caret-color:#F59E0B!important;
+ font-family:'Archivo Narrow',Arial,sans-serif!important;font-size:15px!important;font-weight:600!important;line-height:60px!important;
+ letter-spacing:0!important;text-indent:0!important;text-shadow:none!important;filter:none!important;
+}
+#bopStableLandingSearchInput::placeholder,#bestOfOverlay #boSearchInput::placeholder{
+ color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;opacity:1!important;
+ font:600 15px/60px 'Archivo Narrow',Arial,sans-serif!important;letter-spacing:0!important;text-shadow:none!important;filter:none!important;
+}
+#bopLandingOverlay .bo-search-powered-by,#bestOfOverlay .bo-search-powered-by{
+ position:absolute!important;right:16px!important;top:50%!important;transform:translateY(-50%)!important;
+ display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;
+ margin:0!important;color:#F59E0B!important;font:600 15px/1 'Archivo Narrow',Arial,sans-serif!important;
+ letter-spacing:0!important;white-space:nowrap!important;pointer-events:none!important;text-shadow:none!important;filter:none!important;
+}
+#bopLandingOverlay .bo-search-powered-by *,#bestOfOverlay .bo-search-powered-by *{text-shadow:none!important;filter:none!important}
+#bopLandingOverlay .bo-search-powered-by svg:first-child,#bestOfOverlay .bo-search-powered-by svg:first-child{width:15px!important;height:15px!important;margin:0!important;flex:0 0 15px!important}
+#bopLandingOverlay .bo-search-powered-by svg:last-child,#bestOfOverlay .bo-search-powered-by svg:last-child{width:24px!important;height:24px!important;flex:0 0 24px!important}
+#bopLandingOverlay .bop-one-search-icon,#bestOfOverlay .bop-one-search-icon{
+ display:block!important;visibility:visible!important;opacity:1!important;left:20px!important;top:50%!important;
+ width:21px!important;height:21px!important;transform:translateY(-52%)!important;filter:none!important;
+}
+#bopLandingOverlay .bop-one-search-icon::before,#bestOfOverlay .bop-one-search-icon::before{border-color:#F59E0B!important;filter:none!important;box-shadow:none!important}
+#bopLandingOverlay .bop-one-search-icon::after,#bestOfOverlay .bop-one-search-icon::after{background:#F59E0B!important;filter:none!important;box-shadow:none!important}
+#bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay .bop-landing-search-prompt,#bopLandingSearchPrompt,
+#bopLandingOverlay .bop-universal-search-icon,#bopLandingOverlay .bop-universal-search-prompt{
+ display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;
+}
+@media(max-width:430px){
+ #bopStableLandingSearchInput,#bestOfOverlay #boSearchInput{padding-left:50px!important;padding-right:145px!important;font-size:14px!important}
+ #bopStableLandingSearchInput::placeholder,#bestOfOverlay #boSearchInput::placeholder{font-size:14px!important}
+ #bopLandingOverlay .bo-search-powered-by,#bestOfOverlay .bo-search-powered-by{right:12px!important;font-size:14px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:first-child,#bestOfOverlay .bo-search-powered-by svg:first-child{width:14px!important;height:14px!important;flex-basis:14px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:last-child,#bestOfOverlay .bo-search-powered-by svg:last-child{width:22px!important;height:22px!important;flex-basis:22px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),#bestOfOverlay .bo-search-wrap:has(#boSearchInput){animation:none!important;box-shadow:0 0 5px rgba(245,158,11,.28)!important}
+}
+</style>
+<script id="bop-clean-search-final-v283-script">
+(function(){
+ function clean(){
+  var city=document.getElementById('bopStableLandingSearchInput');if(city){city.placeholder='Search any city...';city.setAttribute('aria-label','Search any city')}
+  var restaurant=document.getElementById('boSearchInput');if(restaurant){restaurant.placeholder='Search any restaurant...';restaurant.setAttribute('aria-label','Search any restaurant')}
+  document.querySelectorAll('#bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay .bop-landing-search-prompt,#bopLandingSearchPrompt,#bopLandingOverlay .bop-universal-search-icon,#bopLandingOverlay .bop-universal-search-prompt').forEach(function(n){n.remove()});
+  [city,restaurant].forEach(function(input){if(!input)return;var wrap=input.closest('.bo-search-wrap');if(!wrap)return;var icons=wrap.querySelectorAll('.bop-one-search-icon');icons.forEach(function(icon,index){if(index>0)icon.remove()});if(!icons.length){var icon=document.createElement('span');icon.className='bop-one-search-icon';icon.setAttribute('aria-hidden','true');wrap.insertBefore(icon,input)}});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});else clean();
+ setTimeout(clean,250);setTimeout(clean,900);setTimeout(clean,2200);
+})();
+</script>
