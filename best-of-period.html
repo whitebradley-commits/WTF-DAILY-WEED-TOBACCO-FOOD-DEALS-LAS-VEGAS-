@@ -7951,6 +7951,38 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
  window.BOP_REPLAY_CITY_REEL=function(){lastCity='';wasOpen=false;monitor()};
 })();
 </script>
+<!-- v301: internal restaurant route and movie-winner-first flow -->
+<style id="bop-world-restaurants-and-movie-result-v301-style">
+.bop-fate-ticket-choice{
+ display:flex;align-items:center;justify-content:center;width:min(100%,330px);min-height:48px;
+ margin:16px auto 8px;padding:11px 18px;border:2px solid #F59E0B;border-radius:999px;
+ background:#080808;color:#F59E0B;box-shadow:0 0 12px rgba(245,158,11,.28);
+ font:900 .76rem/1 'Archivo Black',Arial,sans-serif;letter-spacing:.055em;cursor:pointer
+}
+</style>
+<script id="bop-world-restaurants-and-movie-result-v301-script">
+(function(){
+ function closeNode(id){
+  var node=document.getElementById(id);if(!node)return;
+  node.classList.remove('open','is-open');
+  if(node.hasAttribute('aria-hidden'))node.setAttribute('aria-hidden','true');
+ }
+ window.bopOpenInternalBestOfPeriod=function(){
+  ['bopWorldwideLanding','boWorldwidePage','boMoviesPage','hhOverlay','bestOfOverlay','tbotrLandingOverlay','ocWorldOverlay','boNearMapPage'].forEach(closeNode);
+  document.body.style.overflow='';
+  document.body.classList.remove('bop-content-open','oc-world-active','bo-near-map-active','bop-ui-near','bo-closest-five-active','bop-closest-tier-selected','bop-closest-chooser-open');
+  var landing=document.getElementById('bopLandingOverlay');
+  if(landing){landing.classList.add('open');landing.setAttribute('aria-hidden','false');}
+  if(typeof window.BOP_CLEAR_ALL_SEARCHES==='function')window.BOP_CLEAR_ALL_SEARCHES();
+  window.scrollTo(0,0);
+ };
+ document.addEventListener('click',function(event){
+  var highHungryLink=event.target.closest&&event.target.closest('#bestOfExternalLink');
+  if(!highHungryLink)return;
+  event.preventDefault();event.stopImmediatePropagation();window.bopOpenInternalBestOfPeriod();
+ },true);
+})();
+</script>
 <!-- v275: one search layer, full city names, and complete Santa Barbara friend picks -->
 <style id="bop-search-city-santa-v275-final">
   /* Search bars: one icon, one input string and one Powered by lockup. */
@@ -28908,7 +28940,7 @@ body footer .fine-print>span:first-child+span,#promotionsOverlay footer .fine-pr
       if(worldLanding)worldLanding.classList.remove('open');
       document.body.style.overflow='';
       if(key==='restaurants'){
-        window.location.assign('https://bestofperiod.com/');
+        if(typeof window.bopOpenInternalBestOfPeriod==='function')window.bopOpenInternalBestOfPeriod();
         return;
       }
       window.requestAnimationFrame(function(){
@@ -31107,7 +31139,17 @@ footer .bop-mini-legend-badge,
   }
   function openMovie(title){
     const inTheaters=currentTitles().has(title);
-    if(inTheaters){openBuyTickets();return;}
+    if(inTheaters){
+      const modal=ensureModal(),poster=posterFor(title);
+      modal.querySelector('.bop-movie-choice-content').innerHTML='<div class="bop-fate-decided">FATE HAS DECIDED</div>'+(poster?'<img class="bop-movie-choice-poster" src="'+poster+'" alt="'+title.replace(/"/g,'&quot;')+' poster">':'')+'<h2>'+title+'</h2><p class="bop-movie-choice-message">This winning movie is currently in theaters.</p><button type="button" class="bop-fate-ticket-choice">SHOWTIMES + TICKETS</button><div class="bop-gold-divider"></div><h3 class="bop-watch-instantly-heading">OR WATCH AT HOME</h3>'+providerHTML(homeProviders,title)+'<p class="bop-movie-fun">GO HAVE SOME FUN!</p>';
+      modal.classList.add('is-open');
+      modal.querySelector('.bop-fate-ticket-choice').addEventListener('click',function(){
+        modal.classList.remove('is-open');
+        const launch=Array.from(document.querySelectorAll('#boMoviesPage .bop-ticket-launch')).find(function(button){return button.dataset.ticketMovie===title;});
+        if(launch)launch.click();else openBuyTickets();
+      });
+      return;
+    }
     const modal=ensureModal(),poster=posterFor(title),message='This movie is available to rent or purchase. Here are your options.';
     modal.querySelector('.bop-movie-choice-content').innerHTML='<div class="bop-fate-decided">FATE HAS DECIDED</div>'+(poster?'<img class="bop-movie-choice-poster" src="'+poster+'" alt="'+title.replace(/"/g,'&quot;')+' poster">':'')+'<h2>'+title+'</h2><p class="bop-movie-choice-message">'+message+'</p>'+providerHTML(homeProviders,title)+'<p class="bop-movie-fun">GO HAVE SOME FUN!</p>';
     modal.classList.add('is-open');
