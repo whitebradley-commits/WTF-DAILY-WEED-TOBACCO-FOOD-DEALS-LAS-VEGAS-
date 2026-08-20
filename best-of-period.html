@@ -7935,7 +7935,12 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
   z-index: 8 !important;
 }
 </style>
-</head>
+<style id="bop-city-lockup-debug-fix">
+/* City reel: the PERIOD word is a fixed column; only the city cell changes. */
+.bop-splash-line2{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;column-gap:6px!important;align-items:baseline!important;width:100%!important;}
+.bop-splash-city-col{min-width:0!important;width:100%!important;text-align:right!important;}
+.bop-splash-period{position:relative!important;left:auto!important;right:auto!important;transform:none!important;margin:0!important;white-space:nowrap!important;}
+</style></head>
 <body><script id="bop-legend-arrange-and-vendor-clean-v301">
 /* Restores two things: (1) the legend page's badge section gets moved to
    sit right after the "independent listing service" disclaimer, and the
@@ -22937,10 +22942,12 @@ function boRenderCategory(cat){
       if(cityCfg.useNameCycler){
         // San Diego uses the same readable cadence as the main rotating-city
         // treatment, then stops permanently on the short landed-page label.
-        const resultSpinHold = cat === 'sandiego' ? 310 : 2;
-        const resultOutMs = cat === 'sandiego' ? 45 : 1;
-        const resultInMs = cat === 'sandiego' ? 45 : 1;
-        const resultSpinCount = cat === 'sandiego' ? 6 : 0;
+        // Match the landing-page city reel exactly: one city every 200ms.
+        // Twelve names gives a readable 2.4-second spin before the selected city lands.
+        const resultSpinHold = 200;
+        const resultOutMs = 0;
+        const resultInMs = 0;
+        const resultSpinCount = 12;
         startBopVegasSlotCycler('bopResultsCityText', cyclerCities, resultSpinHold, 5000, resultOutMs, resultInMs, resultSpinCount, true);
         if(cat === 'sandiego'){
           const sdHeroText = document.getElementById('bopResultsCityText');
@@ -25184,7 +25191,9 @@ init(); </script> <script id="bopUnifiedNavigationPatch"> /* Unified Best Of Per
     const input = document.getElementById('bopLandingSearchInput');
     const results = document.getElementById('bopLandingResults');
     const otherCities = document.getElementById('otherCitiesOverlay');
+    const bestOverlay = document.getElementById('bestOfOverlay');
     if(otherCities) otherCities.classList.remove('open');
+    if(bestOverlay) bestOverlay.classList.remove('open');
     if(input) input.value = '';
     if(results){
       results.innerHTML = '';
@@ -43660,5 +43669,144 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
   document.addEventListener('click',function(event){var b=event.target.closest&&event.target.closest('[data-bop-sd-cheese-area]');if(!b)return;event.preventDefault();event.stopPropagation();render(b.dataset.bopSdCheeseArea)},true);
   window.bopShowSdCheesesteakTerritory=function(area){render(area||selected)};
   install();setTimeout(install,300);setTimeout(install,1200);
+})();
+</script>
+
+<style id="bop-clean-city-and-category-routes-style">
+/* Interior city/category routes get one restaurant-list surface, never the landing dock, tile dashboard, or old split-flap ticker. */
+html.bop-clean-route #bopCleanOrbDock,
+html.bop-clean-route #bopStableMobileLockup,
+html.bop-clean-route #bopStableMobileCity,
+html.bop-clean-route .bop-static-landing-dock,
+html.bop-clean-route #bestOfOverlay [class*="ticker"],
+html.bop-clean-route #bestOfOverlay [id*="Ticker"],
+html.bop-clean-route #bestOfOverlay .bo-main-hub-title,
+html.bop-clean-route #bestOfOverlay .bo-main-hub-title-wrap,
+html.bop-clean-route #bestOfOverlay .bo-main-hub-footer,
+html.bop-clean-route #bestOfOverlay .bo-main-hub-footer-grid,
+html.bop-clean-route #bestOfOverlay .bo-picker-grid,
+html.bop-clean-route #bestOfOverlay .bo-alpha-groups,
+html.bop-clean-route #bestOfOverlay .bo-alpha-quadrant,
+html.bop-clean-route #bestOfOverlay .bo-lead-best-lockup,
+html.bop-clean-route #bestOfOverlay .bo-lead-best,
+html.bop-clean-route #bestOfOverlay .bo-sd-coast-picker,
+html.bop-clean-route #bestOfOverlay #boSdTerritories,
+html.bop-clean-route #bestOfOverlay .sf-board,
+html.bop-clean-route #bestOfOverlay #boHeroSection,
+html.bop-clean-route #bestOfOverlay #boSectionHead,
+html.bop-clean-route #bestOfOverlay #boBackBtn{display:none!important;}
+
+#bopCleanRouteHeader{position:relative;z-index:8;width:min(900px,100%);margin:72px auto 14px;padding:14px 13px 12px;box-sizing:border-box;border-block:1px solid rgba(245,158,11,.55);background:linear-gradient(180deg,rgba(5,5,5,.96),rgba(5,5,5,.78));color:#fff;text-align:center;}
+#bopCleanRouteHeader .bop-clean-kicker{margin:0;color:#f59e0b;font:900 10px/1 'Archivo Black',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;}
+#bopCleanRouteHeader h1{margin:7px 0 4px;color:#fff;font:900 clamp(26px,7vw,52px)/.95 Georgia,serif;letter-spacing:.015em;}
+#bopCleanRouteHeader h1 span{color:#f59e0b;}
+#bopCleanRouteHeader .bop-clean-sub{max-width:680px;margin:7px auto 12px;color:#d9c693;font:700 11px/1.35 Arial,sans-serif;letter-spacing:.02em;}
+#bopCleanRouteHeader .bop-clean-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;}
+#bopCleanRouteHeader .bop-clean-back{position:absolute;top:10px;left:10px;min-width:52px;min-height:32px;padding:6px 8px;border:1px solid #f59e0b;border-radius:18px;background:#050505;color:#ef3340;font:900 9px/1 Arial,sans-serif;cursor:pointer;}
+#bopCleanRouteSearch{margin:12px auto 0;}
+#bopCleanRouteSearch .bo-search-wrap{position:relative!important;z-index:9!important;width:min(620px,92vw)!important;margin:0 auto!important;}
+#bopCleanRouteHeader .bop-clean-tab{min-height:31px;padding:6px 8px;border:1px solid #76531b;border-radius:999px;background:#0b0b0b;color:#e6d0a4;font:900 9px/1 Arial,sans-serif;letter-spacing:.045em;text-transform:uppercase;cursor:pointer;}
+#bopCleanRouteHeader .bop-clean-tab.is-active{border-color:#ef3340;background:#23070c;color:#fff;box-shadow:0 0 10px rgba(239,51,64,.45);}
+html.bop-clean-route #bestOfOverlay #boList{position:relative!important;z-index:7!important;display:grid!important;width:min(900px,100%)!important;margin:0 auto 90px!important;padding:0 10px 40px!important;box-sizing:border-box!important;gap:12px!important;}
+html.bop-clean-route #bestOfOverlay #boList .bo-card{width:100%!important;margin:0!important;}
+html.bop-clean-route #bestOfOverlay .bo-search-wrap{position:relative!important;z-index:9!important;width:min(620px,92vw)!important;margin:12px auto 16px!important;}
+html.bop-clean-route #bestOfOverlay #boSearchInput{color:#f59e0b!important;-webkit-text-fill-color:#f59e0b!important;font-size:15.2px!important;font-weight:500!important;}
+html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!important;-webkit-text-fill-color:#f59e0b!important;opacity:1!important;font-size:15.2px!important;font-weight:500!important;}
+@media(max-width:560px){#bopCleanRouteHeader{margin-top:56px;padding:13px 9px 12px;}#bopCleanRouteHeader h1{font-size:clamp(25px,8.2vw,38px);}#bopCleanRouteHeader .bop-clean-sub{font-size:10px;}#bopCleanRouteHeader .bop-clean-tab{font-size:8px;padding:6px 7px;}html.bop-clean-route #bestOfOverlay #boList{padding-inline:8px!important;}}
+</style>
+<script id="bop-clean-city-and-category-routes-script">
+(function(){
+  'use strict';
+  var categoryLabels={michelin:'MICHELIN',jamesbeardverified:'JAMES BEARD',steakhighend:'STEAK',italianhighend:'ITALIAN',mexicancasual:'MEXICAN',pizza:'PIZZA',cheesesteak:'CHEESESTEAK',bjspickssandiego:'BJS PICKS'};
+  var city='sandiego';
+  var defaultCategory='michelin';
+  var observedRenderer=null;
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function currentCity(){
+    try{if(typeof boCityContext!=='undefined'&&boCityContext&&String(boCityContext).toLowerCase()!=='bestof'&&String(boCityContext).toLowerCase()!=='worldwide')return String(boCityContext);}catch(ignore){}
+    if(window.boCityContext&&String(window.boCityContext).toLowerCase()!=='bestof'&&String(window.boCityContext).toLowerCase()!=='worldwide')return String(window.boCityContext);
+    var lead=document.getElementById('boLeadBestCity')||document.querySelector('.bo-main-hub-city-name');
+    var text=(lead&&lead.textContent||'').trim();
+    return text.toLowerCase().replace(/[^a-z0-9]+/g,'');
+  }
+  function isSanDiego(){return currentCity().toLowerCase()===city;}
+  function isLiveCity(){var value=currentCity().toLowerCase();return !!value&&value!=='bestof'&&value!=='worldwide';}
+  function displayCity(){
+    var saved=String(window.__bopCleanSelectedCity||'').trim();
+    if(saved)return saved;
+    var key=currentCity().toLowerCase();
+    try{if(window.BO_CITY_CONFIG&&window.BO_CITY_CONFIG[key])return window.BO_CITY_CONFIG[key].displayName||window.BO_CITY_CONFIG[key].landingName||key;}catch(ignore){}
+    var node=document.querySelector('.bo-main-hub-city-name,#boLeadBestCity');
+    var fromPage=(node&&node.textContent||'').trim();
+    if(fromPage)return fromPage;
+    var known={lasvegas:'Las Vegas',sandiego:'San Diego',losangeles:'Los Angeles',newyork:'New York City',santabarbara:'Santa Barbara',palmdesert:'Palm Desert'};
+    return known[key]||key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/(^|[-_\s])([a-z])/g,function(_,a,b){return a+b.toUpperCase()}).replace(/[-_]/g,' ');
+  }
+  function overlay(){return document.getElementById('bestOfOverlay');}
+  function header(){var h=document.getElementById('bopCleanRouteHeader');if(h)return h;var list=document.getElementById('boList');if(!list)return null;h=document.createElement('section');h.id='bopCleanRouteHeader';list.insertAdjacentElement('beforebegin',h);return h;}
+  function setRouteMode(on){document.documentElement.classList.toggle('bop-clean-route',!!on);var best=overlay();if(best)best.classList.toggle('bop-clean-route',!!on);}
+  function renderHeader(cat,cityOverview){
+    var h=header();if(!h)return;
+    var active=cityOverview?cat:cat;
+    var title=cityOverview?'THE TOP <span>19</span>, RIGHT NOW':'BEST <span>'+esc(categoryLabels[cat]||String(cat||'').toUpperCase())+'</span>';
+    var place=esc(displayCity());
+    var sub=cityOverview?place+' restaurant lists, ranked first. Choose a category only when you want to narrow the list.':place+' · restaurant list';
+    var search=document.getElementById('boSearchInput');
+    var searchWrap=search&&search.closest('.bo-search-wrap');
+    h.innerHTML='<button type="button" class="bop-clean-back" data-bop-clean-back="1">← Back</button><p class="bop-clean-kicker">BEST OF '+place.toUpperCase()+', PERIOD</p><h1>'+title+'</h1><p class="bop-clean-sub">'+sub+'</p><div class="bop-clean-tabs">'+Object.keys(categoryLabels).map(function(key){return '<button type="button" class="bop-clean-tab '+(key===active?'is-active':'')+'" data-bop-clean-category="'+key+'">'+esc(categoryLabels[key])+'</button>';}).join('')+'</div><div id="bopCleanRouteSearch"></div>';
+    if(searchWrap)h.querySelector('#bopCleanRouteSearch').appendChild(searchWrap);
+  }
+  function cleanCity(cat,original){
+    if(!isLiveCity())return;
+    window.__bopCleanSelectedCity=displayCity();
+    var requestedOverview=cat==='otheroptions'||cat==='sandiego'||!cat;
+    if(requestedOverview)window.__bopCleanCityOverview=true;
+    var isOverview=requestedOverview||(cat===defaultCategory&&window.__bopCleanCityOverview===true);
+    setRouteMode(true);
+    if(isOverview){
+      /* San Diego has the verified 19-record Michelin list; other cities use their native Best Of restaurant list. */
+      var overviewCategory=isSanDiego()?defaultCategory:'bestof';
+      try{original.call(window,overviewCategory);}catch(ignore){}
+      setTimeout(function(){setRouteMode(true);renderHeader(overviewCategory,true);},110);
+    }else{
+      window.__bopCleanCityOverview=false;
+      setTimeout(function(){
+        if(isSanDiego()&&cat==='cheesesteak'&&typeof window.bopShowSdCheesesteakTerritory==='function'){
+          window.bopShowSdCheesesteakTerritory('Oceanside');
+        }
+        setRouteMode(true);renderHeader(cat,false);
+      },150);
+    }
+  }
+  function install(){
+    var active=window.boRenderCategory;
+    if(typeof active!=='function'||active===observedRenderer||active.__bopCleanRouteWrapper)return;
+    var original=active;
+    function cleanRouteRenderer(category){
+      var cat=String(category||'otheroptions').toLowerCase();
+      var result=original.apply(this,arguments);
+      setTimeout(function(){cleanCity(cat,original);},45);
+      return result;
+    }
+    cleanRouteRenderer.__bopCleanRouteWrapper=true;
+    cleanRouteRenderer.__bopCleanRouteOriginal=original;
+    observedRenderer=cleanRouteRenderer;
+    window.boRenderCategory=cleanRouteRenderer;
+  }
+  document.addEventListener('click',function(event){
+    var back=event.target.closest&&event.target.closest('[data-bop-clean-back]');
+    if(back){event.preventDefault();event.stopImmediatePropagation();var best=overlay(),landing=document.getElementById('bopLandingOverlay');if(best)best.classList.remove('open');if(landing)landing.classList.add('open');setRouteMode(false);return;}
+    var button=event.target.closest&&event.target.closest('[data-bop-clean-category]');if(!button)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    window.__bopCleanCityOverview=false;
+    if(typeof window.boRenderCategory==='function')window.boRenderCategory(button.dataset.bopCleanCategory);
+  },true);
+  function detectLegacyCityHandoff(){
+    var best=overlay();var lead=document.getElementById('boLeadBestCity')||document.querySelector('.bo-main-hub-city-name');
+    if(!best||!best.classList.contains('open')||document.documentElement.classList.contains('bop-clean-route')||!(lead&&lead.textContent.trim()))return;
+    if(typeof window.boRenderCategory==='function')window.boRenderCategory('otheroptions');
+  }
+  document.addEventListener('click',function(){setTimeout(function(){if(!overlay()||!overlay().classList.contains('open'))setRouteMode(false);},120)},true);
+  install();setTimeout(install,600);setTimeout(install,1600);setInterval(install,350);setInterval(detectLegacyCityHandoff,420);
 })();
 </script>
