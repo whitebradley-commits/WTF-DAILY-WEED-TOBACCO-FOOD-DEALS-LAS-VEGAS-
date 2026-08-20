@@ -7996,6 +7996,27 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
   setTimeout(sync,250);setTimeout(sync,1200);
 })();
 </script>
+<!-- v286: preserve full restaurant cards on dedicated pages. Compact coastal
+     rows are permitted only inside the Near Me/map results context. -->
+<style id="bop-full-page-card-policy-v286">
+#bestOfOverlay #boList>.bo-card{width:100%!important;max-width:none!important;min-height:0!important;transform:none;box-sizing:border-box!important}
+#bestOfOverlay #boList>.bo-card:hover{transform:translateY(-4px) scale(1.01)}
+#bestOfOverlay .bo-sd-results,#bestOfOverlay .bo-sd-result-grid,#bestOfOverlay .bo-sd-result{display:none!important}
+#bestOfOverlay #boNearMapPage .bo-sd-results{display:block!important}
+#bestOfOverlay #boNearMapPage .bo-sd-result-grid{display:grid!important}
+#bestOfOverlay #boNearMapPage .bo-sd-result{display:grid!important}
+@media(max-width:640px){#bestOfOverlay #boList>.bo-card{display:grid!important;grid-template-columns:1fr!important;padding:1.1rem 1rem 1.35rem!important}}
+</style>
+<script id="bop-full-page-card-policy-v286-script">
+(function(){
+ function enforce(){
+  document.querySelectorAll('#bestOfOverlay #boList>.bo-card').forEach(function(card){card.dataset.bopDisplayFormat='full';});
+  document.querySelectorAll('.bo-sd-results').forEach(function(results){if(!results.closest('#boNearMapPage'))results.remove();});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',enforce,{once:true});else enforce();
+ new MutationObserver(enforce).observe(document.documentElement,{subtree:true,childList:true});
+})();
+</script>
 <!-- v278: live inventory audit (deduplicated restaurant and unrated totals) -->
 <script id="bop-live-data-audit-v278-script">
 (function(){
