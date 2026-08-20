@@ -41396,13 +41396,13 @@ function keyFor(name,city){
     if(!line||!city||!period)return;
     city.style.removeProperty('font-size');period.style.removeProperty('font-size');
     var preferred=Math.min(60,Math.max(34,window.innerWidth*.085));
-    city.style.setProperty('font-size',(preferred-1)+'px','important');
+    city.style.setProperty('font-size',preferred+'px','important');
     period.style.setProperty('font-size',preferred+'px','important');
     var available=Math.max(220,Math.min(line.clientWidth||window.innerWidth,window.innerWidth)-12);
     var needed=city.getBoundingClientRect().width+period.getBoundingClientRect().width+6;
     if(needed>available){
       var fitted=Math.max(25,preferred*(available/needed));
-      city.style.setProperty('font-size',Math.max(24,fitted-1)+'px','important');
+      city.style.setProperty('font-size',fitted+'px','important');
       period.style.setProperty('font-size',fitted+'px','important');
     }
   }
@@ -45782,3 +45782,122 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  transform:none!important;z-index:7!important
 }
 </style>
+<!-- v305: fixed Period while spinning, final 6px landing, restored in-bar branding -->
+<style id="bop-logo-search-coast-v305-authoritative-last">
+/* Main page: one point smaller again. The city remains behind both logo words. */
+#bopLandingOverlay #bopStableMobileLockup{position:relative!important;isolation:isolate!important;overflow:visible!important}
+#bopLandingOverlay #bopStableMobileLockup::before,
+#bopLandingOverlay #bopStableMobileLockup::after{display:none!important;content:none!important}
+#bopLandingOverlay #bopStableMobileCity{
+ left:37.5%!important;right:auto!important;top:0!important;
+ font-size:clamp(35px,calc(13.4vw - 5px),53px)!important;
+ transform:translateX(-50%)!important;transform-origin:center center!important;
+ z-index:1!important;overflow:visible!important
+}
+#bopLandingOverlay #bopStableMobilePeriod{
+ position:absolute!important;left:54%!important;right:auto!important;top:0!important;
+ margin:0!important;transform:none!important;transition:none!important;animation:none!important;
+ background:transparent!important;box-shadow:none!important;z-index:8!important
+}
+#bopLandingOverlay .bop-splash-line1{position:relative!important;background:transparent!important;z-index:8!important}
+
+/* City pages: one point larger than the prior build. During the reel Period©
+   is locked; only after landing does the complete pair recenter at a 6px gap. */
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-line2{
+ position:relative!important;display:block!important;overflow:visible!important;isolation:isolate!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city-col{
+ position:absolute!important;left:38%!important;right:auto!important;top:0!important;
+ width:max-content!important;transform:translateX(-50%)!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopResultsCityText{
+ font-size:clamp(34px,calc(9vw - 2px),62px)!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-period{
+ position:absolute!important;left:54%!important;right:auto!important;top:0!important;
+ margin:0!important;transform:none!important;transition:none!important;animation:none!important;
+ background:transparent!important;box-shadow:none!important;z-index:8!important
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-line1{position:relative!important;background:transparent!important;z-index:8!important}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+ display:flex!important;align-items:baseline!important;justify-content:center!important;
+ column-gap:6px!important;gap:6px!important
+}
+
+/* Clean main search: search icon + lowercase prompt at left; matching
+   lightning/powered-by/BJS group at the opposite side, all inside the ring. */
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){
+ position:relative!important;overflow:hidden!important;margin-bottom:0!important
+}
+#bopStableLandingSearchInput{
+ padding-left:54px!important;padding-right:158px!important;text-transform:none!important
+}
+#bopStableLandingSearchInput::placeholder{text-transform:none!important}
+#bopLandingOverlay .bo-search-powered-by{
+ position:absolute!important;top:50%!important;right:16px!important;bottom:auto!important;left:auto!important;
+ display:flex!important;align-items:center!important;justify-content:flex-end!important;
+ width:auto!important;height:auto!important;margin:0!important;padding:0!important;
+ gap:5px!important;column-gap:5px!important;transform:translateY(-50%)!important;
+ transform-origin:center right!important;color:#F59E0B!important;opacity:1!important;
+ font:600 15px/1 'Archivo Narrow',Arial,sans-serif!important;text-transform:none!important;
+ white-space:nowrap!important;z-index:5!important
+}
+#bopLandingOverlay .bo-search-powered-by svg:first-child{
+ display:inline-block!important;width:15px!important;height:15px!important;flex:0 0 15px!important
+}
+#bopLandingOverlay .bo-search-powered-by svg:last-child{
+ display:inline-block!important;width:24px!important;height:24px!important;flex:0 0 24px!important
+}
+@media(max-width:430px){
+ #bopStableLandingSearchInput{padding-left:50px!important;padding-right:145px!important;font-size:14px!important}
+ #bopStableLandingSearchInput::placeholder{font-size:14px!important}
+ #bopLandingOverlay .bo-search-powered-by{right:12px!important;font-size:14px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:first-child{width:14px!important;height:14px!important;flex-basis:14px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:last-child{width:22px!important;height:22px!important;flex-basis:22px!important}
+}
+
+/* San Diego Coast title and breathing room above the hand-drawn diagram. */
+#bestOfOverlay #bopSdCityHubCoast h2{
+ color:#F59E0B!important;margin:0 auto 18px!important;text-shadow:0 0 8px rgba(245,158,11,.34)!important
+}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-sub{
+ margin:0 auto 46px!important;padding:0 12px!important
+}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-coastline{margin-top:0!important}
+</style>
+<script id="bop-logo-search-coast-v305-script">
+(function(){
+ function normalizeMainSearch(){
+  var input=document.getElementById('bopStableLandingSearchInput');
+  if(input){input.placeholder='search the world...';input.setAttribute('aria-label','search the world')}
+  var powered=document.querySelector('#bopLandingOverlay .bo-search-powered-by');
+  if(powered){
+   Array.from(powered.childNodes).forEach(function(node){
+    if(node.nodeType===3&&/powered\s+by/i.test(node.nodeValue||''))node.nodeValue=(node.nodeValue||'').replace(/Powered\s+by/gi,'powered by')
+   });
+  }
+ }
+ function animatePeriodLanding(hero){
+  if(!hero||hero.dataset.bopPeriodSlide305==='1')return;
+  var line=hero.querySelector('.bop-splash-line2'),period=hero.querySelector('.bop-splash-period');
+  if(!line||!period)return;hero.dataset.bopPeriodSlide305='1';
+  requestAnimationFrame(function(){
+   var fixedX=line.getBoundingClientRect().left+(line.getBoundingClientRect().width*.54);
+   var finalX=period.getBoundingClientRect().left;
+   if(period.animate)period.animate([{transform:'translateX('+(fixedX-finalX)+'px)'},{transform:'translateX(0)'}],{duration:320,easing:'ease-out'});
+  });
+ }
+ var observer=new MutationObserver(function(records){
+  normalizeMainSearch();
+  records.forEach(function(record){
+   var node=record.target;
+   if(node&&node.nodeType===1&&node.classList&&node.classList.contains('bop-city-reel-settled-v298'))animatePeriodLanding(node)
+  });
+ });
+ observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalizeMainSearch,{once:true});else normalizeMainSearch();
+ setTimeout(normalizeMainSearch,300);setTimeout(normalizeMainSearch,1200);
+})();
+</script>
