@@ -39206,3 +39206,45 @@ body footer.bop-approved-footer{
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',scheduleLanding);else scheduleLanding();
 })();
 </script>
+
+<!-- Persistent landing city reel: independent of the one-shot legacy city cycler. -->
+<style id="bop-persistent-landing-city-style">
+  body.bop-five-orb-route .bop-persistent-city-out{opacity:0!important;transform:translateY(-.22em)!important;transition:opacity 180ms ease,transform 180ms ease!important}
+  body.bop-five-orb-route .bop-persistent-city-in{opacity:1!important;transform:translateY(0)!important;transition:opacity 220ms ease,transform 220ms ease!important}
+</style>
+<script id="bop-persistent-landing-city-script">
+(function(){
+  var cities=['Vegas','S. B.','Fort Worth','P. S.','Phoenix','Key West','L. A.','Miami','N. Y.','Chicago','Austin','Nashville'];
+  var index=-1;
+  var running=false;
+  function targets(){
+    return Array.from(document.querySelectorAll('#bopLandingCityText,#bopSplashCityText,#bopMainCityText,#bopResultsCityText,.bop-splash-city,.bop-splash-city-col')).filter(function(el){
+      return !!(el.offsetWidth||el.offsetHeight||el.getClientRects().length);
+    });
+  }
+  function paint(next){
+    var els=targets();
+    if(!els.length)return;
+    els.forEach(function(el){el.classList.remove('bop-persistent-city-in');el.classList.add('bop-persistent-city-out');});
+    setTimeout(function(){
+      els.forEach(function(el){el.textContent=next;el.setAttribute('data-bop-persistent-city','true');el.classList.remove('bop-persistent-city-out');el.classList.add('bop-persistent-city-in');});
+    },190);
+  }
+  function tick(){
+    if(!document.body.classList.contains('bop-five-orb-route'))return;
+    index=(index+1)%cities.length;
+    paint(cities[index]);
+  }
+  function start(){
+    if(running)return;
+    running=true;
+    tick();
+    window.__bopPersistentLandingCityTimer=setInterval(tick,2600);
+  }
+  function ensure(){
+    if(document.body.classList.contains('bop-five-orb-route'))start();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(ensure,700);});else setTimeout(ensure,700);
+  new MutationObserver(ensure).observe(document.documentElement,{attributes:true,attributeFilter:['class'],subtree:true});
+})();
+</script>
