@@ -2503,3 +2503,43 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>
+<style id="fnt-offer-iphone-tap-replacement-style">
+#offer .offer-close{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+#fntOfferCloseHit{position:absolute;right:-5px;top:20px;z-index:2147483647;width:66px;height:66px;padding:0 0 4px;border:3px solid #d6ad45;outline:3px solid #050505;border-radius:50%;background:#050505;color:#ff1744;font:1000 39px/1 Arial,sans-serif;display:grid;place-items:center;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 22px rgba(214,173,69,.65);touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto}
+#fntOfferCloseHit:after{content:'CLOSE';position:absolute;top:72px;left:50%;transform:translateX(-50%);padding:4px 7px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap}
+#fntOfferClaimHit{position:absolute;z-index:2147483646;margin:0;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.001);color:transparent;touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto;cursor:pointer}
+#offer.fnt-offer-processing{pointer-events:none!important}
+</style>
+<script id="fnt-offer-iphone-tap-replacement-script">
+(function(){
+  var busyUntil=0,reofferTimer=0;
+  function getOffer(){return document.getElementById('offer')}
+  function claimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
+  function releasePage(){document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');document.documentElement.style.overflow='';document.body.style.overflow=''}
+  function hideOffer(){var o=getOffer();if(o){o.classList.remove('fnt-offer-processing');o.style.setProperty('display','none','important');o.style.setProperty('pointer-events','none','important');o.setAttribute('aria-hidden','true')}releasePage()}
+  function showOffer(){var o=getOffer();if(!o||claimed())return;o.style.setProperty('display','grid','important');o.style.setProperty('pointer-events','auto','important');o.setAttribute('aria-hidden','false');document.body.classList.add('fnt-shipping-offer-open')}
+  function updateCart(hasCredit){
+    var saving=document.getElementById('saving');if(saving)saving.hidden=!hasCredit;
+    try{free=hasCredit}catch(e){}
+    try{sync()}catch(e){}
+    var cart=document.getElementById('cart');if(cart){var count=0;try{count=cartItems.length}catch(e){}cart.hidden=false;cart.innerHTML='CART ('+count+')'+(hasCredit?' · <del>−$33.50</del> FREE PRIORITY SHIPPING':'')}
+  }
+  function once(action,event){var now=Date.now();if(now<busyUntil)return;busyUntil=now+650;if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}action()}
+  function decline(){localStorage.removeItem('fnt-free-shipping-v1');updateCart(false);hideOffer();clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!claimed()&&!document.hidden)showOffer()},240000)}
+  function accept(){clearTimeout(reofferTimer);localStorage.setItem('fnt-free-shipping-v1','claimed');updateCart(true);hideOffer()}
+  function bindAction(button,action){['pointerup','touchend','click'].forEach(function(type){button.addEventListener(type,function(e){once(action,e)},{capture:true,passive:false})})}
+  function positionClaimHit(){var offer=getOffer(),visual=offer&&offer.querySelector('.offer'),claim=offer&&offer.querySelector('.claim-btn'),hit=document.getElementById('fntOfferClaimHit');if(!visual||!claim||!hit)return;hit.style.left=claim.offsetLeft+'px';hit.style.top=claim.offsetTop+'px';hit.style.width=claim.offsetWidth+'px';hit.style.height=claim.offsetHeight+'px'}
+  function install(){
+    var offer=getOffer(),visual=offer&&offer.querySelector('.offer');if(!offer||!visual)return;
+    offer.querySelectorAll('#fntOfferCloseHit,#fntOfferClaimHit').forEach(function(x){x.remove()});
+    var close=document.createElement('button');close.id='fntOfferCloseHit';close.type='button';close.textContent='×';close.setAttribute('aria-label','Close shipping offer without credit');
+    var claim=document.createElement('button');claim.id='fntOfferClaimHit';claim.type='button';claim.textContent='Unlock free priority shipping';claim.setAttribute('aria-label','Unlock free priority shipping and apply thirty-three dollars and fifty cents credit');
+    visual.append(close,claim);bindAction(close,decline);bindAction(claim,accept);positionClaimHit();
+    window.addEventListener('resize',positionClaimHit,{passive:true});
+    window.FNT_DECLINE_SHIPPING=decline;window.FNT_ACCEPT_SHIPPING=accept;
+    setTimeout(function(){if(claimed()){updateCart(true);hideOffer()}else showOffer();positionClaimHit()},100)
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+  window.addEventListener('load',function(){setTimeout(function(){if(claimed()){updateCart(true);hideOffer()}else{showOffer();positionClaimHit()}},180)},{once:true});
+})();
+</script>
