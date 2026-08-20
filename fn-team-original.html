@@ -2950,6 +2950,8 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
 })();
 </script>
 <style id="fnt-home-controls-clean-slate-style">
+html{overflow-y:auto!important;-webkit-overflow-scrolling:touch!important}
+body.fnt-shipping-accepted{overflow-y:auto!important;overscroll-behavior-y:auto!important;touch-action:pan-y!important;-webkit-overflow-scrolling:touch!important}
 body.fnt-on-home #fntCoreBack{display:none!important}
 #fnMusicOrb,#fntCoreMusicOrb,#fntCompactMusicOrb,#fntNativeMusicDock,#fntCompactMusicModal,#fntMusicChoicePopup,#fntTinyMusicPopup{display:none!important;pointer-events:none!important}
 #fntOneMusicOrb{position:fixed;right:94px;bottom:18px;z-index:2147482000;width:54px;height:54px;padding:4px;border:3px solid #ff334f;border-radius:50%;background:#080808;color:#fff;box-shadow:0 0 0 3px #080808,0 0 17px rgba(255,24,59,.85);font:1000 8px/1.05 Arial,sans-serif;letter-spacing:.04em;text-align:center;touch-action:manipulation}
@@ -2970,7 +2972,13 @@ body.fnt-on-home #fntCoreBack{display:none!important}
   var audioContext=null,master=null,musicTimer=null,musicActive='off';
   function stopEvent(e){if(!e)return;e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation()}
   function onHome(){var picker=document.getElementById('picker');return !!picker&&getComputedStyle(picker).display!=='none'}
-  function markRoute(){document.body.classList.toggle('fnt-on-home',onHome())}
+  function markRoute(){
+    document.body.classList.toggle('fnt-on-home',onHome());
+    if(!document.getElementById('fntShippingGateV2')){
+      document.body.classList.remove('fnt-lock-scroll','fnt-shipping-offer-open');
+      document.documentElement.style.overflowY='auto';document.body.style.overflowY='auto';
+    }
+  }
   function closeModal(id){var modal=document.getElementById(id);if(modal)modal.classList.remove('open')}
   function makeTone(freq,at,dur,type,volume){if(!audioContext||!master)return;var osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type=type||'sine';osc.frequency.setValueAtTime(freq,at);gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(volume,at+.018);gain.gain.exponentialRampToValueAtTime(.0001,at+dur);osc.connect(gain).connect(master);osc.start(at);osc.stop(at+dur+.04)}
   function makePad(freq,at,dur,volume){if(!audioContext||!master)return;var osc=audioContext.createOscillator(),filter=audioContext.createBiquadFilter(),gain=audioContext.createGain();osc.type='sine';osc.frequency.setValueAtTime(freq,at);filter.type='lowpass';filter.frequency.value=520;gain.gain.setValueAtTime(.0001,at);gain.gain.linearRampToValueAtTime(volume,at+.65);gain.gain.linearRampToValueAtTime(.0001,at+dur);osc.connect(filter).connect(gain).connect(master);osc.start(at);osc.stop(at+dur+.05)}
@@ -2999,8 +3007,11 @@ body.fnt-on-home #fntCoreBack{display:none!important}
     var musicModal=document.createElement('div');musicModal.id='fntOneMusicModal';musicModal.innerHTML='<section class="fnt-one-panel" role="dialog" aria-modal="true"><button class="fnt-one-close" type="button" aria-label="Close">×</button><h2>MUSIC</h2><p>THREE DIFFERENT DARK SOUNDS</p><button class="fnt-one-choice" data-sound="one" type="button">ONE · NIGHT RUN</button><button class="fnt-one-choice" data-sound="two" type="button">TWO · AFTER HOURS</button><button class="fnt-one-choice" data-sound="three" type="button">THREE · NEON NOIR</button><button class="fnt-one-choice off" data-sound="off" type="button">OFF</button></section>';
     var premiumModal=document.createElement('div');premiumModal.id='fntOnePremiumModal';premiumModal.innerHTML='<section class="fnt-one-panel" role="dialog" aria-modal="true"><button class="fnt-one-close" type="button" aria-label="Close">×</button><h2>JAMES PERSE<br><strong>&amp; ALO</strong></h2><p>NUMBERED LIMITED-EDITION PIECES ON GENUINE PREMIUM BLANKS. CHOOSE YOUR TEAM FIRST, THEN THE SPECIAL COLLECTION APPEARS AT THE TOP OF YOUR RESULTS.</p><button id="fntOnePremiumStart" class="fnt-one-choice" type="button">CHOOSE YOUR TEAM</button></section>';
     document.body.append(music,musicModal,premiumModal);
-    music.onclick=function(e){stopEvent(e);musicModal.classList.add('open')};
-    music.onpointerup=music.onclick;
+    var musicTapAt=0;
+    function openMusic(e){stopEvent(e);musicTapAt=Date.now();musicModal.classList.add('open');musicModal.setAttribute('aria-hidden','false')}
+    music.addEventListener('pointerdown',openMusic,{capture:true,passive:false});
+    music.addEventListener('touchstart',openMusic,{capture:true,passive:false});
+    music.addEventListener('click',function(e){if(Date.now()-musicTapAt<800){stopEvent(e);return}openMusic(e)},true);
     musicModal.querySelector('.fnt-one-close').onclick=function(){closeModal('fntOneMusicModal')};
     musicModal.onclick=function(e){if(e.target===musicModal)closeModal('fntOneMusicModal')};
     musicModal.querySelectorAll('[data-sound]').forEach(function(b){b.onclick=function(){if(this.dataset.sound==='off')stopMusic();else playMusic(this.dataset.sound);closeModal('fntOneMusicModal')}});
@@ -3011,7 +3022,6 @@ body.fnt-on-home #fntCoreBack{display:none!important}
     window.jumpToReserveOrPicker=window.FN_OPEN_PREMIUM_CHOOSER;
     markRoute();setInterval(markRoute,400);
     setTimeout(removeLegacyMusic,350);setTimeout(removeLegacyMusic,900);setTimeout(removeLegacyMusic,1700);
-    new MutationObserver(removeLegacyMusic).observe(document.body,{childList:true,subtree:true});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(install,50)},{once:true});else setTimeout(install,50);
 })();
