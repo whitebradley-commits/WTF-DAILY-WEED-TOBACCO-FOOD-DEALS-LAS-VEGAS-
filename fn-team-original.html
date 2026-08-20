@@ -2413,8 +2413,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 <script id="fnt-compact-music-popup-script">
 (function(){
-  function build(){if(document.getElementById('fntCompactMusicOrb'))return;var audio=document.getElementById('fntNativeAudio');if(!audio)return;var orb=document.createElement('button');orb.id='fntCompactMusicOrb';orb.type='button';orb.textContent='MUSIC';orb.setAttribute('aria-label','Open music options');var modal=document.createElement('div');modal.id='fntCompactMusicModal';modal.innerHTML='<section class="fnt-music-sheet" role="dialog" aria-modal="true" aria-label="F N Team music"><button class="fnt-music-close" type="button" aria-label="Close music options">×</button><h3>MUSIC</h3><p>CHOOSE A SOUND</p><div class="fnt-music-options"><button type="button" class="fnt-music-option" data-rate="0.88">ONE</button><button type="button" class="fnt-music-option" data-rate="1">TWO</button><button type="button" class="fnt-music-option" data-rate="1.12">THREE</button><button type="button" class="fnt-music-option off" data-off="true">OFF</button></div></section>';document.body.append(orb,modal);function open(e){if(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation()}modal.classList.add('is-open')}function close(){modal.classList.remove('is-open')}window.addEventListener('pointerdown',function(e){if(e.target===orb||e.target.closest&&e.target.closest('#fntCompactMusicOrb'))open(e)},true);window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.fnt-music-close')){e.preventDefault();close();return}var option=e.target.closest&&e.target.closest('.fnt-music-option');if(!option)return;if(option.dataset.off==='true'){audio.pause();audio.currentTime=0;modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.remove('is-active')});return}audio.playbackRate=Number(option.dataset.rate)||1;audio.play().then(function(){modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.toggle('is-active',b===option)})}).catch(function(){});},true);modal.addEventListener('pointerdown',function(e){if(e.target===modal)close()});}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(build,300)});else setTimeout(build,300);
+  function build(){if(document.getElementById('fntCompactMusicOrb'))return;var audio=document.getElementById('fntNativeAudio');if(!audio)return;var orb=document.createElement('button');orb.id='fntCompactMusicOrb';orb.type='button';orb.textContent='MUSIC';orb.setAttribute('aria-label','Open music options');var modal=document.createElement('div');modal.id='fntCompactMusicModal';modal.innerHTML='<section class="fnt-music-sheet" role="dialog" aria-modal="true" aria-label="F N Team music"><button class="fnt-music-close" type="button" aria-label="Close music options">×</button><h3>MUSIC</h3><p>CHOOSE A SOUND</p><div class="fnt-music-options"><button type="button" class="fnt-music-option" data-rate="0.88">ONE</button><button type="button" class="fnt-music-option" data-rate="1">TWO</button><button type="button" class="fnt-music-option" data-rate="1.12">THREE</button><button type="button" class="fnt-music-option off" data-off="true">OFF</button></div></section>';document.body.append(orb,modal);function open(e){return}function close(){modal.classList.remove('is-open')}window.addEventListener('pointerdown',function(e){if(e.target===orb||e.target.closest&&e.target.closest('#fntCompactMusicOrb'))open(e)},true);window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.fnt-music-close')){e.preventDefault();close();return}var option=e.target.closest&&e.target.closest('.fnt-music-option');if(!option)return;if(option.dataset.off==='true'){audio.pause();audio.currentTime=0;modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.remove('is-active')});return}audio.playbackRate=Number(option.dataset.rate)||1;audio.play().then(function(){modal.querySelectorAll('.fnt-music-option').forEach(function(b){b.classList.toggle('is-active',b===option)})}).catch(function(){});},true);modal.addEventListener('pointerdown',function(e){if(e.target===modal)close()});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',build);else build();
 })();
 </script>
 
@@ -2438,6 +2438,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <audio id="fntTrackThree" preload="metadata" loop playsinline src=""></audio>
 
 
+<button id="fntCompactMusicOrb" type="button" aria-label="Open music choices">MUSIC</button>
 <style id="fnt-lightweight-music-style">
 #fntCompactMusicOrb{position:fixed!important;left:18px!important;right:auto!important;bottom:18px!important;width:56px!important;height:56px!important;min-width:56px!important;border-radius:50%!important;padding:0!important;font-size:10px!important;line-height:1.05!important;letter-spacing:.1em!important;z-index:100050!important;transform:translateY(399px)!important;box-shadow:4px 5px 0 #16110b,0 0 14px rgba(119,65,255,.36)!important}
 #fntConfusedOrb{position:fixed!important;right:18px!important;left:auto!important;bottom:18px!important;z-index:100050!important}
@@ -2469,6 +2470,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(orb&&orb.parentElement!==document.body)document.body.appendChild(orb);
   let musicShift=0;
   function alignMusicWithConfused(){
+    return;
     if(!orb||!confused)return;
     orb.style.setProperty('transform','translateY('+musicShift+'px)','important');
     const delta=confused.getBoundingClientRect().bottom-orb.getBoundingClientRect().bottom;
@@ -2496,6 +2498,65 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   document.getElementById('fntTinyMusicClose').onclick=close;
   popup.addEventListener('pointerdown',e=>{if(e.target===popup)close()});
   popup.querySelectorAll('[data-sound]').forEach(btn=>btn.onclick=function(){const s=this.dataset.sound;if(s==='off'){stop();close();return}start(s);close()});
+})();
+</script>
+<style id="fnt-final-control-lock-style">
+#fntCompactMusicOrb{
+  display:grid!important;place-items:center!important;position:fixed!important;
+  left:auto!important;right:94px!important;top:auto!important;bottom:18px!important;
+  transform:none!important;width:56px!important;height:56px!important;min-width:56px!important;
+  padding:4px!important;border:3px solid #ff334f!important;border-radius:50%!important;
+  background:#080808!important;color:#fff!important;
+  box-shadow:0 0 0 3px #080808,0 0 17px rgba(255,24,59,.85)!important;
+  font:1000 8px/1.05 Arial,sans-serif!important;letter-spacing:.04em!important;
+  z-index:2147483000!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+}
+#fntCompactMusicOrb.is-playing,#fntCompactMusicOrb.fnt-music-live,#fntCompactMusicOrb.fnt-direct-music-on{
+  background:#080808!important;color:#fff!important;border-color:#ff8092!important;
+  box-shadow:0 0 0 3px #080808,0 0 27px rgba(255,24,59,1)!important;
+}
+#fntTinyMusicPopup{z-index:2147483100!important}
+#teamTypeGo{
+  flex:0 0 86px!important;width:86px!important;min-width:86px!important;
+  height:86px!important;min-height:86px!important;margin:0 4px 0 12px!important;padding:7px!important;
+  border:4px solid #080808!important;border-radius:50%!important;background:#6b44c9!important;color:#fff!important;
+  box-shadow:0 0 0 3px #080808,0 0 19px rgba(107,68,201,.9),6px 7px 0 #080808!important;
+  font:1000 20px/.82 'Arial Black',Arial,sans-serif!important;letter-spacing:-.06em!important;
+  text-align:center!important;text-transform:uppercase!important;white-space:normal!important;
+  display:grid!important;place-items:center!important;cursor:pointer!important;touch-action:manipulation!important;
+}
+#teamTypeGo .fnt-go-word{display:block!important;font:inherit!important;line-height:.82!important}
+@media(max-width:600px){
+  #fntCompactMusicOrb{right:84px!important;bottom:18px!important;width:52px!important;height:52px!important;min-width:52px!important}
+  #teamTypeGo{flex-basis:82px!important;width:82px!important;min-width:82px!important;height:82px!important;min-height:82px!important;font-size:19px!important}
+}
+</style>
+<script id="fnt-final-control-lock-script">
+(function(){
+  function lockControls(){
+    var go=document.getElementById('teamTypeGo');
+    if(go){
+      go.innerHTML='<span class="fnt-go-word">LET’S<br>GO</span>';
+      go.setAttribute('aria-label','Let’s go');
+    }
+    var music=document.getElementById('fntCompactMusicOrb');
+    if(music){
+      music.style.setProperty('display','grid','important');
+      music.style.setProperty('transform','none','important');
+      music.setAttribute('aria-label','Open the three music choices');
+    }
+  }
+  function openPremium(e){
+    var target=e.target&&e.target.closest?e.target.closest('.premium-callout,[data-fn-premium-trigger="true"]'):null;
+    if(!target)return;
+    var offer=document.getElementById('offer');
+    if(offer&&getComputedStyle(offer).display!=='none')return;
+    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+    if(typeof window.FN_OPEN_PREMIUM_CHOOSER==='function')window.FN_OPEN_PREMIUM_CHOOSER();
+  }
+  window.addEventListener('pointerup',openPremium,true);
+  window.addEventListener('click',openPremium,true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){lockControls();setTimeout(lockControls,350);setTimeout(lockControls,900)},{once:true});else{lockControls();setTimeout(lockControls,350)}
 })();
 </script>
 <script id="fnt-last-word-repair">
@@ -2756,5 +2817,56 @@ html body.fnt-shipping-accepted #offer{display:none!important;visibility:hidden!
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
   window.addEventListener('load',function(){if(!accepted)showGate()},{once:true});
+})();
+</script>
+<style id="fnt-absolute-final-visible-controls">
+html body #fntCompactMusicOrb{
+  display:grid!important;place-items:center!important;position:fixed!important;
+  left:auto!important;right:94px!important;top:auto!important;bottom:18px!important;
+  transform:none!important;width:56px!important;height:56px!important;min-width:56px!important;
+  padding:4px!important;border:3px solid #ff334f!important;border-radius:50%!important;
+  background:#080808!important;color:#fff!important;
+  box-shadow:0 0 0 3px #080808,0 0 17px rgba(255,24,59,.85)!important;
+  font:1000 8px/1.05 Arial,sans-serif!important;letter-spacing:.04em!important;
+  z-index:2147483000!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+}
+html body #fntCompactMusicOrb.is-playing{border-color:#ff8092!important;box-shadow:0 0 0 3px #080808,0 0 27px rgba(255,24,59,1)!important}
+html body #teamTypeGo{
+  flex:0 0 84px!important;width:84px!important;min-width:84px!important;
+  height:84px!important;min-height:84px!important;margin:0 4px 0 12px!important;padding:7px!important;
+  border:4px solid #080808!important;border-radius:50%!important;background:#6b44c9!important;color:#fff!important;
+  box-shadow:0 0 0 3px #080808,0 0 19px rgba(107,68,201,.9),6px 7px 0 #080808!important;
+  font:1000 20px/.82 'Arial Black',Arial,sans-serif!important;letter-spacing:-.06em!important;
+  display:grid!important;place-items:center!important;text-align:center!important;white-space:normal!important;
+}
+html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!important;line-height:.82!important}
+@media(max-width:600px){
+  html body #fntCompactMusicOrb{right:84px!important;width:52px!important;height:52px!important;min-width:52px!important}
+  html body #teamTypeGo{flex-basis:80px!important;width:80px!important;min-width:80px!important;height:80px!important;min-height:80px!important;font-size:19px!important}
+}
+</style>
+<script id="fnt-absolute-final-visible-controls-script">
+(function(){
+  function restore(){
+    var go=document.getElementById('teamTypeGo');
+    if(go){go.innerHTML='<span class="fnt-go-word">LET’S<br>GO</span>';go.setAttribute('aria-label','Let’s go')}
+    var music=document.getElementById('fntCompactMusicOrb');
+    if(music){
+      music.style.setProperty('display','grid','important');
+      music.style.setProperty('transform','none','important');
+      music.setAttribute('aria-label','Open music choices');
+    }
+  }
+  function premium(e){
+    var hit=e.target&&e.target.closest?e.target.closest('.premium-callout,[data-fn-premium-trigger="true"]'):null;
+    if(!hit)return;
+    var shipping=document.getElementById('offer');
+    if(shipping&&getComputedStyle(shipping).display!=='none')return;
+    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+    if(typeof window.FN_OPEN_PREMIUM_CHOOSER==='function')window.FN_OPEN_PREMIUM_CHOOSER();
+  }
+  window.addEventListener('pointerdown',premium,true);
+  window.addEventListener('click',premium,true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){restore();setTimeout(restore,400);setTimeout(restore,1200)},{once:true});else{restore();setTimeout(restore,400)}
 })();
 </script>
