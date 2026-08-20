@@ -42643,6 +42643,9 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 <!-- v287: direct city-title and Back-route repair -->
 <script id="bop-direct-city-title-back-repair-v1">
 (function(){
+  /* Retired: this forced every city Back button to the landing page and
+     bypassed the site's real category/city parent routing. */
+  return;
   function safeReturn(){
     var best=document.getElementById('bestOfOverlay');
     var landing=document.getElementById('bopLandingOverlay');
@@ -42702,6 +42705,8 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 </style>
 <script id="bop-back-button-final-replacement-v1">
 (function(){
+  /* Retired: do not clone away the native Back button listener. */
+  return;
   function safe(){if(typeof window.bopSafeReturnToLanding==='function')window.bopSafeReturnToLanding();}
   function replace(){
     var old=document.getElementById('boBackBtn');
@@ -42744,6 +42749,9 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 </style>
 <script id="bop-city-back-visible-v1-script">
 (function(){
+  /* Retired: the original Back control remains visible and keeps its
+     established category -> city main -> landing hierarchy. */
+  return;
   function wire(){
     var best=document.getElementById('bestOfOverlay');
     var button=document.getElementById('boBackBtn');
@@ -43730,6 +43738,8 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
     var selectedHeroCity='';
     var heroLockPlaced=false;
     function enforceSelectedHero(){
+      /* Native city hero restored; do not build a second absolute overlay. */
+      return;
       if(!selectedHeroCity)return;
       var heroCity=document.getElementById('bopMainCityText');
       var best=document.getElementById('bestOfOverlay');
@@ -44292,5 +44302,47 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
   new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true});
   window.setTimeout(apply,200);window.setTimeout(apply,900);
+})();
+</script>
+<!-- v269: remove duplicate visual layers and restore native city hierarchy -->
+<style id="bop-single-visual-layer-v269">
+  /* Only the actual input placeholder is allowed to draw search copy. */
+  #bopLandingOverlay .bop-landing-search-icon,
+  #bopLandingOverlay .bop-landing-search-prompt,
+  #bopLandingOverlay #bopLandingSearchPrompt{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::before,
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::after,
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput)::before,
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput)::after{content:none!important;display:none!important}
+
+  .bop-one-search-icon{position:absolute!important;left:20px!important;top:50%!important;width:21px!important;height:21px!important;transform:translateY(-54%)!important;z-index:8!important;pointer-events:none!important}
+  .bop-one-search-icon::before{content:''!important;position:absolute!important;left:0!important;top:0!important;width:14px!important;height:14px!important;box-sizing:border-box!important;border:2px solid #F59E0B!important;border-radius:50%!important;filter:drop-shadow(0 0 2px rgba(245,158,11,.32))!important}
+  .bop-one-search-icon::after{content:''!important;position:absolute!important;left:13px!important;top:14px!important;width:8px!important;height:2px!important;border-radius:2px!important;background:#F59E0B!important;transform:rotate(45deg)!important;transform-origin:left center!important;box-shadow:0 0 2px rgba(245,158,11,.30)!important}
+  #bopStableLandingSearchInput,#bestOfOverlay #boSearchInput{padding-left:54px!important;text-indent:0!important;background-image:none!important}
+
+  /* Remove the later duplicate city overlay. The native hero is the only
+     city title and keeps the original six-pixel Period© gap. */
+  #bopSelectedHeroCityOverlay{display:none!important;visibility:hidden!important;opacity:0!important}
+  #bestOfOverlay.bopSelectedHeroLocked .bop-splash-city-col{visibility:visible!important;display:block!important;min-width:0!important;width:auto!important;flex:auto!important}
+  #bestOfOverlay.bopSelectedHeroLocked #bopMainCityText{visibility:visible!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-city{font-size:clamp(36px,9vw,64px)!important;line-height:.96!important;background:transparent!important;box-shadow:none!important;padding:0!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-city-col{background:transparent!important;box-shadow:none!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-period{font-size:clamp(36px,9vw,64px)!important;line-height:.96!important}
+</style>
+<script id="bop-single-visual-layer-v269-script">
+(function(){
+  function clean(){
+    document.querySelectorAll('#bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay .bop-landing-search-prompt,#bopLandingSearchPrompt').forEach(function(node){node.remove();});
+    var overlay=document.getElementById('bopSelectedHeroCityOverlay');if(overlay)overlay.remove();
+    var best=document.getElementById('bestOfOverlay');if(best)best.classList.remove('bopSelectedHeroLocked');
+    [document.getElementById('bopStableLandingSearchInput'),document.getElementById('boSearchInput')].forEach(function(input){
+      if(!input)return;var wrap=input.closest('.bo-search-wrap');if(!wrap)return;
+      wrap.querySelectorAll('.bop-one-search-icon').forEach(function(icon,index){if(index)icon.remove();});
+      if(!wrap.querySelector('.bop-one-search-icon')){var icon=document.createElement('span');icon.className='bop-one-search-icon';icon.setAttribute('aria-hidden','true');wrap.insertBefore(icon,input);}
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});else clean();
+  new MutationObserver(function(){window.requestAnimationFrame(clean);}).observe(document.documentElement,{subtree:true,childList:true});
+  window.setTimeout(clean,200);window.setTimeout(clean,900);
 })();
 </script>
