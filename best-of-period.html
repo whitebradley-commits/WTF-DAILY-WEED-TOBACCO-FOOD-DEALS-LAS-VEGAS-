@@ -24070,7 +24070,7 @@ function boRenderCategory(cat){
            </svg>
            <div style="position:absolute;top:58%;left:50%;transform:translate(-50%,-35%);width:64%;text-align:center;">
              <p style="margin:0;color:#F59E0B;font-size:0.82rem;font-weight:800;line-height:1.4;text-shadow:-1.5px -1.5px 0 #000,1.5px -1.5px 0 #000,-1.5px 1.5px 0 #000,1.5px 1.5px 0 #000,0 0 6px rgba(0,0,0,0.8);">
-               <span class="bo-michelin-badge" style="margin-left:0;text-shadow:none;"><span class="bo-michelin-m">M</span><span class="bo-michelin-stars">&#9733;</span></span> Check back for Michelin-star-rated Las Vegas restaurants — the new MICHELIN Guide Southwest debuts August 26, 2026, the first official Vegas guide in over 15 years.
+               <span class="bo-michelin-badge" style="margin-left:0;text-shadow:none;"><span class="bo-michelin-m">M</span><span class="bo-michelin-stars">&#9733;</span></span> The new MICHELIN Guide Southwest is coming soon. Check back for the official Michelin-rated Las Vegas restaurants.
              </p>
            </div>
            <div style="position:absolute;bottom:-20px;left:70px;width:20px;height:20px;border-radius:50%;background:#0a0a0a;border:3px solid #F59E0B;"></div>
@@ -46059,5 +46059,82 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
  new MutationObserver(function(){install()}).observe(document.documentElement,{subtree:true,childList:true});
  setTimeout(install,300);setTimeout(install,1200);
+})();
+</script>
+<!-- v308: reliable city entry, reel/landing geometry, and Back navigation -->
+<style id="bop-city-entry-back-v308-style">
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+ display:flex!important;align-items:baseline!important;justify-content:center!important;
+ gap:6px!important;column-gap:6px!important;width:100%!important;overflow:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+ width:auto!important;max-width:none!important;margin:0!important;transform:none!important;
+ overflow:visible!important;visibility:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopResultsCityText{
+ position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
+ max-width:none!important;margin:0!important;padding:0!important;transform:none!important;
+ white-space:nowrap!important;overflow:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+ margin:0!important;padding:0!important;transform:none!important;white-space:nowrap!important;
+ background:transparent!important;box-shadow:none!important
+}
+</style>
+<script id="bop-city-entry-back-v308-script">
+(function(){
+ var landingDeparture=0,lastReplayKey='',lastHero=null;
+ function cityKey(){try{return String(window.boCityContext||boCityContext||'bestof')}catch(_){return String(window.boCityContext||'bestof')}}
+ function clearSearch(){
+  ['boSearchInput','bopStableLandingSearchInput','bopLandingSearchInput'].forEach(function(id){var input=document.getElementById(id);if(input){input.value='';input.setAttribute('value','')}});
+  ['boSearchResults','bopStableLandingResults','bopLandingResults'].forEach(function(id){var panel=document.getElementById(id);if(panel){panel.innerHTML='';panel.classList.remove('is-open','open');panel.hidden=true}});
+ }
+ function showLanding(){
+  clearSearch();
+  var best=document.getElementById('bestOfOverlay'),home=document.getElementById('bopLandingOverlay');
+  if(best){best.classList.remove('open');best.setAttribute('aria-hidden','true')}
+  if(home){home.classList.add('open');home.setAttribute('aria-hidden','false');home.scrollTop=0}
+  document.body.style.overflow='';window.scrollTo(0,0);
+ }
+ function forceCityHub(){
+  var best=document.getElementById('bestOfOverlay');if(!best||!best.classList.contains('open'))return;
+  var key=cityKey();
+  try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
+  try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',key)}catch(_){}
+  try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+  if(key.toLowerCase()==='sandiego'&&typeof window.BOP_SHOW_SD_COAST_GATE==='function')setTimeout(window.BOP_SHOW_SD_COAST_GATE,100);
+  setTimeout(replay,180);setTimeout(replay,520);
+ }
+ function replay(){
+  var best=document.getElementById('bestOfOverlay');if(!best||!best.classList.contains('open'))return;
+  if(typeof window.BOP_REPLAY_CITY_REEL==='function')window.BOP_REPLAY_CITY_REEL();
+ }
+ window.addEventListener('focusout',function(event){
+  if(event.target&&event.target.id==='bopStableLandingSearchInput'){
+   landingDeparture=Date.now();setTimeout(function(){if(Date.now()-landingDeparture<1400)forceCityHub()},80);
+  }
+ },true);
+ window.addEventListener('pointerdown',function(event){
+  var back=event.target&&event.target.closest&&event.target.closest('#boBackBtn');if(!back)return;
+  event.preventDefault();event.stopImmediatePropagation();clearSearch();
+  var cat='';try{cat=String(window.boCurrentCat||boCurrentCat||'').toLowerCase()}catch(_){cat=String(window.boCurrentCat||'').toLowerCase()}
+  if(cat&&cat!=='otheroptions'){
+   var key=cityKey();try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
+   try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',key)}catch(_){}
+   try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+   if(key.toLowerCase()==='sandiego'&&typeof window.BOP_SHOW_SD_COAST_GATE==='function')setTimeout(window.BOP_SHOW_SD_COAST_GATE,80);
+   setTimeout(replay,160);window.scrollTo(0,0);return;
+  }
+  showLanding();
+ },true);
+ setInterval(function(){
+  var best=document.getElementById('bestOfOverlay'),hero=best&&best.querySelector('.bop-splash-hero');
+  if(!best||!best.classList.contains('open')){lastReplayKey='';lastHero=null;return}
+  var key=cityKey();if(hero&&(hero!==lastHero||key!==lastReplayKey)){lastHero=hero;lastReplayKey=key;setTimeout(replay,120)}
+ },220);
 })();
 </script>
