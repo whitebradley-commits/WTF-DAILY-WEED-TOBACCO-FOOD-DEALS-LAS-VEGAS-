@@ -7951,6 +7951,46 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
  window.BOP_REPLAY_CITY_REEL=function(){lastCity='';wasOpen=false;monitor()};
 })();
 </script>
+<!-- v303: final-source six-pixel landing lockup and one-point-smaller red city type -->
+<style id="bop-six-pixel-gap-and-red-size-v303-last">
+/* Main-page red reel: one additional point smaller, same established anchor. */
+#bopLandingOverlay #bopStableMobileCity{
+  font-size:clamp(36px,calc(13.4vw - 4px),54px)!important;
+}
+/* City-page reel: one additional point smaller while it spins. */
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopResultsCityText{
+  font-size:clamp(33px,calc(9vw - 3px),61px)!important;
+}
+/* Once landed, city + Period© are a single centered row with exactly 6px
+   between their rendered boxes. No black mask or fixed Period column remains. */
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+  position:relative!important;display:flex!important;grid-template-columns:none!important;
+  align-items:baseline!important;justify-content:center!important;
+  column-gap:6px!important;gap:6px!important;width:100%!important;max-width:100%!important;
+  overflow:visible!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+  position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+  width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;
+  overflow:visible!important;text-align:right!important;transform:none!important;z-index:1!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopResultsCityText{
+  position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
+  max-width:none!important;margin:0!important;padding:0!important;overflow:visible!important;
+  line-height:.96!important;text-align:right!important;white-space:nowrap!important;
+  transform:none!important;visibility:visible!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+  position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+  margin:0!important;padding:0!important;line-height:.96!important;white-space:nowrap!important;
+  background:transparent!important;background-color:transparent!important;box-shadow:none!important;
+  transform:none!important;z-index:7!important;
+}
+</style>
 <!-- v301: internal restaurant route and movie-winner-first flow -->
 <style id="bop-world-restaurants-and-movie-result-v301-style">
 .bop-fate-ticket-choice{
@@ -41318,6 +41358,62 @@ function keyFor(name,city){
   window.BOP_RESTAURANT_DATA_EXPANSION={recordCount:bopRestaurantExpansionRecords.length,categories:{"Michelin": "michelin", "James Beard": "jamesbeardverified", "Steak": "steakhighend", "Italian": "italianhighend", "Mexican": "mexicanhighend", "Pizza": "pizza", "Asian": "asianbestofrest", "French": "french"}};
 })();
 </script>
+<!-- v302: landed city and Period© are one centered lockup with an exact 6px gap -->
+<style id="bop-landed-city-six-pixel-gap-v302">
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+  position:relative!important;display:flex!important;grid-template-columns:none!important;
+  align-items:baseline!important;justify-content:center!important;column-gap:6px!important;gap:6px!important;
+  width:100%!important;max-width:100%!important;overflow:visible!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+  position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+  width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;
+  overflow:visible!important;text-align:right!important;z-index:1!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopResultsCityText{
+  position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
+  max-width:none!important;margin:0!important;padding:0!important;overflow:visible!important;
+  line-height:.96!important;text-align:right!important;white-space:nowrap!important;
+  transform:none!important;visibility:visible!important;
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+  position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+  margin:0!important;padding:0!important;line-height:.96!important;white-space:nowrap!important;
+  background:transparent!important;background-color:transparent!important;box-shadow:none!important;
+  transform:none!important;z-index:7!important;
+}
+</style>
+<script id="bop-landed-city-six-pixel-gap-v302-script">
+(function(){
+  function fitLandedCity(){
+    var overlay=document.getElementById('bestOfOverlay');
+    if(!overlay||!overlay.classList.contains('open'))return;
+    var hero=overlay.querySelector('.bop-splash-hero.bop-city-reel-settled-v298');
+    if(!hero)return;
+    var line=hero.querySelector('.bop-splash-line2'),city=hero.querySelector('.bop-splash-city-col .bop-splash-city'),period=hero.querySelector('.bop-splash-period');
+    if(!line||!city||!period)return;
+    city.style.removeProperty('font-size');period.style.removeProperty('font-size');
+    var preferred=Math.min(60,Math.max(34,window.innerWidth*.085));
+    city.style.setProperty('font-size',(preferred-1)+'px','important');
+    period.style.setProperty('font-size',preferred+'px','important');
+    var available=Math.max(220,Math.min(line.clientWidth||window.innerWidth,window.innerWidth)-12);
+    var needed=city.getBoundingClientRect().width+period.getBoundingClientRect().width+6;
+    if(needed>available){
+      var fitted=Math.max(25,preferred*(available/needed));
+      city.style.setProperty('font-size',Math.max(24,fitted-1)+'px','important');
+      period.style.setProperty('font-size',fitted+'px','important');
+    }
+  }
+  var queued=0;
+  function queueFit(){clearTimeout(queued);queued=setTimeout(function(){requestAnimationFrame(fitLandedCity)},40)}
+  new MutationObserver(queueFit).observe(document.documentElement,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class']});
+  window.addEventListener('resize',queueFit,{passive:true});
+  window.addEventListener('orientationchange',queueFit,{passive:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',queueFit,{once:true});else queueFit();
+})();
+</script>
 </body></html>
 
 <!-- Final readability, Closest 5 control, and verified score patch -->
@@ -45653,3 +45749,36 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  window.BOP_CLEAR_ALL_SEARCHES=clearSearch;
 })();
 </script>
+<!-- v304: authoritative final-source city-logo geometry -->
+<style id="bop-city-logo-v304-authoritative-last">
+#bopLandingOverlay #bopStableMobileCity{font-size:clamp(36px,calc(13.4vw - 4px),54px)!important}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopResultsCityText{
+ font-size:clamp(33px,calc(9vw - 3px),61px)!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+ position:relative!important;display:flex!important;grid-template-columns:none!important;
+ align-items:baseline!important;justify-content:center!important;column-gap:6px!important;gap:6px!important;
+ width:100%!important;max-width:100%!important;overflow:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+ width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;
+ overflow:visible!important;text-align:right!important;transform:none!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopResultsCityText{
+ position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
+ max-width:none!important;margin:0!important;padding:0!important;overflow:visible!important;
+ line-height:.96!important;text-align:right!important;white-space:nowrap!important;
+ transform:none!important;visibility:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+ margin:0!important;padding:0!important;line-height:.96!important;white-space:nowrap!important;
+ background:transparent!important;background-color:transparent!important;box-shadow:none!important;
+ transform:none!important;z-index:7!important
+}
+</style>
