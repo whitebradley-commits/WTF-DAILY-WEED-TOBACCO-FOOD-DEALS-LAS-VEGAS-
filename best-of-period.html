@@ -42195,6 +42195,8 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 </style>
 <script id="bop-main-page-orb-visibility-enforcer-v1">
 (function(){
+  /* Retired: CSS owns visibility; the 90ms inline-style loop caused flicker. */
+  return;
   function isMainLanding(){
     var main=document.getElementById('bopLandingOverlay');
     if(!main || !main.classList.contains('open')) return false;
@@ -43600,6 +43602,8 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 </style>
 <script id="bop-single-landing-controller">
 (function(){
+  /* Retired: its rapid enforcement loops fought the live dock and flickered. */
+  return;
   const labels=['L.A.','S.D.','S.F.','S.B.','P.S.','P.D.','K.W.','N.Y.','BOS.','CHI.','MIA.','NASH.','PHX.'];
   let pos=0, next=Date.now()+900;
   function cityNodes(){return [...document.querySelectorAll('#bopActualMobileCity,#bopLandingCityText,#bopMainCityText')]}
@@ -44210,7 +44214,7 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
       node.dataset.bopCopyrightLocked='1';
     });
   }
-  function setSearchCopy(){var input=document.getElementById('bopStableLandingSearchInput');if(input){input.placeholder='Search any city';input.setAttribute('aria-label','Search any city')}}
+  function setSearchCopy(){var input=document.getElementById('bopStableLandingSearchInput');if(input){input.placeholder='Search any city...';input.setAttribute('aria-label','Search any city')}}
   var observer=new MutationObserver(function(records){records.forEach(function(record){record.addedNodes.forEach(function(node){if(node.nodeType===1)lock(node)})});setSearchCopy()});
   observer.observe(document.documentElement,{childList:true,subtree:true});
   lock(document);setSearchCopy();window.setTimeout(function(){lock(document);setSearchCopy()},150);window.setTimeout(function(){lock(document);setSearchCopy()},700);
@@ -44235,3 +44239,58 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 #bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{position:absolute!important;right:15px!important;top:50%!important;transform:translateY(-50%)!important;display:flex!important;align-items:center!important;gap:3px!important;margin:0!important;color:#F59E0B!important;font-size:10px!important;font-weight:700!important;white-space:nowrap!important}
 @media(max-width:430px){#bopStableLandingSearchInput{padding-right:128px!important;padding-left:50px!important;font-size:16px!important}#bopLandingOverlay .bo-search-powered-by{right:13px!important;font-size:10px!important}#bestOfOverlay #boSearchInput{padding-right:122px!important;padding-left:46px!important;font-size:15px!important}#bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{right:12px!important;font-size:9px!important}}
 </style>
+<!-- v268: single calm orb motion and restrained search-bar finish -->
+<style id="bop-orb-and-search-calm-v268">
+  #bopCleanOrbDock{opacity:1!important;visibility:visible!important}
+  #bopCleanOrbDock>.bop-static-landing-button{
+    opacity:1!important;visibility:visible!important;transition:none!important;
+    animation:bopOneCalmWave 16s ease-in-out infinite!important;
+    backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;
+    transform:translate3d(0,0,0);touch-action:manipulation!important;
+  }
+  #bopCleanOrbDock>.bop-static-landing-button:nth-child(1){animation-delay:-12.8s!important}
+  #bopCleanOrbDock>.bop-static-landing-button:nth-child(2){animation-delay:-9.6s!important}
+  #bopCleanOrbDock>.bop-static-landing-button:nth-child(3){animation-delay:-6.4s!important}
+  #bopCleanOrbDock>.bop-static-landing-button:nth-child(4){animation-delay:-3.2s!important}
+  #bopCleanOrbDock>.bop-static-landing-button:nth-child(5){animation-delay:0s!important}
+  #bopCleanOrbDock>.bop-static-landing-button *,#bopCleanOrbDock>.bop-static-landing-button::before,#bopCleanOrbDock>.bop-static-landing-button::after{animation:none!important;transition:none!important;opacity:1!important}
+  @keyframes bopOneCalmWave{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-1.5px,0)}}
+
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput){
+    border-color:#F59E0B!important;
+    box-shadow:0 0 6px rgba(245,158,11,.30),inset 0 0 4px rgba(245,158,11,.035)!important;
+  }
+  #bopLandingOverlay .bo-search-powered-by,
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{
+    color:#F59E0B!important;text-shadow:0 0 4px rgba(245,158,11,.38)!important;
+    filter:drop-shadow(0 0 2px rgba(245,158,11,.22))!important;
+  }
+  #bopStableLandingSearchInput{padding-left:54px!important}
+  #bopStableLandingSearchInput::placeholder{color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;opacity:.92!important}
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput)::before{
+    content:''!important;position:absolute!important;left:19px!important;top:18px!important;
+    width:14px!important;height:14px!important;box-sizing:border-box!important;
+    border:2px solid #F59E0B!important;border-radius:50%!important;z-index:4!important;
+    pointer-events:none!important;filter:drop-shadow(0 0 2px rgba(245,158,11,.30))!important;
+  }
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput)::after{
+    content:''!important;position:absolute!important;left:32px!important;top:32px!important;
+    width:7px!important;height:2px!important;border-radius:2px!important;background:#F59E0B!important;
+    transform:rotate(45deg)!important;transform-origin:left center!important;z-index:4!important;
+    pointer-events:none!important;box-shadow:0 0 2px rgba(245,158,11,.30)!important;
+  }
+</style>
+<script id="bop-search-copy-lock-v268">
+(function(){
+  function apply(){
+    var city=document.getElementById('bopStableLandingSearchInput');
+    if(city){city.placeholder='Search any city...';city.setAttribute('aria-label','Search any city');}
+    var restaurants=document.getElementById('boSearchInput');
+    if(restaurants){restaurants.placeholder='Search all restaurants...';restaurants.setAttribute('aria-label','Search all restaurants');}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+  new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true});
+  window.setTimeout(apply,200);window.setTimeout(apply,900);
+})();
+</script>
