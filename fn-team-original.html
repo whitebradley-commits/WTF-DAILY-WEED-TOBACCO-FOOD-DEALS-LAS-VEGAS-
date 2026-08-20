@@ -2877,11 +2877,12 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
 #fntShippingGateV2{
   position:fixed!important;inset:0!important;z-index:2147483647!important;
   display:grid!important;place-items:center!important;padding:18px!important;
-  background:rgba(5,5,5,.38)!important;backdrop-filter:blur(7px)!important;
-  -webkit-backdrop-filter:blur(7px)!important;visibility:visible!important;
+  background:rgba(5,5,5,.52)!important;backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;visibility:visible!important;
   opacity:1!important;pointer-events:auto!important;touch-action:manipulation!important;
 }
-#fntShippingGateV2 .offer{pointer-events:auto!important}
+#fntShippingGateV2 .offer{pointer-events:auto!important;animation:none!important;transform:none!important;will-change:auto!important}
+#fntShippingGateV2 .offer:before,#fntShippingGateV2 .offer:after{animation:none!important}
 body.fnt-shipping-accepted #offer,
 body.fnt-shipping-accepted #fntShippingGateV2{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 #fntShippingGateV2 button{display:none!important}
@@ -2958,7 +2959,15 @@ body.fnt-shipping-accepted #fntShippingGateV2{display:none!important;visibility:
     button.onclick=applyCreditAndEnter;
     function gateTap(event){
       var target=event.target;
-      if(target===button||(target.closest&&target.closest('#fntGuaranteedLockButton')))applyCreditAndEnter(event);
+      var direct=target===button||(target.closest&&target.closest('#fntGuaranteedLockButton'));
+      var cardHit=false;
+      if(!direct&&typeof event.clientX==='number'&&typeof event.clientY==='number'){
+        var rect=card.getBoundingClientRect();
+        var relativeX=(event.clientX-rect.left)/rect.width;
+        var relativeY=(event.clientY-rect.top)/rect.height;
+        cardHit=relativeX>=.10&&relativeX<=.90&&relativeY>=.56&&relativeY<=.84;
+      }
+      if(direct||cardHit)applyCreditAndEnter(event);
     }
     gate.addEventListener('pointerdown',gateTap,{capture:true,passive:false});
     gate.addEventListener('touchstart',gateTap,{capture:true,passive:false});
