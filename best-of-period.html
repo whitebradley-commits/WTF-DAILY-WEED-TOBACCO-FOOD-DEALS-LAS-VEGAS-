@@ -45086,3 +45086,38 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  z-index:4!important;background:transparent!important;box-shadow:none!important
 }
 </style>
+<!-- v288: fixed-center city reel behind the permanent Best Of / Period logo -->
+<style id="bop-centered-city-behind-logo-v288">
+/* Landing: every city changes from one centered anchor; it never slides sideways. */
+#bopStableMobileLockup{overflow:visible!important;isolation:isolate!important}
+#bopStableMobileLockup::after{display:none!important;content:none!important}
+#bopStableMobileCity{
+ left:50%!important;right:auto!important;top:0!important;
+ width:max-content!important;min-width:max-content!important;max-width:none!important;
+ padding:0!important;text-align:center!important;white-space:nowrap!important;overflow:visible!important;
+ transform:translateX(-50%)!important;transform-origin:center center!important;z-index:1!important
+}
+#bopStableMobilePeriod{
+ left:54%!important;right:auto!important;z-index:6!important;
+ background:#000!important;box-shadow:-8px 0 0 #000,240px 0 0 #000!important
+}
+#bopLandingOverlay .bop-splash-line1{position:relative!important;z-index:7!important;background:#000!important}
+/* City pages use the same fixed center and the same front/back logo order. */
+#bestOfOverlay .bop-splash-hero .bop-splash-line1{position:relative!important;z-index:7!important;background:#000!important}
+#bestOfOverlay .bop-splash-hero .bop-splash-line2{position:relative!important;overflow:visible!important;isolation:isolate!important}
+#bestOfOverlay .bop-splash-hero .bop-splash-city-col{
+ position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;
+ display:flex!important;align-items:baseline!important;justify-content:center!important;
+ overflow:visible!important;text-align:center!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-city,
+#bestOfOverlay #bopMainCityText{
+ width:max-content!important;max-width:none!important;margin:0 auto!important;padding:0!important;
+ text-align:center!important;white-space:nowrap!important;overflow:visible!important;
+ transform:none!important;transform-origin:center center!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-period{
+ position:relative!important;z-index:6!important;margin-left:auto!important;
+ background:#000!important;box-shadow:-8px 0 0 #000,240px 0 0 #000!important
+}
+</style>

@@ -2464,3 +2464,42 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(bind,700)});else setTimeout(bind,700);
 })();
 </script>
+<style id="fnt-six-photo-and-lets-go-final-style">
+#fntExperienceGallery{overflow:visible!important;padding:16px!important}
+#fntExperienceGallery .fnt-experience-row{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;width:100%!important;min-width:0!important;overflow:visible!important;padding:0!important}
+#fntExperienceGallery .fnt-experience-card{position:relative!important;display:block!important;width:100%!important;min-width:0!important;max-width:none!important;margin:0!important}
+#fntExperienceGallery .fnt-experience-card img{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1!important;object-fit:cover!important}
+#fntExperienceGallery .fn-approved-shirt-tag{position:absolute;z-index:5;left:50%;top:36%;width:25%;aspect-ratio:1.12/1;transform:translate(-50%,-50%) rotate(-2deg);padding:2px;background:#f4ead7;border:1px solid #050505;box-shadow:0 2px 5px rgba(0,0,0,.45);pointer-events:none;overflow:hidden}
+#fntExperienceGallery .fn-approved-shirt-tag img{width:100%!important;height:100%!important;aspect-ratio:auto!important;object-fit:contain!important;background:#f4ead7!important;padding:0!important}
+#teamTypeGo{flex:0 0 116px!important;width:116px!important;min-width:116px!important;height:116px!important;min-height:116px!important;margin:0 4px 0 12px!important;padding:12px!important;border:4px solid #080808!important;border-radius:50%!important;background:#6b44c9!important;color:#fff!important;box-shadow:0 0 0 4px #080808,0 0 22px rgba(107,68,201,.9),8px 9px 0 #080808!important;font:1000 21px/.92 'Arial Black',Arial,sans-serif!important;letter-spacing:-.03em!important;text-align:center!important;text-transform:uppercase!important;white-space:normal!important;display:grid!important;place-items:center!important;animation:fntLetsGoPulse 1.55s ease-in-out infinite!important;cursor:pointer!important;touch-action:manipulation!important}
+#teamTypeGo:hover,#teamTypeGo:focus-visible{background:#7c4ee3!important;color:#fff!important;outline:none!important;transform:scale(1.04)!important}
+#teamTypeGo:active{transform:scale(.94)!important;box-shadow:0 0 0 4px #080808,0 0 15px rgba(107,68,201,.8),3px 4px 0 #080808!important}
+@keyframes fntLetsGoPulse{0%,100%{box-shadow:0 0 0 4px #080808,0 0 15px rgba(107,68,201,.65),8px 9px 0 #080808}50%{box-shadow:0 0 0 4px #080808,0 0 30px rgba(124,78,227,1),8px 9px 0 #080808}}
+@media(max-width:600px){#fntExperienceGallery{padding:12px!important}#fntExperienceGallery .fnt-experience-row{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}#teamTypeGo{flex-basis:106px!important;width:106px!important;min-width:106px!important;height:106px!important;min-height:106px!important;margin-left:10px!important;font-size:19px!important}#teamType{height:88px!important}}
+</style>
+<script id="fnt-six-photo-and-lets-go-final-script">
+(function(){
+  var approvedTag='';
+  function label(card){return(card&&card.textContent||'').replace(/\s+/g,' ').trim().toUpperCase()}
+  function apply(){
+    var button=document.getElementById('teamTypeGo');
+    if(button){button.textContent="LET’S GO";button.setAttribute('aria-label',"Let's go with this team")}
+    var gallery=document.getElementById('fntExperienceGallery')||document.querySelector('.fnt-experience-gallery');
+    var row=gallery&&gallery.querySelector('.fnt-experience-row');if(!row)return;
+    var cards=Array.from(row.querySelectorAll(':scope > .fnt-experience-card'));
+    var inside=cards.find(function(c){return label(c).indexOf('INSIDE LABEL')===0||c.classList.contains('fnt-real-label-card')});
+    if(inside){var logo=inside.querySelector('img');if(logo&&logo.src)approvedTag=logo.src;inside.remove()}
+    cards=Array.from(row.querySelectorAll(':scope > .fnt-experience-card'));
+    var folded=cards.find(function(c){return label(c).indexOf('FOLDED SHIRT STACKS')===0})||cards[0];
+    if(folded&&approvedTag&&!folded.querySelector('.fn-approved-shirt-tag')){var tag=document.createElement('span');tag.className='fn-approved-shirt-tag';tag.setAttribute('aria-hidden','true');var img=document.createElement('img');img.src=approvedTag;img.alt='';tag.appendChild(img);folded.appendChild(tag)}
+    var wanted=['FOLDED SHIRT STACKS','PACKAGE AT YOUR DOOR','LARGER PACKAGE','OPENED PACKAGE','GARMENTS & CARD','OUTSIDE LABEL'];
+    var desired=wanted.map(function(name){return Array.from(row.children).find(function(c){return label(c).indexOf(name)===0})}).filter(Boolean);
+    Array.from(row.querySelectorAll(':scope > .fnt-experience-card')).forEach(function(c){if(desired.indexOf(c)<0)c.remove()});
+    var current=Array.from(row.querySelectorAll(':scope > .fnt-experience-card'));
+    if(current.length!==desired.length||desired.some(function(c,i){return current[i]!==c}))desired.forEach(function(c){row.appendChild(c)});
+    gallery.classList.add('fn-six-photo-grid');row.dataset.fnPackagingOrder='six-photos-three-by-two';
+  }
+  function start(){apply();var queued=false;new MutationObserver(function(){if(queued)return;queued=true;requestAnimationFrame(function(){queued=false;apply()})}).observe(document.getElementById('fntExperienceGallery')||document.body,{childList:true,subtree:true});setTimeout(apply,600);setTimeout(apply,1600)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
