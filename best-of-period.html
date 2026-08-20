@@ -43375,27 +43375,50 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 }
 </style>
 
-<!-- San Diego territory Cheesesteak local-three + Philly Frank's BJS Pick. -->
-<style id="bop-sd-territory-cheesesteak-style">
-.bop-sd-cheesesteak{margin:16px 0 4px!important;padding:13px!important;border:1px solid #f6a014!important;border-radius:17px!important;background:linear-gradient(135deg,#100b03,#050505 60%)!important;box-shadow:0 0 16px rgba(246,160,20,.25)!important}
-.bop-sd-cheesesteak h3{margin:0!important;color:#ffd26c!important;font:1000 18px/1 Arial,sans-serif!important;letter-spacing:.07em!important}.bop-sd-cheesesteak p{margin:7px 0 10px!important;color:#d6bd8e!important;font:700 10px/1.4 Arial,sans-serif!important}.bop-sd-cheese-row{display:grid!important;grid-template-columns:30px 1fr auto!important;gap:8px!important;align-items:center!important;width:100%!important;margin:7px 0!important;padding:9px!important;border:1px solid #4d3719!important;border-radius:11px!important;background:#0b0b0b!important;color:#fff!important;text-align:left!important}.bop-sd-cheese-row strong{display:block!important;font:900 12px/1.1 Arial,sans-serif!important}.bop-sd-cheese-row small{display:block!important;margin-top:3px!important;color:#c6a56b!important;font:700 9px/1.2 Arial,sans-serif!important}.bop-sd-cheese-no{display:grid!important;place-items:center!important;width:28px!important;height:28px!important;border:1px solid #f6a014!important;border-radius:50%!important;color:#f6a014!important;font:1000 11px/1 Arial,sans-serif!important}.bop-sd-cheese-row.bjs{border-color:#ffd26c!important;background:linear-gradient(90deg,rgba(246,160,20,.2),#0b0b0b)!important;box-shadow:0 0 13px rgba(246,160,20,.48)!important}.bop-sd-cheese-row.bjs .bop-sd-cheese-no{background:#f6a014!important;color:#111!important}.bop-sd-cheese-tag{color:#ffd26c!important;font:1000 9px/1 Arial,sans-serif!important;letter-spacing:.08em!important}.bop-sd-worth-drive{display:inline-block!important;margin-top:4px!important;padding:4px 7px!important;border:1px solid #f6a014!important;border-radius:999px!important;color:#ffe49e!important;font:1000 8px/1 Arial,sans-serif!important;letter-spacing:.08em!important;box-shadow:0 0 10px rgba(246,160,20,.88)!important;animation:bopSdDrive 1.8s ease-in-out infinite!important}@keyframes bopSdDrive{50%{filter:brightness(1.35);box-shadow:0 0 19px rgba(246,160,20,1)}}
+<style id="bop-single-controller-style">
+#bopActualMobileCity,#bopLandingCityText,#bopMainCityText{color:#e7193f!important;text-shadow:0 0 12px rgba(231,25,63,.75),0 0 2px #fff!important;white-space:nowrap!important;font-size:clamp(34px,8.4vw,64px)!important;line-height:1!important;letter-spacing:-.035em!important;display:inline-block!important;transform:none!important;animation:none!important}
+#bopActualMobileCityWrap{display:inline-flex!important;align-items:baseline!important;gap:6px!important;white-space:nowrap!important}
+#bopActualMobileCityWrap .bop-splash-period,#bopActualMobileCityWrap .period{margin-left:6px!important}
+#bopSingleResult{position:absolute;z-index:100001;left:50%;transform:translateX(-50%);top:calc(100% + 8px);width:min(100%,520px);background:#090909;border:1px solid #d89c37;border-radius:13px;box-shadow:0 12px 28px rgba(0,0,0,.8);padding:9px;box-sizing:border-box}
+#bopSingleResult[hidden]{display:none!important}
+#bopSingleResult h3{margin:0 0 6px;font:900 11px/1 Arial,sans-serif;letter-spacing:.08em;color:#eead43}
+#bopSingleResult button{display:block;width:100%;border:1px solid #76521c;border-radius:10px;background:#17110a;color:#fff;text-align:left;padding:12px 14px;font:800 15px/1.2 Arial,sans-serif}
+#bopSingleResult button small{display:block;margin-top:4px;color:#c7c7c7;font:700 11px/1.2 Arial,sans-serif}
 </style>
-<script id="bop-sd-territory-cheesesteak-script">
+<script id="bop-single-landing-controller">
 (function(){
- var PH={name:"Philly Frank's Steaks",address:'151 S Rancho Santa Fe Road, San Marcos, CA 92078',lat:33.147582,lon:-117.199456,why:'Owner-operated twenty-five-plus years; Philadelphia born and bred; most authentic cheesesteak you will find in these areas.',url:'https://www.phillyfranks.com/'};
- var DATA={
-  'Oceanside':{c:[33.1959,-117.3795],items:[['The Cheesesteak Grill','1771 S Oceanside Blvd, Oceanside, CA 92054','https://cheesesteakgrilloside.com/'],['Hungry Bear Deli','2205 S Melrose Dr, Suite 103, Vista, CA 92081','https://www.hungrybeardeli.com/'],['American Heroes & Brew','300 Carlsbad Village Dr, Suite 120, Carlsbad, CA 92008','https://americanheroesandbrew.com/']]},
-  'Carlsbad':{c:[33.1581,-117.3506],items:[['American Heroes & Brew','300 Carlsbad Village Dr, Suite 120, Carlsbad, CA 92008','https://americanheroesandbrew.com/menu'],['The Wise Ox Butcher & Deli — La Costa','7750 El Camino Real, Suite P, Carlsbad, CA 92009','https://thewiseox.com/'],['Eureka! Carlsbad','6021 Innovation Way, Suite 110, Carlsbad, CA 92009','https://online.eurekarestaurantgroup.com/order/eureka-carlsbad/item-ribeye-philly-cheesesteak_5f3ace15-bfcd-4742-a83b-928a5d08a8fb']]},
-  'Encinitas / Cardiff':{c:[33.03699,-117.29198],items:[["Honey's Bistro & Bakery",'632 S Coast Hwy 101, Encinitas, CA 92024','https://www.honeysbistroencinitas.com/items/philly-steak-sandwich'],['The Wise Ox Butcher & Deli — La Costa','7750 El Camino Real, Suite P, Carlsbad, CA 92009','https://thewiseox.com/sandwiches'],['American Heroes & Brew','300 Carlsbad Village Dr, Suite 120, Carlsbad, CA 92008','https://americanheroesandbrew.com/menu']]},
-  'Del Mar / Solana Beach':{c:[32.9595,-117.2653],items:[['Philadelphia Sandwich Co.','6904 Miramar Rd, Suite 207, San Diego, CA 92121','https://phillysandwichsd.com/'],['Gaglione Brothers Famous Steaks & Subs','10450 Friars Rd, Suite B, San Diego, CA 92120','https://gaglionebros.com/about'],['American Heroes & Brew','300 Carlsbad Village Dr, Suite 120, Carlsbad, CA 92008','https://americanheroesandbrew.com/menu']]},
-  'La Jolla':{c:[32.8328,-117.2713],items:[['Charleys Cheesesteaks — UTC','4545 La Jolla Village Dr, FC3A, San Diego, CA 92122','https://www.charleys.com/locations/utc-mall/'],['Philadelphia Sandwich Co.','6904 Miramar Rd, Suite 207, San Diego, CA 92121','https://phillysandwichsd.com/'],['Gaglione Brothers Famous Steaks & Subs','10450 Friars Rd, Suite B, San Diego, CA 92120','https://gaglionebros.com/about']]},
-  'PB / Pacific Beach':{c:[32.802,-117.235],items:[['Steak N Fries','1039 Garnet Ave, San Diego, CA 92109','https://www.steaknfries.com/'],["Big Jim's Roast Beef",'4508 Cass St, Suite B, San Diego, CA 92109','https://bigjimsandiego.com/menu'],["Calozzi's Cheesesteaks",'1146 Garnet Ave, Suite A, San Diego, CA 92109','https://calozzis.net/pacific-beach-san-diego-ca/']]},
-  'Downtown San Diego':{c:[32.7157,-117.1611],items:[['Gaslamp Pizza','505 Fifth Ave, San Diego, CA 92101','https://www.gaslamppizza.com/'],['Gaslamp Eatery','732 Fourth Ave, San Diego, CA 92101','https://www.gaslampeatery.com/'],["Giorgino's",'1237 28th St, San Diego, CA 92102','https://www.giorginos.com/contact']]}
- };
- function esc(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}function mi(a,b,c,d){var R=3958.8,p=Math.PI/180,x=(c-a)*p,y=(d-b)*p,z=Math.sin(x/2)**2+Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(z));}
- function seed(){try{if(typeof boCategoryData==='undefined')return;Object.keys(boCategoryData).forEach(function(k){var v=boCategoryData[k];if(Array.isArray(v))for(var i=v.length-1;i>=0;i--){if(v[i]&&v[i].name===PH.name)v.splice(i,1);}});var list=boCategoryData.cheesesteak||(boCategoryData.cheesesteak=[]);list.unshift({name:PH.name,city:'sandiego',address:PH.address,lat:PH.lat,lon:PH.lon,url:PH.url,why:PH.why,price:2,bjsPick:true,bjsPickCity:'sandiego',bjsPickLabel:"BJS Pick — Philly Frank's Steaks",rank:1});}catch(e){}}
- function mount(area){var d=DATA[area],host=document.querySelector('.bo-sd-results');if(!d||!host)return;host.querySelectorAll('.bop-sd-cheesesteak').forEach(function(x){x.remove()});var miles=mi(d.c[0],d.c[1],PH.lat,PH.lon),away=miles>15;var box=document.createElement('section');box.className='bop-sd-cheesesteak';var rows=d.items.map(function(r,i){return '<a class="bop-sd-cheese-row" href="'+esc(r[2])+'" target="_blank" rel="noopener"><span class="bop-sd-cheese-no">'+(i+1)+'</span><span><strong>'+esc(r[0])+'</strong><small>'+esc(r[1])+'</small></span><b class="bop-sd-cheese-tag">LOCAL</b></a>'}).join('');var bjs='<a class="bop-sd-cheese-row bjs" href="'+PH.url+'" target="_blank" rel="noopener"><span class="bop-sd-cheese-no">BJS</span><span><strong>'+PH.name+'</strong><small>'+PH.address+'</small>'+ (away?'<em class="bop-sd-worth-drive">WORTH THE DRIVE · '+miles.toFixed(1)+' MI</em>':'<small>BJS PICK · '+miles.toFixed(1)+' MI</small>')+'</span><b class="bop-sd-cheese-tag">PICK</b></a>';box.innerHTML='<h3>BEST CHEESESTEAK · '+esc(area)+'</h3><p>Three local options first. Then our San Diego BJS Pick.</p>'+rows+bjs;host.appendChild(box)}
- function intercept(e){var b=e.target.closest&&e.target.closest('.bo-sd-subarea');if(!b)return;var area=b.dataset.area;setTimeout(function(){mount(area)},260)}
- seed();window.addEventListener('pointerdown',intercept,true);window.addEventListener('click',intercept,true);setInterval(seed,1300);
+  const labels=['L.A.','S.D.','S.F.','S.B.','P.S.','P.D.','K.W.','N.Y.','BOS.','CHI.','MIA.','NASH.','PHX.'];
+  let pos=0, next=Date.now()+900;
+  function cityNodes(){return [...document.querySelectorAll('#bopActualMobileCity,#bopLandingCityText,#bopMainCityText')]}
+  function enforceCity(){
+    const label=labels[pos];
+    cityNodes().forEach(n=>{if(n.textContent!==label)n.textContent=label;n.style.setProperty('color','#e7193f','important');n.style.setProperty('font-size','clamp(34px,8.4vw,64px)','important');n.style.setProperty('animation','none','important')});
+    if(Date.now()>=next){pos=(pos+1)%labels.length;next=Date.now()+900}
+  }
+  function removeLayers(){
+    const injected=['#bopCleanOrbDock','#bopGlobalFourIconDock','#bopGlobalThreeIconDock','#bopMobileSafeOrbDock','#bopFloatingOrbs','#bopRaisedFullBleedOrbs','.bop-clean-orb-dock','.bop-global-four-icon-dock','.bop-global-three-icon-dock','.bop-mobile-safe-orb-dock','.bop-floating-orbs','.bop-raised-full-bleed-orbs'];
+    document.querySelectorAll(injected.join(',')).forEach(el=>el.style.setProperty('display','none','important'));
+    document.querySelectorAll('#bopLandingResults,#bopGlobalPlaceSearchResults,.bop-global-search-results,.bop-city-search-results').forEach(el=>{if(el.id!=='bopSingleResult')el.remove()})
+  }
+  function installSearch(){
+    const old=document.getElementById('bopLandingSearchInput');
+    if(!old||old.dataset.singleController==='1')return;
+    const fresh=old.cloneNode(true);fresh.dataset.singleController='1';old.replaceWith(fresh);
+    const wrap=fresh.closest('.bo-search-wrap')||fresh.parentElement;
+    const panel=document.createElement('div');panel.id='bopSingleResult';panel.hidden=true;wrap.style.position='relative';wrap.appendChild(panel);
+    const show=()=>{
+      const q=fresh.value.trim().toLowerCase();
+      if(!q){panel.hidden=true;return}
+      const cities=[['Las Vegas','Nevada · Open now'],['Los Angeles','California · Open now'],['San Diego','California · Open now'],['Santa Barbara','California · Open now'],['Nashville','Tennessee · Open now']];
+      const rows=cities.filter(x=>x[0].toLowerCase().includes(q));
+      panel.hidden=false;
+      panel.innerHTML='<h3>LIVE CITIES</h3>'+(rows.length?rows.map(x=>'<button type="button" data-city="'+x[0]+'">'+x[0]+'<small>'+x[1]+'</small></button>').join(''):'<div style="padding:9px;color:#ddd;font:700 12px Arial">No live city match yet.</div>');
+      panel.querySelectorAll('button[data-city]').forEach(b=>b.onclick=()=>{fresh.value='';panel.hidden=true;document.body.dataset.bopSelectedCity=b.dataset.city;window.history.replaceState({},'',location.pathname+'?page=bestof&city='+encodeURIComponent(b.dataset.city.toLowerCase().replace(/\\s+/g,'')))})
+    };
+    fresh.addEventListener('input',show);fresh.addEventListener('focus',show);
+    document.addEventListener('pointerdown',e=>{if(!wrap.contains(e.target))panel.hidden=true},true)
+  }
+  function start(){removeLayers();installSearch();enforceCity();setInterval(enforceCity,100);setInterval(removeLayers,250)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start()
 })();
 </script>
