@@ -7876,6 +7876,81 @@
 html.bop-route-booting body{visibility:hidden!important;opacity:0!important}
 html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacity .12s ease}
 </style>
+<!-- v298: every city page reels briefly, then lands with a true six-pixel logo gap -->
+<style id="bop-city-reel-land-v298-final">
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city-col{
+ position:absolute!important;inset:0!important;width:100%!important;display:flex!important;
+ justify-content:center!important;overflow:visible!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city{
+ width:max-content!important;max-width:none!important;white-space:nowrap!important;text-align:center!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+ display:flex!important;grid-template-columns:none!important;align-items:baseline!important;
+ justify-content:center!important;gap:6px!important;width:100%!important;overflow:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 1 auto!important;
+ width:auto!important;max-width:calc(100vw - 155px)!important;margin:0!important;overflow:visible!important;
+ text-align:right!important;visibility:visible!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText{
+ display:block!important;position:relative!important;inset:auto!important;width:max-content!important;
+ max-width:100%!important;margin:0!important;padding:0!important;overflow:visible!important;
+ font-size:clamp(34px,8.5vw,60px)!important;line-height:.96!important;text-align:right!important;
+ white-space:nowrap!important;transform:none!important;visibility:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+ position:relative!important;inset:auto!important;flex:0 0 auto!important;margin:0!important;padding:0!important;
+ font-size:clamp(34px,8.5vw,60px)!important;line-height:.96!important;white-space:nowrap!important;
+ background:none!important;box-shadow:none!important;transform:none!important;z-index:7!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopSelectedHeroCityOverlay{display:none!important}
+</style>
+<script id="bop-city-reel-land-v298-script">
+(function(){
+ var timer=0,finishTimer=0,lastCity='',wasOpen=false,runToken=0;
+ function cityKey(){try{return String(window.boCityContext||boCityContext||'bestof')}catch(_){return String(window.boCityContext||'bestof')}}
+ function cityName(key){
+  var cfg=(typeof BO_CITY_CONFIG!=='undefined'&&BO_CITY_CONFIG[key])||null;
+  return String((cfg&&(cfg.displayName||cfg.searchName||cfg.landingName))||key||'').trim();
+ }
+ function reelNames(target){
+  var names=[];
+  try{Object.keys(BO_CITY_CONFIG||{}).forEach(function(k){var n=cityName(k);if(n&&n!==target&&names.indexOf(n)<0)names.push(n)})}catch(_){}
+  return names.length?names:['Las Vegas','New York','Miami','Austin','San Diego','Barcelona','London','Chicago'];
+ }
+ function elements(){
+  var overlay=document.getElementById('bestOfOverlay');if(!overlay)return null;
+  var city=overlay.querySelector('#bopMainCityText')||overlay.querySelector('.bop-splash-hero .bop-splash-city');
+  var hero=city&&city.closest('.bop-splash-hero');return city&&hero?{overlay:overlay,city:city,hero:hero}:null;
+ }
+ function settle(target,token){
+  if(token!==runToken)return;clearInterval(timer);timer=0;
+  var el=elements();if(!el)return;el.city.textContent=target;
+  el.hero.classList.remove('bop-city-reel-spinning-v298');el.hero.classList.add('bop-city-reel-settled-v298');
+  el.hero.dataset.bopSettledCity=target;
+ }
+ function start(){
+  var el=elements();if(!el||!el.overlay.classList.contains('open'))return;
+  var key=cityKey(),target=cityName(key);if(!target)return;
+  clearInterval(timer);clearTimeout(finishTimer);var token=++runToken,names=reelNames(target),i=0;
+  el.hero.classList.remove('bop-city-reel-settled-v298');el.hero.classList.add('bop-city-reel-spinning-v298');
+  timer=setInterval(function(){var now=elements();if(!now||token!==runToken)return;now.city.textContent=names[i++%names.length]},115);
+  finishTimer=setTimeout(function(){settle(target,token)},4200);
+ }
+ function monitor(){
+  var el=elements(),open=!!(el&&el.overlay.classList.contains('open')),key=cityKey(),target=cityName(key);
+  if(open&&(!wasOpen||key!==lastCity)){lastCity=key;start()}
+  else if(open&&el&&el.hero.classList.contains('bop-city-reel-settled-v298')&&el.city.textContent.trim()!==target){el.city.textContent=target}
+  else if(open&&el&&!el.hero.classList.contains('bop-city-reel-spinning-v298')&&!el.hero.classList.contains('bop-city-reel-settled-v298')){el.city.textContent=target;el.hero.classList.add('bop-city-reel-settled-v298')}
+  wasOpen=open;if(!open){clearInterval(timer);timer=0;clearTimeout(finishTimer)}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setInterval(monitor,180)},{once:true});else setInterval(monitor,180);
+ window.BOP_REPLAY_CITY_REEL=function(){lastCity='';wasOpen=false;monitor()};
+})();
+</script>
 <!-- v275: one search layer, full city names, and complete Santa Barbara friend picks -->
 <style id="bop-search-city-santa-v275-final">
   /* Search bars: one icon, one input string and one Powered by lockup. */
@@ -45465,4 +45540,36 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  #bestOfOverlay #bopSdCityHubCoast h2{font-size:clamp(34px,9.5vw,44px)!important}
  #bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-sub{margin-bottom:28px!important}
 }
+</style>
+<!-- v299: final-source settled city geometry -->
+<style id="bop-city-reel-land-v299-last">
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city-col{
+ position:absolute!important;inset:0!important;width:100%!important;display:flex!important;
+ justify-content:center!important;overflow:visible!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city{
+ width:max-content!important;max-width:none!important;white-space:nowrap!important;text-align:center!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-line2{
+ display:flex!important;grid-template-columns:none!important;align-items:baseline!important;
+ justify-content:center!important;gap:6px!important;width:100%!important;overflow:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city-col{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 1 auto!important;
+ width:auto!important;max-width:calc(100vw - 155px)!important;margin:0!important;overflow:visible!important;
+ text-align:right!important;visibility:visible!important;z-index:1!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopMainCityText{
+ display:block!important;position:relative!important;inset:auto!important;width:max-content!important;
+ max-width:100%!important;margin:0!important;padding:0!important;overflow:visible!important;
+ font-size:clamp(34px,8.5vw,60px)!important;line-height:.96!important;text-align:right!important;
+ white-space:nowrap!important;transform:none!important;visibility:visible!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 .bop-splash-period{
+ position:relative!important;inset:auto!important;flex:0 0 auto!important;margin:0!important;padding:0!important;
+ font-size:clamp(34px,8.5vw,60px)!important;line-height:.96!important;white-space:nowrap!important;
+ background:none!important;box-shadow:none!important;transform:none!important;z-index:7!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopSelectedHeroCityOverlay{display:none!important}
 </style>
