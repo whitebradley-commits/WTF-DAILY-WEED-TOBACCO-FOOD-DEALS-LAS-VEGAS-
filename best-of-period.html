@@ -43992,3 +43992,135 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   installCitySearch();window.setTimeout(installCitySearch,100);window.setTimeout(installCitySearch,500);
 })();
 </script>
+<!-- v265: permanent Period copyright mark, city-under-period masking, and landing search rebuild -->
+<style id="bop-brand-and-search-lock-v265">
+  .bop-brand-copyright{
+    display:inline-block!important;
+    margin-left:1px!important;
+    font-size:.24em!important;
+    font-family:Arial,sans-serif!important;
+    font-weight:700!important;
+    line-height:1!important;
+    vertical-align:super!important;
+    letter-spacing:0!important;
+    text-transform:none!important;
+  }
+
+  /* Long red city names occupy the full safe width underneath the fixed
+     Period© layer. The gold word masks the tail instead of pushing the city
+     beyond the screen. */
+  #bopStableMobileLockup{overflow:hidden!important}
+  #bopStableMobileCity{
+    left:0!important;
+    right:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    padding:0 6px!important;
+    overflow:hidden!important;
+    text-align:right!important;
+    z-index:1!important;
+  }
+  #bopStableMobilePeriod{
+    z-index:5!important;
+    background:#000!important;
+    box-shadow:-7px 0 0 #000,220px 0 0 #000!important;
+  }
+  #bestOfOverlay .bop-splash-hero .bop-splash-line2{position:relative!important;display:flex!important;justify-content:flex-end!important;overflow:hidden!important;gap:0!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-city-col{position:absolute!important;inset:0!important;z-index:1!important;width:100%!important;max-width:100%!important;overflow:hidden!important;text-align:right!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-city{display:block!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;padding:0 5px!important;overflow:hidden!important;text-align:right!important;white-space:nowrap!important}
+  #bestOfOverlay .bop-splash-hero .bop-splash-period{position:relative!important;z-index:5!important;margin-left:auto!important;background:#000!important;box-shadow:-7px 0 0 #000,240px 0 0 #000!important}
+
+  /* One large landing search field with a single integrated gold icon. */
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){
+    position:relative!important;
+    width:min(94vw,760px)!important;
+    max-width:760px!important;
+    min-height:76px!important;
+    margin:12px auto 0!important;
+  }
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::before{
+    content:''!important;
+    position:absolute!important;
+    left:25px!important;
+    top:27px!important;
+    z-index:8!important;
+    width:15px!important;
+    height:15px!important;
+    box-sizing:border-box!important;
+    border:2px solid #F59E0B!important;
+    border-radius:50%!important;
+    pointer-events:none!important;
+    filter:drop-shadow(0 0 4px rgba(245,158,11,.6))!important;
+  }
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::after{
+    content:''!important;
+    position:absolute!important;
+    left:39px!important;
+    top:42px!important;
+    z-index:8!important;
+    width:9px!important;
+    height:2px!important;
+    border-radius:2px!important;
+    background:#F59E0B!important;
+    transform:rotate(45deg)!important;
+    transform-origin:left center!important;
+    pointer-events:none!important;
+    box-shadow:0 0 4px rgba(245,158,11,.6)!important;
+  }
+  #bopStableLandingSearchInput{
+    display:block!important;
+    width:100%!important;
+    height:66px!important;
+    min-height:66px!important;
+    box-sizing:border-box!important;
+    padding:0 25px 0 59px!important;
+    border:2px solid #F59E0B!important;
+    border-radius:33px!important;
+    background:#050505!important;
+    color:#F59E0B!important;
+    -webkit-text-fill-color:#F59E0B!important;
+    caret-color:#F59E0B!important;
+    font-size:20px!important;
+    font-weight:700!important;
+    line-height:66px!important;
+    text-indent:0!important;
+    box-shadow:0 0 12px rgba(245,158,11,.48),inset 0 0 12px rgba(245,158,11,.05)!important;
+  }
+  #bopStableLandingSearchInput::placeholder{color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;opacity:1!important;font-size:20px!important;font-weight:700!important}
+  #bopLandingOverlay .bop-landing-search-icon,#bopLandingOverlay #bopLandingSearchPrompt{display:none!important}
+  #bopLandingOverlay .bo-search-powered-by{color:#F59E0B!important;font-size:16px!important;font-weight:700!important}
+  #bopLandingOverlay .bo-search-powered-by svg:first-child,#bopLandingOverlay .bo-search-powered-by svg:first-child *{fill:#F59E0B!important;stroke:#F59E0B!important}
+  #bopLandingOverlay .bo-search-powered-by svg:last-child circle{display:block!important;fill:#050505!important;stroke:#F59E0B!important}
+  #bopLandingOverlay .bo-search-powered-by svg:last-child text{fill:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important}
+  @media(max-width:430px){
+    #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){width:96vw!important;min-height:72px!important}
+    #bopStableLandingSearchInput{height:62px!important;min-height:62px!important;padding-left:55px!important;font-size:18px!important;line-height:62px!important}
+    #bopStableLandingSearchInput::placeholder{font-size:18px!important}
+    #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::before{left:22px!important;top:25px!important}
+    #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput)::after{left:36px!important;top:40px!important}
+  }
+</style>
+<script id="bop-brand-period-lock-v265">
+(function(){
+  'use strict';
+  var selector='.bop-splash-period,.hub-best-mini-period,.bo-picker-period,.bo-lead-best-period,.bjs-label-period,.bop-world-period,.bo-movies-period,.bop-main-hub-period,#bopStableMobilePeriod';
+  function lock(root){
+    var nodes=[];
+    if(root&&root.matches&&root.matches(selector))nodes.push(root);
+    if(root&&root.querySelectorAll)nodes=nodes.concat(Array.from(root.querySelectorAll(selector)));
+    nodes.forEach(function(node){
+      var text=String(node.textContent||'').replace(/\s+/g,'').replace(/[.©]+$/,'');
+      if(text.toLowerCase()!=='period')return;
+      if(node.dataset.bopCopyrightLocked==='1'&&node.querySelector('.bop-brand-copyright'))return;
+      node.replaceChildren(document.createTextNode('Period'));
+      var mark=document.createElement('sup');mark.className='bop-brand-copyright';mark.setAttribute('aria-label','copyright');mark.textContent='©';node.appendChild(mark);
+      node.dataset.bopCopyrightLocked='1';
+    });
+  }
+  function setSearchCopy(){var input=document.getElementById('bopStableLandingSearchInput');if(input){input.placeholder='Search any city';input.setAttribute('aria-label','Search any city')}}
+  var observer=new MutationObserver(function(records){records.forEach(function(record){record.addedNodes.forEach(function(node){if(node.nodeType===1)lock(node)})});setSearchCopy()});
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  lock(document);setSearchCopy();window.setTimeout(function(){lock(document);setSearchCopy()},150);window.setTimeout(function(){lock(document);setSearchCopy()},700);
+})();
+</script>
