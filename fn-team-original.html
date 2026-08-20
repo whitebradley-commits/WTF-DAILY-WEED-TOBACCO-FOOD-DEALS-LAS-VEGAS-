@@ -2870,3 +2870,80 @@ html body #teamTypeGo .fnt-go-word{display:block!important;font:inherit!importan
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){restore();setTimeout(restore,400);setTimeout(restore,1200)},{once:true});else{restore();setTimeout(restore,400)}
 })();
 </script>
+<style id="fnt-standalone-shipping-gate-style">
+#offer{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#fntShippingGateV2{
+  position:fixed!important;inset:0!important;z-index:2147483647!important;
+  display:grid!important;place-items:center!important;padding:18px!important;
+  background:rgba(5,5,5,.38)!important;backdrop-filter:blur(7px)!important;
+  -webkit-backdrop-filter:blur(7px)!important;visibility:visible!important;
+  opacity:1!important;pointer-events:auto!important;touch-action:manipulation!important;
+}
+#fntShippingGateV2 .offer{pointer-events:auto!important}
+#fntShippingGateV2 button{display:none!important}
+#fntShippingGateV2 #fntGuaranteedLockButton{
+  position:relative!important;z-index:2147483647!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;gap:10px!important;
+  width:min(245px,76%)!important;min-height:60px!important;margin:8px auto 2px!important;
+  padding:12px 18px!important;border:3px solid #d6ad45!important;
+  outline:3px solid #050505!important;border-radius:999px!important;
+  background:#050505!important;color:#f4ead7!important;
+  box-shadow:0 0 0 2px #f4ead7,0 0 25px rgba(214,173,69,.9)!important;
+  font:1000 15px/1 Arial,sans-serif!important;letter-spacing:.08em!important;
+  visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+  touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;
+}
+#fntGuaranteedLockButton svg{width:26px!important;height:26px!important;fill:none!important;stroke:#d6ad45!important;stroke-width:2!important}
+</style>
+<script id="fnt-standalone-shipping-gate-script">
+(function(){
+  function applyCreditAndEnter(event){
+    if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}
+    try{localStorage.setItem('fnt-free-shipping-v1','claimed')}catch(e){}
+    try{free=true}catch(e){}
+    var saving=document.getElementById('saving');if(saving)saving.hidden=false;
+    try{sync()}catch(e){}
+    var cart=document.getElementById('cart'),count=0;
+    try{count=cartItems.length}catch(e){}
+    if(cart){
+      cart.hidden=false;
+      cart.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING';
+      cart.setAttribute('aria-label','Cart. Free priority shipping credit of 33 dollars and 50 cents applied.');
+    }
+    document.body.classList.add('fnt-shipping-accepted');
+    document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');
+    document.body.style.overflow='';document.body.style.pointerEvents='';
+    document.documentElement.style.overflow='';
+    var gate=document.getElementById('fntShippingGateV2');if(gate)gate.remove();
+    var old=document.getElementById('offer');if(old)old.remove();
+    return false;
+  }
+  function install(){
+    var old=document.getElementById('offer');
+    var gate=old?old.cloneNode(true):document.createElement('div');
+    if(old)old.remove();
+    gate.id='fntShippingGateV2';gate.className='overlay';
+    var card=gate.querySelector('.offer');
+    if(!card){
+      card=document.createElement('div');card.className='offer';
+      card.innerHTML='<div class="offer-star">★</div><h2 class="fn-offer-square"><span>F’N FREE</span><span>PRIORITY</span><span>SHIPPING</span></h2><p>ON THIS ORDER</p><small><b>SAVE $33.50</b><span>PRIORITY SHIPPING CREDIT</span><span>APPLIED TO YOUR CART</span></small>';
+      gate.append(card);
+    }
+    card.querySelectorAll('button').forEach(function(button){button.remove()});
+    var button=document.createElement('button');
+    button.id='fntGuaranteedLockButton';button.type='button';
+    button.setAttribute('aria-label','Lock in free priority shipping and enter the site');
+    button.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 11.5 16 6l11 5.5v11L16 28 5 22.5z"></path><path d="m5 11.5 11 5.6 11-5.6M16 17.1V28M11 8.5l11 5.5"></path></svg><span>LOCK IT IN</span>';
+    var details=card.querySelector('small');if(details)details.before(button);else card.append(button);
+    button.onpointerdown=applyCreditAndEnter;
+    button.ontouchend=applyCreditAndEnter;
+    button.onclick=applyCreditAndEnter;
+    document.body.append(gate);
+    document.body.classList.add('fnt-lock-scroll');
+    try{localStorage.removeItem('fnt-free-shipping-v1')}catch(e){}
+    try{free=false}catch(e){}
+    window.FNT_LOCK_IN_SHIPPING=applyCreditAndEnter;
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
