@@ -45573,3 +45573,41 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 }
 #bestOfOverlay .bop-splash-hero.bop-city-reel-settled-v298 #bopSelectedHeroCityOverlay{display:none!important}
 </style>
+<!-- v300: clear searches on Back and anchor every moving city beneath the E in BEST -->
+<style id="bop-city-reel-anchor-v300-last">
+/* Main-page continuous reel: one fixed center beneath the E in BEST. */
+#bopLandingOverlay #bopStableMobileCity{
+ left:38%!important;right:auto!important;width:max-content!important;max-width:none!important;
+ font-size:clamp(38px,calc(13.4vw - 2px),56px)!important;
+ text-align:center!important;transform:translateX(-50%)!important;transform-origin:center center!important
+}
+/* City-page entry reel uses the identical anchor and grows equally in both directions. */
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city-col{
+ left:38%!important;right:auto!important;top:0!important;bottom:auto!important;inset-inline:auto!important;
+ width:max-content!important;max-width:none!important;display:block!important;
+ text-align:center!important;transform:translateX(-50%)!important;transform-origin:center center!important
+}
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city,
+#bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 #bopMainCityText{
+ width:max-content!important;max-width:none!important;margin:0!important;
+ font-size:clamp(34px,calc(9vw - 2px),62px)!important;text-align:center!important;
+ transform:none!important;transform-origin:center center!important
+}
+</style>
+<script id="bop-back-clears-search-v300-script">
+(function(){
+ function clearSearch(){
+  ['boSearchInput','bopStableLandingSearchInput','bopLandingSearchInput'].forEach(function(id){
+   var input=document.getElementById(id);if(input){input.value='';input.setAttribute('value','');input.dispatchEvent(new Event('input',{bubbles:true}))}
+  });
+  ['boSearchResults','bopStableLandingResults','bopLandingResults'].forEach(function(id){
+   var panel=document.getElementById(id);if(panel){panel.innerHTML='';panel.classList.remove('is-open','open');panel.hidden=true}
+  });
+ }
+ window.addEventListener('pointerdown',function(event){
+  if(event.target&&event.target.closest&&event.target.closest('#boBackBtn,#botrToLandingBtn,.bop-back-btn'))clearSearch();
+ },true);
+ window.addEventListener('popstate',clearSearch);
+ window.BOP_CLEAR_ALL_SEARCHES=clearSearch;
+})();
+</script>
