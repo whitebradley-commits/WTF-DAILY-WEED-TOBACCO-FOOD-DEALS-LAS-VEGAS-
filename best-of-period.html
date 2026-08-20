@@ -44963,3 +44963,65 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  setTimeout(clean,250);setTimeout(clean,900);setTimeout(clean,2200);
 })();
 </script>
+<!-- v284: larger/left-shifted red city reel + restored live autocomplete -->
+<style id="bop-red-city-autocomplete-v284">
+#bopStableMobileCity{
+ right:calc(46% + 8px)!important;
+ font-size:calc(clamp(40px,13.4vw,58px) + 2px)!important;
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-line2{gap:8px!important;overflow:visible!important}
+#bestOfOverlay .bop-splash-hero .bop-splash-city,
+#bestOfOverlay #bopMainCityText{
+ font-size:calc(clamp(36px,9vw,64px) + 2px)!important;
+ overflow:visible!important;
+}
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){overflow:visible!important}
+#bopStableLandingResults{
+ top:calc(100% + 9px)!important;display:none!important;width:100%!important;max-height:300px!important;
+ overflow:auto!important;padding:7px!important;border:1px solid rgba(245,158,11,.72)!important;border-radius:17px!important;
+ background:#050505!important;box-shadow:0 8px 24px rgba(0,0,0,.72),0 0 8px rgba(245,158,11,.20)!important;
+}
+#bopStableLandingResults.is-open{display:grid!important;gap:6px!important}
+#bopStableLandingResults .bop-v284-city-result{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;
+ width:100%!important;min-height:46px!important;padding:10px 14px!important;box-sizing:border-box!important;
+ border:1px solid rgba(245,158,11,.34)!important;border-radius:12px!important;background:#090909!important;
+ color:#fff!important;text-align:left!important;touch-action:manipulation!important;
+}
+#bopStableLandingResults .bop-v284-city-result strong{color:#fff!important;font:800 15px/1 'Archivo Narrow',Arial,sans-serif!important}
+#bopStableLandingResults .bop-v284-city-result small{color:#F59E0B!important;font:700 10px/1 'Archivo Narrow',Arial,sans-serif!important;white-space:nowrap!important}
+</style>
+<script id="bop-red-city-autocomplete-v284-script">
+(function(){
+ function norm(v){return String(v||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim()}
+ function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+ function catalogue(){
+  var out=[],seen={};
+  function add(name,dest,detail){var k=norm(dest);if(!name||!dest||seen[k])return;seen[k]=1;out.push({name:name,dest:dest,detail:detail||'Open now'})}
+  add('Las Vegas','bestof','Nevada · LIVE');
+  try{Object.keys(BO_CITY_CONFIG||{}).forEach(function(k){var c=BO_CITY_CONFIG[k]||{};add(c.displayName||c.landingName||k,k,(c.countryLabel||((c.areaList||[])[0])||'')+' · LIVE')})}catch(_){}
+  (Array.isArray(window.OC_CITIES)?window.OC_CITIES:[]).forEach(function(c){if(c&&c.t==='live')add(c.n,c.dest,(c.state||c.usRegion||'')+' · LIVE')});
+  return out.sort(function(a,b){return a.name.localeCompare(b.name)})
+ }
+ function open(item){
+  var results=document.getElementById('bopStableLandingResults');if(results)results.classList.remove('is-open');
+  var landing=document.getElementById('bopLandingOverlay');if(landing){landing.classList.remove('open');landing.setAttribute('aria-hidden','true')}
+  ['ocWorldOverlay','otherCitiesOverlay','boNearMapPage','bopWorldwideLanding','boWorldwidePage'].forEach(function(id){var n=document.getElementById(id);if(n){n.classList.remove('open');n.setAttribute('aria-hidden','true')}});
+  var best=document.getElementById('bestOfOverlay');if(best){best.classList.add('open');best.setAttribute('aria-hidden','false')}
+  var reel=document.getElementById('bopStableMobileCity');if(reel)reel.textContent=item.name;
+  try{boCityContext=item.dest}catch(_){}window.boCityContext=item.dest;
+  try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',item.dest)}catch(_){}
+  try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+  window.scrollTo(0,0);
+ }
+ function install(){
+  var input=document.getElementById('bopStableLandingSearchInput'),results=document.getElementById('bopStableLandingResults');if(!input||!results||input.dataset.bopAutocomplete284==='1')return;
+  input.dataset.bopAutocomplete284='1';
+  function render(){var q=norm(input.value),items=q?catalogue().filter(function(x){return norm(x.name).indexOf(q)!==-1||q.indexOf(norm(x.name))!==-1}).slice(0,7):[];results.__bop284Items=items;results.innerHTML=items.map(function(x,i){return'<button type="button" class="bop-v284-city-result" data-bop-v284-index="'+i+'"><strong>'+esc(x.name)+'</strong><small>'+esc(x.detail)+'</small></button>'}).join('');results.classList.toggle('is-open',!!items.length)}
+  input.addEventListener('input',render,true);
+  results.addEventListener('click',function(e){var b=e.target.closest('[data-bop-v284-index]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();var item=(results.__bop284Items||[])[Number(b.dataset.bopV284Index)];if(item)open(item)},true);
+  window.addEventListener('keydown',function(e){if(e.key!=='Enter'||document.activeElement!==input)return;var first=(results.__bop284Items||[])[0];if(!first)return;e.preventDefault();e.stopImmediatePropagation();open(first)},true);
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();setTimeout(install,350);setTimeout(install,1200);
+})();
+</script>
