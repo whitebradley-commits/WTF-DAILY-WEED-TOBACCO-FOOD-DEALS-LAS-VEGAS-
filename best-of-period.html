@@ -7996,6 +7996,34 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
   setTimeout(sync,250);setTimeout(sync,1200);
 })();
 </script>
+<!-- v294: the main-page Period word is letters only—no panel, mask, or crop -->
+<style id="bop-main-period-no-box-v294">
+#bopLandingOverlay .bop-splash-line2,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period,
+#bopLandingOverlay #bopStableMobileLockup,
+#bopLandingOverlay #bopStableMobilePeriod{
+ background:transparent!important;
+ background-color:transparent!important;
+ background-image:none!important;
+ box-shadow:none!important;
+ -webkit-mask:none!important;
+ mask:none!important;
+ clip-path:none!important;
+ overflow:visible!important
+}
+#bopLandingOverlay #bopStableMobileLockup::before,
+#bopLandingOverlay #bopStableMobileLockup::after,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period::before,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period::after,
+#bopLandingOverlay #bopStableMobilePeriod::before,
+#bopLandingOverlay #bopStableMobilePeriod::after{
+ content:none!important;display:none!important;background:transparent!important;box-shadow:none!important
+}
+#bopLandingOverlay .bop-splash-line2 .bop-splash-city-col,
+#bopLandingOverlay #bopStableMobileCity{
+ overflow:visible!important;clip-path:none!important;-webkit-mask:none!important;mask:none!important
+}
+</style>
 <!-- v286: preserve full restaurant cards on dedicated pages. Compact coastal
      rows are permitted only inside the Near Me/map results context. -->
 <style id="bop-full-page-card-policy-v286">
@@ -45331,3 +45359,26 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();setTimeout(install,700);setTimeout(refresh,1700);
 })();
 </script>
+<!-- v295: final-source authority—Period is gold lettering only, never a black panel -->
+<style id="bop-main-period-no-box-v295-final">
+#bopLandingOverlay .bop-splash-line2,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period,
+#bopLandingOverlay #bopStableMobileLockup,
+#bopLandingOverlay #bopStableMobilePeriod{
+ background:none!important;background-color:transparent!important;background-image:none!important;
+ box-shadow:none!important;-webkit-mask:none!important;mask:none!important;clip-path:none!important;
+ overflow:visible!important
+}
+#bopLandingOverlay #bopStableMobileLockup::before,
+#bopLandingOverlay #bopStableMobileLockup::after,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period::before,
+#bopLandingOverlay .bop-splash-line2 .bop-splash-period::after,
+#bopLandingOverlay #bopStableMobilePeriod::before,
+#bopLandingOverlay #bopStableMobilePeriod::after{
+ content:none!important;display:none!important;background:none!important;box-shadow:none!important
+}
+#bopLandingOverlay .bop-splash-line2 .bop-splash-city-col,
+#bopLandingOverlay #bopStableMobileCity{
+ overflow:visible!important;clip-path:none!important;-webkit-mask:none!important;mask:none!important
+}
+</style>
