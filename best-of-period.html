@@ -44060,9 +44060,10 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
     if(!dest)return;
     clearPages();
     try{boCityContext=dest}catch(ignore){}
-    try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute(dest,dest)}catch(ignore){}
+    /* Every landing-search city selection opens that city's tile hub first. */
+    try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',dest)}catch(ignore){}
     var best=byId('bestOfOverlay');if(best){best.classList.add('open');best.setAttribute('aria-hidden','false');best.scrollTop=0}
-    try{if(typeof boRenderCategory==='function')boRenderCategory(dest)}catch(ignore){}
+    try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(ignore){}
     window.scrollTo(0,0);
   }
   function openNear(closest){clearPages();document.body.dataset.bopReturnSource='landing';if(closest)document.body.classList.add('bo-closest-five-active','bop-closest-tier-selected');if(typeof window.boOpenNearMap==='function')window.boOpenNearMap();else{var p=byId('boNearMapPage');if(p)p.classList.add('open')}window.setTimeout(function(){if(closest&&typeof window.boRenderNearClosestFive==='function')window.boRenderNearClosestFive();document.body.classList.add('bo-near-map-active','bop-ui-near')},0)}
@@ -44386,3 +44387,168 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   window.setTimeout(fit,150);
 })();
 </script>
+<!-- v271: unified inviting search bars -->
+<style id="bop-unified-search-bars-v271">
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput){
+    width:min(94vw,720px)!important;max-width:720px!important;
+    border:1.5px solid #F59E0B!important;border-radius:999px!important;
+    background:#050505!important;overflow:visible!important;
+    animation:bopSearchInvite 4.8s ease-in-out infinite!important;
+  }
+  #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){height:68px!important;min-height:68px!important}
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput){height:62px!important;min-height:62px!important}
+  @keyframes bopSearchInvite{
+    0%,100%{box-shadow:0 0 5px rgba(245,158,11,.25),inset 0 0 4px rgba(245,158,11,.025)}
+    50%{box-shadow:0 0 11px rgba(245,158,11,.46),inset 0 0 7px rgba(245,158,11,.06)}
+  }
+  #bopStableLandingSearchInput{
+    height:66px!important;min-height:66px!important;line-height:66px!important;
+    padding:0 154px 0 55px!important;font-size:17px!important;font-weight:600!important;
+  }
+  #bestOfOverlay #boSearchInput{
+    height:60px!important;min-height:60px!important;line-height:60px!important;
+    padding:0 148px 0 53px!important;font-size:15px!important;font-weight:600!important;
+  }
+  #bopStableLandingSearchInput::placeholder{font-size:17px!important;font-weight:600!important;letter-spacing:0!important}
+  #bestOfOverlay #boSearchInput::placeholder{font-size:15px!important;font-weight:600!important;letter-spacing:0!important}
+  #bopLandingOverlay .bop-one-search-icon{left:21px!important}
+  #bestOfOverlay .bop-one-search-icon{left:19px!important}
+  #bopLandingOverlay .bo-search-powered-by,
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{
+    right:16px!important;top:50%!important;transform:translateY(-50%)!important;
+    display:flex!important;align-items:center!important;gap:3px!important;
+    color:#F59E0B!important;white-space:nowrap!important;pointer-events:none!important;
+    text-shadow:0 0 4px rgba(245,158,11,.38)!important;
+  }
+  #bopLandingOverlay .bo-search-powered-by{font-size:10.5px!important}
+  #bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{font-size:9.5px!important}
+  #bopLandingOverlay .bo-search-powered-by svg:last-child{width:22px!important;height:22px!important}
+  #bestOfOverlay .bo-search-powered-by svg:last-child{width:20px!important;height:20px!important}
+  @media(max-width:390px){
+    #bopStableLandingSearchInput{padding-right:132px!important;font-size:15.5px!important}
+    #bopStableLandingSearchInput::placeholder{font-size:15.5px!important}
+    #bestOfOverlay #boSearchInput{padding-right:126px!important;font-size:13.5px!important}
+    #bestOfOverlay #boSearchInput::placeholder{font-size:13.5px!important}
+    #bopLandingOverlay .bo-search-powered-by{right:12px!important;font-size:9px!important}
+    #bestOfOverlay .bo-search-wrap:has(#boSearchInput) .bo-search-powered-by{right:11px!important;font-size:8.5px!important}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+    #bestOfOverlay .bo-search-wrap:has(#boSearchInput){animation:none!important;box-shadow:0 0 7px rgba(245,158,11,.32)!important}
+  }
+</style>
+<script id="bop-unified-search-copy-v271">
+(function(){
+  function apply(){
+    var city=document.getElementById('bopStableLandingSearchInput');
+    if(city){city.placeholder='Search any city...';city.setAttribute('aria-label','Search any city');}
+    var restaurant=document.getElementById('boSearchInput');
+    if(restaurant){restaurant.placeholder='Search any restaurant...';restaurant.setAttribute('aria-label','Search any restaurant');}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+  new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true});
+  window.setTimeout(apply,180);window.setTimeout(apply,800);
+})();
+</script>
+<style id="bop-all-search-gold-v272">
+  :root{--bop-search-gold-final:#F59E0B}
+  input.bo-search-input,
+  #bopStableLandingSearchInput,
+  #bopLandingSearchInput,
+  #boSearchInput,
+  #boNearMapSearchInput,
+  #ocSearchInput,
+  #ocWorldOverlay .oc-search-input,
+  .bop-global-search-input,
+  .bop-city-search-input{
+    color:var(--bop-search-gold-final)!important;
+    -webkit-text-fill-color:var(--bop-search-gold-final)!important;
+    caret-color:var(--bop-search-gold-final)!important;
+  }
+  input.bo-search-input::placeholder,
+  #bopStableLandingSearchInput::placeholder,
+  #bopLandingSearchInput::placeholder,
+  #boSearchInput::placeholder,
+  #boNearMapSearchInput::placeholder,
+  #ocSearchInput::placeholder,
+  #ocWorldOverlay .oc-search-input::placeholder,
+  .bop-global-search-input::placeholder,
+  .bop-city-search-input::placeholder{
+    color:var(--bop-search-gold-final)!important;
+    -webkit-text-fill-color:var(--bop-search-gold-final)!important;
+    opacity:1!important;
+  }
+  .bo-search-powered-by,.oc-search-powered-by,
+  .bo-search-powered-by *,.oc-search-powered-by *{
+    color:var(--bop-search-gold-final)!important;
+    fill:var(--bop-search-gold-final)!important;
+    stroke:var(--bop-search-gold-final)!important;
+  }
+  .bop-one-search-icon::before{border-color:var(--bop-search-gold-final)!important}
+  .bop-one-search-icon::after{background:var(--bop-search-gold-final)!important}
+  input.bo-search-input:-webkit-autofill,
+  input.bo-search-input:-webkit-autofill:hover,
+  input.bo-search-input:-webkit-autofill:focus{
+    -webkit-text-fill-color:var(--bop-search-gold-final)!important;
+    caret-color:var(--bop-search-gold-final)!important;
+    transition:background-color 9999s ease-out 0s!important;
+  }
+</style>
+<style id="bop-period-copyright-baseline-v273">
+  .bop-brand-copyright,
+  .bop-splash-period .period-mark,
+  .hub-best-mini-period .period-mark,
+  .bo-picker-period .period-mark,
+  .bo-lead-best-period .period-mark,
+  .bjs-label-period .period-mark,
+  .bop-world-period sup,
+  .bo-movies-period .period-mark,
+  .bop-main-hub-period .period-mark,
+  #bopStableMobilePeriod sup{
+    display:inline-block!important;
+    font-size:.23em!important;
+    line-height:1!important;
+    vertical-align:baseline!important;
+    position:relative!important;
+    top:.16em!important;
+    margin-left:1px!important;
+    transform:none!important;
+  }
+</style>
+<!-- v274-final: raise only the five navigation orbs; canonical one-ring BJS Co. badge -->
+<style id="bop-raised-orbs-one-ring-bjs-v274-final">
+  @media(max-width:700px),(pointer:coarse){
+    #bopLandingOverlay #bopCleanOrbDock{
+      bottom:max(34px,calc(env(safe-area-inset-bottom,0px) + 26px))!important;
+    }
+  }
+  @media(min-width:701px) and (pointer:fine){
+    #bopLandingOverlay #bopCleanOrbDock{bottom:34px!important}
+  }
+
+  /* Keep its existing bottom-right coordinates. Only the badge artwork is
+     standardized: one gold ring, black center, red BJS / CO. */
+  #bopFrontBjsCoLogo{
+    box-sizing:border-box!important;
+    border:3px solid #F59E0B!important;
+    border-radius:50%!important;
+    background:#050505!important;
+    outline:0!important;
+    box-shadow:0 0 10px rgba(245,158,11,.62)!important;
+    overflow:hidden!important;
+  }
+  #bopFrontBjsCoLogo::before,#bopFrontBjsCoLogo::after{content:none!important;display:none!important}
+  #bopFrontBjsCoLogo .bop-bjsco-lockup{gap:2px!important;transform:none!important}
+  #bopFrontBjsCoLogo .bop-bjsco-main,
+  #bopFrontBjsCoLogo .bop-bjsco-sub{
+    color:#E4002B!important;
+    -webkit-text-stroke:0 transparent!important;
+    text-shadow:none!important;
+    letter-spacing:.01em!important;
+    font-family:'Archivo Black',Impact,Arial,sans-serif!important;
+    font-weight:900!important;
+  }
+  #bopFrontBjsCoLogo .bop-bjsco-main{font-size:17px!important;line-height:.92!important}
+  #bopFrontBjsCoLogo .bop-bjsco-sub{font-size:10px!important;line-height:1!important}
+</style>
