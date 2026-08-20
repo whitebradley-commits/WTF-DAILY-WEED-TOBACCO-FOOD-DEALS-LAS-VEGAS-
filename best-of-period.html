@@ -7951,6 +7951,91 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
  window.BOP_REPLAY_CITY_REEL=function(){lastCity='';wasOpen=false;monitor()};
 })();
 </script>
+<!-- v307: main BJS logo opens Founders; founder portraits expand on demand -->
+<style id="bop-founders-toggle-v307-style">
+#bopFoundersToggle{
+ display:block!important;margin:28px auto 22px!important;padding:0!important;border:0!important;
+ background:transparent!important;color:#F59E0B!important;
+ font:900 clamp(25px,6vw,38px)/1 'Archivo Black',Impact,Arial,sans-serif!important;
+ letter-spacing:.06em!important;text-transform:uppercase!important;cursor:pointer!important;
+ text-shadow:0 0 7px rgba(245,158,11,.48),0 0 18px rgba(245,158,11,.22)!important
+}
+#bopFoundersToggle::after{content:'  +';color:#d60009!important;font-size:.72em!important}
+#bopFoundersToggle[aria-expanded="true"]::after{content:'  −'}
+#bopFoundersPhotos.bop-founders-collapsed{display:none!important}
+#bopFoundersPhotos:not(.bop-founders-collapsed){
+ display:flex!important;gap:14px!important;width:min(96vw,900px)!important;max-width:900px!important;
+ margin:0 auto 24px!important;align-items:flex-start!important
+}
+#bopFoundersPhotos:not(.bop-founders-collapsed)>div{flex:1 1 0!important;min-width:0!important}
+#bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoBrad,
+#bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoJordan,
+#bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoSam{
+ height:clamp(280px,48vw,440px)!important;box-shadow:0 0 12px rgba(245,158,11,.38)!important
+}
+@media(max-width:560px){
+ #bopFoundersPhotos:not(.bop-founders-collapsed){gap:7px!important;width:98vw!important}
+ #bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoBrad,
+ #bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoJordan,
+ #bopFoundersPhotos:not(.bop-founders-collapsed) #founderPhotoSam{height:clamp(245px,72vw,340px)!important}
+}
+</style>
+<script id="bop-founders-toggle-v307-script">
+(function(){
+ function closePages(){
+  document.querySelectorAll('.open,.active,.is-open,.tg-open').forEach(function(page){
+   if(page.id&&(/Overlay$|Page$/.test(page.id)||page.id==='bopWorldwideLanding')){
+    page.classList.remove('open','active','is-open','tg-open');page.setAttribute('aria-hidden','true');
+   }
+  });
+ }
+ function openFounders(){
+  closePages();
+  var founders=document.getElementById('aboutUsOverlay');
+  if(founders){founders.classList.add('open');founders.setAttribute('aria-hidden','false');founders.scrollTop=0}
+  var toggle=document.getElementById('bopFoundersToggle'),photos=document.getElementById('bopFoundersPhotos');
+  if(toggle)toggle.setAttribute('aria-expanded','false');if(photos)photos.classList.add('bop-founders-collapsed');
+  document.body.style.overflow='';window.scrollTo(0,0);
+ }
+ function installFoundersToggle(){
+  var first=document.getElementById('founderPhotoBrad');if(!first)return;
+  var row=first.parentElement&&first.parentElement.parentElement;if(!row)return;
+  row.id='bopFoundersPhotos';row.classList.add('bop-founders-collapsed');
+  var toggle=document.getElementById('bopFoundersToggle');
+  if(!toggle){
+   toggle=document.createElement('button');toggle.type='button';toggle.id='bopFoundersToggle';
+   toggle.textContent='Founders';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','bopFoundersPhotos');
+   row.parentNode.insertBefore(toggle,row);
+   toggle.addEventListener('click',function(event){
+    event.preventDefault();event.stopPropagation();
+    var expanded=toggle.getAttribute('aria-expanded')==='true';
+    toggle.setAttribute('aria-expanded',expanded?'false':'true');row.classList.toggle('bop-founders-collapsed',expanded);
+    if(!expanded)row.scrollIntoView({behavior:'smooth',block:'center'});
+   });
+  }
+ }
+ function neutralizeLogo(){
+  var logo=document.getElementById('bopFrontBjsCoLogo')||document.querySelector('#bopLandingOverlay .bop-front-bjsco-logo,#bopLandingOverlay [data-bop-canonical-logo="BJS CO."]');
+  if(!logo)return;
+  if(logo.hasAttribute('href'))logo.removeAttribute('href');if(logo.hasAttribute('target'))logo.removeAttribute('target');if(logo.hasAttribute('rel'))logo.removeAttribute('rel');
+  if(logo.getAttribute('role')!=='button')logo.setAttribute('role','button');if(logo.getAttribute('tabindex')!=='0')logo.setAttribute('tabindex','0');
+  if(logo.getAttribute('aria-label')!=='Open Founders')logo.setAttribute('aria-label','Open Founders');if(logo.getAttribute('title')!=='Founders')logo.setAttribute('title','Founders');
+  if(logo.dataset.bopFoundersLink!=='true')logo.dataset.bopFoundersLink='true';
+ }
+ window.addEventListener('click',function(event){
+  var logo=event.target&&event.target.closest&&event.target.closest('#bopLandingOverlay [data-bop-founders-link="true"],#bopLandingOverlay #bopFrontBjsCoLogo');
+  if(!logo)return;event.preventDefault();event.stopImmediatePropagation();openFounders();
+ },true);
+ window.addEventListener('keydown',function(event){
+  var logo=event.target&&event.target.closest&&event.target.closest('#bopLandingOverlay [data-bop-founders-link="true"]');
+  if(!logo||(event.key!=='Enter'&&event.key!==' '))return;event.preventDefault();event.stopImmediatePropagation();openFounders();
+ },true);
+ function install(){installFoundersToggle();neutralizeLogo()}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+ new MutationObserver(install).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['href','aria-label']});
+ setTimeout(install,300);setTimeout(install,1300);setTimeout(install,2200);
+})();
+</script>
 <!-- v303: final-source six-pixel landing lockup and one-point-smaller red city type -->
 <style id="bop-six-pixel-gap-and-red-size-v303-last">
 /* Main-page red reel: one additional point smaller, same established anchor. */
@@ -45899,5 +45984,80 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',normalizeMainSearch,{once:true});else normalizeMainSearch();
  setTimeout(normalizeMainSearch,300);setTimeout(normalizeMainSearch,1200);
+})();
+</script>
+<!-- v306: visible live city dropdown and gold-edged continuous city reel -->
+<style id="bop-main-search-dropdown-city-outline-v306-last">
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){overflow:visible!important}
+#bopStableLandingResults{
+ position:absolute!important;left:0!important;right:0!important;top:calc(100% + 9px)!important;
+ width:100%!important;max-height:min(300px,42vh)!important;overflow:auto!important;
+ padding:7px!important;box-sizing:border-box!important;border:1px solid rgba(245,158,11,.72)!important;
+ border-radius:17px!important;background:#050505!important;
+ box-shadow:0 8px 24px rgba(0,0,0,.76),0 0 9px rgba(245,158,11,.25)!important;
+ z-index:2147483640!important;pointer-events:auto!important
+}
+#bopStableLandingResults.is-open{display:grid!important;gap:6px!important}
+#bopStableLandingResults .bop-v306-city-result{
+ display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;
+ width:100%!important;min-height:46px!important;padding:10px 14px!important;box-sizing:border-box!important;
+ border:1px solid rgba(245,158,11,.34)!important;border-radius:12px!important;background:#090909!important;
+ color:#fff!important;text-align:left!important;cursor:pointer!important;touch-action:manipulation!important
+}
+#bopStableLandingResults .bop-v306-city-result strong{color:#fff!important;font:800 15px/1 'Archivo Narrow',Arial,sans-serif!important}
+#bopStableLandingResults .bop-v306-city-result small{color:#F59E0B!important;font:700 10px/1 'Archivo Narrow',Arial,sans-serif!important;white-space:nowrap!important}
+#bopLandingOverlay #bopStableMobileCity{
+ -webkit-text-stroke:.7px #F59E0B!important;paint-order:stroke fill!important
+}
+</style>
+<script id="bop-main-search-dropdown-v306-script">
+(function(){
+ function norm(v){return String(v||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim()}
+ function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+ function catalogue(){
+  var out=[],seen={};
+  function add(name,dest,detail){var id=norm(dest||name);if(!name||!dest||seen[id])return;seen[id]=1;out.push({name:name,dest:dest,detail:detail||'LIVE'})}
+  add('Las Vegas','bestof','Nevada · LIVE');
+  try{Object.keys(window.BO_CITY_CONFIG||BO_CITY_CONFIG||{}).forEach(function(key){var c=(window.BO_CITY_CONFIG||BO_CITY_CONFIG)[key]||{};add(c.displayName||c.searchName||c.landingName||key,key,(c.countryLabel||((c.areaList||[])[0])||'')+' · LIVE')})}catch(_){ }
+  (Array.isArray(window.OC_CITIES)?window.OC_CITIES:[]).forEach(function(c){if(c&&c.t==='live')add(c.n,c.dest,(c.state||c.usRegion||'')+' · LIVE')});
+  return out.sort(function(a,b){return a.name.localeCompare(b.name)})
+ }
+ function render(){
+  var input=document.getElementById('bopStableLandingSearchInput'),results=document.getElementById('bopStableLandingResults');if(!input||!results)return;
+  input.placeholder='Search the world...';input.setAttribute('aria-label','Search the world');
+  var q=norm(input.value),items=q?catalogue().filter(function(item){var n=norm(item.name);return n.indexOf(q)!==-1||q.indexOf(n)!==-1}).slice(0,8):[];
+  results.__bop306Items=items;
+  results.innerHTML=items.map(function(item,index){return'<button type="button" class="bop-v306-city-result" data-bop-v306-index="'+index+'"><strong>'+esc(item.name)+'</strong><small>'+esc(item.detail)+'</small></button>'}).join('');
+  results.classList.toggle('is-open',items.length>0);results.hidden=items.length===0;
+ }
+ function open(item){
+  if(!item)return;var input=document.getElementById('bopStableLandingSearchInput'),results=document.getElementById('bopStableLandingResults');
+  if(results){results.classList.remove('is-open');results.hidden=true}if(input)input.blur();
+  var landing=document.getElementById('bopLandingOverlay');if(landing){landing.classList.remove('open');landing.setAttribute('aria-hidden','true')}
+  ['ocWorldOverlay','otherCitiesOverlay','boNearMapPage','bopWorldwideLanding','boWorldwidePage'].forEach(function(id){var n=document.getElementById(id);if(n){n.classList.remove('open');n.setAttribute('aria-hidden','true')}});
+  var best=document.getElementById('bestOfOverlay');if(best){best.classList.add('open');best.setAttribute('aria-hidden','false')}
+  try{boCityContext=item.dest}catch(_){ }window.boCityContext=item.dest;
+  try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',item.dest)}catch(_){ }
+  try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){ }
+  window.scrollTo(0,0);
+ }
+ function install(){
+  var input=document.getElementById('bopStableLandingSearchInput');if(!input||input.dataset.bopAutocomplete306==='1')return;
+  input.dataset.bopAutocomplete306='1';input.placeholder='Search the world...';input.setAttribute('aria-label','Search the world');
+  input.addEventListener('input',render,true);input.addEventListener('focus',render,true);
+ }
+ window.addEventListener('pointerdown',function(event){
+  var button=event.target&&event.target.closest&&event.target.closest('[data-bop-v306-index]');if(!button)return;
+  var results=document.getElementById('bopStableLandingResults'),item=results&&(results.__bop306Items||[])[Number(button.dataset.bopV306Index)];
+  if(!item)return;event.preventDefault();event.stopImmediatePropagation();open(item)
+ },true);
+ window.addEventListener('keydown',function(event){
+  var input=document.getElementById('bopStableLandingSearchInput');if(event.key!=='Enter'||document.activeElement!==input)return;
+  var results=document.getElementById('bopStableLandingResults'),item=results&&(results.__bop306Items||[])[0];if(!item)return;
+  event.preventDefault();event.stopImmediatePropagation();open(item)
+ },true);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+ new MutationObserver(function(){install()}).observe(document.documentElement,{subtree:true,childList:true});
+ setTimeout(install,300);setTimeout(install,1200);
 })();
 </script>
