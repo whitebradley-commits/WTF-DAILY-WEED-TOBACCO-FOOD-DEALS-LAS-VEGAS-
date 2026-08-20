@@ -2517,6 +2517,41 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>
+<style id="fnt-lock-it-in-only-final-style">
+#offer .offer-close,#offer #fntOfferCloseHit,#offer #fntOfferClaimHit{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#offer .fnt-only-lock-button{position:relative!important;z-index:2147483647!important;width:min(245px,76%)!important;min-height:58px!important;margin:5px auto 0!important;padding:12px 18px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:999px!important;background:#050505!important;color:#f4ead7!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;font:1000 15px/1 Arial,sans-serif!important;letter-spacing:.08em!important;box-shadow:0 0 0 2px #f4ead7,0 0 23px rgba(214,173,69,.8)!important;animation:fntOnlyLockPulse 1.45s ease-in-out infinite!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;cursor:pointer!important}
+#offer .fnt-only-lock-button svg{width:26px;height:26px;fill:none;stroke:#d6ad45;stroke-width:2}
+@keyframes fntOnlyLockPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px #f4ead7,0 0 13px rgba(214,173,69,.65)}50%{transform:scale(1.035);box-shadow:0 0 0 2px #f4ead7,0 0 29px rgba(214,173,69,1)}}
+</style>
+<script id="fnt-lock-it-in-only-final-script">
+(function(){
+  var lockedUntil=0;
+  function offer(){return document.getElementById('offer')}
+  function updateCredit(){
+    localStorage.setItem('fnt-free-shipping-v1','claimed');try{free=true}catch(e){}
+    var saving=document.getElementById('saving');if(saving)saving.hidden=false;
+    try{sync()}catch(e){}
+    var cart=document.getElementById('cart'),count=0;try{count=cartItems.length}catch(e){}
+    if(cart){cart.hidden=false;cart.innerHTML='CART ('+count+') · <del>−$33.50</del> FREE PRIORITY SHIPPING'}
+  }
+  function enter(event){
+    var now=Date.now();if(now<lockedUntil)return;lockedUntil=now+800;
+    if(event){event.preventDefault();event.stopPropagation();if(event.stopImmediatePropagation)event.stopImmediatePropagation()}
+    updateCredit();var o=offer();if(o){o.style.setProperty('display','none','important');o.style.setProperty('pointer-events','none','important');o.setAttribute('aria-hidden','true')}
+    document.body.classList.remove('fnt-shipping-offer-open','fnt-lock-scroll');document.documentElement.style.overflow='';document.body.style.overflow='';
+  }
+  function install(){
+    var o=offer(),card=o&&o.querySelector('.offer');if(!o||!card)return;
+    card.querySelectorAll('.offer-close,#fntOfferCloseHit,#fntOfferClaimHit,.claim-btn,.fnt-only-lock-button').forEach(function(x){x.remove()});
+    var button=document.createElement('button');button.type='button';button.className='fnt-only-lock-button';button.setAttribute('aria-label','Lock in free priority shipping and enter the site');button.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 11.5 16 6l11 5.5v11L16 28 5 22.5z"></path><path d="m5 11.5 11 5.6 11-5.6M16 17.1V28M11 8.5l11 5.5"></path></svg><span>LOCK IT IN</span>';
+    card.querySelector('small')?.before(button);['pointerdown','touchstart','click'].forEach(function(type){button.addEventListener(type,enter,{capture:true,passive:false})});
+    window.FNT_LOCK_IN_SHIPPING=enter;
+    if(localStorage.getItem('fnt-free-shipping-v1')==='claimed'){updateCredit();enter()}else{o.style.setProperty('display','grid','important');o.style.setProperty('pointer-events','auto','important');o.setAttribute('aria-hidden','false');document.body.classList.add('fnt-shipping-offer-open')}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+  window.addEventListener('load',function(){setTimeout(install,250)},{once:true});
+})();
+</script>
 <style id="fnt-offer-iphone-tap-replacement-style">
 #offer .offer-close{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 #fntOfferCloseHit{position:absolute;right:-5px;top:20px;z-index:2147483647;width:66px;height:66px;padding:0 0 4px;border:3px solid #d6ad45;outline:3px solid #050505;border-radius:50%;background:#050505;color:#ff1744;font:1000 39px/1 Arial,sans-serif;display:grid;place-items:center;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 22px rgba(214,173,69,.65);touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto}
