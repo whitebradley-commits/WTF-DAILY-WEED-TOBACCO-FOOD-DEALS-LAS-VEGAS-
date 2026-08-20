@@ -43422,3 +43422,115 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start()
 })();
 </script>
+
+<style id="bop-final-stable-landing-style">
+/* Final mobile landing authority: one title, one search result surface, and one five-orb dock. */
+#bopActualMobileLockup.bopStableLegacyHidden{display:none!important}
+#bopStableMobileLockup{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px!important;width:auto!important;max-width:100%!important;min-width:0!important;white-space:nowrap!important}
+#bopStableMobileCity{display:inline-block!important;flex:0 1 auto!important;min-width:0!important;max-width:64%!important;overflow:visible!important;text-align:right!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important;will-change:opacity!important}
+#bopStableMobilePeriod{display:inline-block!important;flex:0 0 auto!important;margin-left:0!important;color:#f5af40!important;text-shadow:0 0 10px rgba(245,175,64,.55)!important}
+#bopLandingSearchPrompt{display:none!important}
+#bopStableLandingResults{position:absolute!important;left:0!important;top:calc(100% + 14px)!important;width:100%!important;z-index:2147483100!important;display:none!important;box-sizing:border-box!important}
+#bopStableLandingResults.is-open{display:block!important}
+#bopStableCityResult{display:block!important;width:100%!important;padding:17px 22px!important;box-sizing:border-box!important;border:1px solid #e6a539!important;border-radius:20px!important;background:#1a1510!important;color:#fff8eb!important;box-shadow:0 0 0 1px rgba(240,177,75,.28),0 10px 24px rgba(0,0,0,.36)!important;text-align:left!important;font-family:Arial,sans-serif!important}
+#bopStableCityResult strong{display:block!important;font-size:18px!important;line-height:1.1!important;letter-spacing:.02em!important}
+#bopStableCityResult span{display:block!important;margin-top:6px!important;color:#e8e1d4!important;font-size:13px!important;font-weight:700!important;letter-spacing:.02em!important}
+#bopStableCityResult .bopStableOpen{color:#f2b13b!important}
+#bopCleanOrbDock{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483000!important}
+#bopStaticLandingDock,#bopPersistentMapDock,#bopLegacyOrbDock{display:none!important}
+@media (max-width:600px){
+  #bopStableMobileLockup{gap:6px!important}
+  #bopStableMobileCity{max-width:61vw!important}
+  #bopStableCityResult{padding:18px 22px!important;border-radius:19px!important}
+  #bopStableCityResult strong{font-size:17px!important}
+}
+</style>
+<script id="bop-final-stable-landing-controller">
+(function(){
+  'use strict';
+  function boot(){
+    var oldLock=document.getElementById('bopActualMobileLockup');
+    var oldCity=document.getElementById('bopActualMobileCity');
+    var oldPeriod=document.getElementById('bopActualMobilePeriod');
+    var oldInput=document.getElementById('bopLandingSearchInput');
+    if(!oldLock||!oldCity||!oldPeriod||!oldInput||document.getElementById('bopStableMobileLockup')) return;
+
+    var cityStyle=getComputedStyle(oldCity), periodStyle=getComputedStyle(oldPeriod);
+    var lock=document.createElement('div');
+    lock.id='bopStableMobileLockup';
+    var city=document.createElement('span'); city.id='bopStableMobileCity';
+    var period=document.createElement('span'); period.id='bopStableMobilePeriod'; period.textContent='Period';
+    city.style.fontFamily=cityStyle.fontFamily; city.style.fontSize=cityStyle.fontSize; city.style.fontWeight=cityStyle.fontWeight; city.style.lineHeight=cityStyle.lineHeight; city.style.letterSpacing=cityStyle.letterSpacing;
+    period.style.fontFamily=periodStyle.fontFamily; period.style.fontSize=periodStyle.fontSize; period.style.fontWeight=periodStyle.fontWeight; period.style.lineHeight=periodStyle.lineHeight; period.style.letterSpacing=periodStyle.letterSpacing;
+    lock.append(city,period); oldLock.insertAdjacentElement('afterend',lock); oldLock.classList.add('bopStableLegacyHidden');
+
+    /* Landing city reel: full city names, red, fast, and directly six pixels from Period. */
+    var cities=['Palm Desert','Santa Barbara','Las Vegas','San Diego','Los Angeles','Venice','Nashville','New York City','Miami','Austin','Seattle','Chicago'];
+    var cityIndex=0, cityTimer=null;
+    function drawCity(){
+      city.style.opacity='0';
+      setTimeout(function(){city.textContent=cities[cityIndex];city.style.opacity='1';cityIndex=(cityIndex+1)%cities.length;},85);
+    }
+    city.style.transition='opacity 85ms linear'; drawCity();
+    cityTimer=setInterval(drawCity,900);
+    document.addEventListener('visibilitychange',function(){
+      if(document.hidden&&cityTimer){clearInterval(cityTimer);cityTimer=null;}
+      else if(!document.hidden&&!cityTimer){cityTimer=setInterval(drawCity,900);}
+    });
+
+    /* Replace the legacy input node completely so old live-search listeners cannot create or flicker panels. */
+    var input=oldInput.cloneNode(false);
+    input.id='bopStableLandingSearchInput';
+    input.type='search'; input.autocomplete='off'; input.autocapitalize='words'; input.spellcheck=false;
+    input.placeholder='Search any city...'; input.value='';
+    oldInput.replaceWith(input);
+    var wrap=input.parentElement;
+    var results=document.createElement('div'); results.id='bopStableLandingResults';
+    results.innerHTML='<button type="button" id="bopStableCityResult"><strong></strong><span></span></button>';
+    wrap.appendChild(results);
+    var resultButton=results.querySelector('button'), resultName=results.querySelector('strong'), resultStatus=results.querySelector('span');
+    var catalogue=[
+      {name:'Las Vegas',detail:'Nevada · ',dest:'bestof'},
+      {name:'San Diego',detail:'California · ',dest:'sandiego'},
+      {name:'Santa Barbara',detail:'California · ',dest:'santabarbara'},
+      {name:'Palm Desert',detail:'California · ',dest:'palmdesert'},
+      {name:'Los Angeles',detail:'California · ',dest:'losangeles'},
+      {name:'New York City',detail:'New York · ',dest:'newyork'},
+      {name:'Miami',detail:'Florida · ',dest:'miami'},
+      {name:'Nashville',detail:'Tennessee · ',dest:'nashville'}
+    ];
+    function matchCity(query){
+      query=(query||'').trim().toLowerCase();
+      if(!query)return null;
+      return catalogue.find(function(item){return item.name.toLowerCase().indexOf(query)>-1 || query.indexOf(item.name.toLowerCase())>-1;}) || null;
+    }
+    function render(){
+      var match=matchCity(input.value);
+      if(!match){results.classList.remove('is-open');return;}
+      resultName.textContent=match.name;
+      resultStatus.textContent=''; resultStatus.append(document.createTextNode(match.detail),Object.assign(document.createElement('b'),{className:'bopStableOpen',textContent:'Open now'}));
+      resultButton.dataset.dest=match.dest; results.classList.add('is-open');
+    }
+    input.addEventListener('input',function(event){event.stopPropagation();render();},true);
+    input.addEventListener('keydown',function(event){if(event.key==='Enter'){event.preventDefault();if(results.classList.contains('is-open'))resultButton.click();}},true);
+    resultButton.addEventListener('click',function(event){
+      event.preventDefault();event.stopPropagation();
+      results.classList.remove('is-open');
+      var dest=this.dataset.dest;
+      /* Mirror the original landing's direct city handoff: it opens the city's Main tile page,
+         not the worldwide map-pin helper. */
+      try{boCityContext=dest;}catch(ignore){}
+      if(typeof window.boReplaceBestOfRoute==='function')window.boReplaceBestOfRoute('otheroptions',dest);
+      var overlay=document.getElementById('bopLandingOverlay'); if(overlay)overlay.classList.remove('open');
+      var best=document.getElementById('bestOfOverlay'); if(best)best.classList.add('open');
+      try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions');}catch(ignore){}
+      window.scrollTo(0,0);
+    },true);
+    document.addEventListener('pointerdown',function(event){if(!wrap.contains(event.target))results.classList.remove('is-open');},true);
+  }
+  /* The source has legacy scripts after the original document close, so always retry after parsing settles. */
+  function launch(){try{boot();}catch(error){setTimeout(launch,80);}}
+  setTimeout(launch,0);
+  window.addEventListener('load',launch,{once:true});
+})();
+</script>
