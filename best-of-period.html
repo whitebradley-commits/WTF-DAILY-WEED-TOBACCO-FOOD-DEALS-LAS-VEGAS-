@@ -44800,8 +44800,9 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   var anchor=best.querySelector('.bo-picker-grid');if(!anchor)return;
   if(selected()){anchor.hidden=false;anchor.style.removeProperty('display');return}
   var names=['Oceanside','Carlsbad','Encinitas / Cardiff','Del Mar / Solana Beach','La Jolla','PB / Pacific Beach','Downtown San Diego'];
-  var panel=document.createElement('section');panel.id='bopSdCityHubCoast';panel.innerHTML='<h2>SAN DIEGO COAST</h2><p class="bop-sd-hub-sub">Choose a coastal area</p><div class="bop-sd-hub-coastline"><span class="bop-sd-ocean-label">Ocean</span><span class="bop-sd-coastal-label">Coastal</span><div class="bop-sd-hub-areas">'+names.map(function(n){return'<button type="button" class="bop-sd-hub-area" data-area="'+esc(n)+'" aria-pressed="false">'+esc(n)+'</button>'}).join('')+'</div></div>';
-  anchor.hidden=true;anchor.parentNode.insertBefore(panel,anchor);panel.querySelectorAll('.bop-sd-hub-area').forEach(function(b){b.addEventListener('click',function(){renderArea(panel,b.dataset.area,anchor)})});
+  var panel=document.createElement('section');panel.id='bopSdCityHubCoast';panel.innerHTML='<h2>SAN DIEGO COAST</h2><p class="bop-sd-hub-sub">Choose a coastal area, or explore all San Diego territories combined in the tiles below.</p><div class="bop-sd-hub-coastline"><span class="bop-sd-ocean-label">Ocean</span><span class="bop-sd-coastal-label">Coastal</span><div class="bop-sd-hub-areas">'+names.map(function(n){return'<button type="button" class="bop-sd-hub-area" data-area="'+esc(n)+'" aria-pressed="false">'+esc(n)+'</button>'}).join('')+'</div></div>';
+  /* The coast selector is optional: keep the complete San Diego category grid directly below it. */
+  anchor.hidden=false;anchor.style.removeProperty('display');anchor.parentNode.insertBefore(panel,anchor);panel.querySelectorAll('.bop-sd-hub-area').forEach(function(b){b.addEventListener('click',function(){renderArea(panel,b.dataset.area,anchor)})});
  }
  function install(){if(typeof window.boRenderCategory!=='function'||window.boRenderCategory.__bopSdHubCoast)return;var original=window.boRenderCategory;function wrapped(){var r=original.apply(this,arguments);setTimeout(mount,80);setTimeout(mount,260);return r}wrapped.__bopSdHubCoast=true;window.boRenderCategory=wrapped}
  document.addEventListener('click',function(event){var result=event.target&&event.target.closest&&event.target.closest('.bop-v284-city-result');if(result&&/san diego/i.test(result.textContent||''))setSelected('');setTimeout(mount,90)},true);install();setTimeout(install,500);setTimeout(install,1500);setTimeout(mount,700);
@@ -45120,4 +45121,117 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  position:relative!important;z-index:6!important;margin-left:auto!important;
  background:#000!important;box-shadow:-8px 0 0 #000,240px 0 0 #000!important
 }
+</style>
+<!-- v289: optional San Diego coast filter with the complete city grid always below -->
+<style id="bop-sd-coast-choice-v289">
+#bopSdCityHubCoast .bop-sd-hub-sub{
+ max-width:560px!important;margin:8px auto 14px!important;padding:0 8px!important;
+ font-size:clamp(11px,2.7vw,14px)!important;line-height:1.35!important;letter-spacing:.09em!important
+}
+#bopSdCityHubCoast .bop-sd-coastal-label{
+ font-size:clamp(13px,3.2vw,17px)!important;letter-spacing:.22em!important;
+ text-shadow:0 0 7px rgba(245,158,11,.82),0 0 15px rgba(245,158,11,.42)!important
+}
+@keyframes bopSdCoastChoicePulseV289{
+ 0%,100%{color:#F59E0B;text-shadow:0 0 4px rgba(245,158,11,.35);filter:brightness(.94)}
+ 50%{color:#ffc15a;text-shadow:0 0 8px rgba(245,158,11,.82),0 0 15px rgba(245,158,11,.35);filter:brightness(1.08)}
+}
+#bopSdCityHubCoast .bop-sd-hub-area{
+ animation:bopSdCoastChoicePulseV289 3.2s ease-in-out infinite!important;
+ cursor:pointer!important;touch-action:manipulation!important
+}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(2) .bop-sd-hub-area{animation-delay:-.45s!important}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(3) .bop-sd-hub-area{animation-delay:-.90s!important}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(4) .bop-sd-hub-area{animation-delay:-1.35s!important}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(5) .bop-sd-hub-area{animation-delay:-1.80s!important}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(6) .bop-sd-hub-area{animation-delay:-2.25s!important}
+#bopSdCityHubCoast .bop-sd-hub-areas>div:nth-child(7) .bop-sd-hub-area{animation-delay:-2.70s!important}
+#bestOfOverlay .bop-sd-area-filter-note{
+ width:min(720px,calc(100% - 20px));margin:0 auto 18px;padding:12px 15px;box-sizing:border-box;
+ border:1px solid rgba(245,158,11,.58);border-radius:13px;background:#080604;color:#F59E0B;
+ font:800 12px/1.35 'Archivo Narrow',Arial,sans-serif;letter-spacing:.055em;text-align:center;text-transform:uppercase
+}
+@media(max-width:430px){#bopSdCityHubCoast .bop-sd-coastal-label{left:24%!important;font-size:12px!important}}
+@media(prefers-reduced-motion:reduce){#bopSdCityHubCoast .bop-sd-hub-area{animation:none!important}}
+</style>
+<script id="bop-sd-coast-choice-v289-script">
+(function(){
+ function slug(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+ function selected(){try{return sessionStorage.getItem('bopSdSelectedArea')||''}catch(_){return window.BOP_SD_SELECTED_AREA||''}}
+ function inventory(){
+  var territories=window.BO_SD_TERRITORIES||{},all=[],seen={};
+  Object.keys(territories).forEach(function(area){(territories[area]||[]).forEach(function(row){var name=row&&row[0],key=slug(name);if(!key||seen[key])return;seen[key]=1;all.push({name:name,area:area,key:key})})});
+  window.BOP_SD_COAST_INVENTORY={territories:Object.keys(territories).length,restaurants:all.length,combinedOnSanDiego:true,records:all};
+  return all;
+ }
+ function apply(){
+  var city=String(window.boCityContext||'').toLowerCase(),cat=String(window.boCurrentCat||'').toLowerCase(),list=document.getElementById('boList');
+  if(!list||city!=='sandiego'||cat==='otheroptions')return;
+  list.querySelectorAll('.bop-sd-area-filter-note').forEach(function(n){n.remove()});
+  var area=selected(),cards=Array.from(list.children).filter(function(n){return n.classList&&n.classList.contains('bo-card')});
+  if(!area){cards.forEach(function(card){card.style.removeProperty('display');card.removeAttribute('data-sd-area-hidden')});return}
+  var allowed={};inventory().filter(function(x){return x.area===area}).forEach(function(x){allowed[x.key]=1});
+  var shown=0;cards.forEach(function(card){var key=String(card.id||'').replace(/^bo-card-/,'');var visible=!!allowed[key];if(visible){card.style.removeProperty('display');card.removeAttribute('data-sd-area-hidden');shown++}else{card.style.setProperty('display','none','important');card.setAttribute('data-sd-area-hidden','true')}});
+  var note=document.createElement('div');note.className='bop-sd-area-filter-note';note.textContent=shown?area+' · '+shown+' restaurant'+(shown===1?'':'s')+' in this category':'No restaurants in this category are assigned to '+area+' yet.';list.insertBefore(note,list.firstChild);
+ }
+ function install(){
+  inventory();if(typeof window.boRenderCategory!=='function'||window.boRenderCategory.__bopSdChoice289)return;
+  var original=window.boRenderCategory;function wrapped(){var r=original.apply(this,arguments);setTimeout(apply,100);setTimeout(apply,350);setTimeout(apply,900);return r}wrapped.__bopSdChoice289=true;window.boRenderCategory=wrapped;
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();setTimeout(install,500);setTimeout(install,1600);
+})();
+</script>
+<!-- v290: simplified search bars with compact Powered by BJS below -->
+<style id="bop-search-powered-below-v290">
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput),
+#bestOfOverlay .bo-search-wrap:has(#boSearchInput){
+ position:relative!important;overflow:visible!important;margin-bottom:25px!important
+}
+#bopLandingOverlay .bo-search-powered-by,
+#bestOfOverlay .bo-search-powered-by{
+ position:absolute!important;top:calc(100% + 3px)!important;right:12px!important;bottom:auto!important;left:auto!important;
+ width:max-content!important;max-width:none!important;height:auto!important;margin:0!important;padding:0!important;
+ transform:scale(.75)!important;transform-origin:top right!important;
+ color:#F59E0B!important;opacity:.92!important;white-space:nowrap!important;z-index:5!important;
+ text-shadow:0 0 4px rgba(245,158,11,.28)!important;pointer-events:none!important
+}
+#bopLandingOverlay .bo-search-powered-by svg:first-child,
+#bestOfOverlay .bo-search-powered-by svg:first-child{display:none!important}
+#bopStableLandingSearchInput{padding-right:28px!important}
+#bestOfOverlay #boSearchInput{padding-right:28px!important}
+#bopStableLandingSearchInput,
+#bopStableLandingSearchInput::placeholder,
+#bestOfOverlay #boSearchInput,
+#bestOfOverlay #boSearchInput::placeholder{color:#F59E0B!important;text-shadow:none!important;opacity:1!important}
+</style>
+<script id="bop-search-powered-below-v290-script">
+(function(){
+ function clean(){
+  var territory=document.getElementById('bopStableLandingSearchInput');
+  if(territory){territory.placeholder='Search the world';territory.setAttribute('aria-label','Search the world')}
+  var restaurant=document.getElementById('boSearchInput');
+  if(restaurant){restaurant.placeholder='Search any restaurant...';restaurant.setAttribute('aria-label','Search any restaurant')}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});else clean();
+ new MutationObserver(function(){requestAnimationFrame(clean)}).observe(document.documentElement,{subtree:true,childList:true});
+ setTimeout(clean,300);setTimeout(clean,1100);
+})();
+</script>
+<!-- v291: restore the lightning bolt within the compact below-bar branding -->
+<style id="bop-search-powered-bolt-v291">
+#bopLandingOverlay .bo-search-powered-by svg:first-child,
+#bestOfOverlay .bo-search-powered-by svg:first-child{
+ display:inline-block!important;visibility:visible!important;opacity:1!important;
+ width:11px!important;height:11px!important;margin-right:3px!important;vertical-align:-1px!important
+}
+</style>
+<!-- v292: equal spacing around Powered by -->
+<style id="bop-powered-equal-spacing-v292">
+#bopLandingOverlay .bo-search-powered-by,
+#bestOfOverlay .bo-search-powered-by{
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ gap:5px!important;column-gap:5px!important
+}
+#bopLandingOverlay .bo-search-powered-by svg,
+#bestOfOverlay .bo-search-powered-by svg{margin:0!important}
 </style>
