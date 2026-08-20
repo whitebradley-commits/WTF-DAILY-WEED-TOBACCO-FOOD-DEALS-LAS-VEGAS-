@@ -44114,7 +44114,7 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
         city.textContent=cities[cityIndex]; city.style.opacity='1'; cityIndex=(cityIndex+1)%cities.length;
       },55);
     }
-    function startReel(){if(!reelFrozen&&!cityTimer)cityTimer=window.setInterval(drawCity,550);}
+    function startReel(){if(!reelFrozen&&!cityTimer)cityTimer=window.setInterval(drawCity,275);}
     function freezeReel(name){
       reelFrozen=true; if(cityTimer){window.clearInterval(cityTimer);cityTimer=null;}
       if(name)city.textContent=name; city.style.opacity='1';
@@ -45619,8 +45619,8 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 <style id="bop-city-reel-anchor-v300-last">
 /* Main-page continuous reel: one fixed center beneath the E in BEST. */
 #bopLandingOverlay #bopStableMobileCity{
- left:38%!important;right:auto!important;width:max-content!important;max-width:none!important;
- font-size:clamp(38px,calc(13.4vw - 2px),56px)!important;
+ left:37.5%!important;right:auto!important;width:max-content!important;max-width:none!important;
+ font-size:clamp(37px,calc(13.4vw - 3px),55px)!important;
  text-align:center!important;transform:translateX(-50%)!important;transform-origin:center center!important
 }
 /* City-page entry reel uses the identical anchor and grows equally in both directions. */
