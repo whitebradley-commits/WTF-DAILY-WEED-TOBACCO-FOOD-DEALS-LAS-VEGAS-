@@ -46134,7 +46134,33 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  setInterval(function(){
   var best=document.getElementById('bestOfOverlay'),hero=best&&best.querySelector('.bop-splash-hero');
   if(!best||!best.classList.contains('open')){lastReplayKey='';lastHero=null;return}
-  var key=cityKey();if(hero&&(hero!==lastHero||key!==lastReplayKey)){lastHero=hero;lastReplayKey=key;setTimeout(replay,120)}
+ var key=cityKey();if(hero&&(hero!==lastHero||key!==lastReplayKey)){lastHero=hero;lastReplayKey=key;setTimeout(replay,120)}
  },220);
 })();
 </script>
+<!-- v309: clean four text orbs; retain the rotating globe artwork -->
+<style id="bop-clean-text-orbs-v309-style">
+#bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]){background-color:#050505!important;background-image:none!important}
+#bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) .bop-orb-glyph,
+#bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) img,
+#bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) svg{display:none!important;visibility:hidden!important;opacity:0!important}
+#bopCleanOrbDock .bop-orb-label,
+#bopCleanOrbDock .bop-static-near-label,
+#bopCleanOrbDock .bop-static-city-label{font-size:16px!important}
+#bopCleanOrbDock .bop-orb-label--closest{font-size:13px!important}
+#bopCleanOrbDock .bop-orb-label--closest b{font-size:36px!important}
+#bopCleanOrbDock [data-clean-orb="world"] .bop-orb-label{display:none!important}
+#bopCleanOrbDock [data-clean-orb="world"] .bop-orb-glyph{display:block!important;visibility:visible!important;opacity:1!important}
+@media(max-width:600px),(pointer:coarse){
+ #bopCleanOrbDock .bop-orb-label,
+ #bopCleanOrbDock .bop-static-near-label,
+ #bopCleanOrbDock .bop-static-city-label{font-size:15px!important}
+ #bopCleanOrbDock .bop-orb-label--closest{font-size:12px!important}
+ #bopCleanOrbDock .bop-orb-label--closest b{font-size:32px!important}
+}
+@media(max-width:340px){
+ #bopCleanOrbDock .bop-orb-label,
+ #bopCleanOrbDock .bop-static-near-label,
+ #bopCleanOrbDock .bop-static-city-label{font-size:14px!important}
+}
+</style>
