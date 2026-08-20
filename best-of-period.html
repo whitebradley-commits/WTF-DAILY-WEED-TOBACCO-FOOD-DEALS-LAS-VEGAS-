@@ -43434,10 +43434,15 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 #bopLandingOverlay .bjs-why-trigger{animation:none!important;transform:none!important;transition:none!important}
 /* A selected city page must land on that city; never let its old hero ticker rewrite it. */
 #bestOfOverlay #bopMainCityText{animation:none!important;transform:none!important;transition:none!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important}
+/* City-page lock: reserve the legacy city column but draw the selected city in an isolated overlay. */
+#bestOfOverlay.bopSelectedHeroLocked #boHeroTitle{position:relative!important}
 #bestOfOverlay.bopSelectedHeroLocked .bop-splash-line2{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px!important}
-#bestOfOverlay.bopSelectedHeroLocked .bop-splash-city-col{position:relative!important;display:block!important;flex:0 0 clamp(180px,44vw,320px)!important;width:clamp(180px,44vw,320px)!important;text-align:right!important}
-#bestOfOverlay.bopSelectedHeroLocked #bopMainCityText{visibility:hidden!important;display:block!important;width:100%!important}
-#bopSelectedHeroCityOverlay{display:block!important;position:absolute!important;right:0!important;top:0!important;white-space:nowrap!important;pointer-events:none!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important;animation:none!important;transform:none!important;transition:none!important}
+#bestOfOverlay.bopSelectedHeroLocked .bop-splash-city-col{display:block!important;flex:0 0 clamp(180px,44vw,320px)!important;width:clamp(180px,44vw,320px)!important;text-align:right!important;visibility:hidden!important}
+#bestOfOverlay.bopSelectedHeroLocked #bopMainCityText{visibility:hidden!important;animation:none!important;transform:none!important}
+#bopSelectedHeroCityOverlay{display:block!important;position:absolute!important;box-sizing:border-box!important;text-align:right!important;white-space:nowrap!important;pointer-events:none!important;z-index:25!important;font-size:0!important;color:transparent!important;text-shadow:none!important;animation:none!important;transform:none!important;transition:none!important}
+#bopSelectedHeroCityOverlay::after{content:attr(data-city)!important;display:block!important;color:#db153a!important;font-family:var(--bop-city-font,serif)!important;font-size:var(--bop-city-size,inherit)!important;font-weight:var(--bop-city-weight,700)!important;line-height:var(--bop-city-line,1)!important;letter-spacing:var(--bop-city-spacing,normal)!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important}
+/* The city screen does not need the repeated social/Vendor strip; hide it so it cannot enter the title region. */
+#bestOfOverlay.bopSelectedHeroLocked .bop-icons-only-dock{display:none!important}
 #bestOfOverlay .bjs-why-trigger{animation:none!important;transform:none!important;transition:none!important}
 #bopLandingSearchPrompt{display:none!important}
 #bopStableLandingResults{position:absolute!important;left:0!important;top:calc(100% + 14px)!important;width:100%!important;z-index:2147483100!important;display:none!important;box-sizing:border-box!important}
@@ -43506,23 +43511,38 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
       else if(!document.hidden&&!reelFrozen){startReel();}
     });
     var selectedHeroCity='';
+    var heroLockPlaced=false;
     function enforceSelectedHero(){
       if(!selectedHeroCity)return;
       var heroCity=document.getElementById('bopMainCityText');
-      if(!heroCity)return;
+      var best=document.getElementById('bestOfOverlay');
+      var title=document.getElementById('boHeroTitle');
+      if(!heroCity||!best||!title)return;
       heroCity.style.setProperty('animation','none','important');heroCity.style.setProperty('transform','none','important');heroCity.style.setProperty('transition','none','important');
-      var cityCol=heroCity.parentElement, best=document.getElementById('bestOfOverlay');
-      if(!cityCol||!best)return;
       best.classList.add('bopSelectedHeroLocked');
-      var overlay=document.getElementById('bopSelectedHeroCityOverlay');
-      if(!overlay){
-        overlay=document.createElement('span');overlay.id='bopSelectedHeroCityOverlay';
-        var s=getComputedStyle(heroCity);overlay.style.fontFamily=s.fontFamily;overlay.style.fontSize=s.fontSize;overlay.style.fontWeight=s.fontWeight;overlay.style.lineHeight=s.lineHeight;overlay.style.letterSpacing=s.letterSpacing;
-        cityCol.appendChild(overlay);
+      var legacyOverlay=document.getElementById('bopSelectedHeroCityOverlay');
+      if(!legacyOverlay){
+        legacyOverlay=document.createElement('span');legacyOverlay.id='bopSelectedHeroCityOverlay';
+        var s=getComputedStyle(heroCity);legacyOverlay.style.setProperty('--bop-city-font',s.fontFamily);legacyOverlay.style.setProperty('--bop-city-size',s.fontSize);legacyOverlay.style.setProperty('--bop-city-weight',s.fontWeight);legacyOverlay.style.setProperty('--bop-city-line',s.lineHeight);legacyOverlay.style.setProperty('--bop-city-spacing',s.letterSpacing);
+        title.appendChild(legacyOverlay);
+        /* Legacy scripts append auxiliary labels late; keep this title overlay text-only forever. */
+        var textGuard=new MutationObserver(function(){
+          if(legacyOverlay.childNodes.length)legacyOverlay.replaceChildren();
+        });
+        textGuard.observe(legacyOverlay,{childList:true,subtree:true,characterData:true});
       }
-      overlay.textContent=selectedHeroCity;
+      legacyOverlay.dataset.city=selectedHeroCity;
+      legacyOverlay.replaceChildren();
+      /* Only place geometry while the original city column is clean; never let later legacy dock mutations move the selected title. */
+      if(!heroLockPlaced){
+        var cityRect=heroCity.parentElement.getBoundingClientRect(), titleRect=title.getBoundingClientRect();
+        legacyOverlay.style.left=Math.round(cityRect.left-titleRect.left)+'px';
+        legacyOverlay.style.top=Math.round(cityRect.top-titleRect.top)+'px';
+        legacyOverlay.style.width=Math.round(cityRect.width)+'px';
+        heroLockPlaced=true;
+      }
     }
-    var heroObserver=new MutationObserver(function(){enforceSelectedHero();});
+    var heroObserver=new MutationObserver(function(){if(!heroLockPlaced)enforceSelectedHero();});
     heroObserver.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
 
     /* Replace the legacy input node completely so old live-search listeners cannot create or flicker panels. */
@@ -43566,6 +43586,7 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
       var dest=this.dataset.dest;
       freezeReel(resultName.textContent);
       selectedHeroCity=resultName.textContent;
+      heroLockPlaced=false;
       /* Mirror the original landing's direct city handoff: it opens the city's Main tile page,
          not the worldwide map-pin helper. */
       try{boCityContext=dest;}catch(ignore){}
