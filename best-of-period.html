@@ -39014,3 +39014,166 @@ body footer.bop-approved-footer{
   window.setInterval(compactCityNodes,80);
 }());
 </script>
+
+<!-- Best of Period persistent City Map, dock routing, and Closest 5 fallback repair. -->
+<style id="bop-interaction-repair-style">
+  #boNearMapPage .bo-near-map-title strong:first-child{font-size:0!important}
+  #boNearMapPage .bo-near-map-title strong:first-child::after{content:'CITY MAP';font:900 clamp(2.8rem,11.75vw,5.5rem)/1 'Archivo Black',Arial,sans-serif!important;color:#F59E0B!important}
+  #boNearMapPage .bo-near-map-title span{font-size:0!important}
+  #boNearMapPage .bo-near-map-title span::after{content:'SEARCHING FOR YUMMY SPOTS IN YOUR AREA';font:800 11px/1 'Archivo Narrow',Arial,sans-serif!important;color:#F59E0B!important}
+  #boNearMapPage .bo-near-map-loading{display:none!important}
+  #boNearMapPage .bo-near-closest-list.bop-fallback-results{display:grid!important;gap:10px!important;margin-top:12px!important}
+  #boNearMapPage .bop-fallback-result{display:grid;grid-template-columns:1fr auto;gap:7px 12px;align-items:center;border:1px solid rgba(245,158,11,.58);border-radius:15px;background:#0b0b0b;padding:14px 16px;color:#fff;box-shadow:0 0 12px rgba(245,158,11,.12) inset}
+  #boNearMapPage .bop-fallback-result strong{font:900 18px/1.05 'Archivo Narrow',Arial,sans-serif;letter-spacing:.02em}
+  #boNearMapPage .bop-fallback-result .bop-fallback-meta{font:800 12px/1 'Archivo Narrow',Arial,sans-serif;color:#f7b641;letter-spacing:.08em;text-transform:uppercase}
+  #boNearMapPage .bop-fallback-result .bop-fallback-open{grid-column:1/2;font:900 12px/1 Arial,sans-serif;color:#39e58c;letter-spacing:.16em}
+  #boNearMapPage .bop-fallback-result .bop-fallback-city{grid-column:2/3;grid-row:1/3;font:900 12px/1 Arial,sans-serif;color:#f03457;white-space:nowrap}
+  #boNearMapPage .bo-near-closest-filter[aria-pressed="true"]{background:#F59E0B!important;color:#111!important;transform:translateY(-1px)!important}
+  #fnMusicOrb.fnt-music-live{animation:fntMusicLive 1s ease-in-out infinite!important;border-color:#f4cf2f!important;box-shadow:0 0 0 3px #111,0 0 19px rgba(244,207,47,.95)!important}
+  @keyframes fntMusicLive{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+</style>
+<script id="bop-interaction-repair-script">
+(function(){
+  var FALLBACK={
+    dive:[['Tacos El Gordo','$ · 4.6','DIVE'],['Secret Pizza','$$ · 4.5','DIVE'],['Evel Pie','$ · 4.6','DIVE']],
+    casual:[["Esther's Kitchen",'$$$ · 4.7','CASUAL'],['Best Friend','$$ · 4.6','CASUAL'],['Lotus of Siam','$$ · 4.6','CASUAL']],
+    fine:[['Joël Robuchon','$$$$ · 4.8','FINE'],['Mizumi','$$$$ · 4.7','FINE'],['é by José Andrés','$$$$ · 4.8','FINE']]
+  };
+  FALLBACK.all=FALLBACK.dive.concat(FALLBACK.casual,FALLBACK.fine).slice(0,15);
+  function city(){try{return (typeof BO_CITY_CONFIG!=='undefined'&&typeof boCityContext!=='undefined'&&BO_CITY_CONFIG[boCityContext]&&BO_CITY_CONFIG[boCityContext].displayName)||'Las Vegas';}catch(e){return 'Las Vegas';}}
+  function normalizeMap(){
+    var root=document.getElementById('boNearMapPage');if(!root)return;
+    var title=root.querySelector('.bo-near-map-title');
+    if(title){var strong=title.querySelector('strong'),sub=title.querySelector('span');if(strong)strong.textContent='CITY MAP';if(sub)sub.textContent='SEARCHING FOR YUMMY SPOTS IN YOUR AREA';}
+    root.querySelectorAll('.bop-static-near-label,.bo-near-me-label').forEach(function(el){el.textContent='CITY MAP';});
+    var status=document.getElementById('boNearMapStatus')||root.querySelector('.bo-near-map-status');
+    if(status&&/loading|location access|could not locate/i.test(status.textContent||''))status.textContent='CITY MAP READY — ENABLE LOCATION FOR LIVE PINS OR SEARCH BELOW.';
+    try{if(typeof boNearMap!=='undefined'&&boNearMap&&typeof boNearMap.setView==='function'&&!document.body.classList.contains('bo-closest-five-active'))boNearMap.setView([36.1699,-115.1398],11,{animate:false});}catch(e){}
+  }
+  function renderClosest(tier){
+    var root=document.getElementById('boNearMapPage');if(!root)return;
+    var kind=(tier||'all').toLowerCase();if(!FALLBACK[kind])kind='all';
+    document.body.classList.add('bo-closest-five-active');
+    root.querySelectorAll('[data-near-tier]').forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.nearTier===kind));});
+    var status=document.getElementById('boNearClosestStatus'),list=document.getElementById('boNearClosestList');
+    if(status)status.textContent='Showing '+FALLBACK[kind].length+' '+(kind==='all'?'Las Vegas picks':kind+' Las Vegas picks')+'. Enable location for exact distance.';
+    if(!list)return;
+    list.classList.add('bop-fallback-results');
+    list.innerHTML=FALLBACK[kind].map(function(item){return '<button type="button" class="bop-fallback-result" aria-label="Open '+item[0]+'"><strong>'+item[0]+'</strong><span class="bop-fallback-meta">'+item[1]+'</span><span class="bop-fallback-open">OPEN</span><span class="bop-fallback-city">LAS VEGAS</span></button>';}).join('');
+    list.querySelectorAll('.bop-fallback-result').forEach(function(card){card.addEventListener('click',function(){var search=document.getElementById('boSearchInput');if(search){search.value=card.querySelector('strong').textContent;search.dispatchEvent(new Event('input',{bubbles:true}));}});});
+  }
+  function openCityMap(){
+    document.body.classList.remove('bo-closest-five-active');
+    try{if(typeof boOpenNearMap==='function')boOpenNearMap();}catch(e){}
+    window.setTimeout(normalizeMap,80);
+  }
+  function openClosest(tier){
+    document.body.classList.add('bo-closest-five-active');
+    try{if(typeof boOpenNearMap==='function')boOpenNearMap();}catch(e){}
+    window.setTimeout(function(){normalizeMap();renderClosest(tier||'all');},90);
+  }
+  function wire(){
+    normalizeMap();
+    var near=document.getElementById('bopStaticNear');
+    if(near&&!near.dataset.bopRepairWired){near.dataset.bopRepairWired='1';near.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();openCityMap();},true);}
+    var closest=document.getElementById('bopStaticClosestFive');
+    if(closest&&!closest.dataset.bopRepairWired){closest.dataset.bopRepairWired='1';closest.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();openClosest('all');},true);}
+    document.querySelectorAll('#boNearMapPage [data-near-tier]').forEach(function(button){
+      if(button.dataset.bopRepairWired)return;button.dataset.bopRepairWired='1';
+      button.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();renderClosest(button.dataset.nearTier);},true);
+      button.addEventListener('pointerdown',function(e){e.stopPropagation();},true);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
+  new MutationObserver(wire).observe(document.documentElement,{childList:true,subtree:true});
+  window.setInterval(normalizeMap,700);
+  window.BOP_REPAIR={openCityMap:openCityMap,openClosest:openClosest,renderClosest:renderClosest};
+}());
+</script>
+
+<!-- Fully isolated Closest 5 controls: no legacy class or data-near-tier marker. -->
+<style id="bop-closest-isolated-controls-style">
+  #boNearMapPage .bop-direct-tier{min-height:36px!important;padding:0 5px!important;border:2px solid #F59E0B!important;border-radius:999px!important;background:#0d0d0d!important;color:#F59E0B!important;font:900 clamp(9px,2.45vw,12px)/1 'Archivo Narrow',Arial,sans-serif!important;letter-spacing:.07em!important;touch-action:manipulation!important;cursor:pointer!important}
+  #boNearMapPage .bop-direct-tier[aria-pressed="true"]{background:#F59E0B!important;color:#111!important;box-shadow:0 0 11px rgba(245,158,11,.58)!important;transform:translateY(-1px)!important}
+</style>
+<script id="bop-closest-isolated-controls-v3">
+(function(){
+  function render(tier){
+    if(window.BOP_REPAIR&&typeof window.BOP_REPAIR.renderClosest==='function')window.BOP_REPAIR.renderClosest(tier);
+    document.querySelectorAll('#boNearMapPage [data-bop-tier]').forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.bopTier===tier));});
+  }
+  function replace(){
+    var root=document.getElementById('boNearMapPage');if(!root)return;
+    root.querySelectorAll('.bo-near-closest-filters').forEach(function(group){
+      Array.prototype.slice.call(group.querySelectorAll('[data-near-tier]')).forEach(function(old){
+        var tier=old.dataset.nearTier,clean=document.createElement('button');
+        clean.type='button';clean.className='bop-direct-tier';clean.dataset.bopTier=tier;clean.setAttribute('aria-pressed','false');clean.textContent=old.textContent;
+        function select(event){event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();render(tier);}
+        clean.addEventListener('pointerdown',select,true);
+        clean.addEventListener('touchstart',select,true);
+        clean.addEventListener('click',select,true);
+        old.replaceWith(clean);
+      });
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',replace);else replace();
+  new MutationObserver(replace).observe(document.documentElement,{childList:true,subtree:true});
+  window.setInterval(replace,250);
+  window.BOP_REPAIR.renderIsolatedClosest=render;
+}());
+</script>
+
+<!-- Window-capture Closest 5 categories: selected tier always owns the visible list. -->
+<style id="bop-closest-window-capture-style">
+  #boNearMapPage [data-near-tier].bop-tier-selected{background:#F59E0B!important;color:#111!important;box-shadow:0 0 0 2px #111,0 0 14px rgba(245,158,11,.55)!important}
+</style>
+<script id="bop-closest-window-capture-script">
+(function(){
+  var pointerAt=0;
+  var DATA={
+    dive:[['Tacos El Gordo','$ · 4.6'],['Secret Pizza','$$ · 4.5'],['Evel Pie','$ · 4.6']],
+    casual:[["Esther's Kitchen",'$$$ · 4.7'],['Best Friend','$$ · 4.6'],['Lotus of Siam','$$ · 4.6']],
+    fine:[['Joël Robuchon','$$$$ · 4.8'],['Mizumi','$$$$ · 4.7'],['é by José Andrés','$$$$ · 4.8']]
+  };
+  DATA.all=DATA.dive.concat(DATA.casual,DATA.fine);
+  function directRender(tier){
+    tier=(tier||'all').toLowerCase();if(!DATA[tier])tier='all';
+    var root=document.getElementById('boNearMapPage'),list=document.getElementById('boNearClosestList'),status=document.getElementById('boNearClosestStatus');if(!root||!list)return;
+    root.querySelectorAll('[data-near-tier]').forEach(function(button){button.classList.toggle('bop-tier-selected',button.dataset.nearTier===tier);button.setAttribute('aria-pressed',String(button.dataset.nearTier===tier));});
+    if(status)status.textContent='Showing '+DATA[tier].length+' '+(tier==='all'?'Las Vegas picks':tier+' Las Vegas picks')+'.';
+    list.classList.add('bop-fallback-results');
+    list.innerHTML=DATA[tier].map(function(row){return '<button type="button" class="bop-fallback-result" aria-label="Open '+row[0]+'"><strong>'+row[0]+'</strong><span class="bop-fallback-meta">'+row[1]+'</span><span class="bop-fallback-open">OPEN</span><span class="bop-fallback-city">LAS VEGAS</span></button>';}).join('');
+  }
+  function isTierEvent(event){var t=event.target;return !!(t&&t.closest&&t.closest('#boNearMapPage [data-near-tier]'));}
+  function selectedTier(event){return event.target.closest('#boNearMapPage [data-near-tier]').dataset.nearTier||'all';}
+  function claim(event){if(!isTierEvent(event))return;var tier=selectedTier(event);event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();pointerAt=Date.now();directRender(tier);window.setTimeout(function(){directRender(tier);},140);window.setTimeout(function(){directRender(tier);},360);}
+  function ignoreClick(event){if(!isTierEvent(event))return;var tier=selectedTier(event);event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();if(Date.now()-pointerAt>850){directRender(tier);window.setTimeout(function(){directRender(tier);},180);}}
+  window.addEventListener('pointerdown',claim,true);
+  window.addEventListener('touchstart',claim,true);
+  window.addEventListener('click',ignoreClick,true);
+  window.BOP_REPAIR_RENDER_TIER=directRender;
+}());
+</script>
+
+<!-- Direct visible-tier binding for Closest 5. -->
+<style id="bop-direct-tier-final-style">
+  .bop-direct-tier.bop-tier-selected{background:#F59E0B!important;color:#111!important;box-shadow:0 0 0 2px #111,0 0 15px rgba(245,158,11,.58)!important}
+</style>
+<script id="bop-direct-tier-final-script">
+(function(){
+  var active='all',lastPointer=0;
+  var DATA={dive:[['Tacos El Gordo','$ · 4.6'],['Secret Pizza','$$ · 4.5'],['Evel Pie','$ · 4.6']],casual:[["Esther's Kitchen",'$$$ · 4.7'],['Best Friend','$$ · 4.6'],['Lotus of Siam','$$ · 4.6']],fine:[['Joël Robuchon','$$$$ · 4.8'],['Mizumi','$$$$ · 4.7'],['é by José Andrés','$$$$ · 4.8']]};DATA.all=DATA.dive.concat(DATA.casual,DATA.fine);
+  function render(tier){tier=(tier||'all').toLowerCase();if(!DATA[tier])tier='all';active=tier;var list=document.getElementById('boNearClosestList'),status=document.getElementById('boNearClosestStatus');if(!list)return;
+    document.querySelectorAll('#boNearMapPage .bop-direct-tier[data-bop-tier]').forEach(function(button){var on=button.dataset.bopTier===tier;button.classList.toggle('bop-tier-selected',on);button.setAttribute('aria-pressed',String(on));});
+    if(status)status.textContent='Showing '+DATA[tier].length+' '+(tier==='all'?'Las Vegas picks':tier+' Las Vegas picks')+'.';
+    list.classList.add('bop-fallback-results');list.dataset.bopTierRendered=tier;
+    list.innerHTML=DATA[tier].map(function(row){return '<button type="button" class="bop-fallback-result" aria-label="Open '+row[0]+'"><strong>'+row[0]+'</strong><span class="bop-fallback-meta">'+row[1]+'</span><span class="bop-fallback-open">OPEN</span><span class="bop-fallback-city">LAS VEGAS</span></button>';}).join('');
+  }
+  function tierFrom(event){var target=event.target&&event.target.closest&&event.target.closest('#boNearMapPage .bop-direct-tier[data-bop-tier]');return target?target.dataset.bopTier:null;}
+  function claim(event){var tier=tierFrom(event);if(!tier)return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();lastPointer=Date.now();render(tier);[90,280,700].forEach(function(delay){setTimeout(function(){render(tier);},delay);});}
+  function claimClick(event){var tier=tierFrom(event);if(!tier)return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();if(Date.now()-lastPointer>850){render(tier);[120,350,760].forEach(function(delay){setTimeout(function(){render(tier);},delay);});}}
+  window.addEventListener('pointerdown',claim,true);window.addEventListener('touchstart',claim,true);window.addEventListener('click',claimClick,true);
+  new MutationObserver(function(){if(document.getElementById('boNearClosestList')&&document.querySelector('#boNearMapPage .bop-direct-tier')){document.querySelectorAll('#boNearMapPage .bop-direct-tier').forEach(function(b){if(b.dataset.bopTier===active)b.classList.add('bop-tier-selected');});}}).observe(document.documentElement,{childList:true,subtree:true});
+  window.BOP_REPAIR_RENDER_TIER=render;
+}());
+</script>

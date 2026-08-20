@@ -1938,3 +1938,118 @@ try{
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){waitForControls(0);});else waitForControls(0);
 }());
 </script>
+
+<!-- FN Team persistent reference-image fallback and tap-safe music player. -->
+<style id="fnt-reference-music-repair-style">
+  #fnIdeasProofLightbox .fn-idea-tile img.fnt-photo-fallback{object-fit:cover!important;background:#171717!important}
+  #fnIdeasProofLightbox .fn-idea-tile::after{content:'F\2019N TEAM';position:absolute;right:5px;bottom:5px;padding:3px 4px;background:rgba(0,0,0,.68);color:#f4cf2f;font:900 7px/1 Arial,sans-serif;letter-spacing:.08em}
+  #fnMusicOrb.fnt-music-live{animation:fntMusicLive 1s ease-in-out infinite!important;border-color:#f4cf2f!important;box-shadow:0 0 0 3px #111,0 0 19px rgba(244,207,47,.95)!important}
+</style>
+<script id="fnt-reference-music-repair-script">
+(function(){
+  function svgFallback(index){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560"><rect width="420" height="560" fill="#151515"/><rect x="18" y="18" width="384" height="524" rx="12" fill="#24154a" stroke="#6b44c9" stroke-width="8"/><path d="M82 196h256l-34 208H116z" fill="#111" stroke="#f4cf2f" stroke-width="7"/><path d="M139 184c0-64 142-64 142 0" fill="none" stroke="#f4cf2f" stroke-width="12"/><text x="210" y="312" text-anchor="middle" fill="#f4cf2f" font-family="Arial Black,Arial" font-size="44">F’N</text><text x="210" y="354" text-anchor="middle" fill="#fff" font-family="Arial Black,Arial" font-size="27">TEAM</text><text x="210" y="447" text-anchor="middle" fill="#f4cf2f" font-family="Arial" font-weight="700" font-size="19">REFERENCE '+String(index).padStart(2,'0')+'</text></svg>');}
+  function usablePhotos(){return Array.from(document.querySelectorAll('img[src]')).map(function(img){return img.currentSrc||img.src;}).filter(function(src){return src&&/^data:image|^https?:/i.test(src)&&!/fnt_idea_/i.test(src)&&!/^data:image\/svg\+xml/i.test(src);});}
+  function repairReferenceTiles(){
+    var photos=usablePhotos();
+    document.querySelectorAll('#fnIdeasProofLightbox .fn-idea-tile img').forEach(function(img,index){
+      if(img.dataset.fntReferenceRepaired==='true')return;
+      var fallback=photos[index%Math.max(photos.length,1)]||svgFallback(index+1);
+      img.dataset.fntReferenceRepaired='true';img.classList.add('fnt-photo-fallback');
+      img.onerror=function(){img.onerror=null;img.src=svgFallback(index+1);};
+      /* The old manuscript storage host is retired, so use an available on-page photo immediately. */
+      if(/fnt_idea_|manus-storage/i.test(img.src))img.src=fallback;
+    });
+  }
+  var ctx=null,master=null,timer=null,playing=false,step=0,suppressUntil=0;
+  function oscillator(freq,duration,type,gain){if(!ctx||!master)return;var now=ctx.currentTime,osc=ctx.createOscillator(),amp=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,now);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(gain,now+.025);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp).connect(master);osc.start(now);osc.stop(now+duration+.04);}
+  function tick(){var notes=[220,261.63,329.63,392];var f=notes[step%notes.length];oscillator(f,.28,'triangle',.055);if(step%2===0)oscillator(f/2,.36,'sine',.024);step++;}
+  function stop(){if(timer){clearInterval(timer);timer=null;}playing=false;var orb=document.getElementById('fnMusicOrb');if(orb){orb.classList.remove('fnt-music-live');orb.textContent='MUSIC';orb.setAttribute('aria-pressed','false');}}
+  function start(){var orb=document.getElementById('fnMusicOrb');try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.3;master.connect(ctx.destination);}ctx.resume().then(function(){stop();playing=true;step=0;tick();timer=setInterval(tick,440);if(orb){orb.classList.add('fnt-music-live');orb.textContent='MUSIC ON';orb.setAttribute('aria-pressed','true');}}).catch(stop);}catch(e){stop();}}
+  function toggle(event){if(event){event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();}suppressUntil=Date.now()+900;if(playing)stop();else start();}
+  function wireMusic(){var orb=document.getElementById('fnMusicOrb');if(!orb||orb.dataset.fntMusicRepair==='true')return;orb.dataset.fntMusicRepair='true';orb.setAttribute('aria-pressed','false');['pointerdown','touchstart','mousedown','click'].forEach(function(type){orb.addEventListener(type,function(event){if(type==='click'&&Date.now()<suppressUntil){event.preventDefault();event.stopImmediatePropagation();return;}toggle(event);},true);});}
+  function apply(){repairReferenceTiles();wireMusic();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply);else apply();
+  new MutationObserver(apply).observe(document.documentElement,{childList:true,subtree:true});
+  window.setInterval(repairReferenceTiles,300);
+  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
+}());
+</script>
+
+<!-- Isolated FN Team Music control: no external source or legacy listener required. -->
+<style id="fnt-direct-music-style">
+  #fnMusicPanel{display:none!important}
+  #fnMusicOrb.fnt-direct-music-on{background:#f4cf2f!important;color:#111!important;border-color:#111!important;box-shadow:0 0 0 3px #111,0 0 24px rgba(244,207,47,.95)!important;animation:fntDirectPulse 1s ease-in-out infinite!important}
+  #fnMusicOrb.fnt-direct-music-on::after{content:'ON';display:block;font-size:8px;letter-spacing:.12em;margin-top:1px}
+  @keyframes fntDirectPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+</style>
+<script id="fnt-direct-music-script">
+(function(){
+  var ctx=null,master=null,timer=null,playing=false,beat=0;
+  function setState(on){
+    playing=!!on;window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};
+    var orb=document.getElementById('fnMusicOrb');if(!orb)return;
+    orb.classList.toggle('fnt-direct-music-on',playing);orb.setAttribute('aria-pressed',String(playing));orb.textContent=playing?'MUSIC':'MUSIC';orb.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');
+  }
+  function note(freq,length,volume,type){if(!ctx||!master)return;var now=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'triangle';o.frequency.setValueAtTime(freq,now);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(volume,now+.012);g.gain.exponentialRampToValueAtTime(.0001,now+length);o.connect(g).connect(master);o.start(now);o.stop(now+length+.03);}
+  function pulse(){var root=[196,220,246.94,293.66][beat%4];note(root,.22,.09,'triangle');if(beat%2===0)note(root/2,.32,.035,'sine');if(beat%4===2)note(root*1.5,.12,.025,'square');beat++;window.__FN_BUILTIN_MUSIC_STATE={playing:true,engine:'embedded-web-audio',beat:beat};}
+  function stop(){if(timer){clearInterval(timer);timer=null;}setState(false);}
+  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}var ready=ctx.resume?ctx.resume():Promise.resolve();Promise.resolve(ready).then(function(){if(timer)clearInterval(timer);beat=0;pulse();timer=setInterval(pulse,420);setState(true);}).catch(stop);}catch(error){stop();}}
+  function toggle(event){if(event){event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();}if(playing)stop();else start();}
+  function replaceOrb(){
+    var old=document.getElementById('fnMusicOrb');if(!old||old.dataset.fntDirectMusic==='true')return;
+    var clean=old.cloneNode(true);clean.dataset.fntDirectMusic='true';clean.setAttribute('type','button');clean.setAttribute('aria-pressed','false');clean.textContent='MUSIC';
+    ['pointerdown','touchstart','click'].forEach(function(name){clean.addEventListener(name,toggle,true);});
+    old.replaceWith(clean);setState(false);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',replaceOrb);else replaceOrb();
+  new MutationObserver(replaceOrb).observe(document.documentElement,{childList:true,subtree:true});
+  window.setInterval(replaceOrb,300);
+  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
+}());
+</script>
+
+<!-- Single-tap FN Team Music controller: suppresses duplicate click after pointerdown. -->
+<script id="fnt-single-tap-music-script">
+(function(){
+  var ctx=null,master=null,timer=null,playing=false,beat=0,ignoreClickUntil=0;
+  function orb(){return document.getElementById('fnMusicOrb');}
+  function state(on){playing=!!on;window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};var el=orb();if(el){el.classList.toggle('fnt-direct-music-on',playing);el.setAttribute('aria-pressed',String(playing));el.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');}}
+  function tone(f,d,v,t){if(!ctx||!master)return;var n=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.type=t||'triangle';o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime(.0001,n);g.gain.exponentialRampToValueAtTime(v,n+.014);g.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(g).connect(master);o.start(n);o.stop(n+d+.04);}
+  function pulse(){var f=[196,220,246.94,293.66][beat%4];tone(f,.22,.09,'triangle');if(beat%2===0)tone(f/2,.32,.035,'sine');beat++;window.__FN_BUILTIN_MUSIC_STATE={playing:true,engine:'embedded-web-audio',beat:beat};}
+  function stop(){if(timer){clearInterval(timer);timer=null;}state(false);}
+  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}Promise.resolve(ctx.resume?ctx.resume():null).then(function(){if(timer)clearInterval(timer);beat=0;pulse();timer=setInterval(pulse,420);state(true);}).catch(stop);}catch(e){stop();}}
+  function toggle(){if(playing)stop();else start();}
+  function replace(){var old=orb();if(!old||old.dataset.fntSingleTap==='true')return;var clean=old.cloneNode(true);clean.dataset.fntSingleTap='true';clean.textContent='MUSIC';clean.setAttribute('type','button');clean.setAttribute('aria-pressed','false');
+    clean.addEventListener('pointerdown',function(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();ignoreClickUntil=Date.now()+900;toggle();},true);
+    clean.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();e.stopPropagation();if(Date.now()<ignoreClickUntil)return;toggle();},true);
+    old.replaceWith(clean);state(false);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',replace);else replace();
+  new MutationObserver(replace).observe(document.documentElement,{childList:true,subtree:true});window.setInterval(replace,300);
+  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
+}());
+</script>
+
+<!-- Window-capture Music controller: claims mobile taps before legacy FN Team handlers. -->
+<script id="fnt-window-capture-music-script">
+(function(){
+  var ctx=null,master=null,timer=null,playing=false,beat=0,lastPointer=0;
+  function getOrb(){return document.getElementById('fnMusicOrb');}
+  function publish(){var o=getOrb();window.__FN_BUILTIN_MUSIC_STATE={playing:playing,engine:'embedded-web-audio',beat:beat};if(o){o.classList.toggle('fnt-direct-music-on',playing);o.setAttribute('aria-pressed',String(playing));o.setAttribute('aria-label',playing?'Music playing — tap to stop':'Play FN Team music');}}
+  function tone(f,d,v,type){if(!ctx||!master)return;var now=ctx.currentTime,osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=type||'triangle';osc.frequency.setValueAtTime(f,now);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(v,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+d);osc.connect(gain).connect(master);osc.start(now);osc.stop(now+d+.04);}
+  function pulse(){var root=[196,220,246.94,293.66][beat%4];tone(root,.22,.09,'triangle');if(beat%2===0)tone(root/2,.32,.035,'sine');beat++;publish();}
+  function stop(){if(timer){clearInterval(timer);timer=null;}playing=false;publish();}
+  function start(){try{if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.38;master.connect(ctx.destination);}Promise.resolve(ctx.resume?ctx.resume():null).then(function(){if(timer)clearInterval(timer);beat=0;playing=true;pulse();timer=setInterval(pulse,420);publish();}).catch(stop);}catch(error){stop();}}
+  function toggle(){if(playing)stop();else start();}
+  function isMusicTarget(event){var t=event.target;return !!(t&&t.closest&&t.closest('#fnMusicOrb'));}
+  function interceptPointer(event){if(!isMusicTarget(event))return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();lastPointer=Date.now();toggle();}
+  function interceptClick(event){if(!isMusicTarget(event))return;event.preventDefault();event.stopImmediatePropagation();event.stopPropagation();if(Date.now()-lastPointer>850)toggle();}
+  function mark(){var o=getOrb();if(o){o.dataset.fntWindowMusic='true';o.setAttribute('type','button');publish();}}
+  window.addEventListener('pointerdown',interceptPointer,true);
+  window.addEventListener('touchstart',interceptPointer,true);
+  window.addEventListener('click',interceptClick,true);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mark);else mark();
+  new MutationObserver(mark).observe(document.documentElement,{childList:true,subtree:true});window.setInterval(mark,300);
+  window.FN_TEAM_MUSIC_REPAIR={start:start,stop:stop,toggle:toggle};
+}());
+</script>
