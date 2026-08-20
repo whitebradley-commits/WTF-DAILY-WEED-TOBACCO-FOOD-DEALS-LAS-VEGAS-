@@ -45062,3 +45062,27 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();setTimeout(install,350);setTimeout(install,1200);
 })();
 </script>
+<!-- v287: keep every rotating city fully visible while allowing brief logo overlap -->
+<style id="bop-full-city-overlap-v287">
+/* Do not crop or mask the red city reel. It may pass in front of the fixed logo words. */
+#bopStableMobileLockup{overflow:visible!important;isolation:isolate!important}
+#bopStableMobileLockup::after{display:none!important;content:none!important}
+#bopStableMobileCity{
+ width:max-content!important;min-width:max-content!important;max-width:none!important;
+ padding:0!important;overflow:visible!important;white-space:nowrap!important;z-index:8!important
+}
+#bopStableMobilePeriod{z-index:4!important;background:transparent!important;box-shadow:none!important}
+#bestOfOverlay .bop-splash-hero,
+#bestOfOverlay .bop-splash-hero .bop-splash-line1,
+#bestOfOverlay .bop-splash-hero .bop-splash-line2,
+#bestOfOverlay .bop-splash-hero .bop-splash-city-col,
+#bestOfOverlay .bop-splash-hero .bop-splash-city{overflow:visible!important}
+#bestOfOverlay .bop-splash-hero .bop-splash-city-col,
+#bestOfOverlay .bop-splash-hero .bop-splash-city{z-index:8!important}
+#bestOfOverlay .bop-splash-hero .bop-splash-city{
+ width:max-content!important;max-width:none!important;padding:0!important;white-space:nowrap!important
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-period{
+ z-index:4!important;background:transparent!important;box-shadow:none!important
+}
+</style>

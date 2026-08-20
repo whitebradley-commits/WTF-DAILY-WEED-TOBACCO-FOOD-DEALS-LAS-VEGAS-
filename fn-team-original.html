@@ -1857,6 +1857,90 @@ try{
   });
 })();
 </script>
+<style id="fnt-shipping-offer-final-behavior-style">
+body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-label="Go back"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#offer{pointer-events:auto!important;touch-action:manipulation!important}#offer .offer{pointer-events:auto!important;overflow:visible!important}
+#offer .offer-close{position:absolute!important;right:-5px!important;top:24px!important;z-index:2147483647!important;width:58px!important;height:58px!important;display:grid!important;place-items:center!important;padding:0 0 3px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:50%!important;background:#050505!important;color:#ff1744!important;font:1000 36px/1 Arial,sans-serif!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important}
+#offer .offer-close:after{content:'CLOSE';position:absolute;top:64px;left:50%;transform:translateX(-50%);padding:3px 6px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap}
+#offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+@media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
+</style>
+<script id="fnt-shipping-offer-final-behavior-script">
+(function(){
+var REOFFER_DELAY=240000,reofferTimer=0,declinedOnce=false;
+function offer(){return document.getElementById('offer')}function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
+function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
+function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
+function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
+function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
+function decline(){try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}}
+function accept(){clearTimeout(reofferTimer);try{free=true}catch(e){}localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart()}
+window.closeOfferForConstruction=decline;window.claim=accept;
+function actionFromEvent(e){var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;if(!target)return;e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();if(target.classList.contains('offer-close'))decline();else accept()}
+function bind(){var o=offer();if(!o)return;var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}o.addEventListener('pointerup',actionFromEvent,true);o.addEventListener('click',actionFromEvent,true);o.addEventListener('click',function(e){if(e.target===o)decline()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
+})();
+</script>
+<style id="fnt-shipping-offer-final-behavior-style">
+/* Only the offer's own close control is shown while this promotion is open. */
+body.fnt-shipping-offer-open #fntCoreBack,
+body.fnt-shipping-offer-open > [aria-label="Go back"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#offer{pointer-events:auto!important;touch-action:manipulation!important}
+#offer .offer{pointer-events:auto!important;overflow:visible!important}
+#offer .offer-close{
+  position:absolute!important;right:-5px!important;top:24px!important;
+  z-index:2147483647!important;width:58px!important;height:58px!important;
+  display:grid!important;place-items:center!important;padding:0 0 3px!important;
+  border:3px solid #d6ad45!important;outline:3px solid #050505!important;
+  border-radius:50%!important;background:#050505!important;color:#ff1744!important;
+  font:1000 36px/1 Arial,sans-serif!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;
+  opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important
+}
+#offer .offer-close:after{content:'CLOSE';position:absolute;top:64px;left:50%;transform:translateX(-50%);padding:3px 6px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap}
+#offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+@media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
+</style>
+<script id="fnt-shipping-offer-final-behavior-script">
+(function(){
+  var REOFFER_DELAY=240000, reofferTimer=0, declinedOnce=false;
+  function offer(){return document.getElementById('offer')}
+  function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
+  function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
+  function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
+  function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
+  function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
+  function decline(){
+    try{free=false}catch(e){}
+    localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();
+    if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}
+  }
+  function accept(){
+    clearTimeout(reofferTimer);try{free=true}catch(e){}
+    localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart();
+  }
+  window.closeOfferForConstruction=decline;
+  window.claim=accept;
+  function actionFromEvent(e){
+    var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;
+    if(!target)return;
+    e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+    if(target.classList.contains('offer-close'))decline();else accept();
+  }
+  function bind(){
+    var o=offer();if(!o)return;
+    var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');
+    if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}
+    if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}
+    o.addEventListener('pointerup',actionFromEvent,true);
+    o.addEventListener('click',actionFromEvent,true);
+    o.addEventListener('click',function(e){if(e.target===o)decline()});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});
+    setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+  window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
+})();
+</script>
 <style id="fnt-shipping-offer-exit-fix">
 #offer .offer{position:relative!important;overflow:visible!important}
 #offer .offer-close{display:grid!important;place-items:center!important;position:fixed!important;right:18px!important;top:max(18px,env(safe-area-inset-top))!important;z-index:2147483647!important;width:58px!important;height:58px!important;margin:0!important;padding:0 0 3px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:50%!important;background:#050505!important;color:#ff1744!important;font:1000 36px/1 Arial,sans-serif!important;text-shadow:0 0 8px rgba(255,23,68,.75)!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;-webkit-tap-highlight-color:transparent!important}
@@ -2014,6 +2098,30 @@ html{scroll-behavior:smooth}body.fnt-lock-scroll{overflow:hidden}
     },true);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
+})();
+</script>
+<style id="fnt-shipping-offer-final-behavior-style">
+body.fnt-shipping-offer-open #fntCoreBack,body.fnt-shipping-offer-open>[aria-label="Go back"]{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#offer{pointer-events:auto!important;touch-action:manipulation!important}#offer .offer{pointer-events:auto!important;overflow:visible!important}
+#offer .offer-close{position:absolute!important;right:-5px!important;top:24px!important;z-index:2147483647!important;width:58px!important;height:58px!important;display:grid!important;place-items:center!important;padding:0 0 3px!important;border:3px solid #d6ad45!important;outline:3px solid #050505!important;border-radius:50%!important;background:#050505!important;color:#ff1744!important;font:1000 36px/1 Arial,sans-serif!important;box-shadow:0 0 0 2px #f4ead7,0 7px 18px rgba(0,0,0,.65),0 0 20px rgba(214,173,69,.55)!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;touch-action:manipulation!important}
+#offer .offer-close:after{content:'CLOSE';position:absolute;top:64px;left:50%;transform:translateX(-50%);padding:3px 6px;border-radius:8px;background:#050505;color:#f4ead7;font:1000 8px/1 Arial,sans-serif;letter-spacing:.12em;white-space:nowrap}
+#offer .claim-btn{position:relative!important;z-index:5!important;pointer-events:auto!important;touch-action:manipulation!important;cursor:pointer!important}
+@media(max-width:430px){#offer .offer-close{right:-2px!important;top:20px!important;width:56px!important;height:56px!important}}
+</style>
+<script id="fnt-shipping-offer-final-behavior-script">
+(function(){
+var REOFFER_DELAY=240000,reofferTimer=0,declinedOnce=false;
+function offer(){return document.getElementById('offer')}function isClaimed(){return localStorage.getItem('fnt-free-shipping-v1')==='claimed'}
+function setPageState(open){document.body.classList.toggle('fnt-shipping-offer-open',!!open)}
+function hideOffer(){var o=offer();if(o){o.style.setProperty('display','none','important');o.setAttribute('aria-hidden','true')}setPageState(false)}
+function showOffer(){var o=offer();if(!o||isClaimed())return;o.style.setProperty('display','grid','important');o.setAttribute('aria-hidden','false');setPageState(true)}
+function refreshCart(){var saving=document.getElementById('saving');if(saving)saving.hidden=!isClaimed();try{sync()}catch(e){}}
+function decline(){try{free=false}catch(e){}localStorage.removeItem('fnt-free-shipping-v1');hideOffer();refreshCart();if(!declinedOnce){declinedOnce=true;clearTimeout(reofferTimer);reofferTimer=setTimeout(function(){if(!isClaimed()&&!document.hidden)showOffer()},REOFFER_DELAY)}}
+function accept(){clearTimeout(reofferTimer);try{free=true}catch(e){}localStorage.setItem('fnt-free-shipping-v1','claimed');hideOffer();refreshCart()}
+window.closeOfferForConstruction=decline;window.claim=accept;
+function actionFromEvent(e){var target=e.target instanceof Element?e.target.closest('#offer .offer-close,#offer .claim-btn'):null;if(!target)return;e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation)e.stopImmediatePropagation();if(target.classList.contains('offer-close'))decline();else accept()}
+function bind(){var o=offer();if(!o)return;var x=o.querySelector('.offer-close'),unlock=o.querySelector('.claim-btn');if(x){x.removeAttribute('onclick');x.type='button';x.setAttribute('aria-label','Close shipping offer')}if(unlock){unlock.removeAttribute('onclick');unlock.type='button';unlock.setAttribute('aria-label','Unlock free priority shipping')}o.addEventListener('pointerup',actionFromEvent,true);o.addEventListener('click',actionFromEvent,true);o.addEventListener('click',function(e){if(e.target===o)decline()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&getComputedStyle(o).display!=='none')decline()});setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},0)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();window.addEventListener('load',function(){setTimeout(function(){if(isClaimed())hideOffer();else showOffer()},50)},{once:true});
 })();
 </script>
 </body></html>
