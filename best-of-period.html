@@ -43426,9 +43426,19 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 <style id="bop-final-stable-landing-style">
 /* Final mobile landing authority: one title, one search result surface, and one five-orb dock. */
 #bopActualMobileLockup.bopStableLegacyHidden{display:none!important}
-#bopStableMobileLockup{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px!important;width:auto!important;max-width:100%!important;min-width:0!important;white-space:nowrap!important}
-#bopStableMobileCity{display:inline-block!important;flex:0 1 auto!important;min-width:0!important;max-width:64%!important;overflow:visible!important;text-align:right!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important;will-change:opacity!important}
-#bopStableMobilePeriod{display:inline-block!important;flex:0 0 auto!important;margin-left:0!important;color:#f5af40!important;text-shadow:0 0 10px rgba(245,175,64,.55)!important}
+/* The city reel lives on one anchored line. Period is absolutely fixed and never inherits city motion. */
+#bopStableMobileLockup{display:block!important;position:relative!important;width:min(94vw,580px)!important;height:clamp(62px,9.8vw,86px)!important;margin:0 auto!important;overflow:visible!important;white-space:nowrap!important}
+#bopStableMobileCity{display:block!important;position:absolute!important;right:calc(46% + 6px)!important;top:0!important;min-width:0!important;max-width:none!important;overflow:visible!important;text-align:right!important;white-space:nowrap!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important;will-change:opacity!important}
+#bopStableMobilePeriod{display:block!important;position:absolute!important;left:54%!important;top:0!important;margin:0!important;white-space:nowrap!important;color:#f5af40!important;text-shadow:0 0 10px rgba(245,175,64,.55)!important;animation:none!important;transform:none!important;transition:none!important}
+#bopLandingOverlay .bop-splash-hero-nocircle>p{animation:none!important;transform:none!important;transition:none!important}
+#bopLandingOverlay .bjs-why-trigger{animation:none!important;transform:none!important;transition:none!important}
+/* A selected city page must land on that city; never let its old hero ticker rewrite it. */
+#bestOfOverlay #bopMainCityText{animation:none!important;transform:none!important;transition:none!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important}
+#bestOfOverlay.bopSelectedHeroLocked .bop-splash-line2{display:flex!important;align-items:baseline!important;justify-content:center!important;gap:6px!important}
+#bestOfOverlay.bopSelectedHeroLocked .bop-splash-city-col{position:relative!important;display:block!important;flex:0 0 clamp(180px,44vw,320px)!important;width:clamp(180px,44vw,320px)!important;text-align:right!important}
+#bestOfOverlay.bopSelectedHeroLocked #bopMainCityText{visibility:hidden!important;display:block!important;width:100%!important}
+#bopSelectedHeroCityOverlay{display:block!important;position:absolute!important;right:0!important;top:0!important;white-space:nowrap!important;pointer-events:none!important;color:#db153a!important;text-shadow:0 0 10px rgba(255,26,72,.78),0 0 18px rgba(255,26,72,.34)!important;animation:none!important;transform:none!important;transition:none!important}
+#bestOfOverlay .bjs-why-trigger{animation:none!important;transform:none!important;transition:none!important}
 #bopLandingSearchPrompt{display:none!important}
 #bopStableLandingResults{position:absolute!important;left:0!important;top:calc(100% + 14px)!important;width:100%!important;z-index:2147483100!important;display:none!important;box-sizing:border-box!important}
 #bopStableLandingResults.is-open{display:block!important}
@@ -43439,8 +43449,9 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 #bopCleanOrbDock{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:2147483000!important}
 #bopStaticLandingDock,#bopPersistentMapDock,#bopLegacyOrbDock{display:none!important}
 @media (max-width:600px){
-  #bopStableMobileLockup{gap:6px!important}
-  #bopStableMobileCity{max-width:61vw!important}
+  #bopStableMobileLockup{width:94vw!important;height:clamp(56px,16vw,76px)!important}
+  #bopStableMobilePeriod{left:54%!important}
+  #bopStableMobileCity{right:calc(46% + 6px)!important}
   #bopStableCityResult{padding:18px 22px!important;border-radius:19px!important}
   #bopStableCityResult strong{font-size:17px!important}
 }
@@ -43464,19 +43475,46 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
     period.style.fontFamily=periodStyle.fontFamily; period.style.fontSize=periodStyle.fontSize; period.style.fontWeight=periodStyle.fontWeight; period.style.lineHeight=periodStyle.lineHeight; period.style.letterSpacing=periodStyle.letterSpacing;
     lock.append(city,period); oldLock.insertAdjacentElement('afterend',lock); oldLock.classList.add('bopStableLegacyHidden');
 
-    /* Landing city reel: full city names, red, fast, and directly six pixels from Period. */
+    /* Only this red city label rotates. Period, the tagline, and Why stay completely fixed. */
     var cities=['Palm Desert','Santa Barbara','Las Vegas','San Diego','Los Angeles','Venice','Nashville','New York City','Miami','Austin','Seattle','Chicago'];
-    var cityIndex=0, cityTimer=null;
+    var cityIndex=0, cityTimer=null, reelFrozen=false;
     function drawCity(){
-      city.style.opacity='0';
-      setTimeout(function(){city.textContent=cities[cityIndex];city.style.opacity='1';cityIndex=(cityIndex+1)%cities.length;},85);
+      if(reelFrozen)return;
+      city.style.opacity='.22';
+      window.setTimeout(function(){
+        if(reelFrozen)return;
+        city.textContent=cities[cityIndex]; city.style.opacity='1'; cityIndex=(cityIndex+1)%cities.length;
+      },55);
     }
-    city.style.transition='opacity 85ms linear'; drawCity();
-    cityTimer=setInterval(drawCity,900);
+    function startReel(){if(!reelFrozen&&!cityTimer)cityTimer=window.setInterval(drawCity,550);}
+    function freezeReel(name){
+      reelFrozen=true; if(cityTimer){window.clearInterval(cityTimer);cityTimer=null;}
+      if(name)city.textContent=name; city.style.opacity='1';
+    }
+    city.style.transition='opacity 55ms linear'; drawCity(); startReel();
     document.addEventListener('visibilitychange',function(){
-      if(document.hidden&&cityTimer){clearInterval(cityTimer);cityTimer=null;}
-      else if(!document.hidden&&!cityTimer){cityTimer=setInterval(drawCity,900);}
+      if(document.hidden&&cityTimer){window.clearInterval(cityTimer);cityTimer=null;}
+      else if(!document.hidden&&!reelFrozen){startReel();}
     });
+    var selectedHeroCity='';
+    function enforceSelectedHero(){
+      if(!selectedHeroCity)return;
+      var heroCity=document.getElementById('bopMainCityText');
+      if(!heroCity)return;
+      heroCity.style.setProperty('animation','none','important');heroCity.style.setProperty('transform','none','important');heroCity.style.setProperty('transition','none','important');
+      var cityCol=heroCity.parentElement, best=document.getElementById('bestOfOverlay');
+      if(!cityCol||!best)return;
+      best.classList.add('bopSelectedHeroLocked');
+      var overlay=document.getElementById('bopSelectedHeroCityOverlay');
+      if(!overlay){
+        overlay=document.createElement('span');overlay.id='bopSelectedHeroCityOverlay';
+        var s=getComputedStyle(heroCity);overlay.style.fontFamily=s.fontFamily;overlay.style.fontSize=s.fontSize;overlay.style.fontWeight=s.fontWeight;overlay.style.lineHeight=s.lineHeight;overlay.style.letterSpacing=s.letterSpacing;
+        cityCol.appendChild(overlay);
+      }
+      overlay.textContent=selectedHeroCity;
+    }
+    var heroObserver=new MutationObserver(function(){enforceSelectedHero();});
+    heroObserver.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
 
     /* Replace the legacy input node completely so old live-search listeners cannot create or flicker panels. */
     var input=oldInput.cloneNode(false);
@@ -43517,6 +43555,8 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
       event.preventDefault();event.stopPropagation();
       results.classList.remove('is-open');
       var dest=this.dataset.dest;
+      freezeReel(resultName.textContent);
+      selectedHeroCity=resultName.textContent;
       /* Mirror the original landing's direct city handoff: it opens the city's Main tile page,
          not the worldwide map-pin helper. */
       try{boCityContext=dest;}catch(ignore){}
@@ -43524,6 +43564,7 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
       var overlay=document.getElementById('bopLandingOverlay'); if(overlay)overlay.classList.remove('open');
       var best=document.getElementById('bestOfOverlay'); if(best)best.classList.add('open');
       try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions');}catch(ignore){}
+      window.setTimeout(enforceSelectedHero,0);window.setTimeout(enforceSelectedHero,120);window.setTimeout(enforceSelectedHero,420);
       window.scrollTo(0,0);
     },true);
     document.addEventListener('pointerdown',function(event){if(!wrap.contains(event.target))results.classList.remove('is-open');},true);

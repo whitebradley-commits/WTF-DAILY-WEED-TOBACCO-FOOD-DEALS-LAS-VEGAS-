@@ -2125,7 +2125,7 @@ try{
 
 
 <style id="fnt-lightweight-music-style">
-#fntCompactMusicOrb{position:fixed!important;left:18px!important;right:auto!important;bottom:18px!important;width:56px!important;height:56px!important;min-width:56px!important;border-radius:50%!important;padding:0!important;font-size:10px!important;line-height:1.05!important;letter-spacing:.1em!important;z-index:100050!important;box-shadow:4px 5px 0 #16110b,0 0 14px rgba(119,65,255,.36)!important}
+#fntCompactMusicOrb{position:fixed!important;left:18px!important;right:auto!important;bottom:18px!important;width:56px!important;height:56px!important;min-width:56px!important;border-radius:50%!important;padding:0!important;font-size:10px!important;line-height:1.05!important;letter-spacing:.1em!important;z-index:100050!important;transform:translateY(399px)!important;box-shadow:4px 5px 0 #16110b,0 0 14px rgba(119,65,255,.36)!important}
 #fntConfusedOrb{position:fixed!important;right:18px!important;left:auto!important;bottom:18px!important;z-index:100050!important}
 #fntMusicChoicePopup,#fntLegacyNativePanel,.fntNativePlayer,#fntNativeAudioPanel,.fnt-music-popup,.music-popup,audio{display:none!important}
 #fntTinyMusicPopup{position:fixed;inset:0;z-index:100210;background:rgba(13,9,20,.67);display:none;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
@@ -2137,12 +2137,32 @@ try{
 .fntTinyChoice{display:block;width:100%;padding:13px;margin:8px 0;border:2px solid #16100e;background:#fff7e7;color:#16100e;box-shadow:3px 3px 0 #16100e;font:1000 14px/1 Arial,sans-serif;letter-spacing:.09em}
 .fntTinyChoice.is-active{background:#7545e8;color:#fff}
 #fntTinyOff{background:#16100e;color:#f8efd9}
+/* Team entry: a deliberately smaller text field leaves a strong, readable Go target. */
+.typewrap{display:flex!important;gap:12px!important;align-items:stretch!important}
+#teamType{flex:0 1 57%!important;width:57%!important;min-width:0!important;height:86px!important;padding:0 16px!important;font-size:clamp(14px,2vw,19px)!important}
+#teamTypeGo{flex:1 0 43%!important;min-width:146px!important;height:86px!important;padding:0 10px!important;background:#fbf1d8!important;color:#111!important;border:4px solid #111!important;border-radius:18px!important;box-shadow:6px 6px 0 #111,0 0 16px rgba(101,55,214,.48)!important;font-size:clamp(42px,5vw,62px)!important;font-weight:1000!important;line-height:1!important;letter-spacing:.03em!important}
+#teamTypeGo:hover,#teamTypeGo:focus-visible{transform:translate(-2px,-2px)!important;box-shadow:8px 8px 0 #111,0 0 20px rgba(101,55,214,.7)!important}
+@media(max-width:600px){.typewrap{gap:10px!important}#teamType{flex-basis:55%!important;width:55%!important;height:74px!important;padding:0 12px!important;font-size:15px!important}#teamTypeGo{flex-basis:45%!important;min-width:122px!important;height:74px!important;border-width:3px!important;border-radius:17px!important;box-shadow:5px 5px 0 #111,0 0 15px rgba(101,55,214,.48)!important;font-size:clamp(39px,11vw,50px)!important}}
 </style>
 <div id="fntTinyMusicPopup" aria-hidden="true"><section id="fntTinyMusicCard" role="dialog" aria-label="F N Team music options"><button id="fntTinyMusicClose" type="button" aria-label="Close music options">×</button><h2>MUSIC</h2><p>CHOOSE A SOUND</p><button class="fntTinyChoice" data-sound="one" type="button">ONE · NIGHT RUN</button><button class="fntTinyChoice" data-sound="two" type="button">TWO · STREET RHYTHM</button><button class="fntTinyChoice" data-sound="three" type="button">THREE · FAST LANE</button><button class="fntTinyChoice" id="fntTinyOff" data-sound="off" type="button">OFF</button></section></div>
 <script id="fnt-lightweight-music-controller">
 (function(){
   const popup=document.getElementById('fntTinyMusicPopup');
   const orb=document.getElementById('fntCompactMusicOrb');
+  const confused=document.getElementById('fntConfusedOrb');
+  /* The source page transforms its primary content layer, which makes normal fixed positioning relative
+     to that layer. Measure the actual control positions and preserve an exact shared bottom edge. */
+  if(orb&&orb.parentElement!==document.body)document.body.appendChild(orb);
+  let musicShift=0;
+  function alignMusicWithConfused(){
+    if(!orb||!confused)return;
+    orb.style.setProperty('transform','translateY('+musicShift+'px)','important');
+    const delta=confused.getBoundingClientRect().bottom-orb.getBoundingClientRect().bottom;
+    if(Math.abs(delta)>.25){musicShift+=delta;orb.style.setProperty('transform','translateY('+musicShift+'px)','important');}
+  }
+  requestAnimationFrame(function(){alignMusicWithConfused();requestAnimationFrame(alignMusicWithConfused);});
+  window.addEventListener('resize',alignMusicWithConfused,{passive:true});
+  window.addEventListener('scroll',alignMusicWithConfused,{passive:true,capture:true});
   let ctx=null, master=null, timer=null, active='off';
   function stop(){if(timer){clearTimeout(timer);timer=null}if(ctx){ctx.close();ctx=null;master=null}active='off';document.querySelectorAll('.fntTinyChoice').forEach(b=>b.classList.remove('is-active'))}
   function beep(freq,at,dur,type,vol){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,at);g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(vol,at+.012);g.gain.exponentialRampToValueAtTime(.0001,at+dur);o.connect(g).connect(master);o.start(at);o.stop(at+dur+.03)}
