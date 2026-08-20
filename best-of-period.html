@@ -45235,3 +45235,99 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 #bopLandingOverlay .bo-search-powered-by svg,
 #bestOfOverlay .bo-search-powered-by svg{margin:0!important}
 </style>
+<!-- v293: transparent logo layering, clearer coast choices, and territory-accurate San Diego counts -->
+<style id="bop-logo-coast-territory-v293">
+/* The red city remains a complete word behind the actual white/gold glyphs. */
+#bopStableMobilePeriod,
+#bestOfOverlay .bop-splash-hero .bop-splash-period{
+ background:transparent!important;box-shadow:none!important
+}
+#bopLandingOverlay .bop-splash-line1,
+#bestOfOverlay .bop-splash-hero .bop-splash-line1{
+ background:transparent!important
+}
+#bopStableMobileCity{
+ font-size:clamp(40px,13.4vw,58px)!important
+}
+#bestOfOverlay .bop-splash-hero .bop-splash-city,
+#bestOfOverlay #bopMainCityText{
+ font-size:clamp(36px,9vw,64px)!important
+}
+@keyframes bopSdCoastClickPulseV293{
+ 0%,100%{color:#f6a014;text-shadow:0 0 5px rgba(246,160,20,.72),0 0 11px rgba(246,160,20,.30);filter:brightness(.96)}
+ 50%{color:#ffd27a;text-shadow:0 0 9px rgba(255,194,87,.98),0 0 20px rgba(246,160,20,.72),0 0 29px rgba(246,160,20,.34);filter:brightness(1.12)}
+}
+#bopSdCityHubCoast .bop-sd-hub-area{
+ animation:bopSdCoastClickPulseV293 2.45s ease-in-out infinite!important;
+ color:#f6a014!important;font-weight:900!important
+}
+#bopSdCityHubCoast .bop-sd-hub-area:focus-visible{
+ outline:2px solid #ffd27a!important;outline-offset:4px!important
+}
+.bo-worth-the-drive-v293{
+ display:inline-flex;align-items:center;margin:8px 0 0;padding:4px 9px;border:1px solid #ef1648;
+ border-radius:999px;color:#ef1648;background:#100006;font:900 11px/1 'Archivo Narrow',Arial,sans-serif;
+ letter-spacing:.12em;text-transform:uppercase;text-shadow:0 0 7px rgba(239,22,72,.45)
+}
+@media(prefers-reduced-motion:reduce){#bopSdCityHubCoast .bop-sd-hub-area{animation:none!important}}
+</style>
+<script id="bop-logo-coast-territory-v293-script">
+(function(){
+ function slug(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+ function selected(){try{return sessionStorage.getItem('bopSdSelectedArea')||''}catch(_){return window.BOP_SD_SELECTED_AREA||''}}
+ function areaNames(area){
+  var set={};((window.BO_SD_TERRITORIES||{})[area]||[]).forEach(function(row){if(row&&row[0])set[slug(row[0])]=1});return set;
+ }
+ function sameCity(r){var city=String(r&&r.city||'bestof').toLowerCase();return city==='sandiego'}
+ function tagRareSociety(){
+  if(typeof boCategoryData==='undefined')return;
+  var source=null;
+  Object.keys(boCategoryData).forEach(function(key){var list=boCategoryData[key];if(!Array.isArray(list))return;list.forEach(function(r){
+   if(!r||!sameCity(r)||slug(r.name)!=='rare-society-solana-beach')return;
+   r.bjsPick=true;r.bjsPickCity='sandiego';r.bjsPickLabel='BJS Pick';r.bjsSources=['BJS Pick'];
+   r.redCalloutLabel='WORTH THE DRIVE';r.redCallout=r.redCallout||'A BJS Pick worth the drive for red-oak grilling, in-house dry aging, and the signature steak boards.';
+   source=source||r;
+  })});
+  if(source){var picks=boCategoryData.bjspickssandiego||(boCategoryData.bjspickssandiego=[]);if(!picks.some(function(r){return r&&slug(r.name)==='rare-society-solana-beach'}))picks.push(Object.assign({},source,{rank:picks.length+1}))}
+ }
+ function addMatching(list,allowed,seen){
+  if(!Array.isArray(list))return;list.forEach(function(r){if(r&&r.name&&sameCity(r)&&allowed[slug(r.name)])seen[slug(r.name)+'|'+slug(r.address)]=1})
+ }
+ function areaCount(cat,area){
+  var allowed=areaNames(area),seen={},visited={};
+  function collect(key){
+   if(!key||visited[key])return;visited[key]=1;
+   if(key==='bestof'){addMatching(boCategoryData.sandiego||[],allowed,seen);return}
+   if(key==='bjspicks'){addMatching(boCategoryData.bjspickssandiego||[],allowed,seen);return}
+   var children=(typeof boPickerConfig!=='undefined')?boPickerConfig[key]:null;
+   if(Array.isArray(children))children.forEach(function(child){if(child&&child.cat!=='bjspicks')collect(child.cat)});
+   else addMatching(boCategoryData[key]||[],allowed,seen);
+  }
+  collect(cat);return Object.keys(seen).length;
+ }
+ function updateTileCounts(){
+  var area=selected();
+  if(!area||String(window.boCityContext||'').toLowerCase()!=='sandiego'||String(window.boCurrentCat||'').toLowerCase()!=='otheroptions')return;
+  document.querySelectorAll('#bestOfOverlay .bo-picker-btn[data-picker-cat]').forEach(function(btn){
+   var badge=btn.querySelector('.bo-tile-count');if(!badge)return;
+   var count=areaCount(btn.getAttribute('data-picker-cat'),area);badge.textContent=String(count);
+   badge.setAttribute('aria-label',count+' restaurant'+(count===1?'':'s')+' in '+area);
+  });
+ }
+ function finishAreaFilter(){
+  var area=selected(),city=String(window.boCityContext||'').toLowerCase(),cat=String(window.boCurrentCat||'').toLowerCase();
+  if(!area||city!=='sandiego'||cat==='otheroptions')return;
+  var allowed=areaNames(area),cards=Array.from(document.querySelectorAll('#boList .bo-card')),shown=0;
+  cards.forEach(function(card){var visible=!!allowed[String(card.id||'').replace(/^bo-card-/,'')];card.style.setProperty('display',visible?'':'none',visible?'':'important');if(visible){card.style.removeProperty('display');shown++;if(String(card.id)==='bo-card-rare-society-solana-beach'&&!card.querySelector('.bo-worth-the-drive-v293')){var body=card.querySelector('.bo-card-body')||card;var badge=document.createElement('span');badge.className='bo-worth-the-drive-v293';badge.textContent='Worth the Drive';body.appendChild(badge)}}});
+  var title=document.getElementById('boSectionHeadTitle');if(title&&cat!=='brewery')title.textContent='The Top '+shown+', Right Now';
+ }
+ function refresh(){tagRareSociety();setTimeout(updateTileCounts,80);setTimeout(finishAreaFilter,130);setTimeout(function(){updateTileCounts();finishAreaFilter()},450)}
+ function install(){
+  tagRareSociety();
+  if(typeof window.boRenderCategory==='function'&&!window.boRenderCategory.__bopTerritory293){var original=window.boRenderCategory;window.boRenderCategory=function(){var out=original.apply(this,arguments);refresh();return out};window.boRenderCategory.__bopTerritory293=true}
+  document.addEventListener('click',function(e){if(e.target&&e.target.closest&&e.target.closest('#bopSdCityHubCoast .bop-sd-hub-area'))refresh()});
+  refresh();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();setTimeout(install,700);setTimeout(refresh,1700);
+})();
+</script>
