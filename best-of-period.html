@@ -46802,12 +46802,39 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
   var back=event.target&&event.target.closest&&event.target.closest('#boBackBtn');if(!back)return;
   event.preventDefault();event.stopImmediatePropagation();clearSearch();
   var cat='';try{cat=String(window.boCurrentCat||boCurrentCat||'').toLowerCase()}catch(_){cat=String(window.boCurrentCat||'').toLowerCase()}
+  var key=cityKey();
   if(cat&&cat!=='otheroptions'){
-   var key=cityKey();try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
+   /* Tiered category pages (e.g. Fine/Casual/Dive Steak) have one extra
+      level in their hierarchy and should step back to their own parent
+      tile, not jump straight past it to the city hub. */
+   var parentCat='';try{parentCat=(typeof boPickerParent!=='undefined'&&boPickerParent[cat])?boPickerParent[cat]:''}catch(_){parentCat=''}
+   if(parentCat&&parentCat!=='otheroptions'){
+    try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute(parentCat,key)}catch(_){}
+    try{if(typeof boRenderCategory==='function')boRenderCategory(parentCat)}catch(_){}
+    setTimeout(replay,160);window.scrollTo(0,0);return;
+   }
+   try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
    try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',key)}catch(_){}
    try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
    if(key.toLowerCase()==='sandiego'&&typeof window.BOP_SHOW_SD_COAST_GATE==='function')setTimeout(window.BOP_SHOW_SD_COAST_GATE,80);
    setTimeout(replay,160);window.scrollTo(0,0);return;
+  }
+  /* Already at a city hub. San Diego steps back to its coastal area
+     gate if an area is selected; New York's five boroughs/Hamptons step
+     back to the shared New York gateway. Everything else exits to the
+     main landing/city picker as before. */
+  if(key.toLowerCase()==='sandiego'){
+   var sdArea='';try{sdArea=sessionStorage.getItem('bop_sd_area')||sessionStorage.getItem('bop_selected_sd_area')||sessionStorage.getItem('bopSdSelectedArea')||''}catch(_){sdArea=window.BOP_SD_SELECTED_AREA||''}
+   if(sdArea&&typeof window.BOP_SHOW_SD_COAST_GATE==='function'){
+    try{sessionStorage.removeItem('bop_sd_area');sessionStorage.removeItem('bop_selected_sd_area');sessionStorage.removeItem('bopSdSelectedArea')}catch(_){}
+    window.BOP_SD_SELECTED_AREA='';
+    window.BOP_SHOW_SD_COAST_GATE();window.scrollTo(0,0);return;
+   }
+  }
+  var nySubcities=['manhattan','brooklyn','queens','bronx','hamptons'];
+  if(nySubcities.indexOf(key.toLowerCase())>-1&&typeof window.bopOpenNewYorkGateway==='function'){
+   var best=document.getElementById('bestOfOverlay');if(best)best.classList.remove('open');
+   window.bopOpenNewYorkGateway();return;
   }
   showLanding();
  },true);
