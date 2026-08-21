@@ -44387,11 +44387,11 @@ function normalize(value){return String(value||'').toLowerCase().normalize('NFD'
 
 <!-- v295: isolated landing title lockup; legacy title row is data-only -->
 <style id="bop-isolated-landing-lockup-v1">
-  /* The original rotating row remains in the DOM only as a source of city text. */
-  #bopLandingOverlay .bop-splash-line2,
-  #tbotrLandingOverlay .bop-splash-line2{
-    display:none!important;
-  }
+  /* NOTE: this rule originally hid the real splash row and relied on a
+     replacement ".bop-isolated-title-lockup" element that no script in this
+     file ever creates — so the row was being hidden with nothing standing in
+     for it. Disabled: the real row (styled by bop-splash-line2-overlap-safety-net,
+     last in the document) is what actually renders the city name now. */
   .bop-isolated-title-lockup{
     display:grid!important;
     grid-template-columns:minmax(0,var(--bop-isolated-city-slot,270px)) max-content!important;
@@ -47025,6 +47025,7 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
      conflicting rules and the city name could render on top of "Period" and
      the tagline below it. This rule applies regardless of state class. -->
 <style id="bop-splash-line2-overlap-safety-net">
+#tbotrLandingOverlay .bop-splash-line2,
 #bopLandingOverlay .bop-splash-line2,
 #bestOfOverlay .bop-splash-line2{
  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
@@ -47032,18 +47033,21 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  gap:6px!important;column-gap:6px!important;width:100%!important;overflow:visible!important;
  position:relative!important
 }
+#tbotrLandingOverlay .bop-splash-city-col,
 #bopLandingOverlay .bop-splash-city-col,
 #bestOfOverlay .bop-splash-city-col{
  position:relative!important;inset:auto!important;display:block!important;flex:0 1 auto!important;
  width:auto!important;max-width:100%!important;margin:0!important;transform:none!important;
  overflow:visible!important;visibility:visible!important
 }
+#tbotrLandingOverlay .bop-splash-city,#tbotrLandingOverlay #bopSplashCityText,
 #bopLandingOverlay .bop-splash-city,#bopLandingOverlay #bopLandingCityText,#bopLandingOverlay #bopStableMobileCity,#bopLandingOverlay #bopSplashCityText,
 #bestOfOverlay .bop-splash-city,#bestOfOverlay #bopMainCityText,#bestOfOverlay #bopResultsCityText{
  position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
  max-width:100%!important;margin:0!important;padding:0!important;transform:none!important;
  white-space:nowrap!important;overflow:visible!important
 }
+#tbotrLandingOverlay .bop-splash-period,
 #bopLandingOverlay .bop-splash-period,
 #bestOfOverlay .bop-splash-period{
  position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
