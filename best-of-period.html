@@ -7876,6 +7876,110 @@
 html.bop-route-booting body{visibility:hidden!important;opacity:0!important}
 html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacity .12s ease}
 </style>
+<!-- v310: High & Hungry is a fixed directory; closest-to-you is secondary only -->
+<style id="bop-high-hungry-fixed-v310-style">
+  :root{--bop-price-gold:#F59E0B}
+  #hhOverlay .hh-fixed-intro{
+    color:#ddd!important;text-align:center!important;font:700 13px/1.45 'Archivo Narrow',Arial,sans-serif!important;
+    margin:8px auto 18px!important;max-width:390px!important
+  }
+  #hhOverlay .hh-fixed-tier{margin:18px 0 28px!important}
+  #hhOverlay .hh-fixed-tier-head{
+    display:flex!important;align-items:baseline!important;justify-content:space-between!important;gap:12px!important;
+    padding:13px 16px!important;border:2px solid var(--bop-price-gold)!important;border-radius:999px!important;
+    background:#090909!important;color:var(--bop-price-gold)!important;
+    box-shadow:0 0 10px rgba(245,158,11,.28)!important
+  }
+  #hhOverlay .hh-fixed-tier-head strong,
+  #hhOverlay .hh-fixed-tier-head span{
+    color:var(--bop-price-gold)!important;font-family:'Archivo Black','Arial Black',sans-serif!important;
+    text-shadow:0 0 6px rgba(245,158,11,.28)!important
+  }
+  #hhOverlay .hh-fixed-tier-head strong{font-size:17px!important;letter-spacing:.045em!important}
+  #hhOverlay .hh-fixed-tier-head span{font-size:15px!important;white-space:nowrap!important}
+  #hhOverlay .hh-fixed-note{color:#bbb!important;text-align:left!important;font:600 12px/1.4 'Archivo Narrow',Arial,sans-serif!important;margin:8px 8px 10px!important}
+  #hhOverlay .hh-closest-secondary{
+    margin:38px 0 8px!important;padding:20px 16px!important;border-top:1px solid rgba(245,158,11,.42)!important;
+    text-align:center!important
+  }
+  #hhOverlay .hh-closest-secondary p{color:#bbb!important;font:600 12px/1.4 'Archivo Narrow',Arial,sans-serif!important;margin:0 0 10px!important}
+  #hhOverlay #hhClosestSecondaryBtn{
+    width:100%!important;min-height:48px!important;border:2px solid var(--bop-price-gold)!important;border-radius:999px!important;
+    background:#090909!important;color:var(--bop-price-gold)!important;font:900 14px/1 'Archivo Black','Arial Black',sans-serif!important;
+    letter-spacing:.045em!important;box-shadow:0 0 9px rgba(245,158,11,.24)!important
+  }
+  /* Every price key and money-sign grid uses the approved Best Of gold—never red or off-brand orange. */
+  .bo-price-legend-sign,.bo-near-price-key,.bo-near-price-key span,
+  [data-bop-closest-tier] small,[data-bop-closest-price] small,[data-near-tier] small,
+  .bo-near-closest-meta,.bo-near-closest-tier,.bop-price-sign,.price-sign,
+  [class*="price-grid"] [class*="price"],[class*="money-grid"] [class*="money"]{
+    color:var(--bop-price-gold)!important;-webkit-text-fill-color:var(--bop-price-gold)!important;
+    border-color:var(--bop-price-gold)!important;text-shadow:none!important
+  }
+  [class*="price-grid"] [class*="price"],[class*="money-grid"] [class*="money"]{
+    background:#090909!important;box-shadow:none!important
+  }
+</style>
+<script id="bop-high-hungry-fixed-v310-script">
+(function(){
+  function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function allRestaurants(){
+    var rows=[],seen={};
+    [window.DIVE_SPOTS_LIST,window.HIGH_HUNGRY_LIST].forEach(function(list){
+      if(!Array.isArray(list))return;
+      list.forEach(function(item){var key=String(item&&item.name||'').toLowerCase();if(!key||seen[key])return;seen[key]=1;rows.push(item)});
+    });
+    try{
+      if(typeof DIVE_SPOTS_LIST!=='undefined')DIVE_SPOTS_LIST.forEach(function(item){var key=String(item&&item.name||'').toLowerCase();if(key&&!seen[key]){seen[key]=1;rows.push(item)}});
+      if(typeof HIGH_HUNGRY_LIST!=='undefined')HIGH_HUNGRY_LIST.forEach(function(item){var key=String(item&&item.name||'').toLowerCase();if(key&&!seen[key]){seen[key]=1;rows.push(item)}});
+    }catch(_){ }
+    return rows;
+  }
+  function listMarkup(items){
+    if(typeof window.renderEntryList==='function')return window.renderEntryList(items,'Food','All');
+    try{if(typeof renderEntryList==='function')return renderEntryList(items,'Food','All')}catch(_){ }
+    return items.map(function(item){return '<li class="directory-entry"><a href="'+esc(item.url||'#')+'">'+esc(item.name)+'</a></li>'}).join('');
+  }
+  function renderFixed(){
+    var host=document.getElementById('hhList');if(!host)return;
+    var rows=allRestaurants();if(!rows.length)return;
+    var tiers=[
+      {key:'dive',title:'DIVE',price:'$',items:rows.filter(function(r){return Number(r.priceLevel||r.price)===1})},
+      {key:'casual',title:'CASUAL',price:'$$–$$$',items:rows.filter(function(r){var p=Number(r.priceLevel||r.price);return p===2||p===3})},
+      {key:'fine',title:'FINE',price:'$$$$',items:rows.filter(function(r){return Number(r.priceLevel||r.price)>=4})}
+    ];
+    host.innerHTML='<p class="hh-fixed-intro">These are fixed Best Of Period selections—not a closest-to-you or open-now search.</p>'+tiers.map(function(tier){
+      return '<section class="hh-fixed-tier hh-fixed-tier-'+tier.key+'"><div class="hh-fixed-tier-head"><strong>'+tier.title+'</strong><span>'+tier.price+'</span></div><p class="hh-fixed-note">Tap a restaurant for its full details.</p><ul class="directory-list">'+listMarkup(tier.items)+'</ul></section>';
+    }).join('')+'<section class="hh-closest-secondary"><p>Prefer a location-based alternative?</p><button id="hhClosestSecondaryBtn" type="button">CLOSEST TO YOU</button></section>';
+  }
+  function normalizePriceText(root){
+    (root||document).querySelectorAll('.bo-near-price-key span,[data-bop-closest-tier] small,[data-bop-closest-price] small,[data-near-tier] small').forEach(function(node){
+      var text=String(node.textContent||'').trim(),parent=node.closest('[data-bop-closest-tier],[data-bop-closest-price],[data-near-tier]');
+      var tier=parent&&(parent.dataset.bopClosestTier||parent.dataset.bopClosestPrice||parent.dataset.nearTier)||'';
+      if(/fine/i.test(tier)||/fine/i.test(text))node.textContent='$$$$';
+      else if(/casual/i.test(tier)||/casual/i.test(text))node.textContent='$$–$$$';
+      else if(/dive/i.test(tier)||/dive/i.test(text))node.textContent='$';
+    });
+    var key=(root||document).querySelector('.bo-near-price-key');
+    var approved='<span>DIVE&nbsp; $</span><i aria-hidden="true"></i><span>CASUAL&nbsp; $$–$$$</span><i aria-hidden="true"></i><span>FINE&nbsp; $$$$</span>';
+    if(key&&key.innerHTML!==approved)key.innerHTML=approved;
+  }
+  window.renderHighHungry=renderFixed;
+  window.addEventListener('click',function(event){
+    var button=event.target&&event.target.closest&&event.target.closest('#hhClosestSecondaryBtn');if(!button)return;
+    event.preventDefault();
+    var overlay=document.getElementById('hhOverlay');if(overlay)overlay.classList.remove('open');
+    try{window.boNearMapReturnTarget='highhungry';if(typeof window.boOpenNearMap==='function')window.boOpenNearMap()}catch(_){ }
+  },true);
+  function apply(){
+    try{renderHighHungry=renderFixed}catch(_){ }
+    window.renderHighHungry=renderFixed;renderFixed();normalizePriceText(document)
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+  setTimeout(apply,300);setTimeout(apply,1200);
+  new MutationObserver(function(records){records.forEach(function(record){normalizePriceText(record.target&&record.target.nodeType===1?record.target:document)})}).observe(document.documentElement,{subtree:true,childList:true});
+})();
+</script>
 <!-- v298: every city page reels briefly, then lands with a true six-pixel logo gap -->
 <style id="bop-city-reel-land-v298-final">
 #bestOfOverlay .bop-splash-hero.bop-city-reel-spinning-v298 .bop-splash-city-col{
