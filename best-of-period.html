@@ -7876,6 +7876,191 @@
 html.bop-route-booting body{visibility:hidden!important;opacity:0!important}
 html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacity .12s ease}
 </style>
+<!-- v312: unified bright red and balanced main search bar -->
+<style id="bop-bright-red-search-balance-v312-style">
+:root{--bop-bright-red:#ff174f}
+
+/* One bright red for every moving/landed city name. Keep these behind the
+   white BEST OF and gold Period lettering without changing the lockup. */
+#bopLandingOverlay .bop-splash-city,
+#bopLandingOverlay #bopLandingCityText,
+#bopLandingOverlay #bopStableMobileCity,
+#bestOfOverlay .bop-splash-city,
+#bestOfOverlay #bopMainCityText,
+#bestOfOverlay #bopResultsCityText{
+ color:var(--bop-bright-red)!important;
+ -webkit-text-fill-color:var(--bop-bright-red)!important
+}
+
+/* The four text orbs use the same red, with no gold outline. */
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]),
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) span,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) strong,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) b,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) small{
+ color:var(--bop-bright-red)!important;
+ -webkit-text-fill-color:var(--bop-bright-red)!important;
+ -webkit-text-stroke:0 transparent!important;
+ text-stroke:0 transparent!important;
+ text-shadow:0 1px 2px rgba(0,0,0,.92)!important
+}
+
+/* BJS lettering uses that same red; its gold ring remains part of the mark. */
+#bopLandingOverlay #bopFrontBjsCoLogo,
+#bopLandingOverlay #bopFrontBjsCoLogo span,
+#bopLandingOverlay .bop-front-bjsco-logo,
+#bopLandingOverlay .bop-front-bjsco-logo span,
+#bopLandingOverlay [data-bop-canonical-logo="BJS CO."],
+#bopLandingOverlay [data-bop-canonical-logo="BJS CO."] span{
+ color:var(--bop-bright-red)!important;
+ -webkit-text-fill-color:var(--bop-bright-red)!important
+}
+#bopLandingOverlay #bopFrontBjsCoLogo svg text,
+#bopLandingOverlay .bop-front-bjsco-logo svg text,
+#bopLandingOverlay [data-bop-canonical-logo="BJS CO."] svg text,
+#bopLandingOverlay .bo-search-powered-by svg:last-child text{
+ fill:var(--bop-bright-red)!important
+}
+
+/* Balanced main search: prompt and powered-by group share one centerline. */
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){
+ position:relative!important;
+ display:block!important;
+ height:68px!important;
+ min-height:68px!important;
+ padding:0!important;
+ overflow:hidden!important
+}
+#bopLandingOverlay #bopStableLandingSearchInput{
+ position:absolute!important;
+ inset:0!important;
+ box-sizing:border-box!important;
+ width:100%!important;
+ height:100%!important;
+ margin:0!important;
+ padding:0 164px 0 54px!important;
+ border:0!important;
+ line-height:68px!important;
+ font-size:15px!important;
+ text-align:left!important
+}
+#bopLandingOverlay #bopStableLandingSearchInput::placeholder{
+ font-size:15px!important;
+ opacity:1!important
+}
+#bopLandingOverlay .bo-search-powered-by{
+ position:absolute!important;
+ top:50%!important;
+ right:16px!important;
+ bottom:auto!important;
+ left:auto!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:flex-end!important;
+ gap:6px!important;
+ width:auto!important;
+ height:26px!important;
+ margin:0!important;
+ padding:0!important;
+ transform:translateY(-50%)!important;
+ line-height:1!important;
+ font-size:15px!important;
+ white-space:nowrap!important;
+ z-index:6!important
+}
+#bopLandingOverlay .bo-search-powered-by svg:first-child{
+ display:block!important;width:15px!important;height:15px!important;flex:0 0 15px!important;margin:0!important
+}
+#bopLandingOverlay .bo-search-powered-by svg:last-child{
+ display:block!important;width:24px!important;height:24px!important;flex:0 0 24px!important;margin:0!important
+}
+@media(max-width:430px){
+ #bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){height:64px!important;min-height:64px!important}
+ #bopLandingOverlay #bopStableLandingSearchInput{padding-left:50px!important;padding-right:142px!important;line-height:64px!important;font-size:13px!important}
+ #bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:13px!important}
+ #bopLandingOverlay .bo-search-powered-by{right:11px!important;gap:5px!important;height:23px!important;font-size:13px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:first-child{width:13px!important;height:13px!important;flex-basis:13px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:last-child{width:21px!important;height:21px!important;flex-basis:21px!important}
+}
+@media(max-width:350px){
+ #bopLandingOverlay #bopStableLandingSearchInput{padding-right:126px!important;font-size:12px!important}
+ #bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:12px!important}
+ #bopLandingOverlay .bo-search-powered-by{right:9px!important;gap:4px!important;font-size:11.5px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:first-child{width:12px!important;height:12px!important;flex-basis:12px!important}
+ #bopLandingOverlay .bo-search-powered-by svg:last-child{width:20px!important;height:20px!important;flex-basis:20px!important}
+}
+</style>
+<script id="bop-main-search-copy-v312-script">
+(function(){
+ function apply(){
+  var input=document.getElementById('bopStableLandingSearchInput');
+  if(input){
+   if(input.placeholder!=='Search the World...')input.placeholder='Search the World...';
+   if(input.getAttribute('aria-label')!=='Search the World')input.setAttribute('aria-label','Search the World');
+  }
+  var powered=document.querySelector('#bopLandingOverlay .bo-search-powered-by');
+  if(powered){
+   Array.from(powered.childNodes).forEach(function(node){
+    if(node.nodeType===3&&/powered\s+by/i.test(node.nodeValue||''))node.nodeValue=(node.nodeValue||'').replace(/powered\s+by/ig,'powered by');
+   });
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true});else apply();
+ new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['placeholder','aria-label']});
+ setTimeout(apply,250);setTimeout(apply,1000);setTimeout(apply,2500);
+})();
+</script>
+<!-- v311: smaller, higher main navigation orbs with clean red lettering -->
+<style id="bop-main-orbs-clean-red-raised-v311-style">
+  /* Raise only the five-button dock. The separate BJS Co. badge is untouched. */
+  #bopLandingOverlay #bopCleanOrbDock{
+    bottom:50px!important;
+  }
+  #bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{
+    flex:0 0 80px!important;
+    width:80px!important;
+    height:80px!important;
+    min-width:80px!important;
+    min-height:80px!important;
+    padding:5px!important;
+  }
+  /* The four red text controls use solid red—no gold outline or gold glow. */
+  #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]),
+  #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) span,
+  #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) strong,
+  #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) b,
+  #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) small{
+    color:#E4002B!important;
+    -webkit-text-fill-color:#E4002B!important;
+    -webkit-text-stroke:0 transparent!important;
+    text-stroke:0 transparent!important;
+    paint-order:normal!important;
+    text-shadow:0 1px 2px rgba(0,0,0,.9)!important;
+  }
+  @media(max-width:700px),(pointer:coarse){
+    #bopLandingOverlay #bopCleanOrbDock{
+      bottom:max(50px,calc(env(safe-area-inset-bottom,0px) + 42px))!important;
+    }
+    #bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{
+      flex-basis:66px!important;
+      width:66px!important;
+      height:66px!important;
+      min-width:66px!important;
+      min-height:66px!important;
+      padding:3px!important;
+    }
+  }
+  @media(max-width:380px){
+    #bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{
+      flex-basis:63px!important;width:63px!important;height:63px!important;min-width:63px!important;min-height:63px!important;
+    }
+  }
+  @media(max-width:340px){
+    #bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{
+      flex-basis:60px!important;width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;
+    }
+  }
+</style>
 <!-- v310: High & Hungry is a fixed directory; closest-to-you is secondary only -->
 <style id="bop-high-hungry-fixed-v310-style">
   :root{--bop-price-gold:#F59E0B}
@@ -46267,4 +46452,30 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  #bopCleanOrbDock .bop-static-near-label,
  #bopCleanOrbDock .bop-static-city-label{font-size:14px!important}
 }
+</style>
+<!-- v313: authoritative final overrides for bright red and main-search alignment -->
+<style id="bop-bright-red-search-final-v313-style">
+:root{--bop-bright-red:#ff174f}
+#bopLandingOverlay .bop-splash-city,#bopLandingOverlay #bopLandingCityText,#bopLandingOverlay #bopStableMobileCity,
+#bestOfOverlay .bop-splash-city,#bestOfOverlay #bopMainCityText,#bestOfOverlay #bopResultsCityText{color:var(--bop-bright-red)!important;-webkit-text-fill-color:var(--bop-bright-red)!important}
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]),
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) span,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) strong,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) b,
+#bopLandingOverlay #bopCleanOrbDock [data-clean-orb]:not([data-clean-orb="world"]) small{color:var(--bop-bright-red)!important;-webkit-text-fill-color:var(--bop-bright-red)!important;-webkit-text-stroke:0 transparent!important;text-stroke:0 transparent!important;text-shadow:0 1px 2px rgba(0,0,0,.92)!important}
+#bopLandingOverlay #bopFrontBjsCoLogo,#bopLandingOverlay #bopFrontBjsCoLogo span,#bopLandingOverlay .bop-front-bjsco-logo,#bopLandingOverlay .bop-front-bjsco-logo span,#bopLandingOverlay [data-bop-canonical-logo="BJS CO."],#bopLandingOverlay [data-bop-canonical-logo="BJS CO."] span{color:var(--bop-bright-red)!important;-webkit-text-fill-color:var(--bop-bright-red)!important}
+#bopLandingOverlay #bopFrontBjsCoLogo svg text,#bopLandingOverlay .bop-front-bjsco-logo svg text,#bopLandingOverlay [data-bop-canonical-logo="BJS CO."] svg text,#bopLandingOverlay .bo-search-powered-by svg:last-child text{fill:var(--bop-bright-red)!important}
+#bopLandingOverlay #bopCleanOrbDock{bottom:50px!important}
+#bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{flex:0 0 80px!important;width:80px!important;height:80px!important;min-width:80px!important;min-height:80px!important;padding:5px!important}
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){position:relative!important;display:block!important;height:68px!important;min-height:68px!important;padding:0!important;overflow:hidden!important}
+#bopLandingOverlay #bopStableLandingSearchInput{position:absolute!important;inset:0!important;box-sizing:border-box!important;width:100%!important;height:100%!important;margin:0!important;padding:0 164px 0 54px!important;border:0!important;line-height:68px!important;font-size:15px!important;text-align:left!important}
+#bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:15px!important;opacity:1!important}
+#bopLandingOverlay .bo-search-powered-by{position:absolute!important;top:50%!important;right:16px!important;bottom:auto!important;left:auto!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:6px!important;width:auto!important;height:26px!important;margin:0!important;padding:0!important;transform:translateY(-50%)!important;line-height:1!important;font-size:15px!important;white-space:nowrap!important;z-index:6!important}
+#bopLandingOverlay .bo-search-powered-by svg:first-child{display:block!important;width:15px!important;height:15px!important;flex:0 0 15px!important;margin:0!important}
+#bopLandingOverlay .bo-search-powered-by svg:last-child{display:block!important;width:24px!important;height:24px!important;flex:0 0 24px!important;margin:0!important}
+@media(max-width:700px),(pointer:coarse){#bopLandingOverlay #bopCleanOrbDock{bottom:max(50px,calc(env(safe-area-inset-bottom,0px) + 42px))!important}#bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{flex-basis:66px!important;width:66px!important;height:66px!important;min-width:66px!important;min-height:66px!important;padding:3px!important}}
+@media(max-width:430px){#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){height:64px!important;min-height:64px!important}#bopLandingOverlay #bopStableLandingSearchInput{padding-left:50px!important;padding-right:142px!important;line-height:64px!important;font-size:13px!important}#bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:13px!important}#bopLandingOverlay .bo-search-powered-by{right:11px!important;gap:5px!important;height:23px!important;font-size:13px!important}#bopLandingOverlay .bo-search-powered-by svg:first-child{width:13px!important;height:13px!important;flex-basis:13px!important}#bopLandingOverlay .bo-search-powered-by svg:last-child{width:21px!important;height:21px!important;flex-basis:21px!important}}
+@media(max-width:380px){#bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{flex-basis:63px!important;width:63px!important;height:63px!important;min-width:63px!important;min-height:63px!important}}
+@media(max-width:350px){#bopLandingOverlay #bopStableLandingSearchInput{padding-right:126px!important;font-size:12px!important}#bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:12px!important}#bopLandingOverlay .bo-search-powered-by{right:9px!important;gap:4px!important;font-size:11.5px!important}#bopLandingOverlay .bo-search-powered-by svg:first-child{width:12px!important;height:12px!important;flex-basis:12px!important}#bopLandingOverlay .bo-search-powered-by svg:last-child{width:20px!important;height:20px!important;flex-basis:20px!important}}
+@media(max-width:340px){#bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{flex-basis:60px!important;width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important}}
 </style>
