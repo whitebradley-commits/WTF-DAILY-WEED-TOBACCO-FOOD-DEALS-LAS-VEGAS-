@@ -8058,6 +8058,92 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
+<style id="bop-page-state-repair-v319-style">
+/* v319 — High & Hungry must defeat the obsolete retired-page rule. */
+#hhOverlay.open{
+ display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+ position:fixed!important;inset:0!important;z-index:2147483646!important;
+ overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;
+ background:#000!important
+}
+#hhOverlay.open .directory-panel{
+ display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+ width:min(100%,760px)!important;min-height:100%!important;height:auto!important;margin:0 auto!important;
+ overflow:visible!important;box-sizing:border-box!important
+}
+#hhOverlay.open #hhList,#hhOverlay.open .bop-hh-fixed-v317{display:block!important;visibility:visible!important;opacity:1!important}
+/* City pages are real scrollable pages; fixed-height legacy rules must not crop the coast or tiles. */
+#bestOfOverlay.open{
+ display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+ overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;
+ height:100dvh!important;max-height:none!important
+}
+#bestOfOverlay.open .bo-page,#bestOfOverlay.open .bo-content,#bestOfOverlay.open .bo-category-content{
+ height:auto!important;max-height:none!important;overflow:visible!important
+}
+#bestOfOverlay #bopSdCityHubCoast{height:auto!important;min-height:590px!important;overflow:visible!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{display:grid!important;visibility:visible!important;opacity:1!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:block!important;visibility:visible!important;opacity:1!important;color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;pointer-events:auto!important}
+#bestOfOverlay .bo-picker-grid{visibility:visible!important;opacity:1!important}
+</style>
+<script id="bop-page-state-repair-v319-script">
+(function(){
+ 'use strict';
+ var handledPointer=false;
+ function closeNode(node){if(!node)return;node.classList.remove('open','is-open','active','tg-open');node.setAttribute('aria-hidden','true')}
+ function closeCompeting(except){
+  ['bopLandingOverlay','ocWorldOverlay','otherCitiesOverlay','boNearMapPage','bopWorldwideLanding','boWorldwidePage','bopClosestFiveChooser','hhOverlay'].forEach(function(id){var n=document.getElementById(id);if(n&&n!==except)closeNode(n)});
+ }
+ function forceHungry(){
+  var hh=document.getElementById('hhOverlay');if(!hh)return;
+  closeCompeting(hh);hh.classList.add('open');hh.setAttribute('aria-hidden','false');
+  try{if(typeof window.renderHighHungry==='function')window.renderHighHungry()}catch(_){}
+  [0,40,160,500].forEach(function(ms){setTimeout(function(){try{if(typeof window.renderHighHungry==='function')window.renderHighHungry()}catch(_){}},ms)});
+  hh.scrollTop=0;var panel=hh.querySelector('.directory-panel');if(panel)panel.scrollTop=0;
+ }
+ function cityFrom(button){
+  var name=String((button.querySelector('strong')||{}).textContent||button.textContent||'').trim();
+  var dest=button.dataset.dest||'';
+  if(!dest){var n=name.toLowerCase();dest=/san diego/.test(n)?'sandiego':/las vegas/.test(n)?'bestof':/santa barbara/.test(n)?'santabarbara':/new york/.test(n)?'newyork':''}
+  return {name:name,dest:dest};
+ }
+ function forceCity(info){
+  if(!info.dest)return;
+  var best=document.getElementById('bestOfOverlay');if(!best)return;
+  closeCompeting(best);
+  try{boCityContext=info.dest}catch(_){}window.boCityContext=info.dest;
+  try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
+  if(info.dest==='sandiego'){
+   window.BOP_SD_SELECTED_AREA='';try{sessionStorage.removeItem('bopSdSelectedArea')}catch(_){}
+  }
+  best.classList.add('open');best.setAttribute('aria-hidden','false');
+  try{if(typeof boReplaceBestOfRoute==='function')boReplaceBestOfRoute('otheroptions',info.dest)}catch(_){}
+  try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+  function settle(){
+   try{boCityContext=info.dest;boCurrentCat='otheroptions'}catch(_){}window.boCityContext=info.dest;window.boCurrentCat='otheroptions';
+   var city=document.getElementById('bopMainCityText');if(city&&info.name)city.textContent=info.name.replace(/ City$/,'');
+   var grid=best.querySelector('.bo-picker-grid');if(grid){grid.hidden=false;grid.style.removeProperty('display')}
+   if(info.dest==='sandiego'&&typeof window.BOP_SHOW_SD_COAST_GATE==='function')window.BOP_SHOW_SD_COAST_GATE();
+  }
+  [0,80,240,600].forEach(function(ms){setTimeout(settle,ms)});best.scrollTop=0;window.scrollTo(0,0);
+ }
+ document.addEventListener('pointerdown',function(e){
+  var hungry=e.target.closest&&e.target.closest('#hhOpenBtn,[data-dest="highhungry"],[data-bop-open-high-hungry]');
+  if(hungry){handledPointer=true;e.preventDefault();e.stopImmediatePropagation();forceHungry();setTimeout(function(){handledPointer=false},350);return}
+  var close=e.target.closest&&e.target.closest('#hhClose');if(close){e.preventDefault();e.stopImmediatePropagation();closeNode(document.getElementById('hhOverlay'));return}
+  var city=e.target.closest&&e.target.closest('.bop-v284-city-result,#bopStableCityResult');
+  if(city){var info=cityFrom(city);if(info.dest){handledPointer=true;e.preventDefault();e.stopImmediatePropagation();forceCity(info);setTimeout(function(){handledPointer=false},350)}}
+ },true);
+ document.addEventListener('click',function(e){
+  var hungry=e.target.closest&&e.target.closest('#hhOpenBtn,[data-dest="highhungry"],[data-bop-open-high-hungry]');if(hungry){e.preventDefault();e.stopImmediatePropagation();forceHungry();return}
+  var city=e.target.closest&&e.target.closest('.bop-v284-city-result,#bopStableCityResult');if(city&&handledPointer){e.preventDefault();e.stopImmediatePropagation()}
+ },true);
+ function install(){
+  var hh=document.getElementById('hhOverlay');if(hh)new MutationObserver(function(){if(hh.classList.contains('open'))forceHungry()}).observe(hh,{attributes:true,attributeFilter:['class']});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
 <!-- v312: unified bright red and balanced main search bar -->
 <style id="bop-bright-red-search-balance-v312-style">
 :root{--bop-bright-red:#ff174f}
@@ -46767,3 +46853,14 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
 </script>
+<style id="bop-final-visibility-scroll-authority-v320">
+#hhOverlay.open{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;position:fixed!important;inset:0!important;z-index:2147483646!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;background:#000!important}
+#hhOverlay.open .directory-panel,#hhOverlay.open #hhList,#hhOverlay.open .bop-hh-fixed-v317{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#hhOverlay.open .directory-panel{width:min(100%,760px)!important;min-height:100%!important;margin:0 auto!important;box-sizing:border-box!important}
+#bestOfOverlay.open{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;height:100dvh!important;max-height:none!important}
+#bestOfOverlay.open .bo-page,#bestOfOverlay.open .bo-content,#bestOfOverlay.open .bo-category-content{height:auto!important;max-height:none!important;overflow:visible!important}
+#bestOfOverlay #bopSdCityHubCoast{height:auto!important;min-height:590px!important;overflow:visible!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{display:grid!important;visibility:visible!important;opacity:1!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:block!important;visibility:visible!important;opacity:1!important;color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;pointer-events:auto!important}
+#bestOfOverlay .bo-picker-grid{visibility:visible!important;opacity:1!important}
+</style>
