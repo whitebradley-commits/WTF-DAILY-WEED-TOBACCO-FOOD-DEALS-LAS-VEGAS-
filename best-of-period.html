@@ -7876,6 +7876,60 @@
 html.bop-route-booting body{visibility:hidden!important;opacity:0!important}
 html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacity .12s ease}
 </style>
+<!-- v314: visible city suggestions, stable bright reel, and permanent High & Hungry directory -->
+<style id="bop-visible-search-hh-v314-style">
+/* Suggestions must be allowed to extend below the search ring. */
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){overflow:visible!important;z-index:2147483600!important}
+#bopLandingOverlay #bopStableLandingResults{display:none!important;visibility:visible!important;opacity:1!important;z-index:2147483640!important}
+#bopLandingOverlay #bopStableLandingResults.is-open{display:grid!important}
+
+/* Never dim the bright-red reel into burgundy, and keep long names on screen. */
+#bopLandingOverlay #bopStableMobileCity{
+ left:10px!important;right:calc(46% + 6px)!important;width:auto!important;
+ font-size:clamp(34px,11vw,49px)!important;opacity:1!important;
+ color:#ff174f!important;-webkit-text-fill-color:#ff174f!important
+}
+#bopLandingOverlay .bop-city-swap #bopStableMobileCity,
+#bopLandingOverlay #bopStableMobileCity.bop-city-swap{opacity:1!important}
+
+/* High & Hungry is a permanent editorial directory, never an API error state. */
+#hhOverlay .hh-fixed-tier{display:block!important}
+#hhOverlay .hh-fixed-tier .directory-list{display:block!important}
+#hhOverlay .hh-fixed-tier-head strong,#hhOverlay .hh-fixed-tier-head span{color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important}
+</style>
+<script id="bop-visible-search-hh-v314-script">
+(function(){
+ function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+ function rows(){
+  var out=[],seen={};
+  function add(list){if(!Array.isArray(list))return;list.forEach(function(item){var key=String(item&&item.name||'').toLowerCase();if(key&&!seen[key]){seen[key]=1;out.push(item)}})}
+  try{add(DIVE_SPOTS_LIST)}catch(_){add(window.DIVE_SPOTS_LIST)}
+  try{add(HIGH_HUNGRY_LIST)}catch(_){add(window.HIGH_HUNGRY_LIST)}
+  return out;
+ }
+ function cards(items){
+  try{if(typeof renderEntryList==='function')return renderEntryList(items,'Food','All')}catch(_){ }
+  return items.map(function(item){var rating=item.rating&&(item.rating.score||item.rating);return '<li class="directory-entry"><a href="'+esc(item.url||'#')+'"><strong>'+esc(item.name)+'</strong>'+(rating?' <span>★ '+esc(rating)+'</span>':'')+'</a></li>'}).join('');
+ }
+ function render(){
+  var host=document.getElementById('hhList');if(!host)return;
+  var all=rows();if(!all.length)return;
+  var tiers=[
+   {key:'dive',title:'DIVE',price:'$',items:all.filter(function(r){return Number(r.priceLevel||r.price)===1})},
+   {key:'casual',title:'CASUAL',price:'$$–$$$',items:all.filter(function(r){var p=Number(r.priceLevel||r.price);return p===2||p===3})},
+   {key:'fine',title:'FINE',price:'$$$$',items:all.filter(function(r){return Number(r.priceLevel||r.price)>=4})}
+  ];
+  host.innerHTML='<p class="hh-fixed-intro">These are fixed Best Of Period selections—not a closest-to-you or open-now search.</p>'+tiers.map(function(t){return '<section class="hh-fixed-tier hh-fixed-tier-'+t.key+'"><div class="hh-fixed-tier-head"><strong>'+t.title+'</strong><span>'+t.price+'</span></div><p class="hh-fixed-note">Tap a restaurant for its full details.</p><ul class="directory-list">'+cards(t.items)+'</ul></section>'}).join('')+'<section class="hh-closest-secondary"><p>Prefer a location-based alternative?</p><button id="hhClosestSecondaryBtn" type="button">CLOSEST TO YOU</button></section>';
+ }
+ window.renderHighHungry=render;
+ window.addEventListener('click',function(event){
+  if(event.target&&event.target.closest&&event.target.closest('#hhOverlay,#openHighHungryBtn,[data-dest="highhungry"]'))setTimeout(render,30);
+ },true);
+ var hh=document.getElementById('hhOverlay');if(hh)new MutationObserver(function(){if(hh.classList.contains('open'))setTimeout(render,0)}).observe(hh,{attributes:true,attributeFilter:['class']});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
+ setTimeout(render,400);setTimeout(render,1400);
+})();
+</script>
 <!-- v312: unified bright red and balanced main search bar -->
 <style id="bop-bright-red-search-balance-v312-style">
 :root{--bop-bright-red:#ff174f}
@@ -46479,3 +46533,24 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 @media(max-width:350px){#bopLandingOverlay #bopStableLandingSearchInput{padding-right:126px!important;font-size:12px!important}#bopLandingOverlay #bopStableLandingSearchInput::placeholder{font-size:12px!important}#bopLandingOverlay .bo-search-powered-by{right:9px!important;gap:4px!important;font-size:11.5px!important}#bopLandingOverlay .bo-search-powered-by svg:first-child{width:12px!important;height:12px!important;flex-basis:12px!important}#bopLandingOverlay .bo-search-powered-by svg:last-child{width:20px!important;height:20px!important;flex-basis:20px!important}}
 @media(max-width:340px){#bopLandingOverlay #bopCleanOrbDock .bop-static-landing-button{flex-basis:60px!important;width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important}}
 </style>
+<!-- v315: final runtime repair for the three photographed failures -->
+<style id="bop-photographed-failures-v315-style">
+#bopLandingOverlay .bo-search-wrap:has(#bopStableLandingSearchInput){overflow:visible!important;z-index:2147483600!important}
+#bopLandingOverlay #bopStableLandingResults{visibility:visible!important;opacity:1!important;z-index:2147483640!important}
+#bopLandingOverlay #bopStableLandingResults.is-open{display:grid!important}
+#bopLandingOverlay #bopStableMobileCity{left:10px!important;right:calc(46% + 6px)!important;width:auto!important;font-size:clamp(34px,11vw,49px)!important;opacity:1!important;color:#ff174f!important;-webkit-text-fill-color:#ff174f!important}
+#bopLandingOverlay #bopStableMobileCity.bop-city-swap{opacity:1!important}
+#hhOverlay .hh-fixed-tier{display:block!important}
+#hhOverlay .hh-fixed-tier .directory-list{display:block!important}
+</style>
+<script id="bop-high-hungry-final-v315-script">
+(function(){
+ function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+ function allRows(){var out=[],seen={};function add(list){if(!Array.isArray(list))return;list.forEach(function(x){var k=String(x&&x.name||'').toLowerCase();if(k&&!seen[k]){seen[k]=1;out.push(x)}})}try{add(DIVE_SPOTS_LIST);add(HIGH_HUNGRY_LIST)}catch(_){add(window.DIVE_SPOTS_LIST);add(window.HIGH_HUNGRY_LIST)}return out}
+ function markup(list){try{if(typeof renderEntryList==='function')return renderEntryList(list,'Food','All')}catch(_){ }return list.map(function(x){var r=x.rating&&(x.rating.score||x.rating);return '<li class="directory-entry"><a href="'+esc(x.url||'#')+'"><strong>'+esc(x.name)+'</strong>'+(r?' <span>★ '+esc(r)+'</span>':'')+'</a></li>'}).join('')}
+ function render(){var host=document.getElementById('hhList');if(!host)return;var rows=allRows();if(!rows.length)return;var tiers=[{key:'dive',title:'DIVE',price:'$',items:rows.filter(function(x){return Number(x.priceLevel||x.price)===1})},{key:'casual',title:'CASUAL',price:'$$–$$$',items:rows.filter(function(x){var p=Number(x.priceLevel||x.price);return p===2||p===3})},{key:'fine',title:'FINE',price:'$$$$',items:rows.filter(function(x){return Number(x.priceLevel||x.price)>=4})}];host.innerHTML='<p class="hh-fixed-intro">These are fixed Best Of Period selections—not a closest-to-you or open-now search.</p>'+tiers.map(function(t){return '<section class="hh-fixed-tier hh-fixed-tier-'+t.key+'"><div class="hh-fixed-tier-head"><strong>'+t.title+'</strong><span>'+t.price+'</span></div><p class="hh-fixed-note">Tap a restaurant for its full details.</p><ul class="directory-list">'+markup(t.items)+'</ul></section>'}).join('')+'<section class="hh-closest-secondary"><p>Prefer a location-based alternative?</p><button id="hhClosestSecondaryBtn" type="button">CLOSEST TO YOU</button></section>'}
+ window.renderHighHungry=render;render();
+ var overlay=document.getElementById('hhOverlay');if(overlay)new MutationObserver(function(){if(overlay.classList.contains('open'))setTimeout(render,0)}).observe(overlay,{attributes:true,attributeFilter:['class']});
+ window.addEventListener('click',function(e){if(e.target&&e.target.closest&&e.target.closest('#hhOverlay'))setTimeout(render,0)},true);
+})();
+</script>
