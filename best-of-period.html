@@ -8086,6 +8086,129 @@ html:not(.bop-route-booting) body{visibility:visible;opacity:1;transition:opacit
 #bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:block!important;visibility:visible!important;opacity:1!important;color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;pointer-events:auto!important}
 #bestOfOverlay .bo-picker-grid{visibility:visible!important;opacity:1!important}
 </style>
+<style id="bop-sd-hh-absolute-final-v322-style">
+/* Final, design-preserving San Diego coast and High & Hungry repair. */
+#bestOfOverlay #bopSdCityHubCoast{display:block!important;width:100%!important;min-height:800px!important;height:auto!important;overflow:visible!important;padding:46px 22px 72px!important;box-sizing:border-box!important;text-align:center!important}
+#bestOfOverlay #bopSdCityHubCoast h2{margin:0 auto 24px!important;color:#f6a20a!important;-webkit-text-fill-color:#f6a20a!important;font-size:clamp(38px,8.3vw,58px)!important;font-weight:900!important;line-height:.94!important;letter-spacing:.025em!important;text-shadow:0 0 8px rgba(246,162,10,.62),0 0 22px rgba(246,162,10,.3)!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-sub{display:block!important;max-width:650px!important;margin:0 auto 64px!important;color:#f6d28a!important;-webkit-text-fill-color:#f6d28a!important;font-size:clamp(14px,3.3vw,19px)!important;line-height:1.42!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-coastline{display:block!important;position:relative!important;width:min(100%,620px)!important;min-height:560px!important;height:auto!important;margin:0 auto!important;overflow:visible!important;transform:none!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{display:grid!important;grid-template-rows:repeat(7,minmax(58px,auto))!important;gap:13px!important;width:min(78%,430px)!important;margin:0 3% 0 auto!important;position:relative!important;z-index:5!important;visibility:visible!important;opacity:1!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:flex!important;align-items:center!important;justify-content:flex-start!important;min-height:58px!important;width:100%!important;padding:10px 14px!important;box-sizing:border-box!important;color:#f6a20a!important;-webkit-text-fill-color:#f6a20a!important;font-weight:850!important;font-size:clamp(14px,3.2vw,18px)!important;line-height:1.1!important;text-align:left!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;text-shadow:0 0 6px rgba(246,162,10,.78),0 0 14px rgba(246,162,10,.38)!important}
+#hhOverlay .bop-hh-closest-v317,#hhOverlay .hh-closest-secondary,#hhOverlay #hhClosestSecondaryBtn,#hhOverlay [data-bop-closest-retry]{display:none!important}
+#hhOverlay.open .directory-panel,#hhOverlay.open #hhList{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+@media(max-width:520px){#bestOfOverlay #bopSdCityHubCoast{padding-inline:12px!important}#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{width:75%!important;margin-right:0!important}#bestOfOverlay #bopSdCityHubCoast .bop-sd-coastline{min-height:585px!important}}
+</style>
+<script id="bop-sd-hh-absolute-final-v322-script">
+(function(){
+ 'use strict';
+ function el(id){return document.getElementById(id)}
+ function cleanHungry(){
+  var hh=el('hhOverlay');if(!hh)return;
+  hh.querySelectorAll('.bop-hh-closest-v317,.hh-closest-secondary,#hhClosestSecondaryBtn,[data-bop-closest-retry]').forEach(function(n){n.remove()});
+ }
+ function showLanding(){
+  try{sessionStorage.removeItem('bop_sd_area');sessionStorage.removeItem('bop_selected_sd_area')}catch(_){ }
+  var best=el('bestOfOverlay'),landing=el('landing');
+  if(best)best.classList.remove('open');
+  if(landing){landing.classList.add('active');landing.style.display='flex';landing.scrollTop=0}
+  document.documentElement.style.overflow='';document.body.style.overflow='';
+ }
+ function back(){
+  var best=el('bestOfOverlay');if(!best||!best.classList.contains('open'))return false;
+  var cat='';try{cat=sessionStorage.getItem('boCurrentCat')||''}catch(_){ }
+  if(cat&&cat!=='otheroptions'){
+   try{sessionStorage.setItem('boCurrentCat','otheroptions')}catch(_){ }
+   if(typeof window.boRenderCategory==='function')window.boRenderCategory('otheroptions');
+   if(/san diego/i.test(String(window.BOP_CITY||window.boCurrentCity||''))&&typeof window.BOP_SHOW_SD_COAST_GATE==='function')setTimeout(window.BOP_SHOW_SD_COAST_GATE,0);
+   best.scrollTop=0;return true;
+  }
+  var area='';try{area=sessionStorage.getItem('bop_sd_area')||sessionStorage.getItem('bop_selected_sd_area')||''}catch(_){ }
+  if(area&&typeof window.BOP_SHOW_SD_COAST_GATE==='function'){
+   try{sessionStorage.removeItem('bop_sd_area');sessionStorage.removeItem('bop_selected_sd_area')}catch(_){ }
+   window.BOP_SHOW_SD_COAST_GATE();best.scrollTop=0;return true;
+  }
+  showLanding();return true;
+ }
+ var consumed=false;
+ document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('#boBackBtn');if(!b)return;if(back()){consumed=true;e.preventDefault();e.stopImmediatePropagation();setTimeout(function(){consumed=false},450)}},true);
+ document.addEventListener('click',function(e){if(consumed&&e.target.closest&&e.target.closest('#boBackBtn')){e.preventDefault();e.stopImmediatePropagation()}var h=e.target.closest&&e.target.closest('#hhOpenBtn');if(h)setTimeout(cleanHungry,0)},true);
+ function install(){cleanHungry();var hh=el('hhOverlay');if(hh)new MutationObserver(cleanHungry).observe(hh,{subtree:true,childList:true});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
+<style id="bop-sd-hh-final-cleanup-v321-style">
+/* San Diego Coast: preserve the hand-drawn design, but make every label readable and reachable. */
+#bestOfOverlay #bopSdCityHubCoast{
+ width:min(720px,calc(100vw - 22px))!important;min-height:760px!important;height:auto!important;
+ margin:30px auto 34px!important;padding:24px 10px 42px!important;overflow:visible!important
+}
+#bestOfOverlay #bopSdCityHubCoast h2{
+ color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;
+ font-size:clamp(32px,9vw,52px)!important;line-height:.96!important;font-weight:900!important;
+ margin:0 auto 24px!important;text-shadow:0 0 8px rgba(245,158,11,.48)!important
+}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-sub{
+ color:#d8b466!important;-webkit-text-fill-color:#d8b466!important;
+ margin:0 auto 54px!important;padding:0 12px!important;max-width:620px!important;
+ font-size:clamp(11px,3vw,15px)!important;line-height:1.45!important
+}
+#bestOfOverlay #bopSdCityHubCoast:before{top:185px!important;bottom:28px!important;background-size:100% 100%!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-coastline{min-height:520px!important;margin-top:0!important;overflow:visible!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{
+ display:grid!important;grid-template-rows:repeat(7,minmax(54px,auto))!important;gap:14px!important;
+ width:60%!important;margin-left:40%!important;padding:0 0 12px!important;overflow:visible!important
+}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{
+ display:block!important;min-height:54px!important;padding:10px 2px!important;overflow:visible!important;
+ color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;
+ font-size:clamp(10px,2.8vw,14px)!important;line-height:1.12!important;text-shadow:0 0 7px rgba(245,158,11,.7)!important
+}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-ocean-label{top:230px!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-coastal-label{top:210px!important}
+/* Restore the original High & Hungry editorial page. Closest 5 is not part of it. */
+#hhOverlay .hh-logo-wrap,#hhOverlay .hh-title,#hhOverlay .hh-sub,#hhOverlay .hh-best-wrap{display:block!important;visibility:visible!important;opacity:1!important}
+#hhOverlay .bop-hh-closest-v317,#hhOverlay .hh-closest-secondary,#hhOverlay #hhClosestSecondaryBtn,#hhOverlay [class*="closest"],#hhOverlay [id*="Closest"]{display:none!important}
+#hhOverlay .directory-panel{padding-bottom:70px!important}
+</style>
+<script id="bop-sd-hh-final-cleanup-v321-script">
+(function(){
+ 'use strict';
+ function showLanding(){
+  var best=document.getElementById('bestOfOverlay'),landing=document.getElementById('bopLandingOverlay');
+  if(best){best.classList.remove('open');best.setAttribute('aria-hidden','true')}
+  if(landing){landing.classList.add('open');landing.setAttribute('aria-hidden','false');landing.scrollTop=0}
+  try{sessionStorage.removeItem('bopSdSelectedArea')}catch(_){}window.BOP_SD_SELECTED_AREA='';window.scrollTo(0,0);
+ }
+ function back(){
+  var cat='';try{cat=String(boCurrentCat||window.boCurrentCat||'').toLowerCase()}catch(_){cat=String(window.boCurrentCat||'').toLowerCase()}
+  if(cat&&cat!=='otheroptions'){
+   try{boCurrentCat='otheroptions'}catch(_){}window.boCurrentCat='otheroptions';
+   try{if(typeof boRenderCategory==='function')boRenderCategory('otheroptions')}catch(_){}
+   setTimeout(function(){if(typeof window.BOP_SHOW_SD_COAST_GATE==='function')window.BOP_SHOW_SD_COAST_GATE()},80);window.scrollTo(0,0);return;
+  }
+  var area='';try{area=sessionStorage.getItem('bopSdSelectedArea')||''}catch(_){}
+  if(area){if(typeof window.BOP_SHOW_SD_COAST_GATE==='function')window.BOP_SHOW_SD_COAST_GATE();window.scrollTo(0,0);return}
+  showLanding();
+ }
+ function cleanHungry(){
+  var hh=document.getElementById('hhOverlay');if(!hh)return;
+  hh.querySelectorAll('.bop-hh-closest-v317,.hh-closest-secondary,#hhClosestSecondaryBtn,[data-bop-closest-retry]').forEach(function(n){n.remove()});
+ }
+ document.addEventListener('pointerdown',function(e){
+  var b=e.target.closest&&e.target.closest('#boBackBtn');var best=document.getElementById('bestOfOverlay');
+  if(b&&best&&best.classList.contains('open')){e.preventDefault();e.stopImmediatePropagation();back();return}
+  if(e.target.closest&&e.target.closest('#hhOpenBtn,[data-dest="highhungry"]'))setTimeout(cleanHungry,20);
+ },true);
+ document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('#boBackBtn');var best=document.getElementById('bestOfOverlay');
+  if(b&&best&&best.classList.contains('open')){e.preventDefault();e.stopImmediatePropagation();back()}
+ },true);
+ function install(){
+  cleanHungry();var hh=document.getElementById('hhOverlay');if(hh)new MutationObserver(cleanHungry).observe(hh,{subtree:true,childList:true});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
+})();
+</script>
 <script id="bop-page-state-repair-v319-script">
 (function(){
  'use strict';
@@ -46859,8 +46982,12 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 #hhOverlay.open .directory-panel{width:min(100%,760px)!important;min-height:100%!important;margin:0 auto!important;box-sizing:border-box!important}
 #bestOfOverlay.open{display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;height:100dvh!important;max-height:none!important}
 #bestOfOverlay.open .bo-page,#bestOfOverlay.open .bo-content,#bestOfOverlay.open .bo-category-content{height:auto!important;max-height:none!important;overflow:visible!important}
-#bestOfOverlay #bopSdCityHubCoast{height:auto!important;min-height:590px!important;overflow:visible!important}
-#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{display:grid!important;visibility:visible!important;opacity:1!important}
-#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:block!important;visibility:visible!important;opacity:1!important;color:#F59E0B!important;-webkit-text-fill-color:#F59E0B!important;pointer-events:auto!important}
+#bestOfOverlay #bopSdCityHubCoast{display:block!important;width:100%!important;height:auto!important;min-height:800px!important;overflow:visible!important;padding:46px 22px 72px!important;box-sizing:border-box!important;text-align:center!important}
+#bestOfOverlay #bopSdCityHubCoast h2{margin:0 auto 24px!important;color:#f6a20a!important;-webkit-text-fill-color:#f6a20a!important;font-size:clamp(38px,8.3vw,58px)!important;font-weight:900!important;line-height:.94!important;letter-spacing:.025em!important;text-shadow:0 0 8px rgba(246,162,10,.62),0 0 22px rgba(246,162,10,.3)!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-sub{display:block!important;max-width:650px!important;margin:0 auto 64px!important;color:#f6d28a!important;-webkit-text-fill-color:#f6d28a!important;line-height:1.42!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-coastline{display:block!important;position:relative!important;width:min(100%,620px)!important;min-height:560px!important;height:auto!important;margin:0 auto!important;overflow:visible!important;transform:none!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-areas{display:grid!important;grid-template-rows:repeat(7,minmax(58px,auto))!important;gap:13px!important;width:min(78%,430px)!important;margin:0 3% 0 auto!important;position:relative!important;z-index:5!important;visibility:visible!important;opacity:1!important}
+#bestOfOverlay #bopSdCityHubCoast .bop-sd-hub-area{display:flex!important;align-items:center!important;min-height:58px!important;width:100%!important;padding:10px 14px!important;box-sizing:border-box!important;visibility:visible!important;opacity:1!important;color:#f6a20a!important;-webkit-text-fill-color:#f6a20a!important;font-weight:850!important;text-align:left!important;text-shadow:0 0 6px rgba(246,162,10,.78),0 0 14px rgba(246,162,10,.38)!important;pointer-events:auto!important}
+#hhOverlay .bop-hh-closest-v317,#hhOverlay .hh-closest-secondary,#hhOverlay #hhClosestSecondaryBtn,#hhOverlay [data-bop-closest-retry]{display:none!important}
 #bestOfOverlay .bo-picker-grid{visibility:visible!important;opacity:1!important}
 </style>
