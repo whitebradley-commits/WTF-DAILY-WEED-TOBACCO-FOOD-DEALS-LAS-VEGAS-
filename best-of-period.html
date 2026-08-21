@@ -47018,3 +47018,36 @@ html.bop-clean-route #bestOfOverlay #boSearchInput::placeholder{color:#f59e0b!im
 #hhOverlay .bop-hh-closest-v317,#hhOverlay .hh-closest-secondary,#hhOverlay #hhClosestSecondaryBtn,#hhOverlay [data-bop-closest-retry]{display:none!important}
 #bestOfOverlay .bo-picker-grid{visibility:visible!important;opacity:1!important}
 </style>
+<!-- Unconditional safety-net layout for the rotating city name + "Period" lockup.
+     Earlier rules only style this row while a spinning/settled state class is
+     present; if that class is ever missing (a timing gap, a page where the
+     reel-state script hasn't run yet), the row previously fell back to older
+     conflicting rules and the city name could render on top of "Period" and
+     the tagline below it. This rule applies regardless of state class. -->
+<style id="bop-splash-line2-overlap-safety-net">
+#bopLandingOverlay .bop-splash-line2,
+#bestOfOverlay .bop-splash-line2{
+ display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+ align-items:baseline!important;justify-content:center!important;
+ gap:6px!important;column-gap:6px!important;width:100%!important;overflow:visible!important;
+ position:relative!important
+}
+#bopLandingOverlay .bop-splash-city-col,
+#bestOfOverlay .bop-splash-city-col{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 1 auto!important;
+ width:auto!important;max-width:100%!important;margin:0!important;transform:none!important;
+ overflow:visible!important;visibility:visible!important
+}
+#bopLandingOverlay .bop-splash-city,#bopLandingOverlay #bopLandingCityText,#bopLandingOverlay #bopStableMobileCity,#bopLandingOverlay #bopSplashCityText,
+#bestOfOverlay .bop-splash-city,#bestOfOverlay #bopMainCityText,#bestOfOverlay #bopResultsCityText{
+ position:relative!important;inset:auto!important;display:block!important;width:max-content!important;
+ max-width:100%!important;margin:0!important;padding:0!important;transform:none!important;
+ white-space:nowrap!important;overflow:visible!important
+}
+#bopLandingOverlay .bop-splash-period,
+#bestOfOverlay .bop-splash-period{
+ position:relative!important;inset:auto!important;display:block!important;flex:0 0 auto!important;
+ margin:0!important;padding:0!important;transform:none!important;white-space:nowrap!important;
+ background:transparent!important;box-shadow:none!important
+}
+</style>
