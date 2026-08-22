@@ -21253,3 +21253,35 @@ window.wtfPrepare24Hours=async function(city){
   else installLvSteamReturn();
 }());
 </script>
+
+<!-- Correction for the reported mobile footer behavior. -->
+<style id="wtf-footer-orb-and-lv-icon-correction">
+  /* Medical belongs only in the lower-right three-orb group, never in the footer strip. */
+  .wtf2-contact-strip .wtf2-medical-open{display:none!important;}
+  .wtf2-medical-open.wtf2-footer-medical-orb{display:none!important;}
+  #wtf2Overlay.open ~ .wtf2-medical-open.wtf2-footer-medical-orb{display:flex!important;}
+
+  /* The LV monogram fills the same footer button as the other icons without widening the row. */
+  .wtf2-lv-steam-monogram{font-size:27px!important;line-height:.9!important;transform:translateY(-1px) scaleX(.96)!important;}
+
+  /* LV Steam must sit above the 100000-level WTF browsing layer. */
+  .lvsteam-overlay{z-index:100500!important;}
+</style>
+<script id="wtf-footer-orb-and-lv-icon-correction-script">
+(function(){
+  function installFooterCorrection(){
+    var medical=document.getElementById('wtfMedicalDirectoryOpen');
+    var wtf2=document.getElementById('wtf2Overlay');
+    if(!medical||!wtf2)return;
+    medical.classList.add('wtf2-footer-medical-orb');
+    if(medical.parentElement!==document.body)document.body.appendChild(medical);
+    function syncMedicalVisibility(){
+      medical.style.display=wtf2.classList.contains('open')?'flex':'none';
+    }
+    syncMedicalVisibility();
+    new MutationObserver(syncMedicalVisibility).observe(wtf2,{attributes:true,attributeFilter:['class']});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installFooterCorrection);
+  else installFooterCorrection();
+}());
+</script>
