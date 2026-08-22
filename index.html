@@ -21285,3 +21285,63 @@ window.wtfPrepare24Hours=async function(city){
   else installFooterCorrection();
 }());
 </script>
+
+<!-- Requested Local Laws relocation: available inside Map and Medical, not as a floating footer orb. -->
+<style id="wtf-local-laws-relocation">
+  /* Remove Local Laws from the floating lower-right orb group. */
+  .wtf-local-laws-orb{display:none!important;}
+
+  /* Map takes the former Local Laws spot; Medical takes the former Map spot. */
+  .wtf-us-map-orb{right:14px!important;bottom:22px!important;width:62px!important;height:62px!important;}
+  .wtf2-medical-open.wtf2-footer-medical-orb{right:84px!important;bottom:28px!important;}
+  @media(max-width:520px){
+    .wtf-us-map-orb{right:12px!important;bottom:19px!important;width:58px!important;height:58px!important;}
+    .wtf2-medical-open.wtf2-footer-medical-orb{right:78px!important;bottom:25px!important;width:44px!important;height:44px!important;}
+  }
+
+  /* Local Laws now uses one compact, green orb inside both its relevant pages. */
+  .wtf-context-local-laws-orb{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:60px;
+    height:60px;
+    margin:10px auto 14px;
+    padding:0;
+    border:2px solid #65dc79;
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 35%,#102c17,#020503 72%);
+    color:#73e285;
+    font:900 9px/1 'Archivo Black',sans-serif;
+    letter-spacing:.035em;
+    text-align:center;
+    box-shadow:0 0 12px rgba(101,220,121,.40),inset 0 0 10px rgba(101,220,121,.12);
+    cursor:pointer;
+  }
+  .wtf-context-local-laws-orb:hover,.wtf-context-local-laws-orb:focus-visible{border-color:#9af0a8;box-shadow:0 0 18px rgba(101,220,121,.72),inset 0 0 10px rgba(101,220,121,.16);outline:none;}
+  @media(max-width:520px){.wtf-context-local-laws-orb{width:56px;height:56px;font-size:8.5px;margin:8px auto 12px;}}
+</style>
+<script id="wtf-local-laws-relocation-script">
+(function(){
+  function addLocalLawsOrb(container,id){
+    if(!container||document.getElementById(id))return;
+    var original=document.getElementById('wtfLocalLawsOrb');
+    if(!original)return;
+    var orb=document.createElement('button');
+    orb.type='button';
+    orb.id=id;
+    orb.className='wtf-context-local-laws-orb';
+    orb.setAttribute('aria-label','Open local laws');
+    orb.innerHTML='LOCAL<br>LAWS';
+    orb.addEventListener('click',function(){original.click();});
+    container.appendChild(orb);
+  }
+  function installLocalLawsRelocation(){
+    addLocalLawsOrb(document.querySelector('#wtfUsMapOverlay .wtf-us-map-page'),'wtfMapLocalLawsOrb');
+    addLocalLawsOrb(document.querySelector('#wtfMedicalOverlay .wtf-medical-page'),'wtfMedicalLocalLawsOrb');
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installLocalLawsRelocation);
+  else installLocalLawsRelocation();
+}());
+</script>
