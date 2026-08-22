@@ -19152,7 +19152,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   <button class="wtf2-legend-close" id="wtf2LegendClose" type="button" aria-label="Close legend">×</button>
   <div class="wtf2-legend-page">
     <h1 id="wtf2LegendTitle">LEGEND</h1><div class="wtf2-legend-star">★</div>
-    <p class="wtf2-legend-disclaimer"><strong><span aria-label="WTF" class="new-wtf-logo wtf2-legend-inline-logo" role="img"></span> is your weed, tobacco, food, direct-access location, period.</strong> WTFdd.com is an independent discovery and listing service developed by BJS Co. We organize public business information, current location data and editorial selections; placement is not an endorsement, guarantee or affiliation with any business shown. Hours, availability, prices, phone numbers, promotions and local laws can change—always confirm important details directly before traveling. Cannabis and smoking rules vary by jurisdiction. Medical information is general information, not medical advice. 21+ where required. Please consume responsibly.</p>
+    <p class="wtf2-legend-disclaimer"><span class="wtf2-legend-lede"><span aria-label="WTF" class="new-wtf-logo wtf2-legend-inline-logo" role="img"></span><span>is your weed, tobacco, food.</span></span><span class="wtf2-legend-body">Direct-access location, period. WTFdd.com is an independent discovery and listing service developed by BJS Co. We organize public business information, current location data and editorial selections; placement is not an endorsement, guarantee or affiliation with any business shown. Hours, availability, prices, phone numbers, promotions and local laws can change—always confirm important details directly before traveling. Cannabis and smoking rules vary by jurisdiction. Medical information is general information, not medical advice. 21+ where required. Please consume responsibly.</span></p>
     <div class="wtf2-legend-group"><h2>CATEGORIES</h2>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol">GREEN</span><span class="wtf2-legend-copy"><b>Weed</b><span>Licensed dispensaries, cannabis information, or clearly labeled legal alternatives.</span></span></div>
       <div class="wtf2-legend-row"><span class="wtf2-legend-symbol wtf2-legend-brown">BROWN</span><span class="wtf2-legend-copy"><b>Tobacco</b><span>Smoke shops, tobacco retailers, hookah or shisha venues.</span></span></div>
@@ -21345,3 +21345,60 @@ window.wtfPrepare24Hours=async function(city){
   else installLocalLawsRelocation();
 }());
 </script>
+
+<!-- Requested Legend, footer-person-icon, and Vendor routing refinement. -->
+<style id="wtf-legend-footer-vendor-refinement">
+  /* The Legend’s opening statement is intentionally the visual lead; all following copy remains regular text. */
+  .wtf2-legend-disclaimer .wtf2-legend-lede{display:flex;align-items:center;justify-content:center;gap:11px;margin:0 auto 9px;color:#f3f3f3;}
+  .wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font:900 clamp(30px,8.4vw,43px)/.98 'Archivo Black',sans-serif;letter-spacing:.01em;text-align:left;}
+  .wtf2-legend-disclaimer .wtf2-legend-inline-logo{flex:0 0 auto;transform:scale(1.08);transform-origin:center;}
+  .wtf2-legend-disclaimer .wtf2-legend-body{display:block;color:#b9b9b9;font:700 18px/1.52 'Archivo Narrow',sans-serif;}
+  @media(max-width:520px){
+    .wtf2-legend-disclaimer .wtf2-legend-lede{gap:9px;margin-bottom:8px;}
+    .wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font-size:clamp(28px,8.2vw,38px);}
+    .wtf2-legend-disclaimer .wtf2-legend-body{font-size:17px;line-height:1.48;}
+  }
+
+  /* Replace the inactive play-arrow mark with a clear green stick-figure symbol. */
+  .wtf2-contact-icon.wtf2-contact-person{color:#78df85!important;border-color:#3f7f4a!important;box-shadow:0 0 9px rgba(120,223,133,.23);}
+  .wtf2-contact-person svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;}
+
+  /* The vendor sign-up overlay must sit above the 100000-level WTF browsing view. */
+  #vendorVerifyOverlay{z-index:100520!important;}
+</style>
+<script id="wtf-legend-footer-vendor-refinement-script">
+(function(){
+  function installFooterPersonIcon(){
+    document.querySelectorAll('.wtf2-contact-strip .wtf2-contact-icon').forEach(function(control){
+      if(control.textContent.trim()!=='▶')return;
+      control.classList.add('wtf2-contact-person');
+      control.setAttribute('aria-label','Community coming soon');
+      control.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.5"></circle><path d="M12 8v6m0-4-5 3m5-3 5 3m-5 1-4 6m4-6 4 6"></path></svg>';
+    });
+  }
+  function openVendorSignup(event){
+    var trigger=event.target.closest&&event.target.closest('.wtf2-vendor-open');
+    if(!trigger)return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    var overlay=document.getElementById('vendorVerifyOverlay');
+    if(!overlay)return;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    overlay.scrollTop=0;
+    document.body.style.overflow='hidden';
+    window.setTimeout(function(){var input=document.getElementById('vendorVerifyEmail');if(input)input.focus();},80);
+  }
+  function install(){
+    installFooterPersonIcon();
+    document.addEventListener('click',openVendorSignup,true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);
+  else install();
+}());
+</script>
+
+<style id="wtf-legend-lede-final-scale">
+  .wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font-size:clamp(42px,11.2vw,52px)!important;}
+  @media(max-width:520px){.wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font-size:clamp(38px,12.5vw,52px)!important;}}
+</style>
