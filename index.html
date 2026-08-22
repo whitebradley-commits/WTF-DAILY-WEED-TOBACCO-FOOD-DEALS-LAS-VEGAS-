@@ -21147,3 +21147,109 @@ window.wtfPrepare24Hours=async function(city){
 </script>
 
 <!-- WTFdd root homepage delivery marker: native-FN-music package -->
+
+<!-- Requested footer-only refinement: grouped access orbs and LV Steam entry icon. -->
+<style id="wtf-footer-orb-and-lv-icon-refinement">
+  /* Keep the three footer access orbs together, descending large → medium → small. */
+  .wtf2-medical-open.wtf2-footer-medical-orb{
+    position:fixed!important;
+    z-index:100009!important;
+    right:169px!important;
+    bottom:28px!important;
+    width:48px!important;
+    height:48px!important;
+    border:1.5px solid #57dc70!important;
+    border-radius:50%!important;
+    background:radial-gradient(circle at 50% 35%,#102c17,#020503 72%)!important;
+    color:#75e68a!important;
+    box-shadow:0 0 12px rgba(79,210,103,.42),inset 0 0 10px rgba(101,220,121,.10)!important;
+  }
+  .wtf-us-map-orb{right:96px!important;bottom:22px!important;width:62px!important;height:62px!important;}
+  .wtf-local-laws-orb{right:14px!important;bottom:14px!important;width:78px!important;height:78px!important;}
+  @media(max-width:520px){
+    .wtf2-medical-open.wtf2-footer-medical-orb{right:158px!important;bottom:25px!important;width:44px!important;height:44px!important;}
+    .wtf-us-map-orb{right:88px!important;bottom:19px!important;width:58px!important;height:58px!important;}
+    .wtf-local-laws-orb{right:12px!important;bottom:12px!important;width:70px!important;height:70px!important;}
+  }
+
+  /* New LV Steam footer icon: same footer-control treatment, with the clean embedded LV monogram. */
+  .wtf2-lv-steam-open{cursor:pointer!important;box-shadow:0 0 10px rgba(79,210,103,.30)!important;}
+  .wtf2-lv-steam-monogram{
+    display:block;
+    color:#F59E0B;
+    font-family:'Archivo Narrow',sans-serif;
+    font-size:22px;
+    font-weight:900;
+    line-height:1;
+    text-shadow:0 0 5px rgba(255,213,74,.72);
+    transform:translateY(-1px);
+  }
+  .wtf2-lv-steam-open:hover,.wtf2-lv-steam-open:focus-visible{border-color:#69df7d;color:#9af0a8;box-shadow:0 0 18px rgba(79,210,103,.70)!important;outline:none;}
+</style>
+<script id="wtf-footer-orb-and-lv-icon-refinement-script">
+(function(){
+  function installFooterRefinement(){
+    var medical=document.getElementById('wtfMedicalDirectoryOpen');
+    if(medical){
+      medical.classList.add('wtf2-footer-medical-orb');
+      if(medical.parentElement!==document.body)document.body.appendChild(medical);
+    }
+
+    var strip=document.querySelector('#wtf2Overlay .wtf2-contact-strip');
+    if(!strip||strip.querySelector('.wtf2-lv-steam-open'))return;
+    var lvButton=document.createElement('button');
+    lvButton.type='button';
+    lvButton.className='wtf2-contact-icon is-live wtf2-lv-steam-open footer-hotlink';
+    lvButton.dataset.dest='lv';
+    lvButton.setAttribute('aria-label','Open LV Steam');
+    lvButton.setAttribute('title','LV Steam');
+    lvButton.innerHTML='<span class="wtf2-lv-steam-monogram" aria-hidden="true">℣</span>';
+    lvButton.addEventListener('click',function(event){
+      event.preventDefault();
+      event.stopPropagation();
+      var hub=document.getElementById('companyHubOverlay');
+      var best=document.getElementById('bestOfOverlay');
+      var landing=document.getElementById('tbotrLandingOverlay');
+      var lv=document.getElementById('lvSteamOverlay');
+      var gridView=document.getElementById('lvGridView');
+      var dayPassView=document.getElementById('lvDayPassView');
+      var dayPassToggle=document.getElementById('lvDayPassToggle');
+      if(hub)hub.classList.remove('open');
+      if(best)best.classList.remove('open');
+      if(landing)landing.classList.remove('open');
+      if(typeof lvRenderLedger==='function')lvRenderLedger();
+      if(dayPassView)dayPassView.classList.remove('open');
+      if(gridView)gridView.style.display='block';
+      if(dayPassToggle)dayPassToggle.innerHTML='Day<br>Passes';
+      if(lv)lv.classList.add('open');
+      window.scrollTo(0,0);
+    });
+    var footerEdge=strip.lastElementChild;
+    strip.insertBefore(lvButton,footerEdge);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installFooterRefinement);
+  else installFooterRefinement();
+}());
+</script>
+
+<script id="wtf-lv-steam-back-to-main-refinement">
+(function(){
+  function installLvSteamReturn(){
+    var back=document.getElementById('lvBjsHomeBtn');
+    if(!back||back.dataset.wtfReturnToMainBound==='true')return;
+    back.dataset.wtfReturnToMainBound='true';
+    back.addEventListener('click',function(event){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      var lv=document.getElementById('lvSteamOverlay');
+      var hub=document.getElementById('companyHubOverlay');
+      if(lv)lv.classList.remove('open');
+      if(hub)hub.classList.remove('open');
+      document.body.style.overflow='';
+      window.scrollTo(0,0);
+    },true);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installLvSteamReturn);
+  else installLvSteamReturn();
+}());
+</script>
