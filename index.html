@@ -18700,6 +18700,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   .wtf2-top{position:relative;display:flex;justify-content:center;align-items:flex-start;min-height:410px;margin:0 -16px 8px;overflow:hidden;isolation:isolate;}
   .wtf2-exit{position:absolute;z-index:8;left:0;top:3px;width:46px;height:46px;border:2px solid var(--wtf2-orange);border-radius:50%;background:#020202;color:var(--wtf2-red);font:900 24px/1 'Archivo Black',sans-serif;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.42),inset 0 0 10px rgba(245,158,11,.09);}
   .wtf2-logo{position:relative;z-index:6;display:block!important;width:min(84.6vw,441px)!important;height:185px!important;margin:96px auto 0!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:none;}
+  video.wtf2-logo{object-fit:contain;border-radius:10px;background-image:none!important;}
   .wtf2-city-badge{position:absolute;z-index:7;left:50%;bottom:11px;display:block;width:calc(100% - 30px);max-width:730px;padding:0 3px 7px;color:#F5A623;border-bottom:2px solid rgba(245,166,35,.7);border-radius:0 0 50% 50%;font:900 clamp(52px,15vw,86px)/.94 'Archivo Black',sans-serif;letter-spacing:-.04em;text-align:center;text-transform:uppercase;white-space:nowrap;transform:translateX(-50%) scale(1);transform-origin:center center;text-shadow:0 0 3px rgba(245,166,35,.4);animation:wtf2CityBadgePulse 2.35s ease-in-out infinite;pointer-events:none;}
   .wtf2-city-badge.is-long{font-size:clamp(29px,8.2vw,48px);letter-spacing:-.045em;}
   .wtf2-city-quick-change{position:absolute;z-index:9;right:12px;bottom:66px;width:58px;height:58px;padding:7px;border:2px solid #F59E0B;border-radius:50%;background:#020202;color:#F4C15B;font:900 7px/1.05 'Archivo Black',sans-serif;letter-spacing:.015em;text-align:center;text-transform:uppercase;cursor:pointer;box-shadow:0 0 13px rgba(245,158,11,.4),inset 0 0 9px rgba(245,158,11,.08);animation:wtf2CityChangePulse 1.9s ease-in-out infinite}
@@ -19072,7 +19073,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Choose another city"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
-      <span class="new-wtf-logo wtf2-logo" role="img" aria-label="WTF — Weed, Tobacco, Food"></span>
+      <video aria-label="WTF — Weed, Tobacco, Food, animated" class="new-wtf-logo wtf2-logo wtf-hero-logo-video" autoplay loop muted playsinline webkit-playsinline><source src="wtf-bus-vegas-test.mp4" type="video/mp4"/></video>
       <span class="wtf2-city-badge" id="wtf2CityBadge">Las Vegas</span>
       <button class="wtf2-city-quick-change" id="wtf2CityQuickChange" type="button" aria-label="Choose another city">CHOOSE<br>ANOTHER<br>CITY</button>
       <div class="wtf2-hero-fx" aria-hidden="true">
