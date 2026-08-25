@@ -19613,8 +19613,8 @@ function setupHighHungryClosest(city){
     for(var start=0;start<candidates.length&&verified.length<5;start+=6){var checked=await Promise.all(candidates.slice(start,start+6).map(check));verified=verified.concat(checked.filter(Boolean));}
     return verified.filter(function(place){return tierMatch(place.detail||place,tier);}).slice(0,5).map(function(place){var detail=place.detail||{},point=detail.geometry&&detail.geometry.location||place.geometry.location,priceLevel=hhPriceLevel(detail.price_level!=null?detail.price_level:place.price_level);return {name:detail.name||place.name,address:detail.formatted_address||place.vicinity||'',phone:detail.formatted_phone_number||'',placeId:detail.place_id||place.place_id,lat:point.lat(),lng:point.lng(),priceLevel:priceLevel,rating:hhRating(detail.rating!=null?detail.rating:place.rating)};}).sort(function(a,b){return miles(origin,a)-miles(origin,b);});
   }
-  box.querySelectorAll('[data-hh-near-tier]').forEach(function(button){button.addEventListener('click',function(){var tier=button.dataset.hhNearTier;box.querySelectorAll('[data-hh-near-tier]').forEach(function(b){b.classList.toggle('active',b===button);});results.innerHTML='<span>Allow location access to find the five closest open restaurants…</span>';if(!navigator.geolocation){results.innerHTML='<span>Location access is not supported on this device.</span>';return;}navigator.geolocation.getCurrentPosition(async function(pos){var origin={lat:pos.coords.latitude,lng:pos.coords.longitude};try{var rows=await lookup(tier,origin);if(!rows.length){results.innerHTML='<span>No open restaurants in this exact price level could be verified nearby right now.</span>';return;}results.innerHTML=rows.map(function(item){var distance=miles(origin,item),map='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+item.address)+'&query_place_id='+encodeURIComponent(item.placeId),price=Math.max(1,Math.min(4,Number(item.priceLevel)||2));return '<div class="hh-closest-row"><a href="'+map+'" target="_blank" rel="noopener"><b>'+esc(item.name)+' <span class="wtf-near-price" aria-label="Price level '+price+' of 4">'+'$'.repeat(price)+'</span></b><small>'+esc(item.address)+'</small></a>'+(item.phone?'<a class="hh-closest-call" href="tel:'+esc(item.phone.replace(/[^0-9+]/g,''))+'">'+esc(item.phone)+'</a>':'')+'<em>'+distance.toFixed(1)+' MI</em></div>';}).join('');}catch(err){results.innerHTML='<span>Live restaurant lookup is temporarily unavailable. Please try again.</span>';}
-      },function(){results.innerHTML='<span>Location was not shared. Allow location access and try again.</span>';},{enableHighAccuracy:true,timeout:15000,maximumAge:0});});});
+  box.querySelectorAll('[data-hh-near-tier]').forEach(function(button){button.addEventListener('click',function(){var tier=button.dataset.hhNearTier;box.querySelectorAll('[data-hh-near-tier]').forEach(function(b){b.classList.toggle('active',b===button);});results.innerHTML='<span>Allow location access to find the five closest open restaurants…</span>';if(window.wtfShowGoldLoading)window.wtfShowGoldLoading();if(!navigator.geolocation){results.innerHTML='<span>Location access is not supported on this device.</span>';if(window.wtfHideGoldLoading)window.wtfHideGoldLoading();return;}navigator.geolocation.getCurrentPosition(async function(pos){var origin={lat:pos.coords.latitude,lng:pos.coords.longitude};try{var rows=await lookup(tier,origin);if(!rows.length){results.innerHTML='<span>No open restaurants in this exact price level could be verified nearby right now.</span>';if(window.wtfHideGoldLoading)window.wtfHideGoldLoading();return;}results.innerHTML=rows.map(function(item){var distance=miles(origin,item),map='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(item.name+' '+item.address)+'&query_place_id='+encodeURIComponent(item.placeId),price=Math.max(1,Math.min(4,Number(item.priceLevel)||2));return '<div class="hh-closest-row"><a href="'+map+'" target="_blank" rel="noopener"><b>'+esc(item.name)+' <span class="wtf-near-price" aria-label="Price level '+price+' of 4">'+'$'.repeat(price)+'</span></b><small>'+esc(item.address)+'</small></a>'+(item.phone?'<a class="hh-closest-call" href="tel:'+esc(item.phone.replace(/[^0-9+]/g,''))+'">'+esc(item.phone)+'</a>':'')+'<em>'+distance.toFixed(1)+' MI</em></div>';}).join('');if(window.wtfHideGoldLoading)window.wtfHideGoldLoading();}catch(err){results.innerHTML='<span>Live restaurant lookup is temporarily unavailable. Please try again.</span>';if(window.wtfHideGoldLoading)window.wtfHideGoldLoading();}
+      },function(){results.innerHTML='<span>Location was not shared. Allow location access and try again.</span>';if(window.wtfHideGoldLoading)window.wtfHideGoldLoading();},{enableHighAccuracy:true,timeout:15000,maximumAge:0});});});
 }
 
 window.wtfPrepare24Hours=async function(city){
@@ -21407,3 +21407,27 @@ window.wtfPrepare24Hours=async function(city){
   .wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font-size:clamp(42px,11.2vw,52px)!important;}
   @media(max-width:520px){.wtf2-legend-disclaimer .wtf2-legend-lede>span:last-child{font-size:clamp(38px,12.5vw,52px)!important;}}
 </style>
+
+<!-- Requested fix: gold LOADING popup for High & Hungry "CLOSEST TO YOU!" tier buttons. -->
+<style id="wtf-hh-closest-loading-popup">
+  .wtf-gold-loading-popup{position:fixed;inset:0;z-index:200000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);}
+  .wtf-gold-loading-popup.open{display:flex;}
+  .wtf-gold-loading-popup-box{padding:22px 40px;border-radius:16px;background:#0a0a0a;border:2px solid #f59e0b;box-shadow:0 0 26px rgba(245,158,11,.55),inset 0 0 14px rgba(245,158,11,.12);color:#f59e0b;font:900 20px/1 'Archivo Black',sans-serif;letter-spacing:.04em;text-shadow:0 0 10px rgba(245,158,11,.6);}
+</style>
+<script id="wtf-hh-closest-loading-popup-script">
+(function(){
+  function ensurePopup(){
+    var popup=document.getElementById('wtfGoldLoadingPopup');
+    if(popup)return popup;
+    popup=document.createElement('div');
+    popup.id='wtfGoldLoadingPopup';
+    popup.className='wtf-gold-loading-popup';
+    popup.setAttribute('aria-hidden','true');
+    popup.innerHTML='<div class="wtf-gold-loading-popup-box">LOADING</div>';
+    document.body.appendChild(popup);
+    return popup;
+  }
+  window.wtfShowGoldLoading=function(){var popup=ensurePopup();popup.classList.add('open');popup.setAttribute('aria-hidden','false');};
+  window.wtfHideGoldLoading=function(){var popup=document.getElementById('wtfGoldLoadingPopup');if(popup){popup.classList.remove('open');popup.setAttribute('aria-hidden','true');}};
+}());
+</script>
