@@ -6072,6 +6072,27 @@ button[id*="back"] svg,
 #hhOverlay .hh-closest-results{margin-top:16px}.hh-closest-results>span{display:block;padding:12px;color:#aaa;text-align:center;font:700 12px/1.4 'Archivo Narrow',sans-serif}.hh-closest-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 9px;align-items:center;padding:12px 2px;border-top:1px solid rgba(245,158,11,.23)}.hh-closest-row>a:first-child{min-width:0;color:#f59e0b;text-decoration:none}.hh-closest-row b{display:block;font:800 14px/1.2 'Archivo Narrow',sans-serif}.hh-closest-row small{display:block;margin-top:3px;color:#999;font:600 10px/1.25 'Archivo Narrow',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hh-closest-row em{grid-column:2;grid-row:1;color:#f44747;font:900 12px/1 'Archivo Narrow',sans-serif;font-style:normal;text-shadow:0 0 7px rgba(244,71,71,.55)}.hh-closest-call{grid-column:1;color:#fff!important;font:700 11px/1.2 'Archivo Narrow',sans-serif;text-decoration:underline!important}
 @media(min-width:560px){#hhOverlay .hh-closest-picks{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
+<style id="wtf-splash-first-paint-parity">
+  /* Duplicates of the late splash patch rules (lines ~18695+) so the very
+     first paint already matches the final design. Prevents the "old splash"
+     flash on refresh caused by the browser painting raw HTML before parsing
+     the patch styles 4MB later in this file. Values must stay in sync with
+     the originals; literals used instead of vars so no dependency on the
+     late :root block. */
+  footer{display:none!important;}
+  #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{color:#C90201!important;}
+  #wtfLandingOverlay .landing-bjs-corner text{fill:#C90201!important;}
+  #wtfLandingOverlay .wtf-landing-logo.new-wtf-logo{width:min(66vw,235px)!important;height:min(44vw,157px)!important;}
+  #wtfLandingEnterBtn{padding:.75rem 1.55rem!important;font-size:.76rem!important;font-family:'Archivo Black',sans-serif!important;}
+  .wtf2-share-page{position:fixed;z-index:100009;left:13px;bottom:13px;width:64px;height:64px;border:2px solid #F59E0B;border-radius:50%;background:#020202;color:#C90201;font:900 8px/1.08 'Archivo Black',sans-serif;letter-spacing:.035em;cursor:pointer;box-shadow:0 0 12px rgba(245,158,11,.42),inset 0 0 11px rgba(245,158,11,.09);}
+  .wtf2-share-page svg{display:block;width:18px;height:18px;margin:0 auto 4px;fill:none;stroke:#C90201;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  #wtfLandingOverlay>.wtf2-share-page{left:12px;bottom:12px;width:52px;height:52px;font-size:6px;letter-spacing:.02em;}
+  #wtfLandingOverlay>.wtf2-share-page svg{width:14px;height:14px;margin-bottom:2px;}
+  @media(max-width:520px){#wtfLandingOverlay>.wtf2-share-page{width:44px;height:44px;font-size:5.5px;}#wtfLandingOverlay>.wtf2-share-page svg{width:12px;height:12px;margin-bottom:1px;}}
+  #wtfLandingOverlay .wtf-landing-logo{scale:1.25;transform-origin:center center;}
+  #wtfLandingOverlay>.wtf2-share-page{scale:1.375;transform-origin:left bottom;}
+  #wtfLandingOverlay .landing-bjs-corner{scale:1.375;transform-origin:right bottom;}
+</style>
 </head>
 <body>
 <!-- Replace WTF headings with uploaded transparent WTF logo asset -->
@@ -19593,7 +19614,10 @@ function setupHighHungryClosest(city){
     return /VERY_EXPENSIVE|PRICE_LEVEL_VERY_EXPENSIVE/.test(key)?4:/EXPENSIVE|PRICE_LEVEL_EXPENSIVE/.test(key)?3:/MODERATE|PRICE_LEVEL_MODERATE/.test(key)?2:/INEXPENSIVE|FREE|PRICE_LEVEL_INEXPENSIVE/.test(key)?1:0;
   }
   function hhRating(value){var rating=Number(value);return Number.isFinite(rating)?rating:0;}
-  function tierMatch(place,tier){var price=hhPriceLevel(place.priceLevel!=null?place.priceLevel:place.price_level),rating=hhRating(place.rating);if(rating<3.8)return false;if(tier==='dive')return price===1;if(tier==='money')return price===4;return price===2||price===3;}
+  /* Nationwide rule: chain fast food never qualifies as a Dive Spot. */
+  var HH_FAST_FOOD_BLOCKLIST=["mcdonald","burger king","denny's","dennys","wendy's","wendys","taco bell","kfc","kentucky fried","jack in the box","subway","carl's jr","carls jr","del taco","popeyes","chick-fil-a","chick fil a","sonic drive","arby's","arbys","little caesars","domino's","dominos","pizza hut","panda express","chipotle","dairy queen","whataburger","white castle","five guys","raising cane","wingstop","dunkin","starbucks","panera","jimmy john","jersey mike","firehouse subs","checkers","rally's","rallys","hardee's","hardees","church's chicken","churchs chicken","in-n-out","in n out"];
+  function hhIsFastFood(place){var name=String((place.displayName&&place.displayName.text)||place.displayName||place.name||'').toLowerCase();if(!name)return false;for(var i=0;i<HH_FAST_FOOD_BLOCKLIST.length;i++){if(name.indexOf(HH_FAST_FOOD_BLOCKLIST[i])!==-1)return true;}return false;}
+  function tierMatch(place,tier){var price=hhPriceLevel(place.priceLevel!=null?place.priceLevel:place.price_level),rating=hhRating(place.rating);if(rating<3.8)return false;if(tier==='dive')return price===1&&!hhIsFastFood(place);if(tier==='money')return price===4;return price===2||price===3;}
   async function lookup(tier,origin){
     await loadGoogleMapsScript();if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
     var keyword=tier==='dive'?'cheap local restaurant':tier==='money'?'fine dining restaurant':'popular restaurant';
@@ -20364,7 +20388,7 @@ window.wtfPrepare24Hours=async function(city){
         if(!rows.querySelector('.la-near-row')){rows.innerHTML='';status.textContent='The closest '+plural+' are refreshing. Tap Current Location to retry.';updateFullListingDistances(origin);}
       }
     }finally{
-      if(nearBlock)nearBlock.classList.remove('is-loading');
+      if(nearBlock){nearBlock.classList.remove('is-loading');nearBlock.classList.toggle('wtf-near-no-rows',!rows.querySelector('.la-near-row'));}
     }
   }
   async function openLADispensary(item){
@@ -21067,7 +21091,7 @@ window.wtfPrepare24Hours=async function(city){
     }else{
       title.textContent='VEGAS NEVER SLEEPS';
       copy.textContent=route.copy;
-      options.innerHTML='<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('24 hour cannabis dispensaries Las Vegas')+'" target="_blank" rel="noopener">SEE VEGAS 24-HOUR DISPENSARIES</a><button class="wtf24-flight-button" type="button" data-flight-destination="Las Vegas">BOOK FLIGHTS · BOOK FLIGHTS · BOOK FLIGHTS</button>';
+      options.innerHTML='<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('24 hour cannabis dispensaries Las Vegas')+'" target="_blank" rel="noopener">VEGAS 24-HOUR DISPENSARIES</a><button class="wtf24-flight-button" type="button" data-flight-destination="Las Vegas">BOOK FLIGHTS</button>';
       note.textContent='Flight search opens with '+origin+' to Las Vegas prefilled.';
     }
     options.querySelectorAll('[data-flight-destination]').forEach(function(button){button.addEventListener('click',function(){openFlightSearch(origin,button.dataset.flightDestination);});});
@@ -21437,3 +21461,46 @@ window.wtfPrepare24Hours=async function(city){
   window.wtfHideGoldLoading=function(){var popup=document.getElementById('wtfGoldLoadingPopup');if(popup){popup.classList.remove('open');popup.setAttribute('aria-hidden','true');}};
 }());
 </script>
+
+<!-- Requested pass: 24hr popup restyle, tobacco brown / food gold theming, scroll cue fix. -->
+<style id="wtf-vegas-24-and-category-theme-pass">
+  /* ── VEGAS NEVER SLEEPS popup: green title, round buttons side by side ── */
+  .wtf24-route-card h2{color:#71e587!important;text-shadow:0 0 13px rgba(101,220,121,.55);}
+  .wtf24-route-actions{display:flex!important;flex-wrap:wrap;justify-content:center;gap:16px;}
+  .wtf24-route-actions button,.wtf24-route-actions a{flex:0 0 auto;width:132px;height:132px;min-height:0!important;border-radius:50%!important;border-width:2px!important;padding:14px!important;font-size:9.5px!important;line-height:1.3!important;text-align:center;}
+
+  /* ── SCROLL cue never shows over an empty nearest list ── */
+  .la-near-test.wtf-near-no-rows .la-weed-scroll-cue{display:none!important;}
+
+  /* ── TOBACCO pages: brown accents everywhere, no gold ── */
+  #wtf2Directory[data-category="tobacco"] .la-near-test{border-color:rgba(140,96,63,.85)!important;box-shadow:0 0 22px rgba(140,96,63,.22)!important;}
+  #wtf2Directory[data-category="tobacco"] .la-near-test h3,
+  #wtf2Directory[data-category="tobacco"] .directory-area{color:#C38959!important;text-shadow:0 0 8px rgba(140,96,63,.35)!important;}
+  #wtf2Directory[data-category="tobacco"] .la-near-zones button.active{border-color:#B8794B!important;color:#C38959!important;box-shadow:0 0 10px rgba(140,96,63,.5)!important;}
+  #wtf2Directory[data-category="tobacco"] .la-hours-note{border-color:rgba(140,96,63,.7)!important;background:rgba(24,15,8,.8)!important;box-shadow:0 0 11px rgba(140,96,63,.24),inset 0 0 8px rgba(140,96,63,.08)!important;}
+  #wtf2Directory[data-category="tobacco"] .la-hours-note strong,
+  #wtf2Directory[data-category="tobacco"] .la-hours-note .la-hours-star,
+  #wtf2Directory[data-category="tobacco"] .la-near-basis strong{color:#C38959!important;}
+  #wtf2Directory[data-category="tobacco"] .listing-header.open .listing-chevron{color:#B8794B!important;}
+  #wtf2Directory[data-category="tobacco"] .la-near-line{background:linear-gradient(90deg,transparent,#6E4629 18%,#B8794B 50%,#6E4629 82%,transparent)!important;box-shadow:0 0 9px rgba(140,96,63,.7)!important;}
+  #wtf2Directory[data-category="tobacco"] .la-near-full{border-color:#B8794B!important;color:#C38959!important;box-shadow:0 0 9px rgba(140,96,63,.22)!important;}
+  #wtf2Directory[data-category="tobacco"] .wtf2-dir-title{color:#C38959!important;text-shadow:0 0 10px rgba(140,96,63,.4)!important;}
+  #wtf2Directory[data-category="tobacco"] .wtf2-area.active,
+  #wtf2Directory[data-category="tobacco"] .wtf2-area[aria-pressed="true"]{border-color:#B8794B!important;color:#C38959!important;box-shadow:0 0 10px rgba(140,96,63,.45)!important;}
+  /* Footer dock goes brown on tobacco pages */
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-strip{border-color:#8C603F!important;}
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-strip::before,
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-strip::after{background:#8C603F!important;box-shadow:0 0 9px rgba(140,96,63,.6)!important;}
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-edge,
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-icon{border-color:#8C603F!important;color:#C38959!important;box-shadow:0 0 9px rgba(140,96,63,.4)!important;}
+  #wtf2Directory[data-category="tobacco"] .wtf2-contact-icon svg{stroke:#C38959!important;}
+
+  /* ── FOOD pages: footer dock goes gold ── */
+  #wtf2Directory[data-category="food"] .wtf2-contact-strip{border-color:#F59E0B!important;}
+  #wtf2Directory[data-category="food"] .wtf2-contact-strip::before,
+  #wtf2Directory[data-category="food"] .wtf2-contact-strip::after{background:#F59E0B!important;box-shadow:0 0 9px rgba(245,158,11,.6)!important;}
+  #wtf2Directory[data-category="food"] .wtf2-contact-edge,
+  #wtf2Directory[data-category="food"] .wtf2-contact-icon{border-color:#F59E0B!important;color:#F5AE22!important;box-shadow:0 0 9px rgba(245,158,11,.4)!important;}
+  #wtf2Directory[data-category="food"] .wtf2-contact-icon svg{stroke:#F5AE22!important;}
+  /* Weed pages keep the standard green — no override needed. */
+</style>
