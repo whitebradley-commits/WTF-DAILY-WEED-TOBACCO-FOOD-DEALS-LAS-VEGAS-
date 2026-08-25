@@ -20276,7 +20276,7 @@ window.wtfPrepare24Hours=async function(city){
            and request distance ranking before we calculate and render mileage. */
         var modernBatches=await Promise.all(searches.map(async function(search){
           try{
-            var response=await PlaceClass.searchByText({textQuery:search,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','utcOffsetMinutes','businessStatus','types','rating','userRatingCount','priceLevel'],locationBias:{lat:origin.lat,lng:origin.lng},rankPreference:'DISTANCE',isOpenNow:true,maxResultCount:20});
+            var response=await PlaceClass.searchByText({textQuery:search,fields:['id','displayName','formattedAddress','location','nationalPhoneNumber','internationalPhoneNumber','websiteURI','regularOpeningHours','currentOpeningHours','utcOffsetMinutes','businessStatus','types','rating','userRatingCount','priceLevel'],locationBias:{center:{lat:origin.lat,lng:origin.lng},radius:50000},rankPreference:'DISTANCE',isOpenNow:true,maxResultCount:20});
             return response&&response.places||[];
           }catch(err){if(/RESOURCE_EXHAUSTED|quota/i.test(String(err&&err.message||err)))googleQuotaReached=true;console.warn('WTFDD current Places lookup:',search,err);return [];}
         }));
