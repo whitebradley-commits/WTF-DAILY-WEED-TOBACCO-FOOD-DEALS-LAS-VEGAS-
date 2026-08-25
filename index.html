@@ -875,6 +875,12 @@
     font-family:'Archivo Black',sans-serif;font-size:21px;color:#F59E0B;margin:0 0 4px;letter-spacing:0.04em;
     text-shadow:none;
   }
+  .hh-billboard h3.hh-dive-inline{
+    margin-left:-10px;
+  }
+  .hh-billboard h3.hh-dive-inline .dive-spots-tag{
+    display:inline;font-size:11px;letter-spacing:0.5px;vertical-align:middle;margin-left:2px;
+  }
   .area-heading{
     font-family:'Archivo Narrow',sans-serif;font-weight:700;font-size:19px;letter-spacing:0.3px;
     color:var(--text);margin:34px 0 14px;display:flex;align-items:center;gap:10px;
@@ -19572,8 +19578,8 @@ function renderCityHighHungry(city){
   var dives=all.filter(function(item){return qualifies(item)&&Number(item.priceLevel)===1;}).slice(0,10);
   var local=all.filter(function(item){var price=Number(item.priceLevel);return qualifies(item)&&(price===2||price===3);}).slice(0,14);
   var money=all.filter(function(item){return qualifies(item)&&Number(item.priceLevel)===4;}).slice(0,10);
-  function section(title,tag,items,area,priceTier){if(!items.length)return '';var pricedItems=items.map(function(item){var copy=Object.assign({},item);if(priceTier===1||priceTier===4)copy.priceLevel=priceTier;else copy.priceLevel=Number(copy.priceLevel)===3?3:2;return copy;});return '<div class="hh-billboard"><h3>'+title+'</h3><span class="dive-spots-tag">'+tag+'</span></div><p class="hh-city-help">Tap a restaurant for directions and further information ▾</p><ul class="directory-list">'+renderEntryList(pricedItems,'Food',area)+'</ul>';}
-  el.innerHTML=section('DIVE SPOTS','HIGH RATINGS · LOW COST',dives,'Dive Spots',1)+section('SOLID SUGGESTIONS','DEPENDABLE PICKS · WORTH THE STOP',local,'Solid Suggestions',2)+section('MONEY’S NO OBJECT','BIG NIGHT · FULL EXPERIENCE',money,"Money’s No Object",4)+'<section class="hh-closest" id="hhClosest"><div class="hh-closest-title"><span>CLOSEST</span><strong>TO YOU!</strong></div><p>Pick your High &amp; Hungry level.</p><div class="hh-closest-picks"><button type="button" data-hh-near-tier="dive">DIVE SPOTS</button><button type="button" data-hh-near-tier="solid">SOLID SUGGESTIONS</button><button type="button" data-hh-near-tier="money">MONEY’S NO OBJECT</button></div><div class="hh-closest-results" id="hhClosestResults"><span>Choose a level to find the five closest open restaurants.</span></div></section>';
+  function section(title,tag,items,area,priceTier){if(!items.length)return '';var pricedItems=items.map(function(item){var copy=Object.assign({},item);if(priceTier===1||priceTier===4)copy.priceLevel=priceTier;else copy.priceLevel=Number(copy.priceLevel)===3?3:2;return copy;});var billboardInner=title==='DIVE SPOTS'?'<h3 class="hh-dive-inline">'+title+' <span class="dive-spots-tag">('+tag+')</span></h3>':'<h3>'+title+'</h3><span class="dive-spots-tag">'+tag+'</span>';return '<div class="hh-billboard">'+billboardInner+'</div><p class="hh-city-help">Tap a restaurant for directions and further information ▾</p><ul class="directory-list">'+renderEntryList(pricedItems,'Food',area)+'</ul>';}
+  el.innerHTML=section('DIVE SPOTS','HIGH RATINGS, LOW COST',dives,'Dive Spots',1)+section('SOLID SUGGESTIONS','DEPENDABLE PICKS · WORTH THE STOP',local,'Solid Suggestions',2)+section('MONEY’S NO OBJECT','BIG NIGHT · FULL EXPERIENCE',money,"Money’s No Object",4)+'<section class="hh-closest" id="hhClosest"><div class="hh-closest-title"><span>CLOSEST</span><strong>TO YOU!</strong></div><p>Pick your High &amp; Hungry level.</p><div class="hh-closest-picks"><button type="button" data-hh-near-tier="dive">DIVE SPOTS</button><button type="button" data-hh-near-tier="solid">SOLID SUGGESTIONS</button><button type="button" data-hh-near-tier="money">MONEY’S NO OBJECT</button></div><div class="hh-closest-results" id="hhClosestResults"><span>Choose a level to find the five closest open restaurants.</span></div></section>';
   setupHighHungryClosest(city);
 }
 
