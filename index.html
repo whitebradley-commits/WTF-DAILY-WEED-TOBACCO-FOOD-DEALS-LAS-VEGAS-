@@ -5146,6 +5146,40 @@
 
 </style>
 
+<style id="wtf-pink-interface-flow-final">
+  :root{--wtf-pink:#ff5f83;--wtf-pink-glow:rgba(255,95,131,.68);--wtf-pink-soft:rgba(255,95,131,.22)}
+  /* Food's CLOSE orb moves from orange/gold to the new pink. */
+  #wtf2Directory[data-category="food"] .la-near-launch{
+    --near-ring:var(--wtf-pink)!important;--near-center:rgba(255,95,131,.2)!important;--near-outline:rgba(255,95,131,.26)!important;--near-glow:var(--wtf-pink-glow)!important;--near-soft:var(--wtf-pink-soft)!important;
+    border-color:var(--wtf-pink)!important;color:var(--wtf-pink)!important;background:radial-gradient(circle at 50% 36%,rgba(255,95,131,.2),rgba(9,3,6,.97) 62%,#020202 100%)!important;
+    box-shadow:0 0 0 2px var(--wtf-pink-soft),0 0 22px var(--wtf-pink-glow),0 0 42px var(--wtf-pink-soft),inset 0 0 20px rgba(255,95,131,.17)!important;
+  }
+  #wtf2Directory[data-category="food"] .la-near-launch-copy,
+  #wtf2Directory[data-category="food"] .la-near-launch-word,
+  #wtf2Directory[data-category="food"] .la-near-category-word{color:var(--wtf-pink)!important;text-shadow:0 0 10px var(--wtf-pink-glow)!important}
+  #wtf2Directory[data-category="food"] .la-food-banana{border-right-color:var(--wtf-pink)!important;border-bottom-color:var(--wtf-pink)!important;filter:drop-shadow(0 0 5px var(--wtf-pink-glow))!important}
+
+  /* Every red navigation/error/status accent becomes pink. */
+  .wtf2-exit,.wtf2-dir-back,.wtf2-legend-close,.wtf-near-picker-close,.wtf24-route-close,.wtf-night-x,.wtf-news-city-close,
+  .wtf2-groove-close,.near-me-close,.la-near-close{color:var(--wtf-pink)!important;-webkit-text-fill-color:var(--wtf-pink)!important}
+  .wtf2-exit svg,.wtf2-dir-back svg,.wtf2-exit path,.wtf2-dir-back path{stroke:var(--wtf-pink)!important;filter:drop-shadow(0 0 4px var(--wtf-pink-glow))!important}
+  .wtf2-near{border-color:var(--wtf-pink)!important;box-shadow:0 0 16px var(--wtf-pink-soft)!important}
+  .wtf2-near .wtf2-near-text,.wtf2-near-pin{color:var(--wtf-pink)!important;-webkit-text-fill-color:var(--wtf-pink)!important}
+  .la-near-distance,.la-near-distance small{color:var(--wtf-pink)!important;text-shadow:0 0 8px var(--wtf-pink-glow)!important}
+  .wtf-live-near-error{border-color:var(--wtf-pink)!important;background:#13060b!important;box-shadow:0 0 18px var(--wtf-pink-soft)!important}
+  .wtf-live-near-error strong{color:var(--wtf-pink)!important;text-shadow:0 0 9px var(--wtf-pink-glow)!important}
+
+  /* Mail and whichever footer control is actively highlighted use pink. */
+  .wtf2-contact-strip a[href^="mailto:"]{color:var(--wtf-pink)!important;border-color:var(--wtf-pink)!important;box-shadow:0 0 13px var(--wtf-pink-glow)!important;text-decoration:none!important}
+  .wtf2-contact-strip a[href^="mailto:"] svg{stroke:var(--wtf-pink)!important}
+  .wtf2-contact-strip .wtf2-contact-icon:focus-visible,
+  .wtf2-contact-strip .wtf2-contact-edge:focus-visible,
+  .wtf2-contact-strip .wtf2-contact-icon:active,
+  .wtf2-contact-strip .wtf2-contact-edge:active,
+  .wtf2-contact-strip .active,
+  .wtf2-contact-strip [aria-pressed="true"]{color:var(--wtf-pink)!important;border-color:var(--wtf-pink)!important;box-shadow:0 0 15px var(--wtf-pink-glow)!important;outline:none!important}
+</style>
+
 <!-- Final navigation dock and category-color pass. -->
 <style id="wtf-floating-interior-navigation-and-colors">
   /* Other Cities is green everywhere, including the main-page orb. */
@@ -20444,7 +20478,7 @@ window.wtfPrepare24Hours=async function(city){
     await loadGoogleMapsScript();
     if(!placesServiceInstance)placesServiceInstance=new google.maps.places.PlacesService(document.createElement('div'));
     var foodTier=requestedFoodTier||activeFoodNearTier,foodSearches=foodTier==='fast'?['fast food restaurant']:foodTier==='value'?['inexpensive restaurant','cheap eats']:foodTier==='money'?['fine dining restaurant','upscale restaurant']:['restaurant'];
-    var searches=currentCat==='Food'?foodSearches:currentCat==='Tobacco'?['tobacco shop','smoke shop','vape shop']:['cannabis dispensary','marijuana dispensary','recreational cannabis'],googleQuotaReached=false;
+    var searches=currentCat==='Food'?[foodSearches[0]]:currentCat==='Tobacco'?['tobacco shop']:['cannabis dispensary'],googleQuotaReached=false;
     /* Prefer the current Places API. The site previously depended entirely on
        legacy PlacesService callbacks; when a Google project has Places API
        (New) enabled but the legacy service is restricted, the lower directory
@@ -20515,6 +20549,7 @@ window.wtfPrepare24Hours=async function(city){
   }
   async function loadFastFoodNearest(origin,label){
     var rows=q('laNearRows'),status=q('laNearStatus'),nearBlock=q('laNearTest');if(!rows||!status)return;
+    if(nearBlock&&nearBlock.dataset.liveLoading==='1')return;if(nearBlock)nearBlock.dataset.liveLoading='1';
     if(nearBlock)nearBlock.classList.add('is-loading');status.hidden=false;status.textContent='Finding the ten physically closest fast-food restaurants…';rows.innerHTML='<div class="la-near-sub">Searching outward and ordering fast food strictly by physical distance…</div>';
     try{
       var found=await nearTimeout(fetchLAGoogle(origin,'fast'),20000,'Fast-food lookup timed out');
@@ -20525,11 +20560,12 @@ window.wtfPrepare24Hours=async function(city){
       status.textContent='Live location search could not confirm the ten physically closest fast-food restaurants.';
       rows.innerHTML='<div class="wtf-live-near-error"><strong>LIVE FAST-FOOD SEARCH UNAVAILABLE</strong><span>No stored listings have been substituted.</span><button type="button" class="wtf-live-near-retry">RETRY FAST FOOD</button></div>';
       var retry=rows.querySelector('.wtf-live-near-retry');if(retry)retry.addEventListener('click',function(){loadFastFoodNearest(origin,label);});
-    }finally{if(nearBlock){nearBlock.classList.remove('is-loading');nearBlock.classList.toggle('wtf-near-no-rows',!rows.querySelector('.la-near-row'));}}
+    }finally{if(nearBlock){delete nearBlock.dataset.liveLoading;nearBlock.classList.remove('is-loading');nearBlock.classList.toggle('wtf-near-no-rows',!rows.querySelector('.la-near-row'));}}
   }
   async function loadLANearest(origin,label){
     var rows=q('laNearRows'),status=q('laNearStatus');if(!rows||!status)return;
     var nearBlock=q('laNearTest');if(nearBlock)nearBlock.classList.add('is-loading');
+    if(nearBlock&&nearBlock.dataset.liveLoading==='1')return;if(nearBlock)nearBlock.dataset.liveLoading='1';
     var plural=currentCat==='Food'?'restaurants':currentCat==='Tobacco'?'tobacco shops':'dispensaries';
     status.hidden=false;
     status.textContent=currentCat==='Food'?'Finding the three physically closest live restaurants in each price range…':'Finding the nine physically closest live '+plural+' from your phone’s location…';
@@ -20555,7 +20591,7 @@ window.wtfPrepare24Hours=async function(city){
       var retry=rows.querySelector('.wtf-live-near-retry');if(retry)retry.addEventListener('click',function(){loadLANearest(origin,label);});
       updateFullListingDistances(origin);
     }finally{
-      if(nearBlock){nearBlock.classList.remove('is-loading');nearBlock.classList.toggle('wtf-near-no-rows',!rows.querySelector('.la-near-row'));}
+      if(nearBlock){delete nearBlock.dataset.liveLoading;nearBlock.classList.remove('is-loading');nearBlock.classList.toggle('wtf-near-no-rows',!rows.querySelector('.la-near-row'));}
     }
   }
   async function openLADispensary(item){
@@ -22142,4 +22178,16 @@ window.wtfPrepare24Hours=async function(city){
   #wtf2Directory[data-category="food"] .wtf-near-price{margin-left:6px;color:#f5ae22!important;font:900 11px/1 'Archivo Black',sans-serif;letter-spacing:.03em;text-shadow:0 0 6px rgba(245,158,11,.45)}
   .wtf-fast-food-launch{display:grid;place-items:center;width:118px;height:118px;margin:24px auto 6px;padding:12px;border:2px solid #f5ae22;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(245,174,34,.2),#080603 68%);color:#f5ae22;font:900 16px/1 'Archivo Black',sans-serif;letter-spacing:.035em;text-align:center;box-shadow:0 0 21px rgba(245,158,11,.48),inset 0 0 15px rgba(245,158,11,.1);cursor:pointer}
   .wtf-fast-food-launch small{display:block;margin-top:-24px;color:#e3b75e;font:900 8px/1.15 'Archivo Narrow',sans-serif;letter-spacing:.08em}
+</style>
+
+<style id="wtf-pink-interface-priority-lock">
+  #wtf2Directory[data-category="food"] .la-near-launch{--near-ring:#ff5f83!important;--near-center:rgba(255,95,131,.2)!important;--near-outline:rgba(255,95,131,.26)!important;--near-glow:rgba(255,95,131,.68)!important;--near-soft:rgba(255,95,131,.22)!important;border-color:#ff5f83!important;color:#ff5f83!important;background:radial-gradient(circle at 50% 36%,rgba(255,95,131,.2),rgba(9,3,6,.97) 62%,#020202 100%)!important;box-shadow:0 0 0 2px rgba(255,95,131,.22),0 0 22px rgba(255,95,131,.68),0 0 42px rgba(255,95,131,.22),inset 0 0 20px rgba(255,95,131,.17)!important}
+  #wtf2Directory[data-category="food"] .la-near-launch-copy,#wtf2Directory[data-category="food"] .la-near-launch-word,#wtf2Directory[data-category="food"] .la-near-category-word{color:#ff5f83!important;text-shadow:0 0 10px rgba(255,95,131,.68)!important}
+  #wtf2Directory[data-category="food"] .la-food-banana{border-right-color:#ff5f83!important;border-bottom-color:#ff5f83!important;filter:drop-shadow(0 0 5px rgba(255,95,131,.68))!important}
+  .wtf2-exit,.wtf2-dir-back,.wtf2-legend-close,.wtf-near-picker-close,.wtf24-route-close,.wtf-night-x,.wtf-news-city-close,.wtf2-groove-close,.near-me-close,.la-near-close{color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important}
+  #wtf2Directory .wtf2-dir-back path,.wtf2-exit path,.wtf2-exit svg,.wtf2-dir-back svg{stroke:#ff5f83!important;filter:drop-shadow(0 0 4px rgba(255,95,131,.68))!important}
+  .wtf2-near{border-color:#ff5f83!important;box-shadow:0 0 16px rgba(255,95,131,.3)!important;animation:none!important}.wtf2-near .wtf2-near-text,.wtf2-near-pin{color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important}
+  .la-near-distance,.la-near-distance small{color:#ff5f83!important;text-shadow:0 0 8px rgba(255,95,131,.68)!important}.wtf-live-near-error{border-color:#ff5f83!important;background:#13060b!important;box-shadow:0 0 18px rgba(255,95,131,.22)!important}.wtf-live-near-error strong{color:#ff5f83!important;text-shadow:0 0 9px rgba(255,95,131,.68)!important}
+  #wtf2Directory[data-category] .wtf2-contact-strip a[href^="mailto:"],.wtf2-contact-strip a[href^="mailto:"]{color:#ff5f83!important;border-color:#ff5f83!important;box-shadow:0 0 13px rgba(255,95,131,.68)!important;text-decoration:none!important}#wtf2Directory[data-category] .wtf2-contact-strip a[href^="mailto:"] svg,.wtf2-contact-strip a[href^="mailto:"] svg{stroke:#ff5f83!important}
+  .wtf2-contact-strip .wtf2-contact-icon:focus-visible,.wtf2-contact-strip .wtf2-contact-edge:focus-visible,.wtf2-contact-strip .wtf2-contact-icon:active,.wtf2-contact-strip .wtf2-contact-edge:active,.wtf2-contact-strip .active,.wtf2-contact-strip [aria-pressed="true"]{color:#ff5f83!important;border-color:#ff5f83!important;box-shadow:0 0 15px rgba(255,95,131,.68)!important;outline:none!important}
 </style>
