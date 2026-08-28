@@ -5145,6 +5145,74 @@
 }
 
 </style>
+
+<!-- Final navigation dock and category-color pass. -->
+<style id="wtf-floating-interior-navigation-and-colors">
+  /* Other Cities is green everywhere, including the main-page orb. */
+  .wtf2-city-quick-change,.wtf-floating-other-cities{
+    border-color:#65dc79!important;background:radial-gradient(circle at 38% 28%,#17391f 0,#07150b 46%,#020604 100%)!important;
+    color:#7bea8d!important;box-shadow:0 0 16px rgba(57,255,95,.58),inset 0 0 12px rgba(57,255,95,.13)!important;
+    text-shadow:0 0 7px rgba(57,255,95,.52)!important;
+  }
+  .wtf-floating-other-cities{
+    position:fixed;z-index:100012;right:142px;bottom:25px;width:54px;height:54px;padding:6px;border:2px solid #65dc79;border-radius:50%;
+    display:none;align-items:center;justify-content:center;text-align:center;font:900 8.5px/1.08 'Archivo Black',Arial,sans-serif;letter-spacing:.02em;
+  }
+  /* The map is moved beside Medical so both remain visible above interior pages. */
+  body #wtfUsMapOrb{display:none!important;right:12px!important;bottom:20px!important;width:58px!important;height:58px!important;z-index:100012!important;}
+  body.wtf2-site-open #wtfUsMapOrb{display:flex!important;}
+  body .wtf2-medical-open.wtf2-footer-medical-orb{right:80px!important;bottom:26px!important;z-index:100012!important;}
+  body.wtf2-interior-open .wtf-floating-other-cities{display:flex;}
+  /* Pick Your Groove belongs only to the main WTFdd page. */
+  body.wtf2-interior-open #wtf2GrooveTrigger,
+  body.wtf2-interior-open #wtf2MusicPicker,
+  body.wtf2-interior-open .wtf2-contact-music{display:none!important;}
+
+  /* Every headline inherits the active directory's actual category color. */
+  #wtf2Directory[data-category="weed"]{--wtf-directory-headline:#72E684;--wtf-directory-glow:rgba(57,255,95,.42);}
+  #wtf2Directory[data-category="tobacco"]{--wtf-directory-headline:#C38959;--wtf-directory-glow:rgba(140,96,63,.42);}
+  #wtf2Directory[data-category="food"]{--wtf-directory-headline:#F5AE22;--wtf-directory-glow:rgba(245,158,11,.46);}
+  #wtf2Directory[data-category] .wtf2-dir-title,
+  #wtf2Directory[data-category] .directory-area,
+  #wtf2Directory[data-category] .listing-name,
+  #wtf2Directory[data-category] .la-near-test h3,
+  #wtf2Directory[data-category] .la-near-launch,
+  #wtf2Directory[data-category] .wtf2-result-count{
+    color:var(--wtf-directory-headline)!important;text-shadow:0 0 9px var(--wtf-directory-glow)!important;
+  }
+  @media(max-width:420px){
+    .wtf-floating-other-cities{right:132px;bottom:24px;width:50px;height:50px;font-size:7.8px;}
+    body .wtf2-medical-open.wtf2-footer-medical-orb{right:75px!important;}
+    body #wtfUsMapOrb{right:10px!important;width:56px!important;height:56px!important;}
+  }
+</style>
+<script id="wtf-floating-interior-navigation-script">
+(function(){
+  function openElement(selector){var el=document.querySelector(selector);return !!(el&&el.classList.contains('open'));}
+  function syncNavigation(){
+    var site=openElement('#wtf2Overlay');
+    var interior=openElement('#wtf2Directory')||document.body.classList.contains('wtf2-child-open')||
+      openElement('#shuttleOverlay')||openElement('#nearMeOverlay')||openElement('#hhOverlay')||
+      openElement('#wtfNewsletterOverlay')||openElement('#thc24Overlay')||openElement('#wtfUsTileMap');
+    document.body.classList.toggle('wtf2-site-open',site);
+    document.body.classList.toggle('wtf2-interior-open',site&&interior);
+  }
+  function install(){
+    var map=document.getElementById('wtfUsMapOrb');
+    if(map&&map.parentNode!==document.body)document.body.appendChild(map);
+    var city=document.getElementById('wtfFloatingOtherCities');
+    if(!city){
+      city=document.createElement('button');city.type='button';city.id='wtfFloatingOtherCities';city.className='wtf-floating-other-cities';
+      city.setAttribute('aria-label','Choose another city');city.innerHTML='OTHER<br>CITIES';document.body.appendChild(city);
+      city.addEventListener('click',function(){var original=document.getElementById('wtf2CityQuickChange');if(original)original.click();});
+    }
+    var observer=new MutationObserver(syncNavigation);
+    observer.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
+    syncNavigation();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install);else install();
+}());
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -19167,7 +19235,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 
 <section id="wtf2Overlay" aria-hidden="true">
   <button class="wtf2-groove-trigger" id="wtf2GrooveTrigger" type="button" aria-haspopup="dialog" aria-controls="wtf2MusicPicker"><span class="arrow">➜</span><span class="note">♫</span><span>PICK YOUR<br>GROOVE</span></button>
-  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · AFTER HOURS ROTATION</button><button class="wtf2-track" data-track="1" type="button">1 · NEON AFTER HOURS</button><button class="wtf2-track" data-track="2" type="button">2 · DESERT LOWRIDER</button><button class="wtf2-track" data-track="3" type="button">3 · MIDNIGHT SMOKE</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
+  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a full instrumental groove to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · FULL SONG ROTATION</button><button class="wtf2-track" data-track="1" type="button">1 · SUNSET FUNK DRIVE</button><button class="wtf2-track" data-track="2" type="button">2 · VELVET SOUL CRUISE</button><button class="wtf2-track" data-track="3" type="button">3 · COSMIC DESERT DISCO</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Choose another city"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -20117,18 +20185,22 @@ window.wtfPrepare24Hours=async function(city){
   function musicNoise(when,duration,volume,highpass){
     if(!musicCtx||!musicMaster)return;var length=Math.max(1,Math.floor(musicCtx.sampleRate*duration)),buffer=musicCtx.createBuffer(1,length,musicCtx.sampleRate),data=buffer.getChannelData(0);for(var n=0;n<length;n++)data[n]=(Math.random()*2-1)*(1-n/length);var source=musicCtx.createBufferSource(),filter=musicCtx.createBiquadFilter(),gain=musicCtx.createGain();source.buffer=buffer;filter.type='highpass';filter.frequency.value=highpass||900;gain.gain.setValueAtTime(volume,when);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);source.connect(filter);filter.connect(gain);gain.connect(musicMaster);source.start(when);source.stop(when+duration);
   }
+  function musicChord(notes,when,duration,wave,volume){
+    notes.forEach(function(note,index){musicTone(note,when+index*.008,duration,wave||'triangle',(volume||.012)/(1+index*.15));});
+  }
   function musicBeat(){
     if(!musicOn||!musicCtx)return;
     var songs={
-      1:{bass:[55,55,65.41,55,73.42,55,82.41,49,55,55,65.41,73.42,82.41,73.42,65.41,49],lead:[220,0,261.63,0,293.66,0,329.63,0,220,0,392,0,329.63,293.66,261.63,0],beat:300,wave:'sawtooth',kick:[0,4,8,12],snare:[4,12]},
-      2:{bass:[49,49,0,61.74,49,73.42,0,65.41,43.65,43.65,0,55,61.74,55,49,0],lead:[0,196,0,0,0,220,0,0,0,174.61,0,196,0,220,0,0],beat:375,wave:'triangle',kick:[0,6,8,14],snare:[4,12]},
-      3:{bass:[41.2,0,41.2,49,55,0,49,36.71,41.2,0,55,61.74,55,49,41.2,0],lead:[164.81,0,196,0,220,0,246.94,0,164.81,0,261.63,0,246.94,220,196,0],beat:250,wave:'sine',kick:[0,3,8,11],snare:[4,12]}
+      1:{bass:[55,0,82.41,55,73.42,0,82.41,49,55,0,98,82.41,73.42,65.41,55,49],lead:[329.63,392,440,392,523.25,440,392,329.63,293.66,329.63,392,440,392,329.63,293.66,261.63],chords:[[220,277.18,329.63],[196,246.94,293.66],[174.61,220,261.63],[196,246.94,293.66]],beat:245,wave:'triangle',kick:[0,4,8,12],snare:[4,12]},
+      2:{bass:[43.65,0,55,65.41,43.65,0,61.74,55,49,0,61.74,73.42,49,55,61.74,41.2],lead:[261.63,0,329.63,392,349.23,329.63,293.66,261.63,246.94,0,293.66,369.99,329.63,293.66,261.63,246.94],chords:[[174.61,220,261.63],[164.81,207.65,246.94],[146.83,185,220],[164.81,207.65,246.94]],beat:330,wave:'sine',kick:[0,6,8,14],snare:[4,12]},
+      3:{bass:[41.2,61.74,0,73.42,55,82.41,0,73.42,46.25,69.3,0,82.41,61.74,92.5,82.41,55],lead:[329.63,392,493.88,523.25,493.88,440,392,329.63,369.99,440,554.37,587.33,554.37,493.88,440,369.99],chords:[[164.81,207.65,246.94],[184.99,233.08,277.18],[146.83,184.99,220],[174.61,220,261.63]],beat:220,wave:'sawtooth',kick:[0,3,8,11],snare:[4,12]}
     },activeTrack=musicTrack===0?([1,2,3][Math.floor(musicStep/64)%3]):musicTrack,song=songs[activeTrack],t=musicCtx.currentTime+.025,i=musicStep%song.bass.length;
-    if(song.bass[i]){musicTone(song.bass[i],t,song.beat/1000*.9,'sawtooth',.09);musicTone(song.bass[i]/2,t,song.beat/1000*.82,'sine',.17);}
-    if(song.lead[i])musicTone(song.lead[i],t+.025,song.beat/1000*.62,song.wave,.025);
-    if(song.kick.indexOf(i)>-1){musicTone(48,t,.11,'sine',.24);musicTone(34,t+.018,.09,'sine',.18);}
-    if(song.snare.indexOf(i)>-1)musicNoise(t,.105,.055,1100);
-    if(i%2===0)musicNoise(t,.022,.012,5200);
+    if(i%4===0)musicChord(song.chords[Math.floor(i/4)%song.chords.length],t,song.beat/1000*3.65,'triangle',.032);
+    if(song.bass[i]){musicTone(song.bass[i],t,song.beat/1000*.92,'square',.035);musicTone(song.bass[i]/2,t,song.beat/1000*.86,'sine',.12);}
+    if(song.lead[i]){musicTone(song.lead[i],t+.025,song.beat/1000*.82,song.wave,.02);if(i%4===2)musicTone(song.lead[i]*2,t+.04,song.beat/1000*.38,'sine',.007);}
+    if(song.kick.indexOf(i)>-1){musicTone(46,t,.13,'sine',.16);musicTone(32,t+.018,.1,'sine',.11);}
+    if(song.snare.indexOf(i)>-1)musicNoise(t,.12,.035,1300);
+    if(i%2===0)musicNoise(t,.026,.007,6000);
     musicStep++;return song.beat;
   }
   function updateMusicButton(){var b=q('wtf2MusicToggle'),trigger=q('wtf2GrooveTrigger');if(b){b.classList.toggle('is-muted',!musicOn);b.setAttribute('aria-pressed',musicOn?'true':'false');b.setAttribute('aria-label',musicOn?'Turn music off':'Turn music on');var l=b.querySelector('.music-label');if(l)l.textContent=musicOn?'MUSIC OFF':'MUSIC ON';}if(trigger){trigger.classList.toggle('is-playing',musicOn);trigger.setAttribute('aria-pressed',musicOn?'true':'false');trigger.setAttribute('aria-label',musicOn?'Music is playing. Tap to change your groove.':'Turn music on and choose your groove.');}}
@@ -22023,4 +22095,18 @@ window.wtfPrepare24Hours=async function(city){
   #wtf2Directory[data-category="food"] .wtf2-contact-icon{border-color:#F59E0B!important;color:#F5AE22!important;box-shadow:0 0 9px rgba(245,158,11,.4)!important;}
   #wtf2Directory[data-category="food"] .wtf2-contact-icon svg{stroke:#F5AE22!important;}
   /* Weed pages keep the standard green — no override needed. */
+</style>
+
+<style id="wtf-category-headline-colors-final">
+  #wtf2Directory[data-category="weed"]{--wtf-directory-headline:#72E684;--wtf-directory-glow:rgba(57,255,95,.42);}
+  #wtf2Directory[data-category="tobacco"]{--wtf-directory-headline:#C38959;--wtf-directory-glow:rgba(140,96,63,.42);}
+  #wtf2Directory[data-category="food"]{--wtf-directory-headline:#F5AE22;--wtf-directory-glow:rgba(245,158,11,.46);}
+  #wtf2Directory[data-category] .wtf2-dir-title,
+  #wtf2Directory[data-category] #wtf2DirList .directory-area,
+  #wtf2Directory[data-category] #wtf2DirList .listing-name,
+  #wtf2Directory[data-category] #wtf2DirList .la-near-test h3,
+  #wtf2Directory[data-category] #wtf2DirList .la-near-launch,
+  #wtf2Directory[data-category] .wtf2-result-count{
+    color:var(--wtf-directory-headline)!important;text-shadow:0 0 9px var(--wtf-directory-glow)!important;
+  }
 </style>
