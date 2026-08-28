@@ -5146,6 +5146,41 @@
 
 </style>
 
+<style id="wtf-front-page-pink-controls-clarified-final">
+  /* Preserve the front-page composition; change only its former red interface color to pink. */
+  #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{
+    color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important;text-shadow:0 0 8px rgba(255,95,131,.68)!important;
+  }
+  #wtfLandingOverlay>.wtf2-share-page,#wtf2Overlay .wtf2-main-share-wrap .wtf2-share-page{
+    border-color:#ff5f83!important;background:#17050d!important;color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important;
+    box-shadow:0 0 15px rgba(255,95,131,.68),inset 0 0 11px rgba(255,95,131,.12)!important;
+  }
+  #wtfLandingOverlay>.wtf2-share-page *,#wtf2Overlay .wtf2-main-share-wrap .wtf2-share-page *{
+    color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important;stroke:#ff5f83!important;
+  }
+  #wtf2Overlay .wtf2-groove-trigger,#wtf2Overlay .wtf2-music-toggle{
+    border-color:#ff5f83!important;background:linear-gradient(145deg,#8b173b,#3c0a1d)!important;color:#fff!important;
+    box-shadow:0 0 16px rgba(255,95,131,.68),inset 0 0 13px rgba(255,255,255,.08)!important;
+  }
+  #wtf2Overlay .wtf2-groove-trigger .arrow,#wtf2Overlay .wtf2-groove-trigger .note{color:#fff!important;-webkit-text-fill-color:#fff!important}
+  #wtf2Overlay .wtf2-music-picker{background:rgba(46,4,20,.92)!important}
+  #wtf2Overlay .wtf2-music-card{border-color:#ff5f83!important;background:linear-gradient(160deg,#741532 0%,#290712 100%)!important;box-shadow:0 0 35px rgba(255,95,131,.68)!important}
+  #wtf2Overlay .wtf2-music-card p{color:#fff!important;-webkit-text-fill-color:#fff!important}
+  #wtf2Overlay .wtf2-track{border-color:#ff9ab1!important;background:#4b0c22!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:inset 0 0 12px rgba(255,95,131,.2)!important}
+  #wtf2Overlay .wtf2-track.active{border-color:#fff!important;background:#b62250!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:0 0 15px rgba(255,95,131,.68)!important}
+  #wtf2Overlay .wtf2-picker-music-off,#wtf2Overlay .wtf2-groove-close{border-color:#ff5f83!important;background:#24050f!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:0 0 12px rgba(255,95,131,.68)!important}
+  #wtf2Overlay .wtf2-near,#wtf2Overlay .wtf2-tool-deals{
+    border-color:#ff5f83!important;background:#17050d!important;box-shadow:0 0 16px rgba(255,95,131,.52)!important;
+  }
+  #wtf2Overlay .wtf2-near .wtf2-near-text,#wtf2Overlay .wtf2-near .wtf2-near-pin{
+    color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important;
+  }
+  #wtf2Overlay .wtf2-tool-deals,#wtf2Overlay .wtf2-tool-deals *{color:#fff!important;-webkit-text-fill-color:#fff!important}
+  #wtf2Overlay .ticker-label,#wtf2Overlay .ticker-live-dot{background:#ff5f83!important;color:#fff!important;box-shadow:0 0 11px rgba(255,95,131,.58)!important}
+  #wtf2Overlay>.wtf2-shell .wtf2-exit{border-color:#ff5f83!important;color:#ff5f83!important;-webkit-text-fill-color:#ff5f83!important;box-shadow:0 0 15px rgba(255,95,131,.68)!important}
+  #wtf2Overlay>.wtf2-shell .wtf2-exit svg,#wtf2Overlay>.wtf2-shell .wtf2-exit path{stroke:#ff5f83!important}
+</style>
+
 <style id="wtf-main-page-original-colors-restored-final">
   /* The main WTFdd page keeps its established red/gold treatment. */
   #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{
@@ -22289,19 +22324,4 @@ window.wtfPrepare24Hours=async function(city){
   .wtf2-contact-strip .wtf2-lv-steam-open:hover,.wtf2-contact-strip .wtf2-lv-steam-open:focus-visible{
     color:#ff9ab1!important;border-color:#ff9ab1!important;box-shadow:0 0 18px rgba(255,95,131,.82)!important;
   }
-</style>
-
-<style id="wtf-main-original-colors-absolute-last">
-  #wtfLandingEnterBtn,#wtfLandingEnterBtn:hover,#wtfLandingEnterBtn:focus,#wtfLandingEnterBtn:active{color:#C90201!important;-webkit-text-fill-color:#C90201!important;text-shadow:none!important}
-  #wtfLandingOverlay>.wtf2-share-page,#wtf2Overlay .wtf2-main-share-wrap .wtf2-share-page{border-color:#F59E0B!important;background:#020202!important;color:#D7263D!important;-webkit-text-fill-color:#D7263D!important;box-shadow:0 0 12px rgba(245,158,11,.42),inset 0 0 11px rgba(245,158,11,.09)!important}
-  #wtfLandingOverlay>.wtf2-share-page *,#wtf2Overlay .wtf2-main-share-wrap .wtf2-share-page *{color:#D7263D!important;-webkit-text-fill-color:#D7263D!important;stroke:#D7263D!important}
-  #wtf2Overlay .wtf2-groove-trigger{border-color:#F59E0B!important;background:#020202!important;color:#fff!important;box-shadow:0 0 12px rgba(245,158,11,.42)!important}
-  #wtf2Overlay .wtf2-groove-trigger .arrow,#wtf2Overlay .wtf2-groove-trigger .note{color:#D7263D!important;-webkit-text-fill-color:#D7263D!important}
-  #wtf2Overlay .wtf2-music-picker{background:rgba(0,0,0,.74)!important}#wtf2Overlay .wtf2-music-card{border-color:#F59E0B!important;background:#050505!important;box-shadow:0 0 30px rgba(245,158,11,.28),0 22px 70px #000!important}
-  #wtf2Overlay .wtf2-music-card p{color:#888!important;-webkit-text-fill-color:#888!important}#wtf2Overlay .wtf2-track{border-color:#3b3b3b!important;background:#090909!important;color:#ddd!important;-webkit-text-fill-color:#ddd!important;box-shadow:none!important}
-  #wtf2Overlay .wtf2-track.active{border-color:#F59E0B!important;color:#D7263D!important;-webkit-text-fill-color:#D7263D!important;box-shadow:0 0 11px rgba(245,158,11,.3)!important}
-  #wtf2Overlay .wtf2-picker-music-off,#wtf2Overlay .wtf2-groove-close{border-color:#F59E0B!important;background:#020202!important;color:#D7263D!important;-webkit-text-fill-color:#D7263D!important}
-  #wtf2Overlay .wtf2-near{border-color:#D7263D!important;background:#020202!important;box-shadow:0 0 13px rgba(215,38,61,.16)!important}#wtf2Overlay .wtf2-near .wtf2-near-text,#wtf2Overlay .wtf2-near .wtf2-near-pin{color:#D7263D!important;-webkit-text-fill-color:#D7263D!important}
-  #wtf2Overlay .wtf2-tool-deals{border-color:#D7263D!important;background:#020202!important;color:#fff!important;-webkit-text-fill-color:#fff!important;box-shadow:0 0 13px rgba(215,38,61,.16)!important}#wtf2Overlay .wtf2-tool-deals *{color:inherit!important;-webkit-text-fill-color:inherit!important}
-  #wtf2Overlay>.wtf2-shell .wtf2-exit{border-color:#F59E0B!important;color:#D7263D!important;-webkit-text-fill-color:#D7263D!important;box-shadow:0 0 12px rgba(245,158,11,.42)!important}#wtf2Overlay>.wtf2-shell .wtf2-exit svg,#wtf2Overlay>.wtf2-shell .wtf2-exit path{stroke:#D7263D!important}
 </style>
