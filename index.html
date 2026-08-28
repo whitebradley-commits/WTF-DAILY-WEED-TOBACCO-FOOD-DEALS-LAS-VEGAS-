@@ -20020,38 +20020,38 @@ window.wtfPrepare24Hours=async function(city){
     if(city==='London'){
       var alternatives=market.alternative.map(function(entry,i){var name=listName(entry);return item(name,'A London CBD/hemp retailer or specialist medical-access service. This is not recreational adult-use cannabis retail; open the current listing and read the legal label before visiting.',maps(name,'London'),i+1);}).join('');
       var smoke=market.tobacco.map(function(entry,i){var name=listName(entry);return item(name,'A London tobacco, vape or lawful shisha destination. Shisha and tobacco service must not be confused with recreational cannabis use.',maps(name,'London'),i+1);}).join('');
-      grid.innerHTML=localNews+'<section class="wtf-news-section weed full"><h2>LONDON WEED — THE LEGAL POSITION</h2>'+item('No recreational dispensaries','Cannabis remains controlled in the UK. Specialist-prescribed medical cannabis is a separate clinical route, and smoking cannabis-based medicinal products remains prohibited.','https://www.gov.uk/government/publications/circular-0182018-rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans/rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans-accessible-version',0)+'<div class="wtf-news-alert">CBD, hemp retail, medical clinics, tobacco shops and shisha lounges are separate categories. A listing here never changes the law.</div></section>'+ 
+      grid.innerHTML='<section class="wtf-news-section weed full"><h2>LONDON WEED — THE LEGAL POSITION</h2>'+item('No recreational dispensaries','Cannabis remains controlled in the UK. Specialist-prescribed medical cannabis is a separate clinical route, and smoking cannabis-based medicinal products remains prohibited.','https://www.gov.uk/government/publications/circular-0182018-rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans/rescheduling-of-cannabis-based-products-for-medicinal-use-in-humans-accessible-version',0)+'<div class="wtf-news-alert">CBD, hemp retail, medical clinics, tobacco shops and shisha lounges are separate categories. A listing here never changes the law.</div></section>'+ 
       '<section class="wtf-news-section weed full"><h2>10 LEGAL ALTERNATIVES — CBD, HEMP &amp; MEDICAL ACCESS</h2>'+alternatives+'<div class="wtf-news-alert">Medical-cannabis access requires specialist clinical assessment and a prescription. CBD food products require the appropriate UK authorisation.</div></section>'+ 
       '<section class="wtf-news-section tobacco full"><h2>10 LONDON SMOKE, TOBACCO &amp; SHISHA DESTINATIONS</h2>'+smoke+'<div class="wtf-news-alert">Confirm age policy, product type, outdoor-service arrangements and current hours directly.</div></section>'+ 
       '<section class="wtf-news-section food full"><h2>10 HIGH &amp; HUNGRY LONDON STARTERS</h2>'+food+'<div class="wtf-news-alert">Every restaurant in this section is tied only to London. No Las Vegas listings or fallbacks are used.</div></section>'+ 
       '<section class="wtf-news-section events full"><h2>LONDON — AUGUST 27 – SEPTEMBER 3, 2026</h2>'+item('Notting Hill Carnival — August 30–31','Europe’s biggest street festival runs over the bank-holiday weekend. Confirm parade routes, sound-system locations and transport closures before leaving.','https://www.visitlondon.com/things-to-do/whats-on/special-events/london-events-calendar',0)+item('BBC Proms — final fortnight','The Royal Albert Hall summer season runs to mid-September. Check the official daily programme.','https://www.bbc.co.uk/proms',0)+item('Greenwich+Docklands Festival — through early September','Free outdoor art, dance, theatre and installations continue across the issue week.','https://www.visitlondon.com/things-to-do/whats-on/special-events/london-events-calendar',0)+item('Official London events calendar','Use Visit London for additions, cancellations and newly announced events.',calendar,0)+'</section>'+ 
-      '<section class="wtf-news-section community full wtf-before-you-go"><h2>BEFORE YOU GO — LONDON</h2><div class="wtf-news-check-grid"><div class="wtf-news-check-card"><strong>Read the category</strong><span>CBD retail, medical access, tobacco and shisha are legally different.</span></div><div class="wtf-news-check-card"><strong>Confirm directly</strong><span>Hours, prescriptions, eligibility, products and age rules can change.</span></div><div class="wtf-news-check-card"><strong>Check transport</strong><span>Use current TfL and venue information before leaving.</span></div><div class="wtf-news-check-card"><strong>London only</strong><span>This issue contains no Las Vegas business or event content.</span></div></div></section>';
+      '<section class="wtf-news-section community full wtf-before-you-go"><h2>BEFORE YOU GO — LONDON</h2><div class="wtf-news-check-grid"><div class="wtf-news-check-card"><strong>Read the category</strong><span>CBD retail, medical access, tobacco and shisha are legally different.</span></div><div class="wtf-news-check-card"><strong>Confirm directly</strong><span>Hours, prescriptions, eligibility, products and age rules can change.</span></div><div class="wtf-news-check-card"><strong>Check transport</strong><span>Use current TfL and venue information before leaving.</span></div><div class="wtf-news-check-card"><strong>London only</strong><span>This issue contains no Las Vegas business or event content.</span></div></div></section>'+localNews;
       return;
     }
     var weedSection=city==='London'?'<section class="wtf-news-section weed full"><h2>WEED — LONDON AVAILABILITY</h2>'+item('Recreational dispensaries are not available','Cannabis remains controlled in the UK. Specialist-prescribed medical cannabis is a separate route; confirm current official guidance before making decisions.','https://www.gov.uk/government/publications/cannabis-cbd-and-other-cannabinoids-drug-licensing-factsheet/drug-licensing-factsheet-cannabis-cbd-and-other-cannabinoids',0)+'<div class="wtf-news-alert">Use the London Weed button on the main city page to see nearby international locations.</div></section>':'<section class="wtf-news-section weed full"><h2>WEED — '+market.weed.length+' '+esc(city.toUpperCase())+' DISPENSARIES</h2>'+weed+'<div class="wtf-news-alert">This edition only contains '+esc(city)+' dispensaries. Menus, prices, inventory and hours can change; confirm directly before leaving.</div></section>';
     grid.innerHTML=
-      localNews+weedSection+ 
+      weedSection+ 
       '<section class="wtf-news-section tobacco vape full"><h2>VAPE BOARD — '+esc(city.toUpperCase())+'</h2>'+item('Local carts, pods and disposables','Use the live local search to compare current adult-use dispensary and licensed retailer options in '+city+'.',maps('licensed cannabis vapes carts pods',city),0)+'</section>'+ 
       '<section class="wtf-news-section tobacco full"><h2>TOBACCO & SMOKE SHOPS — '+esc(city.toUpperCase())+'</h2>'+item('Weekly local watch','WTF is tracking smoke shops, cigars, hookah, papers, glass, nicotine pouches and late-night hours specifically in '+city+'.',tobaccoQuery,0)+'<div class="wtf-news-alert">Adult products are 21+. Local rules and available products vary by market.</div></section>'+ 
       '<section class="wtf-news-section food full"><h2>FOOD — '+market.food.length+' HIGH & HUNGRY STARTERS</h2>'+food+'<div class="wtf-news-alert">Every restaurant in this section is in the selected '+esc(city)+' market.</div></section>'+ 
       '<section class="wtf-news-section events full"><h2>'+esc(city.toUpperCase())+' — THIS WEEK & NEXT</h2>'+item('Official local events calendar','Use the city’s current visitor calendar for newly added concerts, festivals, sports and community events.',calendar,0)+item('Live music and nightlife','See current '+city+' live-music and nightlife results for this issue week.',search('live music nightlife events',city),0)+item('Food events and pop-ups','See current '+city+' food festivals, markets and pop-up listings.',search('food festivals pop ups events',city),0)+'</section>'+ 
-      '<section class="wtf-news-section community full wtf-before-you-go"><h2>BEFORE YOU GO</h2><div class="wtf-news-check-grid"><div class="wtf-news-check-card"><strong>Open the current page</strong><span>Use the linked live listing for the selected city.</span></div><div class="wtf-news-check-card"><strong>Confirm directly</strong><span>Menus, inventory, prices, restrictions and event times can change.</span></div><div class="wtf-news-check-card"><strong>Check the city name</strong><span>Every listing in this edition is tied to '+esc(city)+'.</span></div><div class="wtf-news-check-card"><strong>Screenshot details</strong><span>Save the offer, address and date before leaving.</span></div></div></section>';
+      '<section class="wtf-news-section community full wtf-before-you-go"><h2>BEFORE YOU GO</h2><div class="wtf-news-check-grid"><div class="wtf-news-check-card"><strong>Open the current page</strong><span>Use the linked live listing for the selected city.</span></div><div class="wtf-news-check-card"><strong>Confirm directly</strong><span>Menus, inventory, prices, restrictions and event times can change.</span></div><div class="wtf-news-check-card"><strong>Check the city name</strong><span>Every listing in this edition is tied to '+esc(city)+'.</span></div><div class="wtf-news-check-card"><strong>Screenshot details</strong><span>Save the offer, address and date before leaving.</span></div></div></section>'+localNews;
   }
   function renderEdition(city){
     updateHeader(city);
-    if(city==='Las Vegas'){grid.innerHTML=newsSection(city)+vegasGrid;}else{build(city);}
+    if(city==='Las Vegas'){grid.innerHTML=vegasGrid+newsSection(city);}else{build(city);}
     var source=document.querySelector('#wtfNewsletterIssue .wtf-news-source');
     if(source)source.textContent='Issue '+issue+' is the '+city+' weekly edition released Thursday, August 27, 2026. Local news, businesses, menus, prices, hours, eligibility and event schedules can change without notice. Confirm directly before leaving.';
     document.dispatchEvent(new CustomEvent('wtfNewsletterEditionRendered',{detail:{city:city}}));
   }
-  var travelSelect=picker.querySelector('#wtfTravelNewsletterCity');travelSelect.innerHTML=Object.keys(WTF_CITY_STARTERS).map(function(city){return '<option value="'+esc(city)+'">'+esc(city)+'</option>';}).join('');
+  var travelSelect=picker.querySelector('#wtfTravelNewsletterCity');var newsletterCities=['Las Vegas'].concat(Object.keys(WTF_CITY_STARTERS).filter(function(city){return city!=='Las Vegas';}));travelSelect.innerHTML='<option value="" selected disabled>CHOOSE A CITY</option>'+newsletterCities.map(function(city){return '<option value="'+esc(city)+'">'+esc(city)+'</option>';}).join('');
   function closePicker(){picker.classList.remove('open');picker.setAttribute('aria-hidden','true');}
-  function openTravel(){var active=window.WTF_NEWSLETTER_CITY||window.WTF_SELECTED_CITY||'Las Vegas';travelSelect.value=active;picker.querySelector('.wtf-newsletter-chooser').classList.remove('open');picker.classList.add('open');picker.setAttribute('aria-hidden','false');}
+  function openTravel(){travelSelect.value='';picker.querySelector('.wtf-newsletter-chooser').classList.remove('open');picker.classList.add('open');picker.setAttribute('aria-hidden','false');}
   topTravel.addEventListener('click',openTravel);travel.querySelector('#wtfTravelHubBottom').addEventListener('click',openTravel);
   picker.querySelector('.wtf-news-city-close').addEventListener('click',closePicker);
   picker.querySelector('.wtf-news-travel-news').addEventListener('click',function(){picker.querySelector('.wtf-newsletter-chooser').classList.add('open');});
   picker.querySelector('#wtfOpenTravelNewsletter').addEventListener('click',function(){var city=travelSelect.value;if(!city)return;window.WTF_NEWSLETTER_CITY=city;renderEdition(city);closePicker();var overlay=document.getElementById('wtfNewsletterOverlay');if(overlay)overlay.scrollTop=0;});
-  picker.querySelector('.wtf-news-travel-sites').addEventListener('click',function(){closePicker();var newsletter=document.getElementById('wtfNewsletterOverlay');if(newsletter){newsletter.classList.remove('open');newsletter.setAttribute('aria-hidden','true');}document.body.style.overflow='';if(window.wtfOpenCityLanding)window.wtfOpenCityLanding();});
+  picker.querySelector('.wtf-news-travel-sites').addEventListener('click',function(){closePicker();if(window.wtfOpenCityLanding)window.wtfOpenCityLanding();});
   picker.addEventListener('click',function(e){if(e.target===picker)closePicker();});
   window.wtfRenderNewsletterEdition=renderEdition;
   window.wtfPrepareNewsletter=async function(){
@@ -21636,6 +21636,58 @@ window.wtfPrepare24Hours=async function(city){
     gate.style.display='none';issue.classList.add('show');overlay.scrollTop=0;
   });
   document.addEventListener('keydown',function(e){if(e.key==='Escape')hideOrb();});
+})();
+</script>
+
+<style id="rolling-paper-color-and-preview-fix">
+/* Full-color newspaper departments */
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed{background:#72bf7d !important;border:3px solid #155b2a !important;padding:12px !important;color:#083817 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed h2,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed .wtf-news-item > strong,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed .wtf-news-item > span{color:#083817 !important;-webkit-text-fill-color:#083817 !important;border-color:#155b2a !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed .wtf-news-link{background:#d9f1dc !important;color:#0b4c20 !important;-webkit-text-fill-color:#0b4c20 !important;border-color:#155b2a !important;box-shadow:3px 3px 0 #155b2a !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco{background:#ad7650 !important;border:3px solid #542c14 !important;padding:12px !important;color:#32180a !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco h2,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco .wtf-news-item > strong,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco .wtf-news-item > span{color:#32180a !important;-webkit-text-fill-color:#32180a !important;border-color:#542c14 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco .wtf-news-link{background:#ead4c3 !important;color:#542c14 !important;-webkit-text-fill-color:#542c14 !important;border-color:#542c14 !important;box-shadow:3px 3px 0 #542c14 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food{background:#e6bd3e !important;border:3px solid #765300 !important;padding:12px !important;color:#4e3500 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food h2,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food .wtf-news-item > strong,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food .wtf-news-item > span{color:#4e3500 !important;-webkit-text-fill-color:#4e3500 !important;border-color:#765300 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food .wtf-news-link{background:#fff1ad !important;color:#654700 !important;-webkit-text-fill-color:#654700 !important;border-color:#765300 !important;box-shadow:3px 3px 0 #765300 !important;}
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.weed .wtf-news-alert,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.tobacco .wtf-news-alert,
+#wtfNewsletterOverlay #wtfNewsletterIssue .wtf-news-section.food .wtf-news-alert{background:rgba(255,255,255,.42) !important;color:inherit !important;-webkit-text-fill-color:currentColor !important;border-color:currentColor !important;}
+
+/* In-newsletter page viewer: the newsletter always remains behind it */
+.rp-link-viewer{position:fixed;inset:0;z-index:13050;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);}
+.rp-link-viewer.open{display:flex;}
+.rp-link-viewer-card{position:relative;width:min(940px,100%);height:min(86vh,820px);padding:52px 8px 8px;border:3px solid #1f7a3a;border-radius:22px;background:#f7f4ea;box-shadow:0 24px 70px rgba(0,0,0,.55);overflow:hidden;}
+.rp-link-viewer-title{position:absolute;left:18px;right:62px;top:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:900 14px/1 'Playfair Display',Georgia,serif;color:#111;}
+.rp-link-viewer-close{position:absolute;right:10px;top:8px;width:38px;height:38px;border-radius:50%;border:2px solid #111;background:#fff;color:#111;font:900 22px/1 Arial,sans-serif;cursor:pointer;}
+.rp-link-viewer iframe{display:block;width:100%;height:100%;border:1px solid #b9b19e;border-radius:12px;background:#fff;}
+</style>
+
+<div class="rp-link-viewer" id="rpLinkViewer" aria-hidden="true">
+  <div class="rp-link-viewer-card" role="dialog" aria-modal="true" aria-label="Current information">
+    <div class="rp-link-viewer-title" id="rpLinkViewerTitle">Current information</div>
+    <button class="rp-link-viewer-close" id="rpLinkViewerClose" type="button" aria-label="Close current information">×</button>
+    <iframe id="rpLinkViewerFrame" title="Current information" loading="lazy"></iframe>
+  </div>
+</div>
+
+<script id="rolling-paper-contained-links">
+(function(){
+  var viewer=document.getElementById('rpLinkViewer'),frame=document.getElementById('rpLinkViewerFrame'),title=document.getElementById('rpLinkViewerTitle'),close=document.getElementById('rpLinkViewerClose');
+  if(!viewer||!frame||!close)return;
+  function shut(){viewer.classList.remove('open');viewer.setAttribute('aria-hidden','true');frame.src='about:blank';}
+  document.addEventListener('click',function(e){
+    var link=e.target.closest('#wtfNewsletterIssue a.wtf-news-link');if(!link)return;
+    e.preventDefault();e.stopPropagation();title.textContent=link.closest('.wtf-news-item')?.querySelector('strong')?.textContent||'Current information';frame.src=link.href;viewer.classList.add('open');viewer.setAttribute('aria-hidden','false');
+  },true);
+  close.addEventListener('click',shut);viewer.addEventListener('click',function(e){if(e.target===viewer)shut();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&viewer.classList.contains('open'))shut();});
 })();
 </script>
 
