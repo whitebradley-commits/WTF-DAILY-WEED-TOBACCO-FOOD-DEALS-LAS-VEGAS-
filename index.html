@@ -20006,6 +20006,7 @@ window.wtfPrepare24Hours=async function(city){
   function item(name,copy,url,index){return '<div class="wtf-news-item"><strong>'+(index?index+'. ':'')+esc(listName(name))+'</strong><span>'+esc(copy)+'</span><a class="wtf-news-link" href="'+esc(url)+'">VIEW CURRENT INFORMATION</a></div>';}
   function updateHeader(city){
     var number=masthead.querySelector('.wtf-news-issue-no');if(number)number.textContent='ISSUE '+issue;
+    var edition=masthead.querySelector('.rp-edition');if(edition)edition.textContent=city.toUpperCase()+' EDITION';
     var line=masthead.querySelector('.wtf-news-city-line');if(line)line.textContent='IN '+city.toUpperCase()+'...';
     var intro=masthead.querySelector('p');if(intro)intro.innerHTML='Fresh deals, things to do, where to eat. New issue every Thursday at midnight.<span class="wtf-news-week">'+release+'</span>';
   }
@@ -20041,6 +20042,7 @@ window.wtfPrepare24Hours=async function(city){
     if(city==='Las Vegas'){grid.innerHTML=newsSection(city)+vegasGrid;}else{build(city);}
     var source=document.querySelector('#wtfNewsletterIssue .wtf-news-source');
     if(source)source.textContent='Issue '+issue+' is the '+city+' weekly edition released Thursday, August 27, 2026. Local news, businesses, menus, prices, hours, eligibility and event schedules can change without notice. Confirm directly before leaving.';
+    document.dispatchEvent(new CustomEvent('wtfNewsletterEditionRendered',{detail:{city:city}}));
   }
   var travelSelect=picker.querySelector('#wtfTravelNewsletterCity');travelSelect.innerHTML=Object.keys(WTF_CITY_STARTERS).map(function(city){return '<option value="'+esc(city)+'">'+esc(city)+'</option>';}).join('');
   function closePicker(){picker.classList.remove('open');picker.setAttribute('aria-hidden','true');}
@@ -21297,7 +21299,7 @@ window.wtfPrepare24Hours=async function(city){
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap');
 
 /* ---------- gate title tweak ---------- */
-#wtfNewsletterGate h1{font-family:'UnifrakturCook','Playfair Display',Georgia,serif !important;letter-spacing:.01em !important;line-height:1 !important;}
+#wtfNewsletterGate h1{font-family:'Playfair Display',Georgia,serif !important;font-weight:900 !important;letter-spacing:.01em !important;line-height:1 !important;}
 #wtfNewsletterGate .rp-gate-sub{font:700 11px/1 'Old Standard TT',Georgia,serif;letter-spacing:.28em;text-transform:uppercase;color:#d9ae2f;margin:-4px 0 6px;}
 
 /* ---------- paper background ---------- */
@@ -21361,11 +21363,11 @@ window.wtfPrepare24Hours=async function(city){
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-title-wrap{padding:14px 0 0;}
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-title{display:inline-block;text-align:center;color:#f7f4ea;}
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-line1{
-  display:block;color:#f7f4ea;font:700 clamp(38px,11.5vw,88px)/.92 'UnifrakturCook','Playfair Display',Georgia,serif;letter-spacing:.005em;
+  display:block;color:#f7f4ea;font:900 clamp(38px,11.5vw,88px)/.92 'Playfair Display',Georgia,serif;letter-spacing:.005em;
 }
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-paper-wrap{display:inline-block;text-align:right;}
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-paper{
-  display:block;color:#f7f4ea;font:700 clamp(40px,12.5vw,96px)/.9 'UnifrakturCook','Playfair Display',Georgia,serif;letter-spacing:.01em;text-align:center;
+  display:block;color:#f7f4ea;font:900 clamp(40px,12.5vw,96px)/.9 'Playfair Display',Georgia,serif;letter-spacing:.01em;text-align:center;
 }
 #wtfNewsletterOverlay #wtfNewsletterIssue .rp-sub{
   display:block;text-align:right;margin-top:3px;
@@ -21587,9 +21589,9 @@ window.wtfPrepare24Hours=async function(city){
 <div class="rp-orb-veil" id="rpOrbVeil" aria-hidden="true">
   <div class="rp-orb" role="dialog" aria-modal="true" aria-label="Newsletter preview">
     <button class="rp-orb-close" id="rpOrbClose" type="button" aria-label="Close">×</button>
-    <div class="rp-orb-kicker">The “Rolling” Paper</div>
-    <p>For a more detailed look at what your newsletter can look like, check out <a href="#" id="rpOrbVegas">Las Vegas</a>.</p>
-    <p>Sign up for the newsletter today and see what’s coming to a city near you!</p>
+    <div class="rp-orb-kicker">The Rolling Paper</div>
+    <p>For a more detailed idea of The Rolling Paper in your city, check out <a href="#" id="rpOrbVegas">Las Vegas</a>.</p>
+    <p>See what’s coming to a city near you!</p>
     <div class="rp-orb-tap">Tap anywhere to continue</div>
   </div>
 </div>
@@ -21614,14 +21616,17 @@ window.wtfPrepare24Hours=async function(city){
   if(!veil||!overlay||!gate||!issue)return;
   function showOrb(){veil.classList.add('open');veil.setAttribute('aria-hidden','false');}
   function hideOrb(){veil.classList.remove('open');veil.setAttribute('aria-hidden','true');}
+  function activeCity(){return window.WTF_NEWSLETTER_CITY||window.WTF_SELECTED_CITY||'Las Vegas';}
+  function syncOrb(city){if(city&&city!=='Las Vegas')setTimeout(showOrb,220);else hideOrb();}
   // pop the orb every time the newsletter is opened to its email page
   var wasOpen=false;
   new MutationObserver(function(){
     var open=overlay.classList.contains('open');
-    if(open&&!wasOpen&&gate.style.display!=='none')setTimeout(showOrb,420);
+    if(open&&!wasOpen&&gate.style.display!=='none')syncOrb(activeCity());
     if(!open)hideOrb();
     wasOpen=open;
   }).observe(overlay,{attributes:true,attributeFilter:['class']});
+  document.addEventListener('wtfNewsletterEditionRendered',function(e){syncOrb(e.detail&&e.detail.city);});
   veil.addEventListener('click',function(e){if(e.target===veil)hideOrb();});
   document.getElementById('rpOrbClose').addEventListener('click',hideOrb);
   document.getElementById('rpOrbVegas').addEventListener('click',function(e){
