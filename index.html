@@ -19178,7 +19178,7 @@ init().catch(function(err){ console.error('WTFDD startup error:',err); });
 
 <section id="wtf2Overlay" aria-hidden="true">
   <button class="wtf2-groove-trigger" id="wtf2GrooveTrigger" type="button" aria-haspopup="dialog" aria-controls="wtf2MusicPicker"><span class="arrow">➜</span><span class="note">♫</span><span>PICK YOUR<br>GROOVE</span></button>
-  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · VEGAS QUEST + NIGHT SHUTTLE</button><button class="wtf2-track" data-track="1" type="button">1 · VEGAS QUEST</button><button class="wtf2-track" data-track="2" type="button">2 · PIXEL PICNIC</button><button class="wtf2-track" data-track="3" type="button">3 · NIGHT SHUTTLE</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
+  <div class="wtf2-music-picker" id="wtf2MusicPicker" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wtf2MusicTitle"><div class="wtf2-music-card"><button class="wtf2-groove-close" id="wtf2GrooveClose" type="button" aria-label="Close music choices">×</button><h2 id="wtf2MusicTitle">PICK YOUR GROOVE</h2><p>Tap a soundtrack to play it now.</p><button class="wtf2-track active" data-track="0" type="button">MIX · AFTER HOURS ROTATION</button><button class="wtf2-track" data-track="1" type="button">1 · NEON AFTER HOURS</button><button class="wtf2-track" data-track="2" type="button">2 · DESERT LOWRIDER</button><button class="wtf2-track" data-track="3" type="button">3 · MIDNIGHT SMOKE</button><button class="wtf2-picker-music-off" id="wtf2PickerMusicOff" type="button">MUSIC OFF</button></div></div>
   <div class="wtf2-shell">
     <div class="wtf2-top">
       <button class="wtf2-exit" id="wtf2Exit" type="button" aria-label="Choose another city"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
@@ -20125,22 +20125,26 @@ window.wtfPrepare24Hours=async function(city){
   function musicTone(freq,when,duration,type,volume){
     if(!musicCtx||!musicMaster)return;var osc=musicCtx.createOscillator(),gain=musicCtx.createGain();osc.type=type||'sine';osc.frequency.setValueAtTime(freq,when);gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.012);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);osc.connect(gain);gain.connect(musicMaster);osc.start(when);osc.stop(when+duration+.03);
   }
+  function musicNoise(when,duration,volume,highpass){
+    if(!musicCtx||!musicMaster)return;var length=Math.max(1,Math.floor(musicCtx.sampleRate*duration)),buffer=musicCtx.createBuffer(1,length,musicCtx.sampleRate),data=buffer.getChannelData(0);for(var n=0;n<length;n++)data[n]=(Math.random()*2-1)*(1-n/length);var source=musicCtx.createBufferSource(),filter=musicCtx.createBiquadFilter(),gain=musicCtx.createGain();source.buffer=buffer;filter.type='highpass';filter.frequency.value=highpass||900;gain.gain.setValueAtTime(volume,when);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);source.connect(filter);filter.connect(gain);gain.connect(musicMaster);source.start(when);source.stop(when+duration);
+  }
   function musicBeat(){
     if(!musicOn||!musicCtx)return;
     var songs={
-      1:{bass:[110,110,146.83,98,110,164.81,146.83,98,110,130.81,146.83,164.81,196,164.81,146.83,130.81],lead:[440,0,523.25,659.25,0,783.99,659.25,523.25,440,493.88,587.33,659.25,783.99,659.25,587.33,493.88],beat:286,wave:'square'},
-      2:{bass:[130.81,164.81,196,164.81,146.83,174.61,220,174.61,130.81,164.81,196,261.63,220,196,174.61,146.83],lead:[659.25,783.99,880,783.99,698.46,880,987.77,880,659.25,783.99,1046.5,987.77,880,783.99,698.46,587.33],beat:238,wave:'square'},
-      3:{bass:[82.41,82.41,110,123.47,73.42,73.42,98,110,82.41,82.41,123.47,146.83,73.42,98,110,123.47],lead:[329.63,0,392,0,440,493.88,0,392,329.63,0,493.88,0,587.33,493.88,440,392],beat:360,wave:'triangle'}
-    },activeTrack=musicTrack===0?(Math.floor(musicStep/96)%2===0?1:3):musicTrack,song=songs[activeTrack],t=musicCtx.currentTime+.025,i=musicStep%song.bass.length;
-    musicTone(song.bass[i],t,song.beat/1000*.78,'triangle',.15);
-    if(song.lead[i])musicTone(song.lead[i],t+.025,song.beat/1000*.55,song.wave,.035);
-    if(i%4===0)musicTone(activeTrack===3?46:58,t,.08,'sine',.2);
-    if(i%4===2)musicTone(1700+(activeTrack*260),t,.035,'square',.012);
+      1:{bass:[55,55,65.41,55,73.42,55,82.41,49,55,55,65.41,73.42,82.41,73.42,65.41,49],lead:[220,0,261.63,0,293.66,0,329.63,0,220,0,392,0,329.63,293.66,261.63,0],beat:300,wave:'sawtooth',kick:[0,4,8,12],snare:[4,12]},
+      2:{bass:[49,49,0,61.74,49,73.42,0,65.41,43.65,43.65,0,55,61.74,55,49,0],lead:[0,196,0,0,0,220,0,0,0,174.61,0,196,0,220,0,0],beat:375,wave:'triangle',kick:[0,6,8,14],snare:[4,12]},
+      3:{bass:[41.2,0,41.2,49,55,0,49,36.71,41.2,0,55,61.74,55,49,41.2,0],lead:[164.81,0,196,0,220,0,246.94,0,164.81,0,261.63,0,246.94,220,196,0],beat:250,wave:'sine',kick:[0,3,8,11],snare:[4,12]}
+    },activeTrack=musicTrack===0?([1,2,3][Math.floor(musicStep/64)%3]):musicTrack,song=songs[activeTrack],t=musicCtx.currentTime+.025,i=musicStep%song.bass.length;
+    if(song.bass[i]){musicTone(song.bass[i],t,song.beat/1000*.9,'sawtooth',.09);musicTone(song.bass[i]/2,t,song.beat/1000*.82,'sine',.17);}
+    if(song.lead[i])musicTone(song.lead[i],t+.025,song.beat/1000*.62,song.wave,.025);
+    if(song.kick.indexOf(i)>-1){musicTone(48,t,.11,'sine',.24);musicTone(34,t+.018,.09,'sine',.18);}
+    if(song.snare.indexOf(i)>-1)musicNoise(t,.105,.055,1100);
+    if(i%2===0)musicNoise(t,.022,.012,5200);
     musicStep++;return song.beat;
   }
   function updateMusicButton(){var b=q('wtf2MusicToggle'),trigger=q('wtf2GrooveTrigger');if(b){b.classList.toggle('is-muted',!musicOn);b.setAttribute('aria-pressed',musicOn?'true':'false');b.setAttribute('aria-label',musicOn?'Turn music off':'Turn music on');var l=b.querySelector('.music-label');if(l)l.textContent=musicOn?'MUSIC OFF':'MUSIC ON';}if(trigger){trigger.classList.toggle('is-playing',musicOn);trigger.setAttribute('aria-pressed',musicOn?'true':'false');trigger.setAttribute('aria-label',musicOn?'Music is playing. Tap to change your groove.':'Turn music on and choose your groove.');}}
   async function startMusic(){
-    try{if(!musicCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('Web Audio is unavailable');musicCtx=new AC();musicMaster=musicCtx.createGain();musicMaster.gain.value=.26;musicMaster.connect(musicCtx.destination);}if(musicCtx.state!=='running')await musicCtx.resume();if(musicCtx.state!=='running')throw new Error('Audio context could not start');if(musicOn){updateMusicButton();return true;}musicOn=true;musicStep=0;function scheduleBeat(){if(!musicOn)return;var delay=musicBeat()||286;musicTimer=setTimeout(scheduleBeat,delay);}scheduleBeat();updateMusicButton();return true;}catch(err){musicOn=false;updateMusicButton();console.warn('WTFDD music could not start',err);return false;}
+    try{if(!musicCtx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('Web Audio is unavailable');musicCtx=new AC();musicMaster=musicCtx.createGain();musicMaster.gain.value=.26;musicMaster.connect(musicCtx.destination);}if(musicCtx.state!=='running')await musicCtx.resume();if(musicCtx.state!=='running')throw new Error('Audio context could not start');if(musicOn){updateMusicButton();return true;}musicOn=true;musicStep=0;function scheduleBeat(){if(!musicOn)return;var delay=musicBeat()||300;musicTimer=setTimeout(scheduleBeat,delay);}scheduleBeat();updateMusicButton();return true;}catch(err){musicOn=false;updateMusicButton();console.warn('WTFdd music could not start',err);return false;}
   }
   function stopMusic(){musicOn=false;if(musicTimer){clearTimeout(musicTimer);musicTimer=null;}if(musicMaster&&musicCtx)musicMaster.gain.setTargetAtTime(.0001,musicCtx.currentTime,.035);updateMusicButton();}
   function toggleMusic(){if(musicOn){stopMusic();}else{startMusic();}}
