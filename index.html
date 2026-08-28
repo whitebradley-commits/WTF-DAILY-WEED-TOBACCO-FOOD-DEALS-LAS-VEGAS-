@@ -5155,7 +5155,7 @@
     text-shadow:0 0 7px rgba(57,255,95,.52)!important;
   }
   .wtf-floating-other-cities{
-    position:fixed;z-index:100012;right:142px;bottom:25px;width:54px;height:54px;padding:6px;border:2px solid #65dc79;border-radius:50%;
+    position:fixed;z-index:100012;right:12px;top:38vh;bottom:auto;width:58px;height:58px;padding:6px;border:2px solid #65dc79;border-radius:50%;
     display:none;align-items:center;justify-content:center;text-align:center;font:900 8.5px/1.08 'Archivo Black',Arial,sans-serif;letter-spacing:.02em;
   }
   /* The map is moved beside Medical so both remain visible above interior pages. */
@@ -5181,7 +5181,7 @@
     color:var(--wtf-directory-headline)!important;text-shadow:0 0 9px var(--wtf-directory-glow)!important;
   }
   @media(max-width:420px){
-    .wtf-floating-other-cities{right:132px;bottom:24px;width:50px;height:50px;font-size:7.8px;}
+    .wtf-floating-other-cities{right:10px;top:38vh;bottom:auto;width:54px;height:54px;font-size:7.8px;}
     body .wtf2-medical-open.wtf2-footer-medical-orb{right:75px!important;}
     body #wtfUsMapOrb{right:10px!important;width:56px!important;height:56px!important;}
   }
@@ -20269,7 +20269,7 @@ window.wtfPrepare24Hours=async function(city){
   function laNearShell(){var zones=activeNearZones();
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
     var collapsible=!nearOnly,launchCategory=currentCat.toLowerCase(),launchWord=currentCat.toUpperCase(),launchIcon=currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';
-    var launchButton='<span class="la-near-launch-copy">'+'FIND CLOSEST '+'<span class="la-near-category-word">'+launchWord+launchIcon+'</span></span><span class="la-near-launch-word">TAP HERE</span>';
+    var launchButton='<span class="la-near-launch-copy">'+'CLOSE '+'<span class="la-near-category-word">'+launchWord+launchIcon+'</span></span><span class="la-near-launch-word">TAP HERE</span>';
     var foodTiers='';
     return (collapsible?'<button class="la-near-launch" data-launch-category="'+launchCategory+'" type="button" aria-label="Open closest '+labels.plural.toLowerCase()+'" aria-expanded="false" aria-controls="laNearTest">'+launchButton+'</button>':'')+'<section class="la-near-test'+(collapsible?' is-collapsed':'')+'" data-near-category="'+launchCategory+'" id="laNearTest">'+foodTiers+'<button class="la-near-close" type="button" aria-label="Collapse closest locations">×</button><div class="la-near-loading" role="status" aria-live="polite"><span class="la-near-spinner" aria-hidden="true"></span><span>LOADING CLOSEST FIVE</span></div><h3>CLOSEST '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus" hidden></p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-tap-note">TAP ANY NAME FOR PHONE, DIRECTIONS, HOURS, AND MORE INFORMATION.</p><div id="laNearRows"><div class="la-near-sub">Finding the closest five open now…</div></div><div class="la-near-line"></div><button class="la-weed-scroll-cue" type="button" aria-label="Scroll to more '+labels.plural.toLowerCase()+'">SCROLL<span>↓</span></button></section>';
   }
@@ -20593,7 +20593,7 @@ window.wtfPrepare24Hours=async function(city){
     var close=q('laDispensaryClose');if(close&&!close.dataset.ready){close.dataset.ready='1';close.addEventListener('click',function(){var overlay=q('laDispensaryOverlay');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.style.overflow='';});}
     if(!document.documentElement.dataset.laFullDelegated){document.documentElement.dataset.laFullDelegated='1';document.addEventListener('click',function(e){var button=e.target.closest('.la-full-dispensary-btn');if(!button)return;e.preventDefault();var market=selectedCity,details=MARKET_DISPENSARY_DETAILS[market]&&MARKET_DISPENSARY_DETAILS[market][button.dataset.laFullName]||{},lat=Number(button.dataset.laFullLat),lng=Number(button.dataset.laFullLng),miles=Number(button.dataset.laFullMiles);openLADispensary(Object.assign({name:button.dataset.laFullName,address:button.dataset.laFullAddress,phone:button.dataset.laFullPhone,city:market,category:button.dataset.laFullCategory||currentCat,lat:Number.isFinite(lat)?lat:null,lng:Number.isFinite(lng)?lng:null,miles:Number.isFinite(miles)?miles:0,source:'WTFDD '+market+' directory'},details));});}
     function launchIcon(){return currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';}
-    function paintLaunch(open){var word=currentCat.toUpperCase(),lead=open?'CLOSE ':'FIND CLOSEST ';nearLaunch.innerHTML='<span class="la-near-launch-copy">'+lead+'<span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close closest ':'Open closest ')+word.toLowerCase()+' locations');}
+    function paintLaunch(open){var word=currentCat.toUpperCase();nearLaunch.innerHTML='<span class="la-near-launch-copy">CLOSE <span class="la-near-category-word">'+word+launchIcon()+'</span></span><span class="la-near-launch-word">TAP HERE</span>';nearLaunch.setAttribute('aria-expanded',open?'true':'false');nearLaunch.setAttribute('aria-label',(open?'Close ':'Open ')+word.toLowerCase()+' locations');}
     block.querySelectorAll('[data-food-near-tier]').forEach(function(button){button.addEventListener('click',function(){activeFoodNearTier=button.dataset.foodNearTier;block.classList.remove('food-awaiting-choice');block.querySelectorAll('[data-food-near-tier]').forEach(function(other){other.classList.toggle('active',other===button);});if(dir)dir.scrollTop=0;requestCurrent('Current Location');});});
     if(nearLaunch){nearLaunch.addEventListener('click',function(){var opening=block.classList.contains('is-collapsed');paintLaunch(opening);block.classList.toggle('is-collapsed',!opening);if(dir){dir.classList.toggle('wtf2-closest-focus',opening);dir.scrollTop=0;}if(opening){activeFoodNearTier='';requestCurrent('Current Location');}else{block.classList.remove('is-loading','food-awaiting-choice');}});}
     else{activeFoodNearTier='';requestCurrent('Current Location');}
