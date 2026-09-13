@@ -8678,7 +8678,8 @@ const GOOGLE_PLACES_API_KEY = 'AIzaSyDnrUZIc1IROc4GXj4nGLlRZQQTj8dEYqw';
    said no, so the on-page error can show it instead of a generic message. */
 window.__wtfLastGoogleError='';
 window.gm_authFailure=function(){window.__wtfLastGoogleError='Google rejected this API key for wtfdd.com (auth failure). In Google Cloud: check the key\u2019s website restrictions include wtfdd.com/* and that Maps JavaScript API + Places API (New) are enabled with billing on.';};
-function wtfNoteGoogleError(err){var m=String(err&&err.message||err||'').trim();if(m&&!window.__wtfLastGoogleError)window.__wtfLastGoogleError=m.slice(0,220);}
+window.__WTF_BUILD='2026-09-13 build C (OpenStreetMap fallback)';
+function wtfNoteGoogleError(err){var m=String(err&&err.message||err||'').trim().slice(0,200);if(!m)return;var cur=window.__wtfLastGoogleError||'';if(cur.indexOf(m)>-1)return;window.__wtfLastGoogleError=(cur?cur+' | ':'')+m;}
 
 const placePhotoCache = {}; // avoids re-fetching the same business twice per visit
 let placesServiceInstance = null;
@@ -20815,9 +20816,9 @@ window.wtfPrepare24Hours=async function(city){
     }catch(googleError){
       var quotaReached=/quota|resource_exhausted/i.test(String(googleError&&googleError.message||googleError));
       wtfNoteGoogleError(googleError);
-      var reason=window.__wtfLastGoogleError||'';
+      var reason=window.__wtfLastGoogleError||'no error text captured';
       status.textContent=quotaReached?'Live Google search has reached its temporary limit. No stored listings have been substituted.':'Live location search could not confirm the physically closest nine. No stored listings have been substituted.';
-      rows.innerHTML='<div class="wtf-live-near-error"><strong>LIVE CLOSEST SEARCH UNAVAILABLE</strong><span>Your locked-in WTFdd listings are still available below, in their own sections.</span>'+(reason?'<span class="wtf-live-near-reason" style="display:block;margin-top:6px;font-size:11px;opacity:.75;word-break:break-word">Reason: '+reason.replace(/</g,'&lt;')+'</span>':'')+'<button type="button" class="wtf-live-near-retry">RETRY LIVE SEARCH</button></div>';
+      rows.innerHTML='<div class="wtf-live-near-error"><strong>LIVE CLOSEST SEARCH UNAVAILABLE</strong><span>Your locked-in WTFdd listings are still available below, in their own sections.</span>'+(reason?'<span class="wtf-live-near-reason" style="display:block;margin-top:6px;font-size:11px;opacity:.75;word-break:break-word">Reason: '+reason.replace(/</g,'&lt;')+'<br>'+window.__WTF_BUILD+'</span>':'')+'<button type="button" class="wtf-live-near-retry">RETRY LIVE SEARCH</button></div>';
       window.__wtfLastGoogleError='';
       var retry=rows.querySelector('.wtf-live-near-retry');if(retry)retry.addEventListener('click',function(){loadLANearest(origin,label);});
       updateFullListingDistances(origin);
