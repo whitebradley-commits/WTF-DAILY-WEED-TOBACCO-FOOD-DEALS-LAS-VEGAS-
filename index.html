@@ -8678,7 +8678,7 @@ const GOOGLE_PLACES_API_KEY = 'AIzaSyDnrUZIc1IROc4GXj4nGLlRZQQTj8dEYqw';
    said no, so the on-page error can show it instead of a generic message. */
 window.__wtfLastGoogleError='';
 window.gm_authFailure=function(){window.__wtfLastGoogleError='Google rejected this API key for wtfdd.com (auth failure). In Google Cloud: check the key\u2019s website restrictions include wtfdd.com/* and that Maps JavaScript API + Places API (New) are enabled with billing on.';};
-window.__WTF_BUILD='2026-09-13 build C (OpenStreetMap fallback)';
+window.__WTF_BUILD='2026-09-13 build D (OpenStreetMap fallback)';
 function wtfNoteGoogleError(err){var m=String(err&&err.message||err||'').trim().slice(0,200);if(!m)return;var cur=window.__wtfLastGoogleError||'';if(cur.indexOf(m)>-1)return;window.__wtfLastGoogleError=(cur?cur+' | ':'')+m;}
 
 const placePhotoCache = {}; // avoids re-fetching the same business twice per visit
@@ -20661,13 +20661,13 @@ window.wtfPrepare24Hours=async function(city){
       :category==='Tobacco'?'nwr["shop"~"^(tobacco|e-cigarette|hookah|vape)$"](around:R,LAT,LNG);nwr["amenity"="hookah_lounge"](around:R,LAT,LNG);'
       :foodTier==='fast'?'nwr["amenity"="fast_food"]["name"](around:R,LAT,LNG);'
       :'nwr["amenity"~"^(restaurant|fast_food)$"]["name"](around:R,LAT,LNG);';
-    var radii=[6000,20000,60000],elements=[],lastErr=null;
+    var radii=[16000,60000],elements=[],lastErr=null;
     for(var i=0;i<radii.length;i++){
-      var query='[out:json][timeout:20];('+selector.replace(/R/g,radii[i]).replace(/LAT/g,origin.lat).replace(/LNG/g,origin.lng)+');out center 80;';
+      var query='[out:json][timeout:12];('+selector.replace(/R/g,radii[i]).replace(/LAT/g,origin.lat).replace(/LNG/g,origin.lng)+');out center 80;';
       var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
       for(var e=0;e<endpoints.length;e++){
         try{
-          var ctrl=typeof AbortController!=='undefined'?new AbortController():null,timer=ctrl?setTimeout(function(){ctrl.abort();},14000):null;
+          var ctrl=typeof AbortController!=='undefined'?new AbortController():null,timer=ctrl?setTimeout(function(){ctrl.abort();},11000):null;
           var res=await fetch(endpoints[e],{method:'POST',body:'data='+encodeURIComponent(query),headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:ctrl?ctrl.signal:undefined});
           if(timer)clearTimeout(timer);
           if(!res.ok)throw new Error('OpenStreetMap responded '+res.status);
@@ -20675,7 +20675,7 @@ window.wtfPrepare24Hours=async function(city){
         }catch(err){lastErr=err;}
       }
       if(lastErr)continue;
-      if(elements.length>=12)break;
+      if(elements.length>=9)break;
     }
     if(lastErr&&!elements.length)throw new Error('OpenStreetMap lookup failed: '+(lastErr.message||lastErr));
     var seen={},items=elements.map(function(el){
@@ -20691,9 +20691,17 @@ window.wtfPrepare24Hours=async function(city){
   }
   async function fetchLAGoogle(origin,requestedFoodTier){
     var tier=requestedFoodTier||activeFoodNearTier;
-    try{var viaGoogle=await fetchLAGoogleOnly(origin,tier);if(viaGoogle&&viaGoogle.length)return viaGoogle;}
-    catch(googleErr){wtfNoteGoogleError(googleErr);}
-    return fetchOSMNearby(origin,currentCat,tier);
+    /* Start the OpenStreetMap search immediately so it never waits behind a
+       slow Google refusal. Once Google has been refused in this visit, it is
+       skipped altogether so the box comes back fast. */
+    var osmPromise=fetchOSMNearby(origin,currentCat,tier);osmPromise.catch(function(){});
+    if(!window.__wtfGoogleDead){
+      try{
+        var viaGoogle=await Promise.race([fetchLAGoogleOnly(origin,tier),new Promise(function(_,rej){setTimeout(function(){rej(new Error('Google took too long'));},9000);})]);
+        if(viaGoogle&&viaGoogle.length)return viaGoogle;
+      }catch(googleErr){wtfNoteGoogleError(googleErr);if(/PERMISSION_DENIED|REQUEST_DENIED|ApiNotActivated|auth failure|not authorized|billing/i.test(String(googleErr&&googleErr.message||googleErr)+' '+(window.__wtfLastGoogleError||'')))window.__wtfGoogleDead=true;}
+    }
+    return osmPromise;
   }
   async function fetchLAGoogleOnly(origin,requestedFoodTier){
     await loadGoogleMapsScript();
@@ -20773,7 +20781,7 @@ window.wtfPrepare24Hours=async function(city){
     if(nearBlock&&nearBlock.dataset.liveLoading==='1')return;if(nearBlock)nearBlock.dataset.liveLoading='1';
     if(nearBlock)nearBlock.classList.add('is-loading');status.hidden=false;status.textContent='Finding the ten physically closest fast-food restaurants…';rows.innerHTML='<div class="la-near-sub">Searching outward and ordering fast food strictly by physical distance…</div>';
     try{
-      var found=await nearTimeout(fetchLAGoogle(origin,'fast'),20000,'Fast-food lookup timed out');
+      var found=await nearTimeout(fetchLAGoogle(origin,'fast'),45000,'Fast-food lookup timed out');
       if(found.length<10)throw new Error('Not enough live fast-food results');
       found.forEach(function(item){item.city=selectedCity;item.__foodTier='fast';if(!item.__osm)item.source='Google Places live fast-food proximity search';});
       renderLANearest(rows,status,found,origin,label);
@@ -20801,15 +20809,15 @@ window.wtfPrepare24Hours=async function(city){
         /* Three price groups (value / middle / upscale) when Google can confirm
            them; any group that comes up short is filled with the next-closest
            open restaurants so the box never fails just because a tier is thin. */
-        var foodTiers=['value','middle','money'],tierBatches=await nearTimeout(Promise.all(foodTiers.map(function(tier){return fetchLAGoogle(searchOrigin,tier).then(function(found){found.forEach(function(item){item.__foodTier=tier;});return found;}).catch(function(err){wtfNoteGoogleError(err);return [];});})),22000,'Live restaurant lookup timed out');
+        var foodTiers=['value','middle','money'],tierBatches=await nearTimeout(Promise.all(foodTiers.map(function(tier){return fetchLAGoogle(searchOrigin,tier).then(function(found){found.forEach(function(item){item.__foodTier=tier;});return found;}).catch(function(err){wtfNoteGoogleError(err);return [];});})),50000,'Live restaurant lookup timed out');
         var seenIds={},picked=[],leftovers=[];
         tierBatches.forEach(function(batch){batch.sort(function(a,b){return laMiles(searchOrigin,a)-laMiles(searchOrigin,b);}).forEach(function(item,i){var id=item.placeId||item.name;if(seenIds[id])return;seenIds[id]=true;(i<3?picked:leftovers).push(item);});});
-        if(!picked.length&&!leftovers.length){var anyFood=await nearTimeout(fetchLAGoogle(searchOrigin,'fast').catch(function(err){wtfNoteGoogleError(err);return [];}),20000,'Live restaurant lookup timed out');anyFood.forEach(function(item){var id=item.placeId||item.name;if(seenIds[id])return;seenIds[id]=true;leftovers.push(item);});}
+        if(!picked.length&&!leftovers.length){var anyFood=await nearTimeout(fetchLAGoogle(searchOrigin,'fast').catch(function(err){wtfNoteGoogleError(err);return [];}),45000,'Live restaurant lookup timed out');anyFood.forEach(function(item){var id=item.placeId||item.name;if(seenIds[id])return;seenIds[id]=true;leftovers.push(item);});}
         leftovers.sort(function(a,b){return laMiles(searchOrigin,a)-laMiles(searchOrigin,b);});
         while(picked.length<9&&leftovers.length)picked.push(leftovers.shift());
         if(picked.some(function(item){return item.__osm;})){picked=picked.concat(leftovers).sort(function(a,b){return laMiles(searchOrigin,a)-laMiles(searchOrigin,b);}).slice(0,9);picked.forEach(function(item){item.__foodTier='nearest';});}
         googleFound=picked;
-      }else googleFound=await nearTimeout(fetchLAGoogle(searchOrigin),20000,'Live map lookup timed out');
+      }else googleFound=await nearTimeout(fetchLAGoogle(searchOrigin),45000,'Live map lookup timed out');
       googleFound.forEach(function(x){x.city=selectedCity;if(!x.__osm)x.source='Google Places live proximity search';});
       renderLANearest(rows,status,googleFound,origin,label);
       if(!rows.querySelector('.la-near-row'))throw new Error('Live provider returned no usable open results');
