@@ -20601,7 +20601,7 @@ window.wtfPrepare24Hours=async function(city){
     hydrateNearestPhones(nearest,rows,renderToken,status,origin);
     var single=currentCat==='Food'?'restaurant':currentCat==='Tobacco'?'tobacco shop':'dispensary';
     var pending=nearest.some(function(item){return item.__nearState&&item.__nearState.key==='unknown';});
-    status.textContent=nearest.length?'Showing the '+nearest.length+' physically closest '+single+(nearest.length===1?'':'s')+'. Hours never override distance.'+(nearest.some(function(x){return x.__osm;})?' Live data via OpenStreetMap.':'') :'Searching for the physically closest '+single+'…';
+    status.textContent=nearest.length?'Showing the '+nearest.length+' closest '+(single==='dispensary'?(nearest.length===1?'dispensary':'dispensaries'):single+(nearest.length===1?'':'s'))+', nearest first.'+(nearest.some(function(x){return x.__osm;})?' Live data via OpenStreetMap.':'') :'Searching for the physically closest '+single+'…';
     updateFullListingDistances(origin);
   }
   function hydrateNearestPhones(items,rows,token,status,origin){
@@ -20659,19 +20659,31 @@ window.wtfPrepare24Hours=async function(city){
       :foodTier==='fast'?'nwr["amenity"="fast_food"]["name"](around:R,LAT,LNG);'
       :'nwr["amenity"~"^(restaurant|fast_food)$"]["name"](around:R,LAT,LNG);';
     var radii=[1000,2500,6000,15000,40000,100000,250000,600000],elements=[],lastErr=null;
+    var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.private.coffee/api/interpreter','https://overpass.osm.ch/api/interpreter'];
+    function askOne(url,query){
+      return new Promise(function(resolve,reject){
+        var ctrl=typeof AbortController!=='undefined'?new AbortController():null,timer=setTimeout(function(){if(ctrl)ctrl.abort();reject(new Error('timeout'));},16000);
+        fetch(url,{method:'POST',body:'data='+encodeURIComponent(query),headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:ctrl?ctrl.signal:undefined})
+          .then(function(res){if(!res.ok)throw new Error('OpenStreetMap responded '+res.status);return res.json();})
+          .then(function(json){clearTimeout(timer);if(!json||!Array.isArray(json.elements))throw new Error('bad reply');resolve(json.elements);})
+          .catch(function(err){clearTimeout(timer);reject(err);});
+      });
+    }
+    function firstGood(query){
+      /* Ask every server at once; the first good answer wins. */
+      return new Promise(function(resolve,reject){
+        var left=endpoints.length,lastE=null;
+        endpoints.forEach(function(url){askOne(url,query).then(resolve,function(err){lastE=err;left--;if(!left)reject(lastE);});});
+      });
+    }
     for(var i=0;i<radii.length;i++){
       var query='[out:json][timeout:20];('+selector.replace(/R/g,radii[i]).replace(/LAT/g,origin.lat).replace(/LNG/g,origin.lng)+');out center 1500;';
-      var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
-      for(var e=0;e<endpoints.length;e++){
-        try{
-          var ctrl=typeof AbortController!=='undefined'?new AbortController():null,timer=ctrl?setTimeout(function(){ctrl.abort();},19000):null;
-          var res=await fetch(endpoints[e],{method:'POST',body:'data='+encodeURIComponent(query),headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:ctrl?ctrl.signal:undefined});
-          if(timer)clearTimeout(timer);
-          if(!res.ok)throw new Error('OpenStreetMap responded '+res.status);
-          var json=await res.json();elements=json&&json.elements||[];lastErr=null;break;
-        }catch(err){lastErr=err;}
+      var got=null;
+      for(var attempt=0;attempt<2&&!got;attempt++){
+        try{got=await firstGood(query);}catch(err){lastErr=err;}
       }
-      if(lastErr)continue;
+      if(!got)continue;
+      elements=got;lastErr=null;
       if(elements.filter(function(el){var t=el.tags||{};return t.name||t.brand;}).length>=10)break;
     }
     if(lastErr&&!elements.length)throw new Error('OpenStreetMap lookup failed: '+(lastErr.message||lastErr));
