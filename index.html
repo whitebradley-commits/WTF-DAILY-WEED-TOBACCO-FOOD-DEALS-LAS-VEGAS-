@@ -8678,7 +8678,7 @@ const GOOGLE_PLACES_API_KEY = 'AIzaSyDnrUZIc1IROc4GXj4nGLlRZQQTj8dEYqw';
    said no, so the on-page error can show it instead of a generic message. */
 window.__wtfLastGoogleError='';
 window.gm_authFailure=function(){window.__wtfLastGoogleError='Google rejected this API key for wtfdd.com (auth failure). In Google Cloud: check the key\u2019s website restrictions include wtfdd.com/* and that Maps JavaScript API + Places API (New) are enabled with billing on.';};
-window.__WTF_BUILD='2026-09-13 build E (OpenStreetMap fallback)';
+window.__WTF_BUILD='2026-10-14 build F (closest 10)';
 function wtfNoteGoogleError(err){var m=String(err&&err.message||err||'').trim().slice(0,200);if(!m)return;var cur=window.__wtfLastGoogleError||'';if(cur.indexOf(m)>-1)return;window.__wtfLastGoogleError=(cur?cur+' | ':'')+m;}
 
 const placePhotoCache = {}; // avoids re-fetching the same business twice per visit
@@ -20652,28 +20652,30 @@ window.wtfPrepare24Hours=async function(city){
     }catch(e){return undefined;}
   }
   async function fetchOSMNearby(origin,category,foodTier){
+    window.__wtfLastGoogleError='';
     var key=category+'|all|'+origin.lat.toFixed(3)+','+origin.lng.toFixed(3);
     if(__wtfOsmCache[key]&&Date.now()-__wtfOsmCache[key].at<120000)return __wtfOsmCache[key].items.map(function(x){return Object.assign({},x);});
     var selector=category==='Weed'?'nwr["shop"="cannabis"](around:R,LAT,LNG);'
       :category==='Tobacco'?'nwr["shop"~"^(tobacco|e-cigarette|hookah|vape)$"](around:R,LAT,LNG);nwr["amenity"="hookah_lounge"](around:R,LAT,LNG);'
       :foodTier==='fast'?'nwr["amenity"="fast_food"]["name"](around:R,LAT,LNG);'
       :'nwr["amenity"~"^(restaurant|fast_food)$"]["name"](around:R,LAT,LNG);';
-    var radii=[1000,2500,6000,15000,40000,100000,250000,600000],elements=[],lastErr=null;
+    var diag=[],radii=[1000,2500,6000,15000,40000,100000,250000,600000],elements=[],lastErr=null;
     var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter','https://overpass.private.coffee/api/interpreter','https://overpass.osm.ch/api/interpreter'];
     function askOne(url,query){
       return new Promise(function(resolve,reject){
         var ctrl=typeof AbortController!=='undefined'?new AbortController():null,timer=setTimeout(function(){if(ctrl)ctrl.abort();reject(new Error('timeout'));},16000);
         fetch(url,{method:'POST',body:'data='+encodeURIComponent(query),headers:{'Content-Type':'application/x-www-form-urlencoded'},signal:ctrl?ctrl.signal:undefined})
           .then(function(res){if(!res.ok)throw new Error('OpenStreetMap responded '+res.status);return res.json();})
-          .then(function(json){clearTimeout(timer);if(!json||!Array.isArray(json.elements))throw new Error('bad reply');resolve(json.elements);})
+          .then(function(json){clearTimeout(timer);if(!json||!Array.isArray(json.elements))throw new Error('bad reply');if(json.remark&&/error|timed out|out of memory|too busy|limit/i.test(String(json.remark)))throw new Error('server busy: '+String(json.remark).slice(0,60));resolve(json.elements);})
           .catch(function(err){clearTimeout(timer);reject(err);});
       });
     }
     function firstGood(query){
-      /* Ask every server at once; the first good answer wins. */
+      /* Ask every server at once. A non-empty answer wins immediately; an empty one only counts if nobody has anything better. */
       return new Promise(function(resolve,reject){
-        var left=endpoints.length,lastE=null;
-        endpoints.forEach(function(url){askOne(url,query).then(resolve,function(err){lastE=err;left--;if(!left)reject(lastE);});});
+        var left=endpoints.length,lastE=null,sawEmpty=false,done=false;
+        function finishOne(){left--;if(!left&&!done){done=true;if(sawEmpty)resolve([]);else reject(lastE||new Error('no reply'));}}
+        endpoints.forEach(function(url){askOne(url,query).then(function(els){if(done)return;if(els.length){done=true;resolve(els);}else{sawEmpty=true;finishOne();}},function(err){lastE=err;diag.push(String(err&&err.message||err).slice(0,50));finishOne();});});
       });
     }
     for(var i=0;i<radii.length;i++){
@@ -20686,7 +20688,24 @@ window.wtfPrepare24Hours=async function(city){
       elements=got;lastErr=null;
       if(elements.filter(function(el){var t=el.tags||{};return t.name||t.brand;}).length>=10)break;
     }
-    if(lastErr&&!elements.length)throw new Error('OpenStreetMap lookup failed: '+(lastErr.message||lastErr));
+    if(!elements.filter(function(el){var t=el.tags||{};return t.name||t.brand;}).length){
+      /* Backup: Photon (OpenStreetMap search biased to your location), then Nominatim. */
+      var terms=category==='Weed'?['dispensary','cannabis','marijuana']:category==='Tobacco'?['smoke shop','tobacco','vape shop','cigar']:['restaurant','cafe','pizza'];
+      var extra=[];
+      async function getJSON(url){var ctrl=typeof AbortController!=='undefined'?new AbortController():null,t=setTimeout(function(){if(ctrl)ctrl.abort();},14000);try{var r=await fetch(url,{signal:ctrl?ctrl.signal:undefined});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json();}finally{clearTimeout(t);}}
+      var photon=await Promise.all(terms.map(function(term){return getJSON('https://photon.komoot.io/api/?q='+encodeURIComponent(term)+'&lat='+origin.lat+'&lon='+origin.lng+'&limit=40').catch(function(err){diag.push('photon '+String(err&&err.message||err).slice(0,30));return null;});}));
+      photon.forEach(function(j,idx){((j&&j.features)||[]).forEach(function(f,n){var pr=f.properties||{},c=f.geometry&&f.geometry.coordinates;if(!pr.name||!c)return;extra.push({type:'photon',id:idx+'-'+n,lat:c[1],lon:c[0],tags:{name:pr.name,'addr:housenumber':pr.housenumber,'addr:street':pr.street,'addr:city':pr.city}});});});
+      if(!extra.length){
+        var deg=[0.08,0.3,1,3];
+        for(var d=0;d<deg.length&&!extra.length;d++){
+          var vb=(origin.lng-deg[d])+','+(origin.lat+deg[d])+','+(origin.lng+deg[d])+','+(origin.lat-deg[d]);
+          var nom=await Promise.all(terms.slice(0,2).map(function(term){return getJSON('https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=40&bounded=1&viewbox='+vb+'&q='+encodeURIComponent(term)).catch(function(err){diag.push('nominatim '+String(err&&err.message||err).slice(0,30));return [];});}));
+          nom.forEach(function(list,idx){(list||[]).forEach(function(r,n){var nm=(r.name||'').trim()||String(r.display_name||'').split(',')[0];if(!nm)return;var ad=r.address||{};extra.push({type:'nominatim',id:idx+'-'+n,lat:Number(r.lat),lon:Number(r.lon),tags:{name:nm,'addr:housenumber':ad.house_number,'addr:street':ad.road,'addr:city':ad.city||ad.town||ad.village}});});});
+        }
+      }
+      if(extra.length){elements=extra;lastErr=null;}
+    }
+    if(!elements.length)throw new Error('No map data from any source'+(diag.length?' ('+diag.slice(0,4).join('; ')+')':''));
     var seen={},items=elements.map(function(el){
       var t=el.tags||{},lat=el.lat!=null?el.lat:el.center&&el.center.lat,lng=el.lon!=null?el.lon:el.center&&el.center.lon,name=t.name||t['brand']||'';
       if(!name||!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return null;
@@ -20694,7 +20713,8 @@ window.wtfPrepare24Hours=async function(city){
       var street=[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),address=[street,t['addr:city']||selectedCity].filter(Boolean).join(', ');
       var open=wtfOsmOpenNow(t.opening_hours);
       return {name:name,placeId:'',osmId:el.type+'/'+el.id,lat:Number(lat),lng:Number(lng),address:address,phone:t.phone||t['contact:phone']||'',website:t.website||t['contact:website']||'',rating:'',ratings:'',priceLevel:0,openNow:open,openingHours:null,types:[],__osm:true,source:'OpenStreetMap live proximity search'};
-    }).filter(Boolean).filter(validNearCategory).sort(function(a,b){var ao=a.openNow===true?0:1,bo=b.openNow===true?0:1;return ao-bo||laMiles(origin,a)-laMiles(origin,b);}).slice(0,60);
+    }).filter(Boolean).filter(validNearCategory).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);}).slice(0,60);
+    if(!items.length)throw new Error('Found '+elements.length+' places but none matched this category'+(diag.length?' ('+diag.slice(0,3).join('; ')+')':''));
     __wtfOsmCache[key]={at:Date.now(),items:items};
     return items.map(function(x){return Object.assign({},x);});
   }
