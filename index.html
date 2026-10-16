@@ -20455,7 +20455,7 @@ window.wtfPrepare24Hours=async function(city){
     var labels=currentCat==='Food'?{plural:'RESTAURANTS',single:'restaurant',list:'RESTAURANT'}:currentCat==='Tobacco'?{plural:'TOBACCO SHOPS',single:'tobacco shop',list:'TOBACCO SHOP'}:{plural:'DISPENSARIES',single:'dispensary',list:'DISPENSARY'};
     var collapsible=!nearOnly,launchCategory=currentCat.toLowerCase(),launchWord=currentCat.toUpperCase(),launchIcon=currentCat==='Weed'?'<span class="la-near-leaf" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>':currentCat==='Tobacco'?'<span class="la-tobacco-leaf" aria-hidden="true"></span>':'<span class="la-food-banana" aria-hidden="true"></span>';
     var launchButton='<span class="la-near-launch-copy">'+'CLOSE '+'<span class="la-near-category-word">'+launchWord+launchIcon+'</span></span><span class="la-near-launch-word">TAP HERE</span>';
-    return (collapsible?'<button class="la-near-launch" data-launch-category="'+launchCategory+'" type="button" aria-label="Open closest 10 '+labels.plural.toLowerCase()+'" aria-expanded="false" aria-controls="laNearTest">'+launchButton+'</button>':'')+'<section class="la-near-test'+(collapsible?' is-collapsed':'')+'" data-near-category="'+launchCategory+'" id="laNearTest"><button class="la-near-close" type="button" aria-label="Collapse closest locations">×</button><div class="la-near-loading" role="status" aria-live="polite"><span class="la-near-spinner" aria-hidden="true"></span><span>FINDING THE CLOSEST... RESULTS APPEAR AS THEY LOAD</span></div><h3>CLOSEST 10 '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus" aria-live="polite"></p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-tap-note">TAP ANY NAME FOR PHONE, DIRECTIONS, HOURS, AND MORE INFORMATION.</p><div id="laNearRows"><div class="la-near-sub">Please allow up to 30 seconds while loading...</div></div><div class="la-near-line"></div><button class="la-weed-scroll-cue" type="button" aria-label="Scroll to more '+labels.plural.toLowerCase()+'">SCROLL<span>↓</span></button></section>';
+    return (collapsible?'<button class="la-near-launch" data-launch-category="'+launchCategory+'" type="button" aria-label="Open closest 10 '+labels.plural.toLowerCase()+'" aria-expanded="false" aria-controls="laNearTest">'+launchButton+'</button>':'')+'<section class="la-near-test'+(collapsible?' is-collapsed':'')+'" data-near-category="'+launchCategory+'" id="laNearTest"><button class="la-near-close" type="button" aria-label="Collapse closest locations">×</button><div class="la-near-loading" role="status" aria-live="polite"><span class="la-near-spinner" aria-hidden="true"></span><span>LOCATING... RESULTS APPEAR AS THEY LOAD</span></div><h3>CLOSEST 10 '+labels.plural+'</h3><p class="la-near-sub" id="laNearStatus" aria-live="polite"></p><div class="la-near-zones">'+Object.keys(zones).map(function(name){return '<button type="button" data-la-zone="'+name+'">'+name+'</button>';}).join('')+'</div><p class="la-near-tap-note">TAP ANY NAME FOR PHONE, DIRECTIONS, HOURS, AND MORE INFORMATION.</p><div id="laNearRows"><div class="la-near-sub">Please allow up to 30 seconds while loading...</div></div><div class="la-near-line"></div><button class="la-weed-scroll-cue" type="button" aria-label="Scroll to more '+labels.plural.toLowerCase()+'">SCROLL<span>↓</span></button></section>';
   }
   function laMiles(a,b){var R=3958.7613,toRad=function(v){return v*Math.PI/180;},dLat=toRad(b.lat-a.lat),dLon=toRad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(x));}
   function marketCenter(city){var zones=CITY_NEAR_ZONES[city]||{},key=Object.keys(zones).find(function(name){return name!=='Current Location'&&zones[name];});return key?zones[key]:null;}
@@ -20922,9 +20922,9 @@ window.wtfPrepare24Hours=async function(city){
         var areas=selectedCity==='Las Vegas'?(currentCat==='Food'?['The Strip','Downtown','Henderson','Summerlin','Off-Strip']:['The Strip','Downtown','Henderson','Summerlin']):marketAreas();
         if(selectedCity!=='Las Vegas')items=placeStarterEntries(items);
         var grouped=areas.map(function(a){var group=items.filter(function(x){return x.area===a || (currentCat!=='Food' && ((typeof BUSINESS_DIRECTORY!=='undefined'&&BUSINESS_DIRECTORY[currentCat]&&BUSINESS_DIRECTORY[currentCat][a])||[]).some(function(y){return y.name===x.name;}));});return group.length?'<div class="directory-area">'+a+' · '+group.length+'</div><ul class="directory-list">'+renderEntryList(group,currentCat,a)+'</ul>':'';}).join('');
-        list.innerHTML='<div class="wtf-locked-directory-heading"><b>WTFdd LOCKED-IN '+currentCat.toUpperCase()+'</b><span>These are WTFdd directory selections—not substitutes for the live closest five.</span></div><div class="wtf2-result-count">'+selectedCity+'</div>'+grouped;
+        list.innerHTML='<div class="wtf-locked-directory-heading"><b>WTFdd LOCKED-IN '+currentCat.toUpperCase()+'</b><span>These are WTFdd directory selections—not a substitute for the closest locations.</span></div><div class="wtf2-result-count">'+selectedCity+'</div>'+grouped;
       }else{
-        list.innerHTML='<div class="wtf-locked-directory-heading"><b>WTFdd LOCKED-IN '+currentCat.toUpperCase()+'</b><span>These are WTFdd directory selections—not substitutes for the live closest five.</span></div><div class="wtf2-result-count">'+items.length+' listings</div><div class="directory-area">'+areaLabel+'</div><ul class="directory-list">'+renderEntryList(items,currentCat,areaLabel)+'</ul>';
+        list.innerHTML='<div class="wtf-locked-directory-heading"><b>WTFdd LOCKED-IN '+currentCat.toUpperCase()+'</b><span>These are WTFdd directory selections—not a substitute for the closest locations.</span></div><div class="wtf2-result-count">'+items.length+' listings</div><div class="directory-area">'+areaLabel+'</div><ul class="directory-list">'+renderEntryList(items,currentCat,areaLabel)+'</ul>';
       }
     }else{
       list.innerHTML=items.map(function(x){return '<div class="wtf2-feature-card"><b>'+x.name+'</b><small>'+(x.address||x.specialty||areaLabel)+'</small></div>';}).join('');
@@ -20998,7 +20998,7 @@ window.wtfPrepare24Hours=async function(city){
     q('wtf2ArcadeShuttle').addEventListener('click',openShuttlePage);
     var nearPicker=document.createElement('section');
     nearPicker.id='wtfNearMePicker';nearPicker.className='wtf-near-picker';nearPicker.setAttribute('role','dialog');nearPicker.setAttribute('aria-modal','true');nearPicker.setAttribute('aria-hidden','true');nearPicker.setAttribute('aria-label','Choose a Near Me category');
-    nearPicker.innerHTML='<div class="wtf-near-picker-card"><button class="wtf-near-picker-close" type="button" aria-label="Close Near Me">×</button><p>NEAR ME</p><h2>CHOOSE A CATEGORY</h2><span>YOUR CLOSEST FIVE ARE NEXT</span><div class="wtf-near-orbs"><button type="button" data-near-picker-category="Weed"><i>✦</i>WEED</button><button type="button" data-near-picker-category="Tobacco"><i>◌</i>TOBACCO</button><button type="button" data-near-picker-category="Food"><i>★</i>FOOD</button></div></div>';
+    nearPicker.innerHTML='<div class="wtf-near-picker-card"><button class="wtf-near-picker-close" type="button" aria-label="Close Near Me">×</button><p>NEAR ME</p><h2>CHOOSE A CATEGORY</h2><span>YOUR CLOSEST LOCATIONS ARE NEXT</span><div class="wtf-near-orbs"><button type="button" data-near-picker-category="Weed"><i>✦</i>WEED</button><button type="button" data-near-picker-category="Tobacco"><i>◌</i>TOBACCO</button><button type="button" data-near-picker-category="Food"><i>★</i>FOOD</button></div></div>';
     document.body.appendChild(nearPicker);
     function closeNearPicker(){nearPicker.classList.remove('open');nearPicker.setAttribute('aria-hidden','true');document.body.style.overflow='';}
     q('wtf2Near').addEventListener('click',function(){nearPicker.classList.add('open');nearPicker.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';});
@@ -22100,6 +22100,7 @@ window.wtfPrepare24Hours=async function(city){
   #wtf2LegendOverlay .wtf2-legend-symbol,#wtf2LegendOverlay .wtf2-legend-symbol *{-webkit-text-fill-color:currentColor}
 </style>
 <style id="wtf-landing-separate">#wtfLandingOverlay .wtf-landing-logo{translate:0 -5px!important}#wtfLandingOverlay #wtfLandingEnterBtn{translate:0 5px!important}</style>
+
 </body>
 </html>
 
@@ -22571,4 +22572,18 @@ window.wtfPrepare24Hours=async function(city){
   .wtf2-tool-deals{background:#17050d!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
   .wtf2-tool-deals *{color:#fff!important;-webkit-text-fill-color:#fff!important}
   .wtf2-redline,.ticker-live-dot{background:#ff5f83!important;box-shadow:0 0 12px rgba(255,95,131,.68)!important}
+</style>
+<style id="wtf-food-gold">
+  :root{--wtf-food-gold:#f59e0b;--wtf-food-gold-glow:rgba(245,158,11,.62)}
+  html body #wtf2Directory[data-category="food"] .la-near-launch{
+    --near-ring:var(--wtf-food-gold)!important;--near-center:rgba(245,158,11,.16)!important;--near-outline:rgba(245,158,11,.26)!important;--near-glow:var(--wtf-food-gold-glow)!important;--near-soft:rgba(245,158,11,.22)!important;
+    border-color:var(--wtf-food-gold)!important;color:var(--wtf-food-gold)!important;background:radial-gradient(circle at 50% 36%,rgba(245,158,11,.16),rgba(9,6,2,.97) 62%,#020202 100%)!important;
+    box-shadow:0 0 0 2px rgba(245,158,11,.22),0 0 22px var(--wtf-food-gold-glow),0 0 42px rgba(245,158,11,.22),inset 0 0 20px rgba(245,158,11,.14)!important}
+  html body #wtf2Directory[data-category="food"] .la-near-launch-copy,
+  html body #wtf2Directory[data-category="food"] .la-near-launch-word,
+  html body #wtf2Directory[data-category="food"] .la-near-category-word{color:var(--wtf-food-gold)!important;-webkit-text-fill-color:var(--wtf-food-gold)!important;text-shadow:0 0 10px var(--wtf-food-gold-glow)!important}
+  html body #wtf2Directory[data-category="food"] .la-food-banana{border-right-color:var(--wtf-food-gold)!important;border-bottom-color:var(--wtf-food-gold)!important;filter:drop-shadow(0 0 5px var(--wtf-food-gold-glow))!important}
+  html body #wtf2Directory[data-category="food"] .wtf2-dir-back,html body #wtf2Directory[data-category="food"] .wtf2-exit,html body #wtf2Directory[data-category="food"] .la-near-close{
+    border-color:var(--wtf-food-gold)!important;color:var(--wtf-food-gold)!important;-webkit-text-fill-color:var(--wtf-food-gold)!important;box-shadow:0 0 14px var(--wtf-food-gold-glow)!important}
+  html body #wtf2Directory[data-category="food"] .wtf2-dir-back svg,html body #wtf2Directory[data-category="food"] .wtf2-dir-back path,html body #wtf2Directory[data-category="food"] .wtf2-exit svg,html body #wtf2Directory[data-category="food"] .wtf2-exit path{stroke:var(--wtf-food-gold)!important;filter:drop-shadow(0 0 4px var(--wtf-food-gold-glow))!important}
 </style>
