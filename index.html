@@ -20468,6 +20468,7 @@ window.wtfPrepare24Hours=async function(city){
     var declared=String(item.kind||item.category||'').toLowerCase(),text=(String(item.name||'')+' '+String(item.address||'')+' '+String(item.specialty||'')).toLowerCase();
     if(currentCat==='Weed'){
       if(declared==='tobacco'||declared==='food'||declared==='alternative')return false;
+      if(/\b(academy|school|institute|university|college|church|training|career|attorney|lawyer|law (firm|office)|insurance|seeds?|consulting|clinic|doctor|evaluation|card)\b/.test(text))return false;
       /* Safety first: never represent tobacco, vape, hookah, CBD-only or hemp-only
          retail as a cannabis dispensary, even when a live provider misclassifies it. */
       if(/\b(smoke\s*shop|cigar|tobacco|vape|vapor|hookah|shisha|e-?cig(?:arette)?s?)\b/.test(text))return false;
@@ -20664,8 +20665,8 @@ window.wtfPrepare24Hours=async function(city){
     function buildItems(els){var seen={};return els.map(function(el){
       var t=el.tags||{},lat=el.lat!=null?el.lat:el.center&&el.center.lat,lng=el.lon!=null?el.lon:el.center&&el.center.lon,name=t.name||t['brand']||'';
       if(!name||!Number.isFinite(Number(lat))||!Number.isFinite(Number(lng)))return null;
-      var k=name.toLowerCase()+'|'+Number(lat).toFixed(4)+','+Number(lng).toFixed(4);if(seen[k])return null;seen[k]=true;
-      var street=[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),address=[street,t['addr:city']||selectedCity].filter(Boolean).join(', ');
+      var k=name.toLowerCase().replace(/[^a-z0-9]/g,'')+'|'+Number(lat).toFixed(3)+','+Number(lng).toFixed(3);if(seen[k])return null;seen[k]=true;
+      var street=[t['addr:housenumber'],t['addr:street']].filter(Boolean).join(' '),address=t.__address||[street,t['addr:city']||selectedCity].filter(Boolean).join(', ');
       var open=wtfOsmOpenNow(t.opening_hours);
       return {name:name,placeId:'',osmId:el.type+'/'+el.id,lat:Number(lat),lng:Number(lng),address:address,phone:t.phone||t['contact:phone']||'',website:t.website||t['contact:website']||'',rating:'',ratings:'',priceLevel:0,openNow:open,openingHours:null,types:[],__osm:true,source:'OpenStreetMap live proximity search'};
     }).filter(Boolean).filter(validNearCategory).sort(function(a,b){return laMiles(origin,a)-laMiles(origin,b);}).slice(0,60);}
@@ -20689,7 +20690,8 @@ window.wtfPrepare24Hours=async function(city){
       });
     }
     for(var i=0;i<radii.length;i++){
-      var query='[out:json][timeout:20];('+selector.replace(/R/g,radii[i]).replace(/LAT/g,origin.lat).replace(/LNG/g,origin.lng)+');out center 1500;';
+      var selX=selector+(category==='Weed'&&radii[i]<=60000?'nwr["name"~"dispensar|cannabis|marijuana|kush|collective",i](around:R,LAT,LNG);':'');
+      var query='[out:json][timeout:25];('+selX.replace(/R/g,radii[i]).replace(/LAT/g,origin.lat).replace(/LNG/g,origin.lng)+');out center 1500;';
       var got=null;
       for(var attempt=0;attempt<2&&!got;attempt++){
         try{got=await firstGood(query);}catch(err){lastErr=err;}
@@ -20699,7 +20701,8 @@ window.wtfPrepare24Hours=async function(city){
       if(onPartial){try{var part=buildItems(got);if(part.length)onPartial(part.slice(0,10));}catch(pe){}}
       if(elements.filter(function(el){var t=el.tags||{};return t.name||t.brand;}).length>=10)break;
     }
-    if(!elements.filter(function(el){var t=el.tags||{};return t.name||t.brand;}).length){
+    var nearCount=elements.filter(function(el){var t=el.tags||{};if(!(t.name||t.brand))return false;var la=el.lat!=null?el.lat:el.center&&el.center.lat,lo=el.lon!=null?el.lon:el.center&&el.center.lon;return Number.isFinite(la)&&Number.isFinite(lo)&&laMiles(origin,{lat:la,lng:lo})<=25;}).length;
+    if(nearCount<10){
       /* Backup: Photon (OpenStreetMap search biased to your location), then Nominatim. */
       var terms=category==='Weed'?['dispensary','cannabis','marijuana']:category==='Tobacco'?['smoke shop','tobacco','vape shop','cigar']:['restaurant','cafe','pizza'];
       var extra=[];
@@ -20714,8 +20717,10 @@ window.wtfPrepare24Hours=async function(city){
           nom.forEach(function(list,idx){(list||[]).forEach(function(r,n){var nm=(r.name||'').trim()||String(r.display_name||'').split(',')[0];if(!nm)return;var ad=r.address||{};extra.push({type:'nominatim',id:idx+'-'+n,lat:Number(r.lat),lon:Number(r.lon),tags:{name:nm,'addr:housenumber':ad.house_number,'addr:street':ad.road,'addr:city':ad.city||ad.town||ad.village}});});});
         }
       }
-      if(extra.length){elements=extra;lastErr=null;}
+      if(extra.length){elements=elements.concat(extra);lastErr=null;}
     }
+    /* WTFdd's own verified listings that have map coordinates join the pool. */
+    try{var wantKind=category==='Weed'?'weed':category==='Tobacco'?'tobacco':'food';Object.keys(MARKET_DISPENSARY_DETAILS||{}).forEach(function(city){var det=MARKET_DISPENSARY_DETAILS[city]||{};Object.keys(det).forEach(function(nm){var d=det[nm]||{};var kind=d.kind||'weed';if(kind!==wantKind||!Number.isFinite(Number(d.lat))||!Number.isFinite(Number(d.lng)))return;elements.push({type:'wtfdd',id:city+'-'+nm,lat:Number(d.lat),lon:Number(d.lng),tags:{name:nm,phone:d.phone||'',website:d.website||'',opening_hours:'',__address:d.address||''}});});});}catch(ce){}
     if(!elements.length)throw new Error('No map data from any source'+(diag.length?' ('+diag.slice(0,4).join('; ')+')':''));
     var items=buildItems(elements);
     if(!items.length)throw new Error('Found '+elements.length+' places but none matched this category'+(diag.length?' ('+diag.slice(0,3).join('; ')+')':''));
